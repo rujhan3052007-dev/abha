@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -71,12 +71,12 @@
     </svg>
   </div>
 
-  <!-- 6. Minimalist ENTER Button (Only Button, No Other Text) -->
-  <div class="absolute bottom-8 sm:bottom-12 inset-x-0 flex justify-center items-center pointer-events-none z-20">
-    <div class="px-8 py-2.5 rounded-full border border-[#D4AF37]/80 bg-[#340810]/80 text-[#FAF7F2] text-xs font-semibold uppercase tracking-[0.3em] backdrop-blur-md shadow-[0_0_25px_rgba(212,175,55,0.4)]">
-      ENTER
-    </div>
-  </div>
+  <!-- Auto redirect to website after 3.2s or click anywhere -->
+  <script>
+    setTimeout(() => {
+      window.location.href = 'index.html';
+    }, 3200);
+  </script>
 
   <script>
     // Fullscreen gold dust particle simulation

@@ -156,20 +156,20 @@
 <body class="min-h-screen flex flex-col antialiased selection:bg-maroon-800 selection:text-ivory-50">
 
   <!-- ========================================================================= -->
-  <!-- 0. ROYAL INTRODUCTION SCREEN (FULLSCREEN EDGE-TO-EDGE) -->
+  <!-- 0. ROYAL INTRODUCTION SCREEN (PURE FULLSCREEN ANIMATION THEN WEBSITE) -->
   <!-- ========================================================================= -->
-  <div id="abhaIntroPortal" onclick="dismissIntroPortal()" class="fixed inset-0 z-50 w-screen h-screen overflow-hidden bg-[#FAF7F2] cursor-pointer transition-all duration-1000 ease-out select-none" title="Click anywhere to enter">
+  <div id="abhaIntroPortal" onclick="dismissIntroPortal()" class="fixed inset-0 z-50 w-screen h-screen overflow-hidden bg-[#FAF7F2] cursor-pointer transition-opacity duration-1000 ease-out select-none" title="Tap to proceed">
     
     <!-- Fullscreen Edge-to-Edge Artwork (Exact Image 1) -->
     <img src="images/logo/abha-logo-primary-mockup.jpg" alt="ABHA Royal Introduction" class="w-full h-full object-cover object-center pointer-events-none" />
 
     <!-- Fullscreen Dynamic Gold Shimmer Beam Overlay -->
-    <div class="absolute -inset-full w-[300%] h-[300%] pointer-events-none" style="background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(243,215,139,0.12) 35%, rgba(255,245,214,0.5) 50%, rgba(243,215,139,0.12) 65%, rgba(255,255,255,0) 100%); animation: portalShimmer 3.5s infinite cubic-bezier(0.4, 0, 0.2, 1); transform: rotate(25deg);"></div>
+    <div class="absolute -inset-full w-[300%] h-[300%] pointer-events-none" style="background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(243,215,139,0.12) 35%, rgba(255,245,214,0.5) 50%, rgba(243,215,139,0.12) 65%, rgba(255,255,255,0) 100%); animation: portalShimmer 3.2s infinite cubic-bezier(0.4, 0, 0.2, 1); transform: rotate(25deg);"></div>
 
     <!-- Pulsing Halo Rings Centered over the Medallion -->
     <div class="absolute top-[40%] left-[50%] -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-      <div class="w-48 h-48 sm:w-72 sm:h-72 rounded-full border border-[#D4AF37]/50" style="animation: portalHalo 3.2s infinite ease-out;"></div>
-      <div class="w-48 h-48 sm:w-72 sm:h-72 rounded-full border border-[#F3D78B]/40" style="animation: portalHalo 3.2s infinite ease-out 1.6s;"></div>
+      <div class="w-48 h-48 sm:w-72 sm:h-72 rounded-full border border-[#D4AF37]/50" style="animation: portalHalo 3s infinite ease-out;"></div>
+      <div class="w-48 h-48 sm:w-72 sm:h-72 rounded-full border border-[#F3D78B]/40" style="animation: portalHalo 3s infinite ease-out 1.5s;"></div>
     </div>
 
     <!-- Royal Glint Stars on Gold Embossing -->
@@ -182,13 +182,6 @@
       <svg class="w-5 h-5 sm:w-6 sm:h-6 text-[#FFF5D6] filter drop-shadow-[0_0_8px_#D4AF37]" viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z"/>
       </svg>
-    </div>
-
-    <!-- Minimalist Enter Button (No Unnecessary Text) -->
-    <div class="absolute bottom-8 sm:bottom-12 inset-x-0 flex justify-center items-center pointer-events-none z-20">
-      <div class="px-8 py-2.5 rounded-full border border-[#D4AF37]/80 bg-[#340810]/80 text-[#FAF7F2] text-xs font-semibold uppercase tracking-[0.3em] backdrop-blur-md shadow-[0_0_25px_rgba(212,175,55,0.4)]">
-        ENTER
-      </div>
     </div>
   </div>
 
@@ -235,10 +228,15 @@
           </button>
         </div>
 
-        <!-- Official ABHA Royal Lotus Vector Logo -->
-        <div class="flex-shrink-0 flex items-center">
-          <a href="#" class="group flex items-center focus:outline-none" aria-label="ABHA Clothing & Tailoring Homepage">
-            <img src="images/logo/abha-logo-primary.svg" alt="ABHA Clothing & Tailoring" class="h-12 sm:h-14 w-auto object-contain transition-transform group-hover:scale-[1.02]" />
+        <!-- Official ABHA Royal Logo: Corner Crest + Theme Maroon Text (Contained under ABHA) -->
+        <div class="flex-shrink-0 flex items-center lg:-ml-3">
+          <a href="#" class="group flex items-center gap-2.5 sm:gap-3 focus:outline-none" aria-label="ABHA Clothing & Tailoring Homepage">
+            <!-- That circular figure on the corner -->
+            <img src="images/logo/abha-crest-authentic.png" alt="ABHA Royal Crest" class="h-11 w-11 sm:h-12 sm:w-12 object-contain filter drop-shadow-sm transition-transform duration-300 group-hover:scale-105" />
+            
+            <!-- Authentic Maroon Text: 'CLOTHING & TAILORING' under 'ABHA' (Does not go out of ABHA) -->
+            <img src="images/logo/abha-text-maroon.png" alt="ABHA Clothing & Tailoring" class="h-9 sm:h-10 w-auto object-contain filter drop-shadow-sm" />
+            <span class="sr-only">ABHA Clothing &amp; Tailoring</span>
           </a>
         </div>
 
@@ -1220,7 +1218,13 @@
         
         <!-- Col 1: Brand -->
         <div class="lg:col-span-2 space-y-4">
-          <img src="images/logo/abha-logo-light.svg" alt="ABHA Clothing & Tailoring" class="h-10 w-auto object-contain mb-2" />
+          <div class="flex items-center gap-3 mb-2">
+            <img src="images/logo/abha-crest-authentic.png" alt="ABHA Royal Crest" class="h-11 w-11 object-contain filter drop-shadow-sm" />
+            <div class="flex flex-col justify-center text-left">
+              <span class="font-serif text-[24px] font-bold tracking-[0.18em] text-[#FAF7F2] uppercase leading-none">ABHA</span>
+              <span class="text-[9px] font-semibold tracking-[0.28em] text-[#D4AF37] uppercase mt-1 leading-none whitespace-nowrap">• CLOTHING &amp; TAILORING •</span>
+            </div>
+          </div>
           <p class="text-slate-400 text-xs leading-relaxed max-w-sm">
             Premium Indian dress materials and bespoke custom tailoring. Delivering authentic textiles and personalized stitching across India.
           </p>
@@ -2816,9 +2820,9 @@
       }
     }
 
-    // Auto-dissolve after 4.5 seconds if untouched
+    // Auto-dissolve directly into website after 3.2 seconds
     document.addEventListener('DOMContentLoaded', () => {
-      portalDismissTimer = setTimeout(dismissIntroPortal, 4500);
+      portalDismissTimer = setTimeout(dismissIntroPortal, 3200);
     });
   </script>
 
