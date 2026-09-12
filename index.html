@@ -2821,7 +2821,7 @@
     /* ========================================================================= */
     /* ROYAL INTRO PORTAL CONTROLLER                                             */
     /* ========================================================================= */
-    let portalRemainingSeconds = 4;
+    let portalRemainingSeconds = 7;
     let portalTimerInterval = null;
 
     function startIntroPortalTimer() {
@@ -2866,9 +2866,9 @@
       if (portal) {
         portal.style.display = 'flex';
         portal.classList.remove('opacity-0', 'scale-105', 'pointer-events-none');
-        portalRemainingSeconds = 4;
+        portalRemainingSeconds = 7;
         const timerText = document.getElementById('portalTimerText');
-        if (timerText) timerText.textContent = `Entering in 4s...`;
+        if (timerText) timerText.textContent = `Entering in 7s...`;
         startIntroPortalTimer();
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
