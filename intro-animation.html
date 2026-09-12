@@ -42,10 +42,13 @@
     }
   </style>
 </head>
-<body class="relative w-screen h-screen select-none cursor-pointer" onclick="location.href='index.html'" title="Click anywhere to enter boutique">
+<body class="relative w-screen h-screen select-none cursor-pointer" onclick="location.href='index.html'" ontouchstart="location.href='index.html'" style="touch-action: manipulation;" title="Tap anywhere to enter boutique">
 
-  <!-- 1. Fullscreen Edge-to-Edge Artwork (Exact Image 1) -->
-  <img src="images/logo/abha-logo-primary-mockup.jpg" alt="ABHA Royal Introduction" class="w-full h-full object-cover object-center pointer-events-none" />
+  <!-- 1. Fullscreen Edge-to-Edge Artwork (Responsive: Mobile Portrait 9:16 & Desktop 16:9) -->
+  <picture>
+    <source media="(max-width: 768px), (max-aspect-ratio: 1/1)" srcset="images/logo/abha-logo-mobile-mockup.jpg">
+    <img src="images/logo/abha-logo-primary-mockup.jpg" alt="ABHA Royal Introduction" class="w-full h-full object-cover object-center pointer-events-none" />
+  </picture>
 
   <!-- 2. Dynamic Gold Shimmer Beam Overlay -->
   <div class="shimmer-active"></div>
@@ -54,28 +57,28 @@
   <canvas id="fullscreenCanvas" class="absolute inset-0 w-full h-full pointer-events-none z-10"></canvas>
 
   <!-- 4. Pulsing Halo Waves Centered over the Medallion -->
-  <div class="absolute top-[40%] left-[50%] -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10">
-    <div class="w-48 h-48 sm:w-72 sm:h-72 rounded-full border border-[#D4AF37]/50" style="animation: haloPulse 3.2s infinite ease-out;"></div>
-    <div class="w-48 h-48 sm:w-72 sm:h-72 rounded-full border border-[#F3D78B]/40" style="animation: haloPulse 3.2s infinite ease-out 1.6s;"></div>
+  <div class="absolute top-[47.6%] sm:top-[40%] left-[50%] -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10">
+    <div class="w-44 h-44 sm:w-72 sm:h-72 rounded-full border border-[#D4AF37]/50" style="animation: haloPulse 3.2s infinite ease-out;"></div>
+    <div class="w-44 h-44 sm:w-72 sm:h-72 rounded-full border border-[#F3D78B]/40" style="animation: haloPulse 3.2s infinite ease-out 1.6s;"></div>
   </div>
 
   <!-- 5. Royal Sparkle Glints on Gold Accents -->
-  <div class="absolute top-[28%] left-[49%] pointer-events-none z-10" style="animation: glintSparkle 3s infinite ease-in-out 0.5s;">
-    <svg class="w-6 h-6 sm:w-8 sm:h-8 text-[#FFF5D6] filter drop-shadow-[0_0_10px_#D4AF37]" viewBox="0 0 24 24" fill="currentColor">
+  <div class="absolute top-[42%] sm:top-[28%] left-[49%] pointer-events-none z-10" style="animation: glintSparkle 3s infinite ease-in-out 0.5s;">
+    <svg class="w-5 h-5 sm:w-8 sm:h-8 text-[#FFF5D6] filter drop-shadow-[0_0_10px_#D4AF37]" viewBox="0 0 24 24" fill="currentColor">
       <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z"/>
     </svg>
   </div>
-  <div class="absolute top-[48%] left-[53%] pointer-events-none z-10" style="animation: glintSparkle 3.5s infinite ease-in-out 1.8s;">
-    <svg class="w-5 h-5 sm:w-6 sm:h-6 text-[#FFF5D6] filter drop-shadow-[0_0_8px_#D4AF37]" viewBox="0 0 24 24" fill="currentColor">
+  <div class="absolute top-[52%] sm:top-[48%] left-[53%] pointer-events-none z-10" style="animation: glintSparkle 3.5s infinite ease-in-out 1.8s;">
+    <svg class="w-4 h-4 sm:w-6 sm:h-6 text-[#FFF5D6] filter drop-shadow-[0_0_8px_#D4AF37]" viewBox="0 0 24 24" fill="currentColor">
       <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z"/>
     </svg>
   </div>
 
-  <!-- Auto redirect to website after 3.2s or click anywhere -->
+  <!-- Auto redirect to website after 2.8s (2-3s window) or click anywhere -->
   <script>
     setTimeout(() => {
       window.location.href = 'index.html';
-    }, 3200);
+    }, 2800);
   </script>
 
   <script>
