@@ -111,6 +111,21 @@
       outline-offset: 2px;
     }
 
+    /* Intro Portal Animations */
+    @keyframes portalShimmer {
+      0% { transform: translateX(-150%) rotate(25deg); }
+      100% { transform: translateX(250%) rotate(25deg); }
+    }
+    @keyframes portalHalo {
+      0% { transform: scale(0.85); opacity: 0; }
+      50% { opacity: 0.5; }
+      100% { transform: scale(1.35); opacity: 0; }
+    }
+    @keyframes portalGlint {
+      0%, 80%, 100% { opacity: 0; transform: scale(0.6); }
+      40% { opacity: 1; transform: scale(1.4); }
+    }
+
     /* Respect reduced motion */
     @media (prefers-reduced-motion: reduce) {
       * {
@@ -139,6 +154,75 @@
 </head>
 
 <body class="min-h-screen flex flex-col antialiased selection:bg-maroon-800 selection:text-ivory-50">
+
+  <!-- ========================================================================= -->
+  <!-- 0. ROYAL INTRODUCTION SCREEN / ENTRANCE PORTAL -->
+  <!-- ========================================================================= -->
+  <div id="abhaIntroPortal" class="fixed inset-0 z-50 flex items-center justify-center bg-[#190408] overflow-hidden transition-all duration-700 ease-out">
+    <!-- Ambient Radial Gold Glow Behind Stage -->
+    <div class="absolute w-[500px] sm:w-[750px] h-[500px] sm:h-[750px] rounded-full bg-[#B38728]/20 blur-[130px] pointer-events-none animate-pulse"></div>
+
+    <!-- Top Skip Action -->
+    <div class="absolute top-4 right-4 sm:top-6 sm:right-6 z-40">
+      <button onclick="dismissIntroPortal()" class="px-3.5 py-1.5 rounded-full border border-[#D4AF37]/50 bg-[#2A050B]/80 text-[11px] text-[#FAF7F2]/90 hover:bg-[#D4AF37] hover:text-[#190408] font-medium tracking-wider uppercase transition-all flex items-center gap-1.5 shadow-lg backdrop-blur-sm">
+        <span>Skip Intro</span>
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <!-- Central Interactive Stage (Exact Image 1 Artwork) -->
+    <div class="relative w-full max-w-4xl mx-4 aspect-[16/9] rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.85)] overflow-hidden border border-[#D4AF37]/50 bg-[#FAF7F2] transform transition-transform duration-700">
+      <!-- 1. Background Mockup Layer (Exact Image 1) -->
+      <img src="images/logo/abha-logo-primary-mockup.jpg" alt="ABHA Clothing and Tailoring Royal Introduction" class="w-full h-full object-cover select-none pointer-events-none" />
+
+      <!-- 2. Dynamic Gold Shimmer Beam Overlay -->
+      <div class="absolute -inset-full w-[300%] h-[300%] pointer-events-none" style="background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(243,215,139,0.12) 35%, rgba(255,245,214,0.45) 50%, rgba(243,215,139,0.12) 65%, rgba(255,255,255,0) 100%); animation: portalShimmer 3.8s infinite cubic-bezier(0.4, 0, 0.2, 1); transform: rotate(25deg);"></div>
+
+      <!-- 3. Pulsing Halo Rings Centered over the Medallion -->
+      <div class="absolute top-[40%] left-[50%] -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+        <div class="w-48 h-48 sm:w-64 sm:h-64 rounded-full border border-[#D4AF37]/50" style="animation: portalHalo 3.2s infinite ease-out;"></div>
+        <div class="w-48 h-48 sm:w-64 sm:h-64 rounded-full border border-[#F3D78B]/40" style="animation: portalHalo 3.2s infinite ease-out 1.6s;"></div>
+      </div>
+
+      <!-- 4. Royal Glint Stars -->
+      <div class="absolute top-[28%] left-[49%] pointer-events-none" style="animation: portalGlint 3s infinite ease-in-out 0.5s;">
+        <svg class="w-6 h-6 text-[#FFF5D6] filter drop-shadow-[0_0_8px_#D4AF37]" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z"/>
+        </svg>
+      </div>
+      <div class="absolute top-[48%] left-[53%] pointer-events-none" style="animation: portalGlint 3.5s infinite ease-in-out 1.8s;">
+        <svg class="w-4 h-4 text-[#FFF5D6] filter drop-shadow-[0_0_6px_#D4AF37]" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5L12 0Z"/>
+        </svg>
+      </div>
+
+      <!-- 5. Floating Bottom Presentation Ribbon with Entrance CTA -->
+      <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-[#2A050B]/95 via-[#2A050B]/70 to-transparent p-5 sm:p-7 flex flex-col items-center justify-end text-center z-20 backdrop-blur-[2px]">
+        <div class="inline-flex items-center space-x-2 text-[10px] sm:text-xs uppercase tracking-[0.3em] text-[#D4AF37] font-semibold mb-1">
+          <span>✦</span>
+          <span>Royal Indian Heritage Boutique</span>
+          <span>✦</span>
+        </div>
+        <p class="text-xs sm:text-sm text-[#FAF7F2] tracking-wide font-light max-w-md mb-3.5 opacity-90 hidden sm:block">
+          Authentic Rajasthani Salwar Suit Dress Materials &amp; Bespoke Master Tailoring
+        </p>
+
+        <!-- CTA Enter Button -->
+        <button onclick="dismissIntroPortal()" class="group/btn relative px-8 py-2.5 rounded-full overflow-hidden bg-gradient-to-r from-[#B38728] via-[#D4AF37] to-[#B38728] text-[#190408] font-bold text-xs uppercase tracking-[0.25em] shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:shadow-[0_0_30px_rgba(212,175,55,0.7)] transition-all transform hover:-translate-y-0.5 active:translate-y-0">
+          <span class="relative z-10 flex items-center gap-2">
+            <span>Enter Boutique</span>
+            <svg class="w-4 h-4 transition-transform group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+          </span>
+          <div class="absolute inset-0 bg-white/25 transform -skew-x-12 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700"></div>
+        </button>
+
+        <!-- Auto-entry progress line -->
+        <div class="mt-2 flex items-center gap-2 text-[10px] text-[#FAF7F2]/60 uppercase tracking-widest">
+          <span id="portalTimerText">Entering in 4s...</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ========================================================================= -->
   <!-- TOP ANNOUNCEMENT & UTILITY BAR -->
@@ -1224,7 +1308,17 @@
 
       <!-- Bottom Bar -->
       <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
-        <p>© 2026 ABHA. All rights reserved. Built with editorial precision.</p>
+        <div class="flex items-center gap-3">
+          <p>© 2026 ABHA. All rights reserved.</p>
+          <span>•</span>
+          <button onclick="replayIntroPortal()" class="text-gold-500 hover:underline flex items-center gap-1 font-medium transition-colors">
+            <span>✦ Replay Intro</span>
+          </button>
+          <span>•</span>
+          <a href="intro-animation.html" class="text-gold-500 hover:underline flex items-center gap-1 font-medium transition-colors">
+            <span>🎬 Intro Showcase</span>
+          </a>
+        </div>
         <div class="flex items-center gap-4">
           <span>Secure Payments via:</span>
           <span class="px-2 py-0.5 bg-charcoal-900 text-slate-300 rounded border border-charcoal-800">UPI</span>
@@ -2723,6 +2817,68 @@
     function quickPurchaseSpecial(id) {
       initiatePurchase('prod-01');
     }
+
+    /* ========================================================================= */
+    /* ROYAL INTRO PORTAL CONTROLLER                                             */
+    /* ========================================================================= */
+    let portalRemainingSeconds = 4;
+    let portalTimerInterval = null;
+
+    function startIntroPortalTimer() {
+      const portal = document.getElementById('abhaIntroPortal');
+      if (!portal) return;
+
+      const timerText = document.getElementById('portalTimerText');
+      
+      portalTimerInterval = setInterval(() => {
+        portalRemainingSeconds--;
+        if (timerText) {
+          if (portalRemainingSeconds > 0) {
+            timerText.textContent = `Entering in ${portalRemainingSeconds}s...`;
+          } else {
+            timerText.textContent = `Welcome to ABHA...`;
+          }
+        }
+        if (portalRemainingSeconds <= 0) {
+          clearInterval(portalTimerInterval);
+          dismissIntroPortal();
+        }
+      }, 1000);
+    }
+
+    function dismissIntroPortal() {
+      if (portalTimerInterval) {
+        clearInterval(portalTimerInterval);
+        portalTimerInterval = null;
+      }
+      const portal = document.getElementById('abhaIntroPortal');
+      if (portal) {
+        portal.classList.add('opacity-0', 'scale-105', 'pointer-events-none');
+        setTimeout(() => {
+          portal.style.display = 'none';
+        }, 750);
+      }
+      sessionStorage.setItem('abha_intro_shown', 'true');
+    }
+
+    function replayIntroPortal() {
+      const portal = document.getElementById('abhaIntroPortal');
+      if (portal) {
+        portal.style.display = 'flex';
+        portal.classList.remove('opacity-0', 'scale-105', 'pointer-events-none');
+        portalRemainingSeconds = 4;
+        const timerText = document.getElementById('portalTimerText');
+        if (timerText) timerText.textContent = `Entering in 4s...`;
+        startIntroPortalTimer();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    // Auto-start on load
+    document.addEventListener('DOMContentLoaded', () => {
+      // Show every fresh page load for maximum visual delight
+      startIntroPortalTimer();
+    });
   </script>
 
 </body>
