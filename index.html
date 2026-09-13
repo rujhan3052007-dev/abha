@@ -49,6 +49,8 @@
             },
             gold: {
               100: '#FBF5E8',
+              300: '#F5DEB3',
+              400: '#ECC87C',
               500: '#B38728',
               600: '#996515',
             },
@@ -270,13 +272,13 @@
   <!-- ========================================================================= -->
   <!-- TOP ANNOUNCEMENT & UTILITY BAR -->
   <!-- ========================================================================= -->
-  <aside aria-label="Announcement" class="bg-maroon-900 text-ivory-50 text-xs py-2 px-4 border-b border-maroon-800/40">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
-      <div class="text-[11px] font-medium tracking-wide flex items-center gap-1.5 justify-center sm:justify-start">
-        <span class="w-1.5 h-1.5 rounded-full bg-gold-400"></span>
-        <span id="announcementText">Free Pan-India Express Delivery on All Salwar Suits | Bespoke Master Stitching Available</span>
+  <aside aria-label="Announcement" class="bg-maroon-900 text-ivory-50 text-xs py-1.5 px-3 sm:px-4 border-b border-maroon-800/40">
+    <div class="max-w-7xl mx-auto flex items-center justify-between text-left gap-2">
+      <div class="text-[10px] sm:text-[11px] font-medium tracking-wide flex items-center gap-1.5 truncate">
+        <span class="w-1.5 h-1.5 rounded-full bg-gold-400 shrink-0"></span>
+        <span id="announcementText" class="truncate">✨ Free Pan-India Express Delivery on Salwar Suits • Bespoke Fit</span>
       </div>
-      <div class="flex flex-wrap items-center justify-center sm:justify-end gap-2.5 sm:gap-4 text-[11px] tracking-wider uppercase font-medium">
+      <div class="hidden sm:flex items-center justify-end gap-2.5 sm:gap-4 text-[11px] tracking-wider uppercase font-medium shrink-0">
         <a href="tel:+919214837104" class="hover:text-gold-500 transition-colors flex items-center gap-1">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
           Tailor Hotline: +91 9214837104
@@ -401,7 +403,73 @@
   <!-- ========================================================================= -->
   <!-- 2. HERO SECTION (§8) -->
   <!-- ========================================================================= -->
-  <section class="relative bg-gradient-to-b from-ivory-100 to-ivory-50 border-b border-ivory-200 overflow-hidden" aria-label="Hero Introduction">
+  <!-- ========================================================================= -->
+  <!-- 2. HERO SECTION (§8) — RESPONSIVE DESKTOP & MOBILE-OPTIMIZED ATELIER -->
+  <!-- ========================================================================= -->
+  
+  <!-- MOBILE HERO & 2x2 TRUST BADGES (<sm only) -->
+  <div class="sm:hidden bg-[#FAF8F5] pt-3 pb-2">
+    <!-- Mobile Luxury Hero Card -->
+    <div class="px-3 pb-2.5">
+      <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br from-maroon-950 via-maroon-900 to-charcoal-950 text-white p-4 shadow-md border border-gold-500/30">
+        <span class="inline-block px-2.5 py-0.5 rounded text-[9px] font-bold bg-gold-500/20 text-gold-400 border border-gold-500/40 uppercase tracking-widest">
+          Pure Loom Handcrafted
+        </span>
+        <h1 class="font-serif text-xl font-bold text-white mt-1.5 leading-tight">
+          Premium Dress Materials, <br>
+          <span class="italic font-normal text-gold-400">Tailored Just for You</span>
+        </h1>
+        <p class="text-xs text-ivory-100/90 mt-1 font-light leading-relaxed">
+          Buy 100% pure authentic fabrics unstitched, or submit measurements for an immaculate custom fit.
+        </p>
+        <div class="mt-3.5 flex items-center gap-2.5">
+          <a href="#newArrivals" class="px-4 py-2 bg-gold-500 hover:bg-gold-400 text-charcoal-950 text-xs font-bold rounded-lg shadow-sm text-center">
+            Explore Loom
+          </a>
+          <button type="button" onclick="openMeasurementStudioFromHero()" class="px-3.5 py-2 border border-ivory-200/50 text-ivory-50 text-xs font-semibold rounded-lg text-center">
+            Custom Tailor Studio
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile 2x2 Trust Badges Grid (Replaces Squished 4-Columns) -->
+    <div class="px-3 pb-1">
+      <div class="grid grid-cols-2 gap-2">
+        <div class="flex items-center gap-2.5 p-2 bg-white rounded-xl border border-[#EBE3D7] shadow-2xs">
+          <span class="text-base">🧵</span>
+          <div>
+            <p class="text-[11px] font-bold text-gray-900 leading-tight">100% Pure Fabric</p>
+            <p class="text-[9px] text-gray-500">Raw Unstitched Sets</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2.5 p-2 bg-white rounded-xl border border-[#EBE3D7] shadow-2xs">
+          <span class="text-base">✂️</span>
+          <div>
+            <p class="text-[11px] font-bold text-gray-900 leading-tight">Master Tailors</p>
+            <p class="text-[9px] text-gray-500">Bespoke Custom Fit</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2.5 p-2 bg-white rounded-xl border border-[#EBE3D7] shadow-2xs">
+          <span class="text-base">🚚</span>
+          <div>
+            <p class="text-[11px] font-bold text-gray-900 leading-tight">Free Delivery</p>
+            <p class="text-[9px] text-gray-500">All India Doorstep</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2.5 p-2 bg-white rounded-xl border border-[#EBE3D7] shadow-2xs">
+          <span class="text-base">⭐</span>
+          <div>
+            <p class="text-[11px] font-bold text-gray-900 leading-tight">4.9/5 Rating</p>
+            <p class="text-[9px] text-gray-500">Loved by Patrons</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESKTOP HERO SECTION (Preserved Exactly for sm and above) -->
+  <section class="hidden sm:block relative bg-gradient-to-b from-ivory-100 to-ivory-50 border-b border-ivory-200 overflow-hidden" aria-label="Hero Introduction">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         
@@ -469,7 +537,7 @@
             <div class="relative rounded-lg overflow-hidden border border-ivory-300 shadow-sm bg-ivory-100">
               <img src="images/pink-leheriya-cotton-suit.jpg" 
                    alt="ABHA Rani Pink Leheriya Pure Cotton Salwar Suit Dress Material" 
-                   class="w-full h-[460px] sm:h-[520px] object-cover object-center"
+                   class="w-full h-[460px] sm:h-[520px] object-cover object-center" 
                    loading="eager" />
               
               <!-- Floating Custom Fitting Badge -->
@@ -499,32 +567,32 @@
   <!-- ========================================================================= -->
   <!-- 3. SHOP BY CATEGORY (§10) -->
   <!-- ========================================================================= -->
-  <section id="categories" class="py-16 sm:py-20 bg-ivory-50 border-b border-ivory-200" aria-label="Shop Salwar Suit Dress Materials">
+  <section id="categories" class="py-8 sm:py-20 bg-ivory-50 border-b border-ivory-200" aria-label="Shop Salwar Suit Dress Materials">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <!-- Section Header -->
-      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-10 pb-4 border-b border-ivory-200 gap-4">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-6 pb-3 sm:mb-10 sm:pb-4 border-b border-ivory-200 gap-4">
         <div>
           <span class="text-xs font-bold uppercase tracking-luxury text-maroon-800">Unstitched Collections</span>
           <h2 class="font-serif text-2xl sm:text-3xl font-bold text-maroon-950 mt-1">Salwar Suit Dress Materials</h2>
           <p class="text-sm text-slateText-600 mt-1">Authentic 3-piece unstitched salwar suit dress materials (Top, Bottom & Dupatta). Buy as pure woven fabric or get custom-tailored to your measurements.</p>
         </div>
 
-        <!-- Dress Material Filter Tabs -->
-        <div class="inline-flex p-1 bg-ivory-100 rounded border border-ivory-300 flex-wrap gap-1" role="tablist" aria-label="Salwar suit dress material fabric categories">
-          <button type="button" onclick="filterCategoryTab('all')" id="tabAll" class="px-3.5 py-1.5 text-xs font-semibold rounded bg-maroon-800 text-ivory-50 shadow-sm transition-all" role="tab" aria-selected="true">
+        <!-- Dress Material Filter Tabs (Swipeable on mobile, flex-wrap on desktop) -->
+        <div class="overflow-x-auto no-scrollbar flex items-center gap-1.5 pb-1 sm:inline-flex sm:flex-wrap p-1 bg-ivory-100 rounded border border-ivory-300" role="tablist" aria-label="Salwar suit dress material fabric categories">
+          <button type="button" onclick="filterCategoryTab('all')" id="tabAll" class="px-3.5 py-1.5 text-xs font-semibold rounded bg-maroon-800 text-ivory-50 shadow-sm transition-all whitespace-nowrap shrink-0" role="tab" aria-selected="true">
             All Salwar Suits
           </button>
-          <button type="button" onclick="filterCategoryTab('cotton')" id="tabCotton" class="px-3.5 py-1.5 text-xs font-semibold rounded text-charcoal-900 hover:text-maroon-800 transition-all" role="tab" aria-selected="false">
+          <button type="button" onclick="filterCategoryTab('cotton')" id="tabCotton" class="px-3.5 py-1.5 text-xs font-semibold rounded text-charcoal-900 hover:text-maroon-800 transition-all whitespace-nowrap shrink-0" role="tab" aria-selected="false">
             Pure Cotton Suits
           </button>
-          <button type="button" onclick="filterCategoryTab('silk')" id="tabSilk" class="px-3.5 py-1.5 text-xs font-semibold rounded text-charcoal-900 hover:text-maroon-800 transition-all" role="tab" aria-selected="false">
+          <button type="button" onclick="filterCategoryTab('silk')" id="tabSilk" class="px-3.5 py-1.5 text-xs font-semibold rounded text-charcoal-900 hover:text-maroon-800 transition-all whitespace-nowrap shrink-0" role="tab" aria-selected="false">
             Chanderi Silk Suits
           </button>
-          <button type="button" onclick="filterCategoryTab('prints')" id="tabPrints" class="px-3.5 py-1.5 text-xs font-semibold rounded text-charcoal-900 hover:text-maroon-800 transition-all" role="tab" aria-selected="false">
+          <button type="button" onclick="filterCategoryTab('prints')" id="tabPrints" class="px-3.5 py-1.5 text-xs font-semibold rounded text-charcoal-900 hover:text-maroon-800 transition-all whitespace-nowrap shrink-0" role="tab" aria-selected="false">
             Bandhani & Leheriya
           </button>
-          <button type="button" onclick="filterCategoryTab('georgette')" id="tabGeorgette" class="px-3.5 py-1.5 text-xs font-semibold rounded text-charcoal-900 hover:text-maroon-800 transition-all" role="tab" aria-selected="false">
+          <button type="button" onclick="filterCategoryTab('georgette')" id="tabGeorgette" class="px-3.5 py-1.5 text-xs font-semibold rounded text-charcoal-900 hover:text-maroon-800 transition-all whitespace-nowrap shrink-0" role="tab" aria-selected="false">
             Festive Occasion Suits
           </button>
         </div>
@@ -570,10 +638,10 @@
   <!-- ========================================================================= -->
   <!-- 4. NEW ARRIVALS (§11) -->
   <!-- ========================================================================= -->
-  <section id="newArrivals" class="py-16 sm:py-24 bg-ivory-100/60 border-b border-ivory-200" aria-label="New Arrivals">
+  <section id="newArrivals" class="py-8 sm:py-24 bg-ivory-100/60 border-b border-ivory-200" aria-label="New Arrivals">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-10 pb-4 border-b border-ivory-200 gap-4">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-6 pb-3 sm:mb-10 sm:pb-4 border-b border-ivory-200 gap-4">
         <div>
           <span class="text-xs font-bold uppercase tracking-luxury text-maroon-800">Fresh from Loom & Studio</span>
           <h2 class="font-serif text-2xl sm:text-3xl font-bold text-maroon-950 mt-1">New Arrivals</h2>
@@ -2708,30 +2776,36 @@
       renderCategories(type);
     }
 
-    // Product Card Template (Meesho Pure Commerce Style)
+    // Product Card Template (Option 2: Royal Boutique Hybrid)
     function createProductCard(prod) {
       const isWishlisted = state.wishlist.includes(prod.id);
       const mrpVal = prod.mrp || Math.round((prod.price * 1.48) / 50) * 50;
-      const discountText = prod.discount || (Math.round(((mrpVal - prod.price) / mrpVal) * 100) + '% off');
+      const savingsVal = mrpVal - prod.price;
+      const categoryBadge = prod.suitType === 'cotton' ? 'Pure Cotton' : (prod.suitType === 'silk' ? 'Chanderi' : (prod.suitType === 'prints' ? 'Bandhani' : (prod.category ? prod.category.split(' ')[0] : 'Pure Loom')));
 
       return `
-        <article class="bg-white rounded-lg border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between group">
-          <!-- Image Frame (Meesho 3:4 aspect) -->
-          <div class="relative aspect-[3/4] bg-slate-100 overflow-hidden cursor-pointer" onclick="openQuickViewModal('${prod.id}')">
+        <article class="bg-[#FCFAF7] rounded-xl border border-[#EBE3D7] overflow-hidden shadow-2xs hover:shadow-md hover:border-maroon-800/40 transition-all flex flex-col justify-between group">
+          <!-- Image Frame (3:4 aspect) -->
+          <div class="relative aspect-[3/4] bg-ivory-200 overflow-hidden cursor-pointer" onclick="openQuickViewModal('${prod.id}')">
             <img src="${prod.image}" alt="${prod.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" onerror="this.src='images/pink-leheriya-cotton-suit.jpg'" />
             
+            <!-- Royal Category Badge Pill -->
+            <span class="absolute top-2 left-2 bg-charcoal-950/85 backdrop-blur-xs text-gold-400 text-[10px] font-bold px-2 py-0.5 rounded shadow-sm tracking-wider border border-gold-400/30">
+              ${categoryBadge}
+            </span>
+
             <!-- Wishlist Heart Button -->
-            <button type="button" onclick="toggleWishlist('${prod.id}', event)" class="absolute top-2 right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 backdrop-blur-xs flex items-center justify-center text-gray-500 hover:text-red-500 shadow-sm transition" aria-label="Save to wishlist">
+            <button type="button" onclick="toggleWishlist('${prod.id}', event)" class="absolute top-2 right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 border border-[#EBE3D7] flex items-center justify-center text-gray-500 hover:text-red-500 shadow-xs transition" aria-label="Save to wishlist">
               <svg class="w-4 h-4 ${isWishlisted ? 'fill-red-500 text-red-500' : 'fill-none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
             </button>
 
             <!-- Tag Badge -->
             ${prod.isBestSeller ? `
-              <span class="absolute bottom-2 left-2 bg-gray-900/80 backdrop-blur-xs text-white text-[9px] sm:text-[10px] font-semibold px-1.5 py-0.5 rounded">
+              <span class="absolute bottom-2 left-2 bg-gray-900/85 backdrop-blur-xs text-white text-[9px] sm:text-[10px] font-semibold px-1.5 py-0.5 rounded shadow-xs">
                 Best Seller
               </span>
             ` : (prod.isNewArrival ? `
-              <span class="absolute bottom-2 left-2 bg-maroon-900/80 backdrop-blur-xs text-white text-[9px] sm:text-[10px] font-semibold px-1.5 py-0.5 rounded">
+              <span class="absolute bottom-2 left-2 bg-maroon-900/90 backdrop-blur-xs text-gold-300 text-[9px] sm:text-[10px] font-semibold px-1.5 py-0.5 rounded shadow-xs border border-gold-400/30">
                 New
               </span>
             ` : '')}
@@ -2740,46 +2814,41 @@
           <!-- Content Area -->
           <div class="p-2.5 sm:p-3.5 flex-1 flex flex-col justify-between">
             <div class="cursor-pointer" onclick="openQuickViewModal('${prod.id}')">
-              <!-- Title (Truncated 2 lines like Meesho) -->
-              <h3 class="text-xs sm:text-sm font-medium text-gray-700 line-clamp-2 leading-snug group-hover:text-gray-950 transition-colors" title="${prod.name}">
+              <!-- Title -->
+              <h3 class="font-serif text-xs sm:text-sm font-bold text-gray-900 line-clamp-1 leading-snug group-hover:text-maroon-900 transition-colors" title="${prod.name}">
                 ${prod.name}
               </h3>
 
-              <!-- Price Block: Bold Price + Strikethrough MRP + % Off -->
+              <!-- Price Block: Bold Price + Strikethrough MRP + Save Pill -->
               <div class="mt-1.5 flex items-baseline flex-wrap gap-1 sm:gap-1.5">
-                <span class="text-sm sm:text-base font-extrabold text-gray-900">₹${prod.price.toLocaleString('en-IN')}</span>
+                <span class="text-sm sm:text-base font-extrabold text-maroon-950">₹${prod.price.toLocaleString('en-IN')}</span>
                 <span class="text-[10px] sm:text-xs text-gray-400 line-through font-normal">₹${mrpVal.toLocaleString('en-IN')}</span>
-                <span class="text-[10px] sm:text-xs font-bold text-[#038D63]">${discountText}</span>
+                <span class="text-[9px] sm:text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1 py-0.5 rounded border border-emerald-200">Save ₹${savingsVal.toLocaleString('en-IN')}</span>
               </div>
 
-              <!-- Free Delivery Badge -->
-              <div class="mt-1.5">
-                <span class="inline-flex items-center gap-1 bg-slate-100 text-gray-600 text-[10px] font-medium px-2 py-0.5 rounded-full">
-                  <svg class="w-3 h-3 text-[#038D63]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
-                  Free Delivery
-                </span>
-              </div>
-
-              <!-- Rating Pill & Reviews Count -->
-              <div class="mt-2 flex items-center gap-1.5">
-                <span class="bg-[#038D63] text-white text-[10px] sm:text-[11px] font-bold px-1.5 py-0.5 rounded flex items-center gap-0.5">
-                  ${prod.rating} <span class="text-[9px]">★</span>
-                </span>
-                <span class="text-[10px] sm:text-[11px] text-gray-400 font-medium">(${prod.reviewsCount})</span>
+              <!-- Rating Pill & Shipping -->
+              <div class="mt-1.5 flex items-center justify-between">
+                <div class="flex items-center gap-1">
+                  <span class="bg-[#038D63] text-white text-[10px] sm:text-[11px] font-bold px-1.5 py-0.5 rounded flex items-center gap-0.5">
+                    ${prod.rating} <span class="text-[8px]">★</span>
+                  </span>
+                  <span class="text-[10px] sm:text-[11px] text-gray-400 font-medium">(${prod.reviewsCount})</span>
+                </div>
+                <span class="text-[10px] sm:text-[11px] text-gray-500 font-medium">Free Delivery</span>
               </div>
             </div>
 
-            <!-- Dual CTAs for ABHA USP -->
-            <div class="mt-3 pt-2.5 border-t border-gray-100 grid grid-cols-2 gap-1.5">
+            <!-- Dual CTAs for ABHA Royal Boutique USP -->
+            <div class="mt-3 pt-2 border-t border-[#EBE3D7]/70 grid grid-cols-2 gap-1.5">
               ${prod.isSoldOut ? `
                 <div class="col-span-2 px-2 py-1.5 bg-red-50 text-red-700 text-[10px] sm:text-xs font-bold rounded text-center border border-red-200">
                   Sold Out
                 </div>
               ` : `
-                <button type="button" onclick="initiatePurchase('${prod.id}', 'unstitched')" class="py-1.5 px-1 rounded text-[10px] sm:text-xs font-bold border border-gray-300 text-gray-800 hover:bg-gray-50 text-center transition">
+                <button type="button" onclick="initiatePurchase('${prod.id}', 'unstitched')" class="py-1.5 px-1 rounded text-[10px] sm:text-xs font-bold border border-maroon-900/40 text-maroon-950 hover:bg-maroon-900/5 text-center transition">
                   Buy Fabric
                 </button>
-                <button type="button" onclick="initiatePurchase('${prod.id}', 'stitched')" class="py-1.5 px-1 rounded text-[10px] sm:text-xs font-bold bg-gray-900 hover:bg-black text-white text-center transition shadow-xs">
+                <button type="button" onclick="initiatePurchase('${prod.id}', 'stitched')" class="py-1.5 px-1 rounded text-[10px] sm:text-xs font-bold bg-maroon-900 hover:bg-maroon-950 text-gold-300 hover:text-white text-center transition shadow-xs">
                   Stitch +₹${prod.stitchingFee}
                 </button>
               `}

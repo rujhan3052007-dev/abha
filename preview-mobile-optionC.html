@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=390, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ABHA Mobile - Option C: Modern D2C Fashion</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-white text-gray-900 antialiased pb-20 font-['Plus_Jakarta_Sans',sans-serif]">
+
+  <!-- STICKY MINIMALIST HEADER -->
+  <header class="sticky top-0 bg-white/95 backdrop-blur-md z-40 border-b border-gray-100 px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <button class="p-1 -ml-1 text-gray-900">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+      <span class="font-['Cinzel',serif] font-black text-xl tracking-widest text-black">ABHA</span>
+    </div>
+
+    <div class="flex items-center gap-4 text-gray-900">
+      <button class="p-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      </button>
+      <button class="p-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+      </button>
+      <button class="relative p-1">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+        <span class="absolute -top-1 -right-1 bg-black text-white text-[8px] font-bold w-3.5 h-3.5 rounded-full flex items-center justify-center">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- FULL BLEED VISUAL FASHION HERO -->
+  <section class="relative aspect-[4/3] bg-gray-900 overflow-hidden">
+    <img src="images/pink-leheriya-cotton-suit.jpg" class="w-full h-full object-cover opacity-90">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-4 text-white">
+      <span class="text-[10px] uppercase font-bold tracking-widest text-rose-300">New In At Loom</span>
+      <h2 class="text-xl font-bold font-['Playfair_Display',serif] leading-tight mt-0.5">
+        Handcrafted Salwar Suit Ensembles
+      </h2>
+      <p class="text-xs text-gray-200 mt-1 font-light">
+        ₹1,650 Onwards • Pure Fabric + Custom Stitching
+      </p>
+      <div class="mt-3 flex items-center gap-2">
+        <button class="px-4 py-2 bg-white text-black text-xs font-bold rounded-full shadow-sm">
+          Shop Loom
+        </button>
+        <button class="px-4 py-2 bg-white/20 backdrop-blur-sm text-white text-xs font-semibold rounded-full border border-white/30">
+          Book Tailor
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MICRO DISCOVERY CHIPS -->
+  <section class="p-3 border-b border-gray-100 flex items-center gap-2 overflow-x-auto no-scrollbar">
+    <button class="px-3.5 py-1.5 bg-black text-white text-xs font-bold rounded-full shrink-0">All Suits</button>
+    <button class="px-3.5 py-1.5 bg-gray-100 text-gray-800 text-xs font-medium rounded-full shrink-0">Pure Cotton</button>
+    <button class="px-3.5 py-1.5 bg-gray-100 text-gray-800 text-xs font-medium rounded-full shrink-0">Bandhani</button>
+    <button class="px-3.5 py-1.5 bg-gray-100 text-gray-800 text-xs font-medium rounded-full shrink-0">Chanderi Silk</button>
+  </section>
+
+  <!-- 2-COLUMN MODERN MINIMALIST FEED -->
+  <section class="p-3">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-xs uppercase font-extrabold tracking-widest text-gray-500">Curated Suits (4)</h3>
+      <span class="text-xs font-bold text-black">Filter (0)</span>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3">
+      
+      <!-- Card 1 -->
+      <article class="flex flex-col justify-between">
+        <div class="relative aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden">
+          <img src="images/mustard-bandhani-chanderi-suit.jpg" class="w-full h-full object-cover">
+          <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 backdrop-blur-xs flex items-center justify-center text-gray-700 shadow-xs">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          </button>
+          <span class="absolute bottom-2 left-2 bg-black/75 backdrop-blur-xs text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
+            ★ 4.9
+          </span>
+        </div>
+        <div class="pt-2 flex-1 flex flex-col justify-between">
+          <div>
+            <h4 class="text-xs font-bold text-gray-900 line-clamp-1">Mustard Bandhani Suit</h4>
+            <div class="flex items-baseline gap-1.5 mt-0.5">
+              <span class="text-sm font-extrabold text-black">₹2,450</span>
+              <span class="text-[10px] text-gray-400 line-through font-normal">₹3,850</span>
+              <span class="text-[10px] font-bold text-rose-600">36% off</span>
+            </div>
+            <p class="text-[10px] text-gray-500 mt-0.5">Free Delivery</p>
+          </div>
+          <button class="mt-2.5 w-full py-2 bg-black text-white text-xs font-bold rounded-md hover:bg-gray-900 transition">
+            + Add to Bag
+          </button>
+        </div>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="flex flex-col justify-between">
+        <div class="relative aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden">
+          <img src="images/magenta-chanderi-silk-suit.jpg" class="w-full h-full object-cover">
+          <button class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 backdrop-blur-xs flex items-center justify-center text-gray-700 shadow-xs">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          </button>
+          <span class="absolute bottom-2 left-2 bg-black/75 backdrop-blur-xs text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
+            ★ 5.0
+          </span>
+        </div>
+        <div class="pt-2 flex-1 flex flex-col justify-between">
+          <div>
+            <h4 class="text-xs font-bold text-gray-900 line-clamp-1">Magenta Chanderi Silk</h4>
+            <div class="flex items-baseline gap-1.5 mt-0.5">
+              <span class="text-sm font-extrabold text-black">₹2,850</span>
+              <span class="text-[10px] text-gray-400 line-through font-normal">₹4,499</span>
+              <span class="text-[10px] font-bold text-rose-600">37% off</span>
+            </div>
+            <p class="text-[10px] text-gray-500 mt-0.5">Free Delivery</p>
+          </div>
+          <button class="mt-2.5 w-full py-2 bg-black text-white text-xs font-bold rounded-md hover:bg-gray-900 transition">
+            + Add to Bag
+          </button>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- STICKY BOTTOM APP NAVIGATION -->
+  <nav class="fixed bottom-0 inset-x-0 bg-white border-t border-gray-100 z-50 py-2 px-6 flex items-center justify-between shadow-lg">
+    <div class="flex flex-col items-center text-black font-bold text-[10px]">
+      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+      <span>Shop</span>
+    </div>
+    <div class="flex flex-col items-center text-gray-400 text-[10px]">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+      <span>Search</span>
+    </div>
+    <div class="flex flex-col items-center text-gray-400 text-[10px]">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+      <span>Wishlist</span>
+    </div>
+    <div class="flex flex-col items-center text-gray-400 text-[10px]">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+      <span>Bag (0)</span>
+    </div>
+  </nav>
+
+</body>
+</html>
