@@ -54,15 +54,16 @@
       flex-direction: column;
     }
 
-    /* Top Bar */
+    /* Top Bar - Harmonized with Home Page Luxury Aesthetic */
     .topbar {
-      background: var(--maroon);
-      color: var(--white);
+      background: var(--cream);
+      color: var(--charcoal);
+      border-bottom: 1px solid var(--gray-300);
       padding: 0.65rem 1.25rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: var(--shadow);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
       position: sticky;
       top: 0;
       z-index: 100;
@@ -79,9 +80,9 @@
       display: none;
       align-items: center;
       justify-content: center;
-      background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.3);
-      color: var(--white);
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      color: var(--charcoal);
       width: 36px;
       height: 36px;
       border-radius: 6px;
@@ -90,7 +91,7 @@
       transition: all 0.2s;
       flex-shrink: 0;
     }
-    .btn-sidebar-toggle:hover { background: rgba(255,255,255,0.25); }
+    .btn-sidebar-toggle:hover { background: var(--gray-100); }
     .topbar-brand {
       display: flex;
       align-items: center;
@@ -98,29 +99,36 @@
       text-decoration: none;
       color: inherit;
       min-width: 0;
+      cursor: pointer;
     }
-    .topbar-logo {
-      width: 30px;
-      height: 30px;
+    .topbar-logo-crest {
+      width: 44px;
+      height: 44px;
       object-fit: contain;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.08));
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+    .topbar-brand:hover .topbar-logo-crest {
+      transform: scale(1.05);
+    }
+    .topbar-logo-text {
+      height: 36px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.06));
       flex-shrink: 0;
     }
-    .topbar-title {
-      font-family: var(--font-serif);
-      font-size: 1.2rem;
-      letter-spacing: 0.08em;
-      font-weight: 700;
-      color: var(--gold-light);
-      white-space: nowrap;
-    }
     .topbar-tag {
-      font-size: 0.7rem;
-      background: rgba(255,255,255,0.15);
-      padding: 0.2rem 0.5rem;
+      font-size: 0.68rem;
+      background: var(--maroon);
+      color: var(--cream);
+      padding: 0.22rem 0.55rem;
       border-radius: 4px;
       margin-left: 0.35rem;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
+      font-weight: 700;
       white-space: nowrap;
     }
     .topbar-user {
@@ -131,6 +139,7 @@
       flex-wrap: wrap;
       justify-content: flex-end;
       min-width: 0;
+      color: var(--charcoal);
     }
     .role-badge {
       display: inline-block;
@@ -147,16 +156,17 @@
     .role-delivery { background: #bbf7d0; color: #166534; }
 
     .btn-logout {
-      background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.3);
+      background: var(--maroon);
+      border: none;
       color: var(--white);
-      padding: 0.35rem 0.8rem;
+      padding: 0.4rem 0.85rem;
       border-radius: 6px;
       cursor: pointer;
       font-size: 0.8rem;
+      font-weight: 600;
       transition: all 0.2s;
     }
-    .btn-logout:hover { background: rgba(255,255,255,0.25); }
+    .btn-logout:hover { background: var(--maroon-light); }
 
     /* Layout Container */
     .portal-container {
@@ -371,12 +381,31 @@
       .btn-sidebar-toggle { display: inline-flex; }
       .topbar { padding: 0.5rem 0.75rem; }
       .topbar-tag { display: none; }
-      .topbar-title { font-size: 1.1rem; }
+      .topbar-logo-crest { width: 36px; height: 36px; }
+      .topbar-logo-text { height: 28px; }
       #userNameDisplay { display: none; }
       #roleSwitcherSelect {
         max-width: 135px;
         font-size: 0.75rem;
         padding: 0.2rem 0.35rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .topbar { padding: 0.45rem 0.5rem; gap: 0.35rem; }
+      .topbar-left { gap: 0.35rem; }
+      .btn-sidebar-toggle { width: 32px; height: 32px; font-size: 1rem; }
+      .topbar-logo-crest { width: 32px; height: 32px; }
+      .topbar-logo-text { height: 24px; }
+      #userRoleBadge { display: none; }
+      #roleSwitcherSelect {
+        max-width: 110px;
+        font-size: 0.72rem;
+        padding: 0.2rem 0.3rem;
+      }
+      .btn-logout {
+        padding: 0.32rem 0.6rem;
+        font-size: 0.75rem;
       }
       .portal-container { flex-direction: column; position: relative; }
       .sidebar {
@@ -624,7 +653,7 @@
   <!-- AUTH GATE OVERLAY -->
   <div id="authGate" style="display: flex;">
     <div class="auth-box">
-      <img src="images/logo/abha-favicon.svg" alt="ABHA Crest" class="auth-logo">
+      <img src="images/logo/abha-crest-simplified.png?v=20260913_4" alt="ABHA Royal Crest" class="auth-logo" style="width: 72px; height: 72px; object-fit: contain;">
       <h2 class="auth-title">ABHA Operations Portal</h2>
       <p class="auth-sub">Enter your staff credentials or register as Owner to manage boutique</p>
       
@@ -692,14 +721,14 @@
       <button type="button" class="btn-sidebar-toggle" id="btnAdminSidebarToggle" onclick="toggleAdminSidebar()" aria-label="Toggle navigation menu">
         <span>☰</span>
       </button>
-      <a href="index.html" class="topbar-brand" title="Return to Live Storefront">
-        <img src="images/logo/abha-favicon.svg" alt="ABHA Crest" class="topbar-logo">
-        <span class="topbar-title">ABHA</span>
+      <a href="index.html" class="topbar-brand group" title="Return to Live Storefront">
+        <img src="images/logo/abha-crest-simplified.png?v=20260913_4" alt="ABHA Royal Crest" class="topbar-logo-crest" />
+        <img src="images/logo/abha-text-maroon.png?v=20260913_4" alt="ABHA Clothing &amp; Tailoring" class="topbar-logo-text" />
         <span class="topbar-tag">Operations Portal</span>
       </a>
     </div>
     <div class="topbar-user">
-      <select id="roleSwitcherSelect" onchange="switchRoleOnTheFly(this.value)" style="background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); border-radius: 4px; padding: 0.25rem 0.5rem; font-size: 0.8rem; cursor: pointer;">
+      <select id="roleSwitcherSelect" onchange="switchRoleOnTheFly(this.value)" style="background: var(--white); color: var(--charcoal); border: 1px solid var(--gray-300); border-radius: 6px; padding: 0.3rem 0.55rem; font-size: 0.8rem; font-weight: 600; cursor: pointer;">
         <option value="OWNER" style="color: #000;">Role: 👑 Owner (Full Access)</option>
         <option value="MANAGER" style="color: #000;">Role: 📋 Manager (Catalog & POS)</option>
         <option value="TAILOR" style="color: #000;">Role: ✂️ Master Tailor (Atelier)</option>
@@ -720,7 +749,7 @@
     <!-- SIDEBAR -->
     <aside class="sidebar">
       <div class="sidebar-mobile-header">
-        <span class="brand-text">ABHA Operations</span>
+        <div style="display: flex; align-items: center; gap: 0.5rem;"><img src="images/logo/abha-crest-simplified.png?v=20260913_4" alt="ABHA Crest" style="width: 32px; height: 32px; object-fit: contain;"><img src="images/logo/abha-text-maroon.png?v=20260913_4" alt="ABHA" style="height: 24px; width: auto; object-fit: contain;"></div>
         <button type="button" class="btn-sidebar-close" onclick="closeAdminSidebar()" aria-label="Close menu">&times;</button>
       </div>
       <div class="nav-header">Overview</div>
