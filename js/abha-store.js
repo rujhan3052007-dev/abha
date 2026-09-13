@@ -831,6 +831,16 @@
       }
       if (pathname === '/api/auth/me') {
         const users = getTable('users', INITIAL_USERS);
+        const authHeader = options.headers?.Authorization || options.headers?.authorization;
+        if (authHeader && authHeader.includes('abha_jwt_')) {
+          try {
+            const tokenStr = authHeader.replace(/^Bearer\s+/, '');
+            const raw = atob(tokenStr.replace('abha_jwt_', ''));
+            const [id, role] = raw.split(':');
+            const found = users.find(u => u.id === id || u.role === role);
+            if (found) return { success: true, user: found };
+          } catch(e) {}
+        }
         return { success: true, user: users[0] };
       }
       if (pathname === '/api/admin/dashboard' || pathname === '/api/admin/overview') {

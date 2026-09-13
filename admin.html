@@ -407,6 +407,10 @@
         padding: 0.32rem 0.6rem;
         font-size: 0.75rem;
       }
+      .btn-switch-role {
+        padding: 0.25rem 0.45rem;
+        font-size: 0.72rem;
+      }
       .portal-container { flex-direction: column; position: relative; }
       .sidebar {
         position: fixed;
@@ -624,7 +628,8 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: var(--maroon);
+      background: rgba(92, 14, 29, 0.95);
+      backdrop-filter: blur(4px);
       z-index: 1000;
       align-items: center;
       justify-content: center;
@@ -634,14 +639,115 @@
     }
     .auth-box {
       background: var(--white);
-      max-width: 440px;
+      max-width: 490px;
       width: 100%;
       border-radius: var(--radius);
-      padding: 2.25rem 1.75rem;
-      box-shadow: var(--shadow-lg);
+      padding: 2rem 1.6rem;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
       text-align: center;
       box-sizing: border-box;
       margin: auto;
+      border: 1px solid rgba(212, 175, 55, 0.35);
+    }
+    .role-card {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0.85rem 1rem;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      background: var(--white);
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .role-card:hover {
+      border-color: var(--maroon);
+      background: #FAF7F2;
+      box-shadow: 0 4px 14px rgba(92, 14, 29, 0.08);
+      transform: translateY(-2px);
+    }
+    .role-card-icon {
+      font-size: 1.6rem;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #FAF7F2;
+      border: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .role-card-body {
+      flex: 1;
+      min-width: 0;
+    }
+    .role-card-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .role-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--charcoal);
+    }
+    .role-device-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.18rem 0.5rem;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      white-space: nowrap;
+    }
+    .badge-authorized {
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #86efac;
+    }
+    .badge-locked {
+      background: #f1f5f9;
+      color: #64748b;
+      border: 1px solid #cbd5e1;
+    }
+    .role-card-sub {
+      font-size: 0.76rem;
+      color: var(--gray-500);
+      margin-top: 0.15rem;
+      line-height: 1.3;
+    }
+    .role-card-arrow {
+      font-size: 1.3rem;
+      color: var(--maroon);
+      font-weight: 700;
+      flex-shrink: 0;
+      padding-left: 0.25rem;
+    }
+    .btn-switch-role {
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      color: var(--maroon);
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-switch-role:hover {
+      background: var(--gray-100);
+      border-color: var(--maroon);
     }
     .auth-logo { width: 54px; height: 54px; margin-bottom: 1rem; }
     .auth-title { font-family: var(--font-serif); color: var(--maroon); font-size: 1.5rem; margin-bottom: 0.25rem; font-weight: 700; }
@@ -650,69 +756,161 @@
 </head>
 <body>
 
-  <!-- AUTH GATE OVERLAY -->
+  <!-- AUTH GATE OVERLAY WITH ROLE-FIRST SELECTION & DEVICE MEMORY -->
   <div id="authGate" style="display: flex;">
     <div class="auth-box">
-      <img src="images/logo/abha-crest-simplified.png?v=20260913_4" alt="ABHA Royal Crest" class="auth-logo" style="width: 72px; height: 72px; object-fit: contain;">
-      <h2 class="auth-title">ABHA Operations Portal</h2>
-      <p class="auth-sub">Enter your staff credentials or register as Owner to manage boutique</p>
       
-      <!-- Toggle Sign In vs Register -->
-      <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--gray-200); padding-bottom: 0.75rem;">
-        <button type="button" id="tabBtnSignIn" onclick="showAuthMode('login')" style="flex: 1; padding: 0.4rem; font-size: 0.85rem; font-weight: 700; border: none; background: none; color: var(--maroon); border-bottom: 2px solid var(--maroon); cursor: pointer;">Sign In</button>
-        <button type="button" id="tabBtnRegister" onclick="showAuthMode('register')" style="flex: 1; padding: 0.4rem; font-size: 0.85rem; font-weight: 600; border: none; background: none; color: var(--gray-500); cursor: pointer;">+ Register as Owner</button>
+      <!-- VIEW 1: ROLE-FIRST SELECTION -->
+      <div id="roleSelectorView">
+        <img src="images/logo/abha-crest-simplified.png?v=20260913_4" alt="ABHA Royal Crest" class="auth-logo" style="width: 68px; height: 68px; object-fit: contain; margin-bottom: 0.75rem;">
+        <h2 class="auth-title" style="font-size: 1.45rem;">ABHA Operations Portal</h2>
+        <p class="auth-sub" style="margin-bottom: 1.15rem; font-size: 0.83rem;">Select your role to access store management.<br><span style="font-size: 0.75rem; color: var(--maroon); font-weight: 700;">Authorized devices enter directly with one tap</span></p>
+
+        <!-- Role Option Cards Stack -->
+        <div class="role-cards-container" style="display: flex; flex-direction: column; gap: 0.65rem; text-align: left; margin-bottom: 1.25rem;">
+          
+          <!-- 1. Owner Card -->
+          <div class="role-card" id="cardRoleOwner" onclick="selectPortalRole('OWNER')">
+            <div class="role-card-icon">👑</div>
+            <div class="role-card-body">
+              <div class="role-card-title-row">
+                <span class="role-name">Boutique Owner</span>
+                <span class="role-device-badge" id="badgeRoleOwner">Checking...</span>
+              </div>
+              <div class="role-card-sub">Full Store Control, Catalog, Revenue & Analytics</div>
+            </div>
+            <div class="role-card-arrow">›</div>
+          </div>
+
+          <!-- 2. Manager Card -->
+          <div class="role-card" id="cardRoleManager" onclick="selectPortalRole('MANAGER')">
+            <div class="role-card-icon">📋</div>
+            <div class="role-card-body">
+              <div class="role-card-title-row">
+                <span class="role-name">Store Manager</span>
+                <span class="role-device-badge" id="badgeRoleManager">Checking...</span>
+              </div>
+              <div class="role-card-sub">Catalog Architecture, POS In-Store Billing, Orders</div>
+            </div>
+            <div class="role-card-arrow">›</div>
+          </div>
+
+          <!-- 3. Tailor Card -->
+          <div class="role-card" id="cardRoleTailor" onclick="selectPortalRole('TAILOR')">
+            <div class="role-card-icon">✂️</div>
+            <div class="role-card-body">
+              <div class="role-card-title-row">
+                <span class="role-name">Master Tailor</span>
+                <span class="role-device-badge" id="badgeRoleTailor">Checking...</span>
+              </div>
+              <div class="role-card-sub">Atelier Stitching Queue & Bespoke Measurements</div>
+            </div>
+            <div class="role-card-arrow">›</div>
+          </div>
+
+          <!-- 4. Delivery Card -->
+          <div class="role-card" id="cardRoleDelivery" onclick="selectPortalRole('DELIVERY')">
+            <div class="role-card-icon">🚚</div>
+            <div class="role-card-body">
+              <div class="role-card-title-row">
+                <span class="role-name">Delivery Staff</span>
+                <span class="role-device-badge" id="badgeRoleDelivery">Checking...</span>
+              </div>
+              <div class="role-card-sub">Beawar Doorstep Dispatches & Delivery Status</div>
+            </div>
+            <div class="role-card-arrow">›</div>
+          </div>
+
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.75rem; border-top: 1px solid var(--gray-200); font-size: 0.8rem;">
+          <a href="index.html" style="color: var(--maroon); text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 0.25rem;">
+            ← Return to Live Store
+          </a>
+          <button type="button" onclick="clearAllDeviceSessions()" style="background: none; border: none; color: var(--gray-500); font-size: 0.75rem; cursor: pointer; text-decoration: underline;">
+            Clear Device Logins
+          </button>
+        </div>
       </div>
 
-      <!-- Login Form -->
-      <form id="adminLoginForm" onsubmit="handleAdminLogin(event)" style="display: flex; flex-direction: column; gap: 1rem; text-align: left;">
-        <div>
-          <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.35rem; display: block;">Email or Phone</label>
-          <input type="text" id="loginIdentifier" class="form-input" placeholder="admin@abha.in / 9214837104" required value="admin@abha.in">
+      <!-- VIEW 2: AUTHENTICATION / LOGIN FORM (For unauthenticated roles or registration) -->
+      <div id="authFormView" style="display: none;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.85rem; border-bottom: 1px solid var(--gray-200); padding-bottom: 0.6rem;">
+          <button type="button" onclick="showRoleSelectorView()" style="background: none; border: none; color: var(--maroon); font-size: 0.82rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 0.3rem;">
+            ← Back to Roles
+          </button>
+          <span id="authFormRoleBadge" class="role-badge role-owner">Owner Login</span>
         </div>
-        <div>
-          <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.35rem; display: block;">Password</label>
-          <input type="password" id="loginPassword" class="form-input" placeholder="••••••••••••" required value="AbhaAdmin2026!">
-        </div>
-        <div id="authError" style="color: var(--red-text); font-size: 0.8rem; display: none;"></div>
-        <button type="submit" class="btn btn-primary" style="justify-content: center; padding: 0.8rem; font-size: 0.95rem; margin-top: 0.5rem;">Sign In to Dashboard</button>
-      </form>
 
-      <!-- Owner Registration Form -->
-      <form id="adminRegisterForm" onsubmit="handleOwnerRegistration(event)" style="display: none; flex-direction: column; gap: 0.85rem; text-align: left;">
-        <div>
-          <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Full Name *</label>
-          <input type="text" id="regName" class="form-input" placeholder="e.g. Rujhan" required>
+        <h3 id="authFormTitle" style="font-family: var(--font-serif); color: var(--maroon); font-size: 1.3rem; margin-bottom: 0.25rem;">Log In to Enter</h3>
+        <p id="authFormSub" class="auth-sub" style="margin-bottom: 0.85rem;">Enter credentials to authorize this device.</p>
+
+        <!-- Toggle Sign In vs Register (Register only for Owner) -->
+        <div id="authModeTabs" style="display: flex; gap: 0.5rem; margin-bottom: 0.85rem; border-bottom: 1px solid var(--gray-200); padding-bottom: 0.5rem;">
+          <button type="button" id="tabBtnSignIn" onclick="showAuthMode('login')" style="flex: 1; padding: 0.35rem; font-size: 0.85rem; font-weight: 700; border: none; background: none; color: var(--maroon); border-bottom: 2px solid var(--maroon); cursor: pointer;">Sign In</button>
+          <button type="button" id="tabBtnRegister" onclick="showAuthMode('register')" style="flex: 1; padding: 0.35rem; font-size: 0.85rem; font-weight: 600; border: none; background: none; color: var(--gray-500); cursor: pointer;">+ Register as Owner</button>
         </div>
-        <div>
-          <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Email Address *</label>
-          <input type="email" id="regEmail" class="form-input" placeholder="owner@abha.in" required>
+
+        <!-- Login Form -->
+        <form id="adminLoginForm" onsubmit="handleAdminLogin(event)" style="display: flex; flex-direction: column; gap: 0.85rem; text-align: left;">
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Email or Phone</label>
+            <input type="text" id="loginIdentifier" class="form-input" placeholder="admin@abha.in / 9214837104" required>
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Password</label>
+            <input type="password" id="loginPassword" class="form-input" placeholder="••••••••••••" required>
+          </div>
+          
+          <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: var(--gray-700); cursor: pointer; user-select: none; margin-top: -0.2rem;">
+            <input type="checkbox" id="chkRememberDevice" checked style="accent-color: var(--maroon); width: 15px; height: 15px;">
+            <span><strong>Remember this device</strong> (Direct one-tap access next time)</span>
+          </label>
+
+          <div id="authError" style="color: var(--red-text); font-size: 0.8rem; display: none;"></div>
+          <button type="submit" id="btnSubmitLogin" class="btn btn-primary" style="justify-content: center; padding: 0.75rem; font-size: 0.95rem; margin-top: 0.25rem;">Sign In & Unlock Panel</button>
+        </form>
+
+        <!-- Owner Registration Form -->
+        <form id="adminRegisterForm" onsubmit="handleOwnerRegistration(event)" style="display: none; flex-direction: column; gap: 0.75rem; text-align: left;">
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.2rem; display: block;">Full Name *</label>
+            <input type="text" id="regName" class="form-input" placeholder="e.g. Rujhan" required>
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.2rem; display: block;">Email Address *</label>
+            <input type="email" id="regEmail" class="form-input" placeholder="owner@abha.in" required>
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.2rem; display: block;">Mobile Phone *</label>
+            <input type="tel" id="regPhone" class="form-input" placeholder="9214837104" required>
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.2rem; display: block;">Set Password *</label>
+            <input type="password" id="regPassword" class="form-input" placeholder="••••••••••••" required minlength="6">
+          </div>
+          <div id="regAuthError" style="color: var(--red-text); font-size: 0.8rem; display: none;"></div>
+          <button type="submit" class="btn btn-primary" style="justify-content: center; padding: 0.75rem; font-size: 0.95rem; margin-top: 0.25rem;">Create Owner Account & Enter</button>
+        </form>
+
+        <div style="margin-top: 0.85rem; padding: 0.65rem; background: var(--gray-100); border-radius: 6px; text-align: center;">
+          <p style="font-size: 0.72rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.4rem;">Demo / Quick Password Auto-Fill:</p>
+          <div style="display: flex; gap: 0.35rem; justify-content: center; flex-wrap: wrap;">
+            <button type="button" class="btn btn-outline" style="padding: 0.25rem 0.45rem; font-size: 0.72rem;" onclick="quickLogin('admin@abha.in', 'AbhaAdmin2026!')">👑 Owner</button>
+            <button type="button" class="btn btn-outline" style="padding: 0.25rem 0.45rem; font-size: 0.72rem;" onclick="quickLogin('manager@abha.in', 'AbhaManager2026!')">📋 Manager</button>
+            <button type="button" class="btn btn-outline" style="padding: 0.25rem 0.45rem; font-size: 0.72rem;" onclick="quickLogin('master.tailor@abha.in', 'AbhaTailor2026!')">✂️ Tailor</button>
+            <button type="button" class="btn btn-outline" style="padding: 0.25rem 0.45rem; font-size: 0.72rem;" onclick="quickLogin('delivery@abha.in', 'AbhaDelivery2026!')">🚚 Delivery</button>
+          </div>
         </div>
-        <div>
-          <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Mobile Phone *</label>
-          <input type="tel" id="regPhone" class="form-input" placeholder="9214837104" required>
-        </div>
-        <div>
-          <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Set Password *</label>
-          <input type="password" id="regPassword" class="form-input" placeholder="••••••••••••" required minlength="6">
-        </div>
-        <div id="regAuthError" style="color: var(--red-text); font-size: 0.8rem; display: none;"></div>
-        <button type="submit" class="btn btn-primary" style="justify-content: center; padding: 0.8rem; font-size: 0.95rem; margin-top: 0.25rem;">Create Owner Account & Enter</button>
-      </form>
-      
-      <div style="margin-top: 1.25rem; padding: 0.75rem; background: var(--gray-100); border-radius: 6px; text-align: center;">
-        <p style="font-size: 0.75rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.5rem;">One-Click Role Testing (Live GitHub Pages & Local):</p>
-        <div style="display: flex; gap: 0.4rem; justify-content: center; flex-wrap: wrap;">
-          <button type="button" class="btn btn-outline" style="padding: 0.3rem 0.5rem; font-size: 0.75rem;" onclick="quickLogin('admin@abha.in', 'AbhaAdmin2026!')">👑 Owner</button>
-          <button type="button" class="btn btn-outline" style="padding: 0.3rem 0.5rem; font-size: 0.75rem;" onclick="quickLogin('manager@abha.in', 'AbhaManager2026!')">📋 Manager</button>
-          <button type="button" class="btn btn-outline" style="padding: 0.3rem 0.5rem; font-size: 0.75rem;" onclick="quickLogin('master.tailor@abha.in', 'AbhaTailor2026!')">✂️ Tailor</button>
-          <button type="button" class="btn btn-outline" style="padding: 0.3rem 0.5rem; font-size: 0.75rem;" onclick="quickLogin('delivery@abha.in', 'AbhaDelivery2026!')">🚚 Delivery</button>
-        </div>
+
       </div>
-      
-      <div style="margin-top: 1rem; border-top: 1px solid var(--gray-200); padding-top: 0.75rem; font-size: 0.75rem; color: var(--gray-500); text-align: center;">
-        Flagship Store: 11, Ganesha Tower, Beawar, Rajasthan (305901)
-      </div>
+
     </div>
+  </div>
+
+  <!-- Direct Access Toast Notification -->
+  <div id="directAccessToast" style="display: none; position: fixed; top: 1.25rem; left: 50%; transform: translateX(-50%); z-index: 2000; background: #065f46; color: #ffffff; padding: 0.65rem 1.35rem; border-radius: 30px; box-shadow: 0 6px 20px rgba(0,0,0,0.25); font-size: 0.85rem; font-weight: 600; align-items: center; gap: 0.5rem; border: 1px solid #34d399;">
+    <span>🟢</span> <span id="directAccessToastMsg">Direct access granted on this device</span>
   </div>
 
   <!-- TOP NAVIGATION BAR -->
@@ -736,6 +934,7 @@
       </select>
       <span id="userRoleBadge" class="role-badge role-owner">Owner</span>
       <span id="userNameDisplay" style="font-weight: 600;">ABHA Management</span>
+      <button type="button" class="btn-switch-role" onclick="openRoleSelector()" title="Switch Portal Role">🔄 Switch Role</button>
       <button onclick="handleLogout()" class="btn-logout">Logout</button>
     </div>
   </header>
@@ -1175,6 +1374,161 @@
     let cachedProducts = [];
     let selectedPosProduct = null;
 
+    const SESSIONS_KEY = 'abha_role_sessions';
+    const ROLE_DEFAULTS = {
+      OWNER: { identifier: 'admin@abha.in', password: 'AbhaAdmin2026!', label: 'Boutique Owner' },
+      MANAGER: { identifier: 'manager@abha.in', password: 'AbhaManager2026!', label: 'Store Manager' },
+      TAILOR: { identifier: 'master.tailor@abha.in', password: 'AbhaTailor2026!', label: 'Master Tailor' },
+      DELIVERY: { identifier: 'delivery@abha.in', password: 'AbhaDelivery2026!', label: 'Delivery Staff' }
+    };
+    let selectedRoleTarget = 'OWNER';
+
+    function getRoleSessions() {
+      try {
+        const raw = localStorage.getItem(SESSIONS_KEY);
+        if (!raw) return {};
+        return JSON.parse(raw);
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveRoleSession(role, token, user) {
+      const sessions = getRoleSessions();
+      sessions[role] = {
+        token,
+        user,
+        savedAt: Date.now()
+      };
+      localStorage.setItem(SESSIONS_KEY, JSON.stringify(sessions));
+      updateRoleBadges();
+    }
+
+    function removeRoleSession(role) {
+      const sessions = getRoleSessions();
+      delete sessions[role];
+      localStorage.setItem(SESSIONS_KEY, JSON.stringify(sessions));
+      updateRoleBadges();
+    }
+
+    function clearAllDeviceSessions() {
+      if (confirm('Clear all saved role logins on this device? You will need to enter passwords again.')) {
+        localStorage.removeItem(SESSIONS_KEY);
+        localStorage.removeItem('abha_token');
+        localStorage.removeItem('abha_active_role');
+        currentUser = null;
+        authToken = null;
+        updateRoleBadges();
+        showDirectAccessToast('All device sessions cleared');
+      }
+    }
+
+    function showDirectAccessToast(msg) {
+      const toast = document.getElementById('directAccessToast');
+      const toastMsg = document.getElementById('directAccessToastMsg');
+      if (!toast || !toastMsg) return;
+      toastMsg.textContent = msg;
+      toast.style.display = 'flex';
+      toast.style.opacity = '1';
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => { toast.style.display = 'none'; }, 300);
+      }, 3500);
+    }
+
+    function updateRoleBadges() {
+      const sessions = getRoleSessions();
+      const roles = ['OWNER', 'MANAGER', 'TAILOR', 'DELIVERY'];
+      roles.forEach(r => {
+        const key = r.charAt(0) + r.slice(1).toLowerCase();
+        const badge = document.getElementById(`badgeRole${key}`);
+        if (!badge) return;
+        if (sessions[r] && sessions[r].token) {
+          badge.className = 'role-device-badge badge-authorized';
+          badge.innerHTML = '🟢 Authorized • Direct Enter';
+        } else {
+          badge.className = 'role-device-badge badge-locked';
+          badge.innerHTML = '🔒 Login Required';
+        }
+      });
+    }
+
+    function selectPortalRole(role) {
+      selectedRoleTarget = role;
+      const sessions = getRoleSessions();
+
+      // If device already logged in for this role, DIRECTLY ENTER!
+      if (sessions[role] && sessions[role].token && sessions[role].user) {
+        const session = sessions[role];
+        authToken = session.token;
+        currentUser = session.user;
+        localStorage.setItem('abha_token', authToken);
+        localStorage.setItem('abha_active_role', role);
+        enterDashboardAs(currentUser, true);
+        return;
+      }
+
+      // Otherwise, must log in first
+      showAuthFormForRole(role);
+    }
+
+    function showRoleSelectorView() {
+      document.getElementById('authFormView').style.display = 'none';
+      document.getElementById('roleSelectorView').style.display = 'block';
+      updateRoleBadges();
+    }
+
+    function showAuthFormForRole(role) {
+      selectedRoleTarget = role;
+      document.getElementById('roleSelectorView').style.display = 'none';
+      document.getElementById('authFormView').style.display = 'block';
+
+      const roleInfo = ROLE_DEFAULTS[role] || ROLE_DEFAULTS.OWNER;
+      document.getElementById('authFormTitle').textContent = `${roleInfo.label} Sign In`;
+      const badge = document.getElementById('authFormRoleBadge');
+      badge.textContent = roleInfo.label;
+      badge.className = `role-badge role-${role.toLowerCase()}`;
+
+      // Registration tab is for Owner
+      const tabReg = document.getElementById('tabBtnRegister');
+      if (tabReg) {
+        tabReg.style.display = role === 'OWNER' ? 'block' : 'none';
+      }
+      showAuthMode('login');
+
+      // Pre-fill default identifier for selected role
+      document.getElementById('loginIdentifier').value = roleInfo.identifier;
+      document.getElementById('loginPassword').value = '';
+      document.getElementById('loginPassword').focus();
+      document.getElementById('authError').style.display = 'none';
+    }
+
+    function openRoleSelector() {
+      document.getElementById('authGate').style.display = 'flex';
+      showRoleSelectorView();
+    }
+
+    function enterDashboardAs(user, isDirect = false) {
+      document.getElementById('authGate').style.display = 'none';
+      document.getElementById('userNameDisplay').textContent = user.name;
+      const badge = document.getElementById('userRoleBadge');
+      if (badge) {
+        badge.textContent = user.role;
+        badge.className = `role-badge role-${user.role.toLowerCase()}`;
+      }
+      const roleSelect = document.getElementById('roleSwitcherSelect');
+      if (roleSelect) roleSelect.value = user.role;
+
+      applyRolePermissions(user.role);
+
+      if (isDirect) {
+        showDirectAccessToast(`Direct access granted as ${user.name || user.role}`);
+      }
+
+      loadDashboard();
+      loadPosItems();
+    }
+
     async function apiRequest(endpoint, options = {}) {
       const headers = { 'Content-Type': 'application/json', ...options.headers };
       if (authToken) headers['Authorization'] = `Bearer ${authToken}`;
@@ -1227,16 +1581,9 @@
         authToken = res.token;
         currentUser = res.user;
         localStorage.setItem('abha_token', authToken);
-        document.getElementById('authGate').style.display = 'none';
-        document.getElementById('userNameDisplay').textContent = currentUser.name;
-        const badge = document.getElementById('userRoleBadge');
-        badge.textContent = currentUser.role;
-        badge.className = `role-badge role-${currentUser.role.toLowerCase()}`;
-        const roleSelect = document.getElementById('roleSwitcherSelect');
-        if (roleSelect) roleSelect.value = currentUser.role;
-        applyRolePermissions(currentUser.role);
-        loadDashboard();
-        loadPosItems();
+        localStorage.setItem('abha_active_role', 'OWNER');
+        saveRoleSession('OWNER', authToken, currentUser);
+        enterDashboardAs(currentUser, false);
       } catch (err) {
         errBox.textContent = err.message;
         errBox.style.display = 'block';
@@ -1251,24 +1598,13 @@
     }
 
     function switchRoleOnTheFly(role) {
-      if (!currentUser) currentUser = { id: 'u-temp', name: 'Staff User' };
-      currentUser.role = role;
-      if (role === 'OWNER') {
-        currentUser.name = 'Owner (ABHA)';
-      } else if (role === 'MANAGER') {
-        currentUser.name = 'Store Manager (Beawar)';
-      } else if (role === 'TAILOR') {
-        currentUser.name = 'Master Tailor (ABHA Atelier)';
-      } else if (role === 'DELIVERY') {
-        currentUser.name = 'Beawar Delivery Staff';
+      const sessions = getRoleSessions();
+      if (sessions[role] && sessions[role].token) {
+        selectPortalRole(role);
+      } else {
+        openRoleSelector();
+        showAuthFormForRole(role);
       }
-      document.getElementById('userNameDisplay').textContent = currentUser.name;
-      const badge = document.getElementById('userRoleBadge');
-      badge.textContent = role;
-      badge.className = `role-badge role-${role.toLowerCase()}`;
-      const roleSelect = document.getElementById('roleSwitcherSelect');
-      if (roleSelect) roleSelect.value = role;
-      applyRolePermissions(role);
     }
 
     function applyRolePermissions(role) {
@@ -1296,32 +1632,28 @@
     }
 
     async function init() {
-      if (authToken) {
+      // Migrate existing token if present
+      const legacyToken = localStorage.getItem('abha_token');
+      const sessions = getRoleSessions();
+      if (legacyToken && !sessions.OWNER) {
         try {
           const me = await apiRequest('/api/auth/me');
-          currentUser = me.user;
-          document.getElementById('authGate').style.display = 'none';
-          document.getElementById('userNameDisplay').textContent = currentUser.name;
-          const badge = document.getElementById('userRoleBadge');
-          badge.textContent = currentUser.role;
-          badge.className = `role-badge role-${currentUser.role.toLowerCase()}`;
-          const roleSelect = document.getElementById('roleSwitcherSelect');
-          if (roleSelect) roleSelect.value = currentUser.role;
-          applyRolePermissions(currentUser.role);
-        } catch (e) {
-          localStorage.removeItem('abha_token');
-          authToken = null;
-          document.getElementById('authGate').style.display = 'flex';
-        }
-      } else {
-        document.getElementById('authGate').style.display = 'flex';
+          if (me && me.user) {
+            saveRoleSession(me.user.role || 'OWNER', legacyToken, me.user);
+          }
+        } catch(e) {}
       }
+
+      // Always present the role gate first on opening admin panel!
+      document.getElementById('authGate').style.display = 'flex';
+      showRoleSelectorView();
     }
 
     async function handleAdminLogin(e) {
       e.preventDefault();
-      const identifier = document.getElementById('loginIdentifier').value;
+      const identifier = document.getElementById('loginIdentifier').value.trim();
       const password = document.getElementById('loginPassword').value;
+      const remember = document.getElementById('chkRememberDevice').checked;
       const errBox = document.getElementById('authError');
       errBox.style.display = 'none';
 
@@ -1333,14 +1665,13 @@
         authToken = res.token;
         currentUser = res.user;
         localStorage.setItem('abha_token', authToken);
-        document.getElementById('authGate').style.display = 'none';
-        document.getElementById('userNameDisplay').textContent = currentUser.name;
-        const badge = document.getElementById('userRoleBadge');
-        badge.textContent = currentUser.role;
-        badge.className = `role-badge role-${currentUser.role.toLowerCase()}`;
-        const roleSelect = document.getElementById('roleSwitcherSelect');
-        if (roleSelect) roleSelect.value = currentUser.role;
-        applyRolePermissions(currentUser.role);
+        localStorage.setItem('abha_active_role', currentUser.role);
+
+        if (remember) {
+          saveRoleSession(currentUser.role, authToken, currentUser);
+        }
+
+        enterDashboardAs(currentUser, false);
       } catch (err) {
         errBox.textContent = err.message;
         errBox.style.display = 'block';
@@ -1348,8 +1679,14 @@
     }
 
     function handleLogout() {
+      if (currentUser && currentUser.role) {
+        removeRoleSession(currentUser.role);
+      }
       localStorage.removeItem('abha_token');
-      window.location.reload();
+      localStorage.removeItem('abha_active_role');
+      currentUser = null;
+      authToken = null;
+      openRoleSelector();
     }
 
     function toggleAdminSidebar() {
