@@ -43,7 +43,7 @@ A production-ready, accessible, mobile-first e-commerce homepage and custom tail
 10. **Why Choose ABHA**: 6 core trust pillars (Quality, Fit, Personalization, Fashion, Tailor Support, Convenience).
 11. **Product Showcase**: Horizontal scrollable gallery of authentic weaves and textures.
 12. **Customer Reviews**: Transparent, verified customer testimonials from Jaipur, Ahmedabad, and Bengaluru.
-13. **Instagram Section**: *"Follow ABHA"* visual journal with `@abha.fashion` social CTA.
+13. **Instagram Section**: *"Follow ABHA on Instagram"* visual journal with `@abha_tailor_and_creation` social CTA and profile integration.
 14. **Visit ABHA / Physical Store**: Flagship store location in Beawar, Rajasthan, with Google Maps link, address, and in-store consultation booking.
 15. **WhatsApp CTA Section**: Direct consultation banner + persistent floating WhatsApp assistance pill.
 16. **About ABHA**: Authentic brand story connecting Indian handlooms with modern bespoke fit.
