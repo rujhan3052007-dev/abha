@@ -608,8 +608,8 @@
         </div>
       </div>
 
-      <!-- Product Grid -->
-      <div id="newArrivalsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Product Grid (Meesho-style 2-col on mobile, 4-col on desktop) -->
+      <div id="newArrivalsGrid" class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-5">
         <!-- Rendered dynamically -->
       </div>
 
@@ -702,8 +702,8 @@
         </div>
       </div>
 
-      <!-- Best Sellers Grid -->
-      <div id="bestSellersGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Best Sellers Grid (Meesho-style 2-col on mobile, 4-col on desktop) -->
+      <div id="bestSellersGrid" class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-5">
         <!-- Populated dynamically -->
       </div>
 
@@ -2449,6 +2449,8 @@
         category: 'Pure Cotton Salwar Suits',
         suitType: 'cotton',
         price: 1650,
+        mrp: 2450,
+        discount: '33% off',
         fabric: '100% Pure Cotton (Top 2.5m, Bottom 2.5m, Dupatta 2.5m)',
         color: 'Rani Pink with White Leheriya Stripes',
         image: 'images/pink-leheriya-cotton-suit.jpg',
@@ -2456,8 +2458,8 @@
         stitchingFee: 650,
         isNewArrival: true,
         isBestSeller: true,
-        rating: 5.0,
-        reviewsCount: 48,
+        rating: 4.8,
+        reviewsCount: 148,
         description: '100% pure breathable cotton 3-piece salwar suit dress material in vibrant rani pink. Features delicate neck embellishment, matching striped bottom fabric, and pure cotton dupatta. Ample 2.5m lengths for custom tailoring.'
       },
       {
@@ -2467,6 +2469,8 @@
         category: 'Bandhani & Leheriya Suits',
         suitType: 'prints',
         price: 2450,
+        mrp: 3850,
+        discount: '36% off',
         fabric: 'Premium Handloom Cotton-Silk with Bandhej Dupatta',
         color: 'Haldi Mustard & Rani Pink Accents',
         image: 'images/mustard-bandhani-chanderi-suit.jpg',
@@ -2475,7 +2479,7 @@
         isNewArrival: true,
         isBestSeller: true,
         rating: 4.9,
-        reviewsCount: 39,
+        reviewsCount: 239,
         description: 'Timeless mustard yellow salwar suit dress material featuring handcrafted pleated placket with delicate thread embroidery, hanging pearls, and authentic traditional Bandhani tie-dye dupatta with colorful tassels.'
       },
       {
@@ -2485,6 +2489,8 @@
         category: 'Chanderi Silk Salwar Suits',
         suitType: 'silk',
         price: 2850,
+        mrp: 4499,
+        discount: '37% off',
         fabric: 'Pure Chanderi Silk with Sequin Embroidery',
         color: 'Deep Magenta Wine & Silver Accents',
         image: 'images/magenta-chanderi-silk-suit.jpg',
@@ -2493,7 +2499,7 @@
         isNewArrival: true,
         isBestSeller: true,
         rating: 5.0,
-        reviewsCount: 42,
+        reviewsCount: 312,
         description: 'Festive Chanderi silk unstitched salwar suit material with rich tree-of-life neckline thread embroidery, subtle diagonal woven texture, matching patterned bottom, and coordinates for celebration occasions.'
       },
       {
@@ -2503,6 +2509,8 @@
         category: 'Mirror-Work Cotton Suits',
         suitType: 'cotton',
         price: 1950,
+        mrp: 2999,
+        discount: '35% off',
         fabric: 'Pure Slub Cotton with Mirror Work & Lime Dupatta',
         color: 'Ivory Cream Kurta & Lime Green Dupatta',
         image: 'images/cream-lime-cotton-suit.jpg',
@@ -2511,7 +2519,7 @@
         isNewArrival: true,
         isBestSeller: false,
         rating: 4.8,
-        reviewsCount: 27,
+        reviewsCount: 94,
         description: 'Natural ivory cream handloom cotton kurta fabric adorned with artisanal mirror-work lace placket and potli buttons. Comes with vibrant lime green floral print dupatta and matching bottom fabric.'
       },
       {
@@ -2521,6 +2529,8 @@
         category: 'Designer Printed Salwar Suits',
         suitType: 'cotton',
         price: 1850,
+        mrp: 2850,
+        discount: '35% off',
         fabric: '100% Fine Combed Cotton with Block Print',
         color: 'Peacock Teal with Multi-Color Mandala',
         image: 'images/teal-geometric-cotton-suit.jpg',
@@ -2529,7 +2539,7 @@
         isNewArrival: true,
         isBestSeller: false,
         rating: 4.9,
-        reviewsCount: 34,
+        reviewsCount: 118,
         description: 'Designer peacock teal unstitched salwar suit dress material featuring artistic circular mandala motifs, pearl embroidered neck placket, solid teal bottom, and coordinated soft cotton dupatta with tassel trim.'
       }
     ];
@@ -2698,62 +2708,79 @@
       renderCategories(type);
     }
 
-    // Product Card Template (§11, §12)
+    // Product Card Template (Meesho Pure Commerce Style)
     function createProductCard(prod) {
       const isWishlisted = state.wishlist.includes(prod.id);
+      const mrpVal = prod.mrp || Math.round((prod.price * 1.48) / 50) * 50;
+      const discountText = prod.discount || (Math.round(((mrpVal - prod.price) / mrpVal) * 100) + '% off');
+
       return `
-        <article class="bg-ivory-50 rounded border border-ivory-300 overflow-hidden shadow-sm hover:border-maroon-800/40 hover:shadow-md transition-luxury flex flex-col justify-between group">
-          <div class="relative aspect-[3/4] overflow-hidden bg-ivory-200 cursor-pointer" onclick="openQuickViewModal('${prod.id}')">
-            <img src="${prod.image}" alt="${prod.name} fabric" class="w-full h-full object-cover group-hover:scale-105 transition-luxury" loading="lazy" />
+        <article class="bg-white rounded-lg border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between group">
+          <!-- Image Frame (Meesho 3:4 aspect) -->
+          <div class="relative aspect-[3/4] bg-slate-100 overflow-hidden cursor-pointer" onclick="openQuickViewModal('${prod.id}')">
+            <img src="${prod.image}" alt="${prod.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" onerror="this.src='images/pink-leheriya-cotton-suit.jpg'" />
             
-            <!-- Stitching Available Badge (§11) -->
-            ${prod.stitchingAvailable ? `
-              <span class="absolute top-3 left-3 bg-ivory-50/95 backdrop-blur-sm text-maroon-900 text-[10px] font-bold px-2 py-0.5 rounded border border-ivory-300 shadow-sm flex items-center gap-1">
-                <span class="w-1.5 h-1.5 rounded-full bg-maroon-800"></span> Stitching Available
-              </span>
-            ` : ''}
-
-            <!-- Quick View Overlay Hint -->
-            <span class="absolute inset-x-4 bottom-3 py-1.5 bg-charcoal-950/80 backdrop-blur-sm text-ivory-50 text-[11px] font-semibold text-center rounded opacity-0 group-hover:opacity-100 transition-opacity shadow-sm pointer-events-none">
-              Quick View &amp; Fabric Specs
-            </span>
-
-            <!-- Wishlist Button -->
-            <button type="button" onclick="toggleWishlist('${prod.id}', event)" class="absolute top-3 right-3 p-1.5 rounded-full bg-ivory-50/90 text-charcoal-900 hover:text-maroon-800 transition-colors shadow-sm" aria-label="Save to wishlist">
-              <svg class="w-4 h-4 ${isWishlisted ? 'fill-terracotta-700 text-terracotta-700' : 'fill-none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+            <!-- Wishlist Heart Button -->
+            <button type="button" onclick="toggleWishlist('${prod.id}', event)" class="absolute top-2 right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 backdrop-blur-xs flex items-center justify-center text-gray-500 hover:text-red-500 shadow-sm transition" aria-label="Save to wishlist">
+              <svg class="w-4 h-4 ${isWishlisted ? 'fill-red-500 text-red-500' : 'fill-none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
             </button>
+
+            <!-- Tag Badge -->
+            ${prod.isBestSeller ? `
+              <span class="absolute bottom-2 left-2 bg-gray-900/80 backdrop-blur-xs text-white text-[9px] sm:text-[10px] font-semibold px-1.5 py-0.5 rounded">
+                Best Seller
+              </span>
+            ` : (prod.isNewArrival ? `
+              <span class="absolute bottom-2 left-2 bg-maroon-900/80 backdrop-blur-xs text-white text-[9px] sm:text-[10px] font-semibold px-1.5 py-0.5 rounded">
+                New
+              </span>
+            ` : '')}
           </div>
 
-          <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
+          <!-- Content Area -->
+          <div class="p-2.5 sm:p-3.5 flex-1 flex flex-col justify-between">
             <div class="cursor-pointer" onclick="openQuickViewModal('${prod.id}')">
-              <div class="flex items-center justify-between">
-                <span class="text-[10px] uppercase font-bold text-slateText-600 tracking-wide">${prod.category}</span>
-                <span class="text-[10px] text-gold-600 font-bold">★ ${prod.rating}</span>
+              <!-- Title (Truncated 2 lines like Meesho) -->
+              <h3 class="text-xs sm:text-sm font-medium text-gray-700 line-clamp-2 leading-snug group-hover:text-gray-950 transition-colors" title="${prod.name}">
+                ${prod.name}
+              </h3>
+
+              <!-- Price Block: Bold Price + Strikethrough MRP + % Off -->
+              <div class="mt-1.5 flex items-baseline flex-wrap gap-1 sm:gap-1.5">
+                <span class="text-sm sm:text-base font-extrabold text-gray-900">₹${prod.price.toLocaleString('en-IN')}</span>
+                <span class="text-[10px] sm:text-xs text-gray-400 line-through font-normal">₹${mrpVal.toLocaleString('en-IN')}</span>
+                <span class="text-[10px] sm:text-xs font-bold text-[#038D63]">${discountText}</span>
               </div>
-              <h3 class="font-serif text-sm font-bold text-charcoal-950 mt-0.5 group-hover:text-maroon-900 transition-colors line-clamp-1">${prod.name}</h3>
-              <p class="text-[11px] text-slateText-600 line-clamp-1 mt-0.5">${prod.fabric}</p>
+
+              <!-- Free Delivery Badge -->
+              <div class="mt-1.5">
+                <span class="inline-flex items-center gap-1 bg-slate-100 text-gray-600 text-[10px] font-medium px-2 py-0.5 rounded-full">
+                  <svg class="w-3 h-3 text-[#038D63]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                  Free Delivery
+                </span>
+              </div>
+
+              <!-- Rating Pill & Reviews Count -->
+              <div class="mt-2 flex items-center gap-1.5">
+                <span class="bg-[#038D63] text-white text-[10px] sm:text-[11px] font-bold px-1.5 py-0.5 rounded flex items-center gap-0.5">
+                  ${prod.rating} <span class="text-[9px]">★</span>
+                </span>
+                <span class="text-[10px] sm:text-[11px] text-gray-400 font-medium">(${prod.reviewsCount})</span>
+              </div>
             </div>
 
-            <div class="flex items-baseline justify-between pt-1">
-              <div>
-                <span class="font-serif text-base font-bold text-maroon-950">₹${prod.price.toLocaleString('en-IN')}</span>
-                <span class="text-[10px] text-slateText-600 ml-1">unstitched</span>
-              </div>
-              <span class="text-[10px] text-maroon-800 font-semibold bg-maroon-900/5 px-2 py-0.5 rounded">+ ₹${prod.stitchingFee} for tailoring</span>
-            </div>
-
-            <!-- Critical Purchase CTA Trigger (§15) -->
-            <div class="pt-2 border-t border-ivory-200 grid grid-cols-2 gap-2">
+            <!-- Dual CTAs for ABHA USP -->
+            <div class="mt-3 pt-2.5 border-t border-gray-100 grid grid-cols-2 gap-1.5">
               ${prod.isSoldOut ? `
-                <div class="col-span-2 px-3 py-2 bg-red-50 text-red-700 text-[11px] font-bold rounded text-center border border-red-200">
-                  Sold Out • Exclusive Artisan Piece
+                <div class="col-span-2 px-2 py-1.5 bg-red-50 text-red-700 text-[10px] sm:text-xs font-bold rounded text-center border border-red-200">
+                  Sold Out
                 </div>
               ` : `
-                <button type="button" onclick="initiatePurchase('${prod.id}', 'unstitched')" class="px-3 py-2 bg-ivory-100 hover:bg-ivory-200 text-charcoal-950 text-[11px] font-bold rounded border border-ivory-300 text-center transition-colors">
-                  Buy Unstitched
+                <button type="button" onclick="initiatePurchase('${prod.id}', 'unstitched')" class="py-1.5 px-1 rounded text-[10px] sm:text-xs font-bold border border-gray-300 text-gray-800 hover:bg-gray-50 text-center transition">
+                  Buy Fabric
                 </button>
-                <button type="button" onclick="initiatePurchase('${prod.id}', 'stitched')" class="px-3 py-2 bg-maroon-800 hover:bg-maroon-700 text-ivory-50 text-[11px] font-bold rounded text-center transition-colors shadow-sm">
-                  Get Stitched
+                <button type="button" onclick="initiatePurchase('${prod.id}', 'stitched')" class="py-1.5 px-1 rounded text-[10px] sm:text-xs font-bold bg-gray-900 hover:bg-black text-white text-center transition shadow-xs">
+                  Stitch +₹${prod.stitchingFee}
                 </button>
               `}
             </div>

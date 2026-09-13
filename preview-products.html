@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ABHA - Meesho Style Product Section Previews</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            meeshoGreen: '#038D63',
+            meeshoGreenLight: '#E6F6F1',
+            meeshoPink: '#F43397',
+            meeshoBorder: '#E7E7E7',
+            maroon: {
+              800: '#7A1C28',
+              900: '#54101A',
+              950: '#380B12',
+            },
+            gold: {
+              400: '#E6C687',
+              500: '#D4AF37',
+              600: '#AA820A',
+            },
+            ivory: {
+              50: '#FDFCFA',
+              100: '#FAF6EF',
+              200: '#F4ECE0',
+              300: '#E7D8C4',
+            },
+            charcoal: {
+              900: '#1F2421',
+              950: '#141815',
+            }
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+            royal: ['Cinzel', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #F8F9FA;
+      color: #212529;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .meesho-price-shadow {
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .device-mobile-frame {
+      max-width: 414px;
+      margin: 0 auto;
+      border: 12px solid #1f2937;
+      border-radius: 40px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      background: #FFFFFF;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+
+  <!-- TOP COMPARISON HEADER -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+        
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-maroon-900 to-maroon-800 text-gold-400 flex items-center justify-center font-royal font-bold text-xl border border-gold-500/30">
+            A
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-base sm:text-lg font-bold text-gray-900 leading-tight">Product Display Preview Options</h1>
+              <span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Meesho-Inspired UX</span>
+            </div>
+            <p class="text-xs text-gray-500">Pick the best layout for ABHA's 2-column mobile and 4-column desktop display</p>
+          </div>
+        </div>
+
+        <!-- VIEWPORT MODE & OPTION SELECTOR TABS -->
+        <div class="flex flex-wrap items-center gap-2.5">
+          <!-- Viewport Toggle -->
+          <div class="bg-slate-100 p-1 rounded-lg border border-slate-200 flex items-center gap-1 text-xs font-semibold">
+            <button id="viewResponsiveBtn" onclick="setDeviceView('responsive')" class="px-3 py-1.5 rounded-md bg-white text-gray-900 shadow-sm transition">
+              🖥️ Desktop / Full Width
+            </button>
+            <button id="viewMobileBtn" onclick="setDeviceView('mobile')" class="px-3 py-1.5 rounded-md text-gray-600 hover:text-gray-900 transition flex items-center gap-1.5">
+              📱 Mobile Preview (2-Col)
+            </button>
+          </div>
+
+          <!-- Direct Option Switcher -->
+          <div class="flex items-center gap-1.5 bg-slate-100 p-1 rounded-lg border border-slate-200 text-xs font-bold">
+            <button onclick="switchOption(1)" id="tabOption1" class="px-3 py-1.5 rounded-md bg-white text-maroon-900 shadow-sm transition">
+              Option 1: Meesho Pure
+            </button>
+            <button onclick="switchOption(2)" id="tabOption2" class="px-3 py-1.5 rounded-md text-gray-600 hover:text-gray-900 transition">
+              Option 2: Meesho + Royal Hybrid
+            </button>
+            <button onclick="switchOption(3)" id="tabOption3" class="px-3 py-1.5 rounded-md text-gray-600 hover:text-gray-900 transition">
+              Option 3: App Ultra-Dense
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- HIGHLIGHT BANNER & EXPLANATION -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <div id="optionBanner" class="mb-6 p-4 rounded-xl border bg-white shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div id="bannerText">
+        <!-- Injected via JS -->
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <span class="text-xs text-gray-500 font-medium">Key Advantage:</span>
+        <span id="bannerPill" class="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800">
+          2-Column Mobile Density
+        </span>
+      </div>
+    </div>
+
+    <!-- MAIN CONTAINER (Can be toggled between Responsive Full Grid and Mobile Mockup) -->
+    <div id="mainDisplayContainer" class="w-full transition-all duration-300">
+      
+      <!-- OPTION 1 CONTENT -->
+      <section id="sectionOption1" class="space-y-6">
+        <div class="flex items-center justify-between border-b border-gray-200 pb-3">
+          <div>
+            <h2 class="text-xl font-extrabold text-gray-900 flex items-center gap-2">
+              <span>Option 1: Meesho Pure Commerce</span>
+              <span class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">Closest to Meesho.com</span>
+            </h2>
+            <p class="text-xs text-gray-500 mt-0.5">Exact Meesho pricing architecture, emerald #038D63 rating badge, Free Delivery pill, and fast dual CTAs.</p>
+          </div>
+          <span class="text-xs text-gray-500 font-semibold hidden sm:inline">Showing 4 Handpicked Products</span>
+        </div>
+
+        <!-- 2-COL ON MOBILE, 4-COL ON DESKTOP -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-5" id="gridOption1">
+          <!-- Rendered via JS -->
+        </div>
+      </section>
+
+      <!-- OPTION 2 CONTENT -->
+      <section id="sectionOption2" class="space-y-6 hidden">
+        <div class="flex items-center justify-between border-b border-gray-200 pb-3">
+          <div>
+            <h2 class="text-xl font-extrabold text-gray-900 flex items-center gap-2">
+              <span>Option 2: Meesho + Royal Boutique Hybrid</span>
+              <span class="text-xs bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-bold">Recommended for ABHA</span>
+            </h2>
+            <p class="text-xs text-gray-500 mt-0.5">Combines Meesho's high-converting pricing hierarchy with ABHA's royal heritage branding & tailoring selector.</p>
+          </div>
+          <span class="text-xs text-gray-500 font-semibold hidden sm:inline">Showing 4 Handpicked Products</span>
+        </div>
+
+        <!-- 2-COL ON MOBILE, 4-COL ON DESKTOP -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-5" id="gridOption2">
+          <!-- Rendered via JS -->
+        </div>
+      </section>
+
+      <!-- OPTION 3 CONTENT -->
+      <section id="sectionOption3" class="space-y-6 hidden">
+        <div class="flex items-center justify-between border-b border-gray-200 pb-3">
+          <div>
+            <h2 class="text-xl font-extrabold text-gray-900 flex items-center gap-2">
+              <span>Option 3: Meesho App-Style Ultra-Dense Grid</span>
+              <span class="text-xs bg-pink-100 text-pink-900 px-2 py-0.5 rounded font-bold">Mobile-First App Layout</span>
+            </h2>
+            <p class="text-xs text-gray-500 mt-0.5">Maximized browse density. Floating rating pills and discount badges directly over the image with instant quick-add.</p>
+          </div>
+          <span class="text-xs text-gray-500 font-semibold hidden sm:inline">Showing 4 Handpicked Products</span>
+        </div>
+
+        <!-- 2-COL ON MOBILE, 4-COL ON DESKTOP -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3.5 md:gap-4" id="gridOption3">
+          <!-- Rendered via JS -->
+        </div>
+      </section>
+
+    </div>
+
+    <!-- COMPARISON TABLE -->
+    <div class="mt-14 bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+      <h3 class="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+        <svg class="w-5 h-5 text-maroon-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+        Direct Feature Comparison
+      </h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-50 border-b border-gray-200 text-gray-600 font-bold">
+              <th class="py-3 px-4">Feature</th>
+              <th class="py-3 px-4">Current ABHA</th>
+              <th class="py-3 px-4 bg-emerald-50/60 text-emerald-900">Option 1: Meesho Pure</th>
+              <th class="py-3 px-4 bg-amber-50/60 text-amber-900 font-extrabold">Option 2: Meesho + Royal Hybrid</th>
+              <th class="py-3 px-4 bg-pink-50/60 text-pink-900">Option 3: App Ultra-Dense</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 text-gray-700">
+            <tr>
+              <td class="py-3 px-4 font-semibold text-gray-900">Mobile Grid Layout</td>
+              <td class="py-3 px-4 text-red-500">1 column (giant cards)</td>
+              <td class="py-3 px-4 font-bold text-emerald-700">2 columns (Meesho standard)</td>
+              <td class="py-3 px-4 font-bold text-emerald-700">2 columns (Balanced elegance)</td>
+              <td class="py-3 px-4 font-bold text-emerald-700">2 columns (High-density)</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-gray-900">Pricing & Discount Hierarchy</td>
+              <td class="py-3 px-4 text-gray-400">Only single price</td>
+              <td class="py-3 px-4 text-emerald-700">₹Price + Crossed MRP + 35% Off</td>
+              <td class="py-3 px-4 text-emerald-700">₹Price + Crossed MRP + 35% Off + Savings</td>
+              <td class="py-3 px-4 text-emerald-700">₹Price + Crossed MRP + Badge on Image</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-gray-900">Meesho Green Rating Pill</td>
+              <td class="py-3 px-4 text-gray-400">Gold text star</td>
+              <td class="py-3 px-4 text-emerald-700">Solid #038D63 Pill (4.9 ★)</td>
+              <td class="py-3 px-4 text-emerald-700">Solid #038D63 Pill + Review count</td>
+              <td class="py-3 px-4 text-emerald-700">Floating on product photo</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-gray-900">Free Delivery Assurance</td>
+              <td class="py-3 px-4 text-gray-400">Hidden in footer</td>
+              <td class="py-3 px-4 text-emerald-700">"Free Delivery" badge on card</td>
+              <td class="py-3 px-4 text-emerald-700">"Free Delivery Across India"</td>
+              <td class="py-3 px-4 text-emerald-700">"Free Delivery" pill</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-gray-900">ABHA Tailoring USP Handling</td>
+              <td class="py-3 px-4 text-gray-600">Separate button</td>
+              <td class="py-3 px-4 text-gray-600">Dual compact action pills</td>
+              <td class="py-3 px-4 font-bold text-amber-800">Live Fabric / Stitched toggle switch</td>
+              <td class="py-3 px-4 text-gray-600">1-tap quick sheet with both choices</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-semibold text-gray-900">Brand Vibe</td>
+              <td class="py-3 px-4 text-gray-600">Luxury Boutique</td>
+              <td class="py-3 px-4 text-emerald-700">Modern Meesho e-commerce</td>
+              <td class="py-3 px-4 font-bold text-amber-800">Royal Indian Heritage + High Conversion</td>
+              <td class="py-3 px-4 text-pink-700">Fast Mobile App Shopping</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- SCRIPT WITH DATA & RENDERING -->
+  <script>
+    const sampleProducts = [
+      {
+        id: 'prod-01',
+        name: 'Rani Pink Leheriya Handloom Cotton Suit',
+        category: 'Pure Cotton Suits',
+        fabric: '100% Breathable Cotton • 2.5m Kurta + Dupatta',
+        price: 1650,
+        mrp: 2450,
+        discount: '33% off',
+        image: 'images/pink-leheriya-cotton-suit.jpg',
+        rating: 4.8,
+        reviewsCount: 148,
+        stitchingFee: 650,
+        isBestSeller: true,
+        tag: 'Best Seller'
+      },
+      {
+        id: 'prod-02',
+        name: 'Mustard Heritage Bandhani Salwar Suit Material',
+        category: 'Bandhani Suits',
+        fabric: 'Handloom Cotton-Silk with Bandhej Dupatta',
+        price: 2450,
+        mrp: 3850,
+        discount: '36% off',
+        image: 'images/mustard-bandhani-chanderi-suit.jpg',
+        rating: 4.9,
+        reviewsCount: 239,
+        stitchingFee: 750,
+        isBestSeller: true,
+        tag: 'Trending'
+      },
+      {
+        id: 'prod-03',
+        name: 'Magenta Festive Chanderi Silk Salwar Suit Material',
+        category: 'Chanderi Silk',
+        fabric: 'Pure Chanderi Silk with Sequin Zari Embroidery',
+        price: 2850,
+        mrp: 4499,
+        discount: '37% off',
+        image: 'images/magenta-chanderi-silk-suit.jpg',
+        rating: 5.0,
+        reviewsCount: 312,
+        stitchingFee: 800,
+        isBestSeller: false,
+        tag: 'Festive Edit'
+      },
+      {
+        id: 'prod-04',
+        name: 'Ivory Cream Handloom Cotton Mirror-Work Suit',
+        category: 'Cotton Suits',
+        fabric: 'Slub Cotton with Mirror Work & Lime Dupatta',
+        price: 1950,
+        mrp: 2999,
+        discount: '35% off',
+        image: 'images/cream-lime-cotton-suit.jpg',
+        rating: 4.8,
+        reviewsCount: 94,
+        stitchingFee: 650,
+        isBestSeller: false,
+        tag: 'Handcrafted'
+      }
+    ];
+
+    let currentOption = 1;
+    let currentView = 'responsive';
+    const wishlist = new Set();
+    const stitchedStates = {}; // prodId -> boolean
+
+    // OPTION 1 RENDERER: Meesho Pure Commerce
+    function renderOption1() {
+      const container = document.getElementById('gridOption1');
+      container.innerHTML = sampleProducts.map(prod => {
+        const isFav = wishlist.has(prod.id);
+        return `
+          <div class="bg-white rounded-lg border border-meeshoBorder overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between group">
+            <!-- Image Frame (Meesho 3:4 aspect) -->
+            <div class="relative aspect-[3/4] bg-slate-100 overflow-hidden cursor-pointer">
+              <img src="${prod.image}" alt="${prod.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&auto=format&fit=crop&q=80'">
+              
+              <!-- Wishlist Heart Button -->
+              <button onclick="toggleHeart('${prod.id}', event)" class="absolute top-2 right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-gray-500 hover:text-red-500 shadow-sm transition">
+                <svg class="w-4 h-4 ${isFav ? 'fill-red-500 text-red-500' : 'fill-none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+              </button>
+
+              <!-- Optional Best Seller Tag -->
+              ${prod.tag ? `
+                <span class="absolute bottom-2 left-2 bg-gray-900/80 backdrop-blur-sm text-white text-[9px] sm:text-[10px] font-semibold px-1.5 py-0.5 rounded">
+                  ${prod.tag}
+                </span>
+              ` : ''}
+            </div>
+
+            <!-- Content Area -->
+            <div class="p-2.5 sm:p-3.5 flex-1 flex flex-col justify-between">
+              <div>
+                <!-- Title (Truncated 2 lines like Meesho) -->
+                <h3 class="text-xs sm:text-sm font-medium text-gray-700 line-clamp-2 leading-snug group-hover:text-gray-900" title="${prod.name}">
+                  ${prod.name}
+                </h3>
+
+                <!-- Price Block: Bold Price + Strikethrough MRP + % Off -->
+                <div class="mt-1.5 flex items-baseline flex-wrap gap-1 sm:gap-1.5">
+                  <span class="text-sm sm:text-base font-extrabold text-gray-900">₹${prod.price.toLocaleString('en-IN')}</span>
+                  <span class="text-[10px] sm:text-xs text-gray-400 line-through font-normal">₹${prod.mrp.toLocaleString('en-IN')}</span>
+                  <span class="text-[10px] sm:text-xs font-bold text-meeshoGreen">${prod.discount}</span>
+                </div>
+
+                <!-- Free Delivery Badge -->
+                <div class="mt-1.5">
+                  <span class="inline-flex items-center gap-1 bg-slate-100 text-gray-600 text-[10px] font-medium px-2 py-0.5 rounded-full">
+                    <svg class="w-3 h-3 text-meeshoGreen" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                    Free Delivery
+                  </span>
+                </div>
+
+                <!-- Rating Pill & Reviews Count -->
+                <div class="mt-2 flex items-center gap-1.5">
+                  <span class="bg-meeshoGreen text-white text-[10px] sm:text-[11px] font-bold px-1.5 py-0.5 rounded flex items-center gap-0.5">
+                    ${prod.rating} <span class="text-[9px]">★</span>
+                  </span>
+                  <span class="text-[10px] sm:text-[11px] text-gray-400 font-medium">(${prod.reviewsCount})</span>
+                </div>
+              </div>
+
+              <!-- Dual CTAs for ABHA USP -->
+              <div class="mt-3 pt-2.5 border-t border-gray-100 grid grid-cols-2 gap-1.5">
+                <button onclick="alert('Fabric selected: ₹${prod.price}')" class="py-1.5 px-1 rounded text-[10px] sm:text-xs font-bold border border-gray-300 text-gray-800 hover:bg-gray-50 text-center transition">
+                  Buy Fabric
+                </button>
+                <button onclick="alert('Custom Stitching selected: ₹${prod.price + prod.stitchingFee}')" class="py-1.5 px-1 rounded text-[10px] sm:text-xs font-bold bg-gray-900 hover:bg-black text-white text-center transition shadow-xs">
+                  Stitch +₹${prod.stitchingFee}
+                </button>
+              </div>
+
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // OPTION 2 RENDERER: Meesho + Royal Boutique Hybrid
+    function renderOption2() {
+      const container = document.getElementById('gridOption2');
+      container.innerHTML = sampleProducts.map(prod => {
+        const isFav = wishlist.has(prod.id);
+        const isStitched = !!stitchedStates[prod.id];
+        const displayPrice = isStitched ? (prod.price + prod.stitchingFee) : prod.price;
+        const displayMrp = isStitched ? (prod.mrp + prod.stitchingFee) : prod.mrp;
+
+        return `
+          <div class="bg-[#FCFAF7] rounded-xl border border-[#EBE3D7] overflow-hidden shadow-sm hover:shadow-md hover:border-maroon-800/30 transition-all flex flex-col justify-between group">
+            
+            <!-- Image Frame -->
+            <div class="relative aspect-[3/4] bg-ivory-200 overflow-hidden cursor-pointer">
+              <img src="${prod.image}" alt="${prod.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&auto=format&fit=crop&q=80'">
+              
+              <!-- Royal Heritage Pill Top-Left -->
+              <span class="absolute top-2 left-2 bg-maroon-950/90 backdrop-blur-sm text-gold-400 border border-gold-500/20 text-[9px] sm:text-[10px] font-semibold px-2 py-0.5 rounded shadow-sm">
+                ${prod.category}
+              </span>
+
+              <!-- Wishlist Heart Button -->
+              <button onclick="toggleHeart('${prod.id}', event)" class="absolute top-2 right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center text-gray-500 hover:text-maroon-800 shadow-sm transition">
+                <svg class="w-4 h-4 ${isFav ? 'fill-maroon-800 text-maroon-800' : 'fill-none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+              </button>
+
+              <!-- Fabric Specification Strip -->
+              <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-2 pt-4">
+                <p class="text-[10px] text-ivory-100 font-medium truncate">${prod.fabric}</p>
+              </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="p-3 sm:p-4 flex-1 flex flex-col justify-between">
+              <div>
+                <!-- Title with Serif Elegance -->
+                <h3 class="font-serif text-xs sm:text-sm font-bold text-gray-900 line-clamp-1 group-hover:text-maroon-900 transition-colors">
+                  ${prod.name}
+                </h3>
+
+                <!-- Meesho Bold Price + Strikethrough MRP + Savings Pill -->
+                <div class="mt-2 flex items-baseline flex-wrap gap-1.5">
+                  <span class="text-base sm:text-lg font-extrabold text-maroon-950">₹${displayPrice.toLocaleString('en-IN')}</span>
+                  <span class="text-xs text-gray-400 line-through font-normal">₹${displayMrp.toLocaleString('en-IN')}</span>
+                  <span class="text-[10px] sm:text-xs font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                    Save ₹${(displayMrp - displayPrice).toLocaleString('en-IN')}
+                  </span>
+                </div>
+
+                <!-- Meesho Rating & Free Delivery Row -->
+                <div class="mt-2 flex items-center justify-between">
+                  <div class="flex items-center gap-1">
+                    <span class="bg-[#038D63] text-white text-[10px] sm:text-[11px] font-bold px-1.5 py-0.5 rounded flex items-center gap-0.5">
+                      ${prod.rating} <span>★</span>
+                    </span>
+                    <span class="text-[10px] text-gray-400">(${prod.reviewsCount})</span>
+                  </div>
+                  <span class="text-[10px] text-gray-500 font-medium flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Free Shipping
+                  </span>
+                </div>
+              </div>
+
+              <!-- Interactive Fabric / Tailoring Toggle Switch -->
+              <div class="mt-3.5 pt-2.5 border-t border-[#EBE3D7]">
+                <div class="flex items-center justify-between p-1 bg-ivory-200/70 rounded-lg text-[10px] font-semibold text-gray-700">
+                  <button onclick="toggleStitchMode('${prod.id}', false)" class="flex-1 py-1 rounded text-center transition ${!isStitched ? 'bg-white text-maroon-900 shadow-xs font-bold' : 'hover:text-black'}">
+                    Fabric Only
+                  </button>
+                  <button onclick="toggleStitchMode('${prod.id}', true)" class="flex-1 py-1 rounded text-center transition ${isStitched ? 'bg-maroon-900 text-gold-400 shadow-xs font-bold' : 'hover:text-black'}">
+                    + Tailored (+₹${prod.stitchingFee})
+                  </button>
+                </div>
+
+                <button onclick="alert('Proceeding to order for ${prod.name} (${isStitched ? 'Custom Stitched' : 'Unstitched Fabric'}): ₹${displayPrice}')" class="mt-2 w-full py-2 bg-maroon-900 hover:bg-maroon-800 text-gold-400 font-bold text-xs rounded-lg text-center transition shadow-sm flex items-center justify-center gap-1.5">
+                  <span>Order ${isStitched ? 'Stitched' : 'Fabric'}</span>
+                  <span>•</span>
+                  <span>₹${displayPrice.toLocaleString('en-IN')}</span>
+                </button>
+              </div>
+
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // OPTION 3 RENDERER: Meesho App Ultra-Dense Grid
+    function renderOption3() {
+      const container = document.getElementById('gridOption3');
+      container.innerHTML = sampleProducts.map(prod => {
+        const isFav = wishlist.has(prod.id);
+        return `
+          <div class="bg-white rounded-md border border-gray-200 overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between group">
+            
+            <!-- Image Frame with direct overlay chips -->
+            <div class="relative aspect-[3/4] bg-gray-50 overflow-hidden cursor-pointer">
+              <img src="${prod.image}" alt="${prod.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" onerror="this.src='https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=600&auto=format&fit=crop&q=80'">
+              
+              <!-- Floating Discount Badge Top-Left -->
+              <span class="absolute top-2 left-2 bg-rose-600 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded shadow-sm">
+                ${prod.discount}
+              </span>
+
+              <!-- Floating Heart Top-Right -->
+              <button onclick="toggleHeart('${prod.id}', event)" class="absolute top-2 right-2 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/90 flex items-center justify-center text-gray-500 hover:text-rose-500 shadow-sm transition">
+                <svg class="w-3.5 h-3.5 ${isFav ? 'fill-rose-500 text-rose-500' : 'fill-none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+              </button>
+
+              <!-- Floating Green Rating Badge Bottom-Left Directly On Image -->
+              <div class="absolute bottom-1.5 left-1.5 bg-black/75 backdrop-blur-xs text-white text-[10px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1">
+                <span class="text-emerald-400">★</span> ${prod.rating} <span class="text-gray-300 font-normal">| ${prod.reviewsCount}</span>
+              </div>
+            </div>
+
+            <!-- Content Area (Ultra-Compact) -->
+            <div class="p-2 sm:p-2.5 flex-1 flex flex-col justify-between">
+              <div>
+                <p class="text-[9px] uppercase tracking-wider text-gray-400 font-semibold truncate">${prod.category}</p>
+                <h3 class="text-xs font-semibold text-gray-800 line-clamp-1 leading-tight mt-0.5" title="${prod.name}">
+                  ${prod.name}
+                </h3>
+
+                <!-- Price Row -->
+                <div class="mt-1 flex items-baseline gap-1">
+                  <span class="text-sm sm:text-base font-black text-gray-900">₹${prod.price.toLocaleString('en-IN')}</span>
+                  <span class="text-[10px] text-gray-400 line-through">₹${prod.mrp}</span>
+                </div>
+
+                <!-- Free delivery tag -->
+                <p class="text-[10px] text-meeshoGreen font-semibold mt-0.5">Free Delivery</p>
+              </div>
+
+              <!-- Quick Add Button -->
+              <button onclick="alert('Quick Select: ${prod.name}')" class="mt-2 w-full py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded text-center transition shadow-xs">
+                + Select &amp; Buy
+              </button>
+
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Toggle Wishlist
+    function toggleHeart(id, e) {
+      if (e) e.stopPropagation();
+      if (wishlist.has(id)) {
+        wishlist.delete(id);
+      } else {
+        wishlist.add(id);
+      }
+      renderCurrentOption();
+    }
+
+    // Toggle Stitch Mode for Option 2
+    function toggleStitchMode(id, isStitched) {
+      stitchedStates[id] = isStitched;
+      renderOption2();
+    }
+
+    // Banner details for each option
+    const bannerInfo = {
+      1: {
+        title: 'Option 1: Meesho Pure Commerce',
+        desc: 'Direct translation of Meesho.com product card. Clean white cards, bold prices, strikethrough MRP, green % off badge, signature #038D63 rating pill, and Free Delivery tag.',
+        pill: 'Authentic Meesho Look'
+      },
+      2: {
+        title: 'Option 2: Meesho + Royal Boutique Hybrid (Recommended)',
+        desc: 'The best of both worlds: Meesho\'s psychological pricing & discount triggers, combined with ABHA\'s royal heritage aesthetic, luxury fabric details, and a live Fabric vs Tailored switcher.',
+        pill: 'High Conversion + Luxury Vibe'
+      },
+      3: {
+        title: 'Option 3: Meesho App-Style Ultra-Dense Grid',
+        desc: 'Maximum product density for smartphone users. Floating rating chips and discount ribbons directly on the image, ultra-compact text spacing, and fast 1-tap select button.',
+        pill: 'Fast Mobile App Experience'
+      }
+    };
+
+    function updateBanner(opt) {
+      const info = bannerInfo[opt];
+      document.getElementById('bannerText').innerHTML = `
+        <h3 class="text-sm font-extrabold text-gray-900">${info.title}</h3>
+        <p class="text-xs text-gray-600 mt-0.5">${info.desc}</p>
+      `;
+      document.getElementById('bannerPill').innerText = info.pill;
+    }
+
+    // Switch Option Tab
+    function switchOption(opt) {
+      currentOption = opt;
+      document.getElementById('sectionOption1').classList.toggle('hidden', opt !== 1);
+      document.getElementById('sectionOption2').classList.toggle('hidden', opt !== 2);
+      document.getElementById('sectionOption3').classList.toggle('hidden', opt !== 3);
+
+      // Button styles
+      [1, 2, 3].forEach(n => {
+        const btn = document.getElementById('tabOption' + n);
+        if (n === opt) {
+          btn.className = 'px-3 py-1.5 rounded-md bg-white text-maroon-900 font-bold shadow-sm transition';
+        } else {
+          btn.className = 'px-3 py-1.5 rounded-md text-gray-600 hover:text-gray-900 transition';
+        }
+      });
+
+      updateBanner(opt);
+      renderCurrentOption();
+    }
+
+    function renderCurrentOption() {
+      if (currentOption === 1) renderOption1();
+      else if (currentOption === 2) renderOption2();
+      else if (currentOption === 3) renderOption3();
+    }
+
+    // Switch Device View
+    function setDeviceView(mode) {
+      currentView = mode;
+      const container = document.getElementById('mainDisplayContainer');
+      const responsiveBtn = document.getElementById('viewResponsiveBtn');
+      const mobileBtn = document.getElementById('viewMobileBtn');
+
+      if (mode === 'mobile') {
+        container.className = 'device-mobile-frame p-3 sm:p-4 my-4 transition-all duration-300';
+        mobileBtn.className = 'px-3 py-1.5 rounded-md bg-white text-gray-900 font-bold shadow-sm transition flex items-center gap-1.5';
+        responsiveBtn.className = 'px-3 py-1.5 rounded-md text-gray-600 hover:text-gray-900 transition';
+      } else {
+        container.className = 'w-full transition-all duration-300';
+        responsiveBtn.className = 'px-3 py-1.5 rounded-md bg-white text-gray-900 font-bold shadow-sm transition';
+        mobileBtn.className = 'px-3 py-1.5 rounded-md text-gray-600 hover:text-gray-900 transition flex items-center gap-1.5';
+      }
+    }
+
+    // Init
+    updateBanner(1);
+    renderOption1();
+    renderOption2();
+    renderOption3();
+  </script>
+</body>
+</html>
