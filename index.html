@@ -208,7 +208,7 @@
   </script>
 </head>
 
-<body class="min-h-screen flex flex-col antialiased selection:bg-maroon-800 selection:text-ivory-50">
+<body class="min-h-screen flex flex-col antialiased selection:bg-maroon-800 selection:text-ivory-50 pb-16 md:pb-0">
 
   <!-- ========================================================================= -->
   <!-- 0. ROYAL INTRODUCTION SCREEN (RESPONSIVE FLAT-LAY + ADAPTIVE DRAG & GLIDE) -->
@@ -273,7 +273,7 @@
         <span class="w-1.5 h-1.5 rounded-full bg-gold-400"></span>
         <span id="announcementText">Free Pan-India Express Delivery on All Salwar Suits | Bespoke Master Stitching Available</span>
       </div>
-      <div class="flex items-center gap-4 text-[11px] tracking-wider uppercase font-medium">
+      <div class="flex flex-wrap items-center justify-center sm:justify-end gap-2.5 sm:gap-4 text-[11px] tracking-wider uppercase font-medium">
         <a href="admin.html" class="text-gold-400 hover:text-gold-300 transition-colors font-semibold flex items-center gap-1">
           <span>⚙️</span> Admin / POS
         </a>
@@ -3177,6 +3177,8 @@
       const count = state.cart.reduce((acc, item) => acc + item.quantity, 0);
       document.getElementById('cartCountBadge').textContent = count;
       document.getElementById('cartHeaderCount').textContent = count;
+      const mbCart = document.getElementById('mobileBottomCartBadge');
+      if (mbCart) mbCart.textContent = count;
 
       const list = document.getElementById('cartItemsList');
       if (state.cart.length === 0) {
@@ -3612,6 +3614,17 @@
           badge.classList.remove('hidden');
         } else {
           badge.classList.add('hidden');
+        }
+      }
+      const mbWishlist = document.getElementById('mobileBottomWishlistBadge');
+      if (mbWishlist) {
+        mbWishlist.textContent = count;
+        if (count > 0) {
+          mbWishlist.classList.remove('hidden');
+          mbWishlist.classList.add('flex');
+        } else {
+          mbWishlist.classList.add('hidden');
+          mbWishlist.classList.remove('flex');
         }
       }
 
@@ -4481,6 +4494,61 @@
       introGlideTimer = setTimeout(triggerIntroGlide, 2000);
     });
   </script>
+
+  <!-- ========================================================================= -->
+  <!-- MOBILE LUXURY STICKY BOTTOM NAVIGATION BAR (Thumb-Friendly E-Commerce) -->
+  <!-- ========================================================================= -->
+  <nav id="mobileBottomNav" class="fixed bottom-0 inset-x-0 z-40 bg-ivory-50/95 backdrop-blur-md border-t border-ivory-300/80 shadow-[0_-4px_16px_rgba(74,16,29,0.06)] md:hidden flex justify-around items-center py-2 px-1 text-charcoal-900" aria-label="Mobile Navigation">
+    
+    <!-- Home -->
+    <button type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="flex flex-col items-center justify-center flex-1 py-1 text-maroon-900 focus:outline-none" aria-label="Home">
+      <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+      </svg>
+      <span class="text-[10px] font-semibold tracking-tight" data-i18n="nav_home">Home</span>
+    </button>
+
+    <!-- Collection / Suits -->
+    <a href="#newArrivals" class="flex flex-col items-center justify-center flex-1 py-1 text-charcoal-900 hover:text-maroon-800 focus:outline-none" aria-label="Shop Suits">
+      <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+      </svg>
+      <span class="text-[10px] font-medium tracking-tight" data-i18n="nav_shop">Suits</span>
+    </a>
+
+    <!-- Custom Stitch Studio (Center Highlight Pill) -->
+    <button type="button" onclick="openMeasurementStudioFromHero()" class="flex flex-col items-center justify-center flex-1 py-1 -mt-3 focus:outline-none group" aria-label="Custom Stitching Studio">
+      <div class="w-10 h-10 rounded-full bg-maroon-900 text-gold-400 flex items-center justify-center shadow-md border-2 border-gold-400/50 group-hover:scale-105 transition-transform">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879a3 3 0 11-4.242-4.242L12 12z"/>
+        </svg>
+      </div>
+      <span class="text-[9px] font-bold text-maroon-900 tracking-tight mt-0.5">Stitch</span>
+    </button>
+
+    <!-- Wishlist -->
+    <button type="button" onclick="openWishlistDrawer()" class="flex flex-col items-center justify-center flex-1 py-1 text-charcoal-900 hover:text-maroon-800 relative focus:outline-none" aria-label="Wishlist">
+      <div class="relative">
+        <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+        </svg>
+        <span id="mobileBottomWishlistBadge" class="absolute -top-1 -right-2 w-3.5 h-3.5 bg-terracotta-700 text-ivory-50 text-[9px] font-bold rounded-full hidden items-center justify-center">0</span>
+      </div>
+      <span class="text-[10px] font-medium tracking-tight">Wishlist</span>
+    </button>
+
+    <!-- Cart / Bag -->
+    <button type="button" onclick="openCartDrawer()" class="flex flex-col items-center justify-center flex-1 py-1 text-charcoal-900 hover:text-maroon-800 relative focus:outline-none" aria-label="Shopping Bag">
+      <div class="relative">
+        <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+        </svg>
+        <span id="mobileBottomCartBadge" class="absolute -top-1 -right-2 w-3.5 h-3.5 bg-maroon-800 text-ivory-50 text-[9px] font-bold rounded-full flex items-center justify-center">0</span>
+      </div>
+      <span class="text-[10px] font-medium tracking-tight">Bag</span>
+    </button>
+
+  </nav>
 
 </body>
 </html>

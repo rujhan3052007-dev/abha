@@ -55,7 +55,7 @@
     .topbar {
       background: var(--maroon);
       color: var(--white);
-      padding: 0.75rem 1.5rem;
+      padding: 0.65rem 1.25rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -63,40 +63,71 @@
       position: sticky;
       top: 0;
       z-index: 100;
+      gap: 0.75rem;
+      min-width: 0;
     }
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      min-width: 0;
+    }
+    .btn-sidebar-toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: var(--white);
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      font-size: 1.15rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .btn-sidebar-toggle:hover { background: rgba(255,255,255,0.25); }
     .topbar-brand {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.6rem;
       text-decoration: none;
       color: inherit;
+      min-width: 0;
     }
     .topbar-logo {
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       object-fit: contain;
+      flex-shrink: 0;
     }
     .topbar-title {
       font-family: var(--font-serif);
-      font-size: 1.25rem;
-      letter-spacing: 0.1em;
+      font-size: 1.2rem;
+      letter-spacing: 0.08em;
       font-weight: 700;
       color: var(--gold-light);
+      white-space: nowrap;
     }
     .topbar-tag {
       font-size: 0.7rem;
       background: rgba(255,255,255,0.15);
       padding: 0.2rem 0.5rem;
       border-radius: 4px;
-      margin-left: 0.5rem;
+      margin-left: 0.35rem;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+      white-space: nowrap;
     }
     .topbar-user {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.6rem;
       font-size: 0.85rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      min-width: 0;
     }
     .role-badge {
       display: inline-block;
@@ -323,10 +354,119 @@
       grid-template-columns: 1fr 380px;
       gap: 1.5rem;
     }
+    .sidebar-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 1040;
+      backdrop-filter: blur(2px);
+    }
+    .sidebar-mobile-header { display: none; }
+
     @media (max-width: 960px) {
-      .pos-grid { grid-template-columns: 1fr; }
-      .portal-container { flex-direction: column; }
-      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--gray-200); }
+      .btn-sidebar-toggle { display: inline-flex; }
+      .topbar { padding: 0.5rem 0.75rem; }
+      .topbar-tag { display: none; }
+      .topbar-title { font-size: 1.1rem; }
+      #userNameDisplay { display: none; }
+      #roleSwitcherSelect {
+        max-width: 135px;
+        font-size: 0.75rem;
+        padding: 0.2rem 0.35rem;
+      }
+      .portal-container { flex-direction: column; position: relative; }
+      .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 280px;
+        max-width: 82vw;
+        background: var(--white);
+        z-index: 1050;
+        transform: translateX(-100%);
+        transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: var(--shadow-lg);
+        overflow-y: auto;
+        border-right: 1px solid var(--gray-200);
+        padding: 1.25rem 1rem;
+      }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-backdrop.open { display: block; }
+      .sidebar-mobile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 0.75rem;
+        margin-bottom: 0.75rem;
+        border-bottom: 1px solid var(--gray-200);
+      }
+      .sidebar-mobile-header .brand-text {
+        font-family: var(--font-serif);
+        font-weight: 700;
+        color: var(--maroon);
+        font-size: 1rem;
+      }
+      .btn-sidebar-close {
+        background: var(--gray-100);
+        border: none;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        color: var(--gray-700);
+        cursor: pointer;
+      }
+      .main-content {
+        padding: 1rem 0.75rem;
+        min-width: 0;
+      }
+      .kpi-grid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+      }
+      .kpi-card {
+        padding: 1rem;
+      }
+      .pos-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      .pos-item-picker {
+        grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+        max-height: 380px;
+      }
+      .data-table {
+        min-width: 620px;
+      }
+      .data-table-wrapper {
+        border-radius: 6px;
+        border: 1px solid var(--gray-200);
+        -webkit-overflow-scrolling: touch;
+      }
+      .tailor-specs-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .auth-box {
+        padding: 1.5rem 1rem !important;
+      }
+      .topbar-brand span.topbar-title {
+        font-size: 1rem;
+      }
+      .pos-scanner-box {
+        flex-direction: column;
+      }
+      .modal-card {
+        padding: 1.25rem 1rem !important;
+      }
     }
     .pos-scanner-box {
       display: flex;
@@ -457,15 +597,19 @@
       align-items: center;
       justify-content: center;
       padding: 1rem;
+      overflow-y: auto;
+      box-sizing: border-box;
     }
     .auth-box {
       background: var(--white);
-      max-width: 420px;
+      max-width: 440px;
       width: 100%;
       border-radius: var(--radius);
-      padding: 2.5rem 2rem;
+      padding: 2.25rem 1.75rem;
       box-shadow: var(--shadow-lg);
       text-align: center;
+      box-sizing: border-box;
+      margin: auto;
     }
     .auth-logo { width: 54px; height: 54px; margin-bottom: 1rem; }
     .auth-title { font-family: var(--font-serif); color: var(--maroon); font-size: 1.5rem; margin-bottom: 0.25rem; font-weight: 700; }
@@ -541,13 +685,18 @@
 
   <!-- TOP NAVIGATION BAR -->
   <header class="topbar">
-    <a href="#" class="topbar-brand">
-      <img src="images/logo/abha-favicon.svg" alt="ABHA Crest" class="topbar-logo">
-      <span class="topbar-title">ABHA</span>
-      <span class="topbar-tag">Operations Portal</span>
-    </a>
+    <div class="topbar-left">
+      <button type="button" class="btn-sidebar-toggle" id="btnAdminSidebarToggle" onclick="toggleAdminSidebar()" aria-label="Toggle navigation menu">
+        <span>☰</span>
+      </button>
+      <a href="#" class="topbar-brand">
+        <img src="images/logo/abha-favicon.svg" alt="ABHA Crest" class="topbar-logo">
+        <span class="topbar-title">ABHA</span>
+        <span class="topbar-tag">Operations Portal</span>
+      </a>
+    </div>
     <div class="topbar-user">
-      <a href="index.html" style="color: var(--gold-light); text-decoration: none; font-size: 0.8rem; font-weight: 600; padding: 0.3rem 0.6rem; border: 1px solid rgba(223,179,94,0.4); border-radius: 4px; transition: all 0.2s;">← Live Store</a>
+      <a href="index.html" style="color: var(--gold-light); text-decoration: none; font-size: 0.8rem; font-weight: 600; padding: 0.3rem 0.6rem; border: 1px solid rgba(223,179,94,0.4); border-radius: 4px; transition: all 0.2s; white-space: nowrap;">← Live Store</a>
       <select id="roleSwitcherSelect" onchange="switchRoleOnTheFly(this.value)" style="background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); border-radius: 4px; padding: 0.25rem 0.5rem; font-size: 0.8rem; cursor: pointer;">
         <option value="OWNER" style="color: #000;">Role: 👑 Owner (Full Access)</option>
         <option value="MANAGER" style="color: #000;">Role: 📋 Manager (Catalog & POS)</option>
@@ -560,11 +709,18 @@
     </div>
   </header>
 
+  <!-- SIDEBAR BACKDROP FOR MOBILE -->
+  <div id="sidebarBackdrop" class="sidebar-backdrop" onclick="closeAdminSidebar()"></div>
+
   <!-- PORTAL CONTAINER -->
   <div class="portal-container">
     
     <!-- SIDEBAR -->
     <aside class="sidebar">
+      <div class="sidebar-mobile-header">
+        <span class="brand-text">ABHA Operations</span>
+        <button type="button" class="btn-sidebar-close" onclick="closeAdminSidebar()" aria-label="Close menu">&times;</button>
+      </div>
       <div class="nav-header">Overview</div>
       <button class="nav-item active" onclick="switchTab('dashboard')">
         <span>📊</span> Dashboard Overview
@@ -913,7 +1069,7 @@
           <label style="font-size: 0.8rem; font-weight: 600;">Product Title *</label>
           <input type="text" id="npTitle" name="title" class="form-input" required placeholder="e.g. Royal Indigo Handblock Pure Cotton Suit">
         </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
           <div>
             <label style="font-size: 0.8rem; font-weight: 600;">SKU Code *</label>
             <input type="text" id="npSku" name="sku" class="form-input" required placeholder="ABHA-SLW-006">
@@ -929,7 +1085,7 @@
             </select>
           </div>
         </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
           <div>
             <label style="font-size: 0.8rem; font-weight: 600;">Fabric Composition *</label>
             <input type="text" id="npFabric" name="fabric" class="form-input" required placeholder="Pure Cotton (Top 2.5m, Bottom 2.5m, Dupatta 2.5m)">
@@ -939,7 +1095,7 @@
             <input type="text" id="npColor" name="color" class="form-input" placeholder="e.g. Royal Indigo & Gold">
           </div>
         </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
           <div>
             <label style="font-size: 0.8rem; font-weight: 600;">Base Fabric Price (₹) *</label>
             <input type="number" id="npPrice" name="base_price" class="form-input" required placeholder="1850">
@@ -949,7 +1105,7 @@
             <input type="number" id="npStitching" name="stitching_price" class="form-input" value="650" required>
           </div>
         </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
           <div>
             <label style="font-size: 0.8rem; font-weight: 600;">Inventory Model</label>
             <select id="npInventoryType" name="inventory_type" class="form-input">
@@ -1165,7 +1321,22 @@
       window.location.reload();
     }
 
+    function toggleAdminSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      if (sidebar) sidebar.classList.toggle('open');
+      if (backdrop) backdrop.classList.toggle('open');
+    }
+
+    function closeAdminSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      if (sidebar) sidebar.classList.remove('open');
+      if (backdrop) backdrop.classList.remove('open');
+    }
+
     function switchTab(tabId) {
+      closeAdminSidebar();
       document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
       const activeBtn = Array.from(document.querySelectorAll('.nav-item')).find(b => b.getAttribute('onclick').includes(tabId));
