@@ -18,11 +18,23 @@
   <meta property="og:title" content="ABHA — Premium Salwar Suit Dress Materials & Custom Tailoring">
   <meta property="og:description" content="Your Style, Your Measurements, Our Experience, Your ABHA. Buy Salwar Suit dress materials and get them stitched to your measurements.">
   
-  <!-- Google Fonts: Playfair Display + Plus Jakarta Sans -->
+  <!-- Google Fonts: Cinzel + Playfair Display + Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
+  <!-- Immediate Mobile Detection Script: tags html.mobile-mode on smartphones and screens < 1024px -->
+  <script>
+    (function() {
+      var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+        || (window.innerWidth < 1024)
+        || (screen.width < 1024 && ('ontouchstart' in window || navigator.maxTouchPoints > 0));
+      if (isMobile) {
+        document.documentElement.classList.add('mobile-mode');
+      }
+    })();
+  </script>
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="js/abha-store.js"></script>
@@ -31,6 +43,7 @@
       theme: {
         extend: {
           colors: {
+            meeshoGreen: '#038D63',
             ivory: {
               50: '#FAF7F2',
               100: '#F5EFEB',
@@ -68,6 +81,7 @@
           fontFamily: {
             serif: ['"Playfair Display"', 'Georgia', 'serif'],
             sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            royal: ['Cinzel', 'serif']
           },
           letterSpacing: {
             luxury: '0.18em',
@@ -117,7 +131,6 @@
       outline-offset: 2px;
     }
 
-
     /* Respect reduced motion */
     @media (prefers-reduced-motion: reduce) {
       * {
@@ -125,6 +138,91 @@
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
+      }
+    }
+
+    /* ========================================================================= */
+    /* ENFORCE OPTION B ROYAL BOUTIQUE HYBRID LAYOUT ON MOBILE PHONES             */
+    /* ========================================================================= */
+    html.mobile-mode .desktop-only-hero {
+      display: none !important;
+    }
+    @media (max-width: 1023px) {
+      .desktop-only-hero {
+        display: none !important;
+      }
+    }
+
+    html.mobile-mode .mobile-only-hero {
+      display: block !important;
+    }
+    @media (max-width: 1023px) {
+      .mobile-only-hero {
+        display: block !important;
+      }
+    }
+
+    /* Hide bulky 6-photo category grid and Future Collections on mobile */
+    html.mobile-mode .desktop-only-categories {
+      display: none !important;
+    }
+    @media (max-width: 1023px) {
+      .desktop-only-categories {
+        display: none !important;
+      }
+    }
+
+    /* Announcement bar toggle */
+    html.mobile-mode .desktop-only-announcement {
+      display: none !important;
+    }
+    @media (max-width: 1023px) {
+      .desktop-only-announcement {
+        display: none !important;
+      }
+    }
+
+    html.mobile-mode .mobile-only-announcement {
+      display: inline-block !important;
+    }
+    @media (max-width: 1023px) {
+      .mobile-only-announcement {
+        display: inline-block !important;
+      }
+    }
+    @media (min-width: 1024px) {
+      html:not(.mobile-mode) .mobile-only-announcement {
+        display: none !important;
+      }
+    }
+
+    /* Horizontal filter pills toggle */
+    html.mobile-mode .mobile-filter-pills {
+      display: flex !important;
+    }
+    @media (max-width: 1023px) {
+      .mobile-filter-pills {
+        display: flex !important;
+      }
+    }
+    @media (min-width: 1024px) {
+      html:not(.mobile-mode) .mobile-filter-pills {
+        display: none !important;
+      }
+    }
+
+    /* Sticky Bottom App Navigation toggle */
+    html.mobile-mode .mobile-bottom-nav {
+      display: flex !important;
+    }
+    @media (max-width: 1023px) {
+      .mobile-bottom-nav {
+        display: flex !important;
+      }
+    }
+    @media (min-width: 1024px) {
+      html:not(.mobile-mode) .mobile-bottom-nav {
+        display: none !important;
       }
     }
   </style>
@@ -145,20 +243,20 @@
   </script>
 </head>
 
-<body class="min-h-screen flex flex-col antialiased selection:bg-maroon-800 selection:text-ivory-50 pb-16 md:pb-0">
+<body class="min-h-screen flex flex-col antialiased selection:bg-maroon-800 selection:text-ivory-50 pb-20 lg:pb-0">
 
 
 
   <!-- ========================================================================= -->
   <!-- TOP ANNOUNCEMENT & UTILITY BAR -->
   <!-- ========================================================================= -->
-  <aside aria-label="Announcement" class="bg-maroon-900 text-ivory-50 text-xs py-1.5 px-3 sm:px-4 border-b border-maroon-800/40">
+  <aside aria-label="Announcement" class="bg-gradient-to-r from-maroon-950 via-maroon-900 to-maroon-950 text-ivory-50 text-xs py-1.5 px-3 sm:px-4 border-b border-maroon-800/40">
     <div class="max-w-7xl mx-auto flex items-center justify-between text-left gap-2">
       <div class="text-[10px] sm:text-[11px] font-medium tracking-wide flex items-center gap-1.5 truncate">
         <span class="w-1.5 h-1.5 rounded-full bg-gold-400 shrink-0"></span>
-        <span id="announcementText" class="truncate">✨ Free Pan-India Express Delivery on Salwar Suits • Bespoke Fit</span>
+        <span id="announcementText" class="truncate">✨ Royal Handloom Salwar Suits • Bespoke Fit</span>
       </div>
-      <div class="hidden md:flex items-center justify-end gap-2.5 sm:gap-4 text-[11px] tracking-wider uppercase font-medium shrink-0">
+      <div class="hidden lg:flex desktop-only-announcement items-center justify-end gap-2.5 sm:gap-4 text-[11px] tracking-wider uppercase font-medium shrink-0">
         <a href="tel:+919214837104" class="hover:text-gold-500 transition-colors flex items-center gap-1">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
           Tailor Hotline: +91 9214837104
@@ -194,6 +292,7 @@
           </select>
         </div>
       </div>
+      <a href="tel:+919214837104" class="mobile-only-announcement text-white text-[10px] underline shrink-0 font-medium">Hotline</a>
     </div>
   </aside>
 
@@ -281,14 +380,11 @@
   </header>
 
   <!-- ========================================================================= -->
-  <!-- 2. HERO SECTION (§8) -->
-  <!-- ========================================================================= -->
-  <!-- ========================================================================= -->
-  <!-- 2. HERO SECTION (§8) — RESPONSIVE DESKTOP & MOBILE-OPTIMIZED ATELIER -->
+  <!-- 2. HERO SECTION (§8) — RESPONSIVE DESKTOP & MOBILE-OPTIMIZED ATELIER      -->
   <!-- ========================================================================= -->
   
-  <!-- MOBILE HERO & 2x2 TRUST BADGES (<md only) -->
-  <div class="md:hidden bg-[#FAF8F5] pt-3 pb-2">
+  <!-- MOBILE HERO & 2x2 TRUST BADGES (Option B Royal Boutique Card) -->
+  <div class="mobile-only-hero hidden bg-[#FAF8F5] pt-3 pb-2">
     <!-- Mobile Luxury Hero Card -->
     <div class="px-3 pb-2.5">
       <div class="relative rounded-2xl overflow-hidden bg-gradient-to-br from-maroon-950 via-maroon-900 to-charcoal-950 text-white p-4 shadow-md border border-gold-500/30">
@@ -313,7 +409,7 @@
       </div>
     </div>
 
-    <!-- Mobile 2x2 Trust Badges Grid (Replaces Squished 4-Columns) -->
+    <!-- Mobile 2x2 Trust Badges Grid (Clean 2x2 Option B layout) -->
     <div class="px-3 pb-1">
       <div class="grid grid-cols-2 gap-2">
         <div class="flex items-center gap-2.5 p-2 bg-white rounded-xl border border-[#EBE3D7] shadow-2xs">
@@ -348,8 +444,8 @@
     </div>
   </div>
 
-  <!-- DESKTOP HERO SECTION (Preserved for md and above) -->
-  <section class="hidden md:block relative bg-gradient-to-b from-ivory-100 to-ivory-50 border-b border-ivory-200 overflow-hidden" aria-label="Hero Introduction">
+  <!-- DESKTOP HERO SECTION (Preserved for lg screens 1024px and above) -->
+  <section class="desktop-only-hero hidden lg:block relative bg-gradient-to-b from-ivory-100 to-ivory-50 border-b border-ivory-200 overflow-hidden" aria-label="Hero Introduction">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 lg:py-28">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         
@@ -445,9 +541,9 @@
   </section>
 
   <!-- ========================================================================= -->
-  <!-- 3. SHOP BY CATEGORY (§10) -->
+  <!-- 3. SHOP BY CATEGORY (§10) — DESKTOP ONLY (Hidden on mobile to eliminate clutter) -->
   <!-- ========================================================================= -->
-  <section id="categories" class="py-8 md:py-20 bg-ivory-50 border-b border-ivory-200" aria-label="Shop Salwar Suit Dress Materials">
+  <section id="categories" class="desktop-only-categories hidden lg:block py-8 md:py-20 bg-ivory-50 border-b border-ivory-200" aria-label="Shop Salwar Suit Dress Materials">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <!-- Section Header -->
@@ -516,12 +612,40 @@
   </section>
 
   <!-- ========================================================================= -->
-  <!-- 4. NEW ARRIVALS (§11) -->
+  <!-- HORIZONTAL FABRIC FILTER PILLS (Mobile Only Option B)                     -->
   <!-- ========================================================================= -->
-  <section id="newArrivals" class="py-8 md:py-24 bg-ivory-100/60 border-b border-ivory-200" aria-label="New Arrivals">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <section class="mobile-filter-pills px-3 py-2 hidden items-center gap-1.5 overflow-x-auto no-scrollbar bg-[#FAF8F5] border-b border-[#EBE3D7]/60" id="mobileFilterPillsSection" aria-label="Filter fabrics">
+    <button type="button" onclick="setCatalogFilter('all')" data-filter="all" class="mobile-filter-pill px-3.5 py-1.5 bg-maroon-900 text-gold-400 text-xs font-bold rounded-full shrink-0 shadow-xs">All Salwar Suits</button>
+    <button type="button" onclick="setCatalogFilter('cotton')" data-filter="cotton" class="mobile-filter-pill px-3.5 py-1.5 bg-white border border-[#EBE3D7] text-gray-800 text-xs font-semibold rounded-full shrink-0">Pure Cotton</button>
+    <button type="button" onclick="setCatalogFilter('prints')" data-filter="prints" class="mobile-filter-pill px-3.5 py-1.5 bg-white border border-[#EBE3D7] text-gray-800 text-xs font-semibold rounded-full shrink-0">Bandhani &amp; Leheriya</button>
+    <button type="button" onclick="setCatalogFilter('silk')" data-filter="silk" class="mobile-filter-pill px-3.5 py-1.5 bg-white border border-[#EBE3D7] text-gray-800 text-xs font-semibold rounded-full shrink-0">Chanderi Silk</button>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 4. NEW ARRIVALS / CATALOG (§11)                                          -->
+  <!-- ========================================================================= -->
+  <section id="newArrivals" class="px-3 py-3 lg:py-24 bg-ivory-100/60 border-b border-ivory-200" aria-label="New Arrivals">
+    <div class="max-w-7xl mx-auto md:px-6 lg:px-8">
       
-      <div class="flex flex-col md:flex-row md:items-end justify-between mb-6 pb-3 md:mb-10 md:pb-4 border-b border-ivory-200 gap-4">
+      <!-- Mobile Catalog Header (Option B) -->
+      <div class="flex items-center justify-between mb-3 lg:hidden">
+        <div>
+          <h2 class="font-serif text-base font-bold text-maroon-950">Curated Salwar Suits</h2>
+          <p class="text-[10px] text-gray-500">Handcrafted Dress Material Sets</p>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <label for="mobileCatalogSortSelect" class="sr-only">Sort products</label>
+          <select id="mobileCatalogSortSelect" onchange="handleCatalogSort(this.value)" class="text-[11px] font-bold text-maroon-900 bg-white border border-[#EBE3D7] rounded-lg px-2 py-1 focus:outline-none shadow-2xs">
+            <option value="featured">Featured Curations</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="rating">Top Rated</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Desktop Section Header (lg:flex) -->
+      <div class="hidden lg:flex flex-col md:flex-row md:items-end justify-between mb-6 pb-3 md:mb-10 md:pb-4 border-b border-ivory-200 gap-4">
         <div>
           <span class="text-xs font-bold uppercase tracking-luxury text-maroon-800">Fresh from Loom & Studio</span>
           <h2 class="font-serif text-2xl sm:text-3xl font-bold text-maroon-950 mt-1">New Arrivals</h2>
@@ -533,8 +657,8 @@
         </a>
       </div>
 
-      <!-- Catalog Controls: Filter Chips & Sort (§11) -->
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-ivory-50 p-4 rounded-lg border border-ivory-200">
+      <!-- Desktop Catalog Controls: Filter Chips & Sort (§11) -->
+      <div class="hidden lg:flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-ivory-50 p-4 rounded-lg border border-ivory-200">
         <!-- Filter Chips -->
         <div class="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 scrollbar-none" id="catalogFilterChips">
           <button type="button" onclick="setCatalogFilter('all')" data-filter="all" class="catalog-chip px-3.5 py-1.5 text-xs font-semibold rounded-full bg-maroon-800 text-ivory-50 transition-all whitespace-nowrap">All Suits</button>
@@ -1403,7 +1527,7 @@
   <!-- ========================================================================= -->
   <!-- FLOATING WHATSAPP BUTTON (§32) -->
   <!-- ========================================================================= -->
-  <aside aria-label="Quick WhatsApp assistance" class="fixed bottom-6 right-6 z-40">
+  <aside aria-label="Quick WhatsApp assistance" class="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40">
     <button type="button" onclick="triggerWhatsAppChat('Floating Action')" class="flex items-center gap-2 px-4 py-3 rounded-full bg-green-700 hover:bg-green-600 text-ivory-50 shadow-lg hover:shadow-xl transition-luxury border border-green-600 text-xs font-bold" aria-label="Chat on WhatsApp with ABHA Tailoring Support">
       <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.553 1.764.815 2.79.815 3.182 0 5.77-2.587 5.77-5.766.001-3.183-2.585-5.8-5.769-5.8zm3.374 8.243c-.147.418-.844.793-1.189.845-.345.053-.787.069-1.272-.088-.309-.1-.707-.234-1.223-.462-2.158-.956-3.565-3.176-3.673-3.322-.108-.147-.872-1.163-.872-2.218 0-1.055.553-1.574.75-1.785.197-.212.43-.265.574-.265.144 0 .287.002.412.008.132.007.309-.05.483.368.177.424.606 1.482.659 1.589.053.107.089.232.018.375-.072.143-.108.232-.215.358-.108.125-.227.28-.324.375-.108.107-.221.223-.095.439.126.216.559.923 1.2 1.494.825.736 1.521.964 1.737 1.071.216.107.342.089.469-.054.126-.143.538-.625.681-.839.144-.214.287-.179.484-.107.197.072 1.254.591 1.469.699.215.107.359.161.412.25.054.089.054.518-.093.936z"/></svg>
       <span class="hidden sm:inline">Chat with Tailor</span>
@@ -1978,7 +2102,7 @@
           Continue Shopping
         </button>
       </div>
-
+    </div>
   </div>
 
   <!-- ========================================================================= -->
@@ -2778,6 +2902,7 @@
 
     function setCatalogFilter(filter) {
       state.activeFilter = filter;
+      // Update desktop filter chips
       document.querySelectorAll('#catalogFilterChips .catalog-chip').forEach(btn => {
         if (btn.getAttribute('data-filter') === filter) {
           btn.className = 'catalog-chip px-3.5 py-1.5 text-xs font-semibold rounded-full bg-maroon-800 text-ivory-50 transition-all whitespace-nowrap';
@@ -2785,11 +2910,23 @@
           btn.className = 'catalog-chip px-3.5 py-1.5 text-xs font-semibold rounded-full bg-ivory-200 text-charcoal-800 hover:bg-maroon-900/10 transition-all whitespace-nowrap';
         }
       });
+      // Update mobile Option B filter pills
+      document.querySelectorAll('.mobile-filter-pill').forEach(pill => {
+        if (pill.getAttribute('data-filter') === filter) {
+          pill.className = 'mobile-filter-pill px-3.5 py-1.5 bg-maroon-900 text-gold-400 text-xs font-bold rounded-full shrink-0 shadow-xs';
+        } else {
+          pill.className = 'mobile-filter-pill px-3.5 py-1.5 bg-white border border-[#EBE3D7] text-gray-800 text-xs font-semibold rounded-full shrink-0';
+        }
+      });
       renderNewArrivals();
     }
 
     function handleCatalogSort(criteria) {
       state.activeSort = criteria;
+      const desktopSort = document.getElementById('catalogSortSelect');
+      if (desktopSort) desktopSort.value = criteria;
+      const mobileSort = document.getElementById('mobileCatalogSortSelect');
+      if (mobileSort) mobileSort.value = criteria;
       renderNewArrivals();
     }
 
@@ -4355,56 +4492,44 @@
   </script>
 
   <!-- ========================================================================= -->
-  <!-- MOBILE LUXURY STICKY BOTTOM NAVIGATION BAR (Thumb-Friendly E-Commerce) -->
+  <!-- STICKY BOTTOM APP NAVIGATION (Mobile Option B Boutique Layout)             -->
   <!-- ========================================================================= -->
-  <nav id="mobileBottomNav" class="fixed bottom-0 inset-x-0 z-40 bg-ivory-50/95 backdrop-blur-md border-t border-ivory-300/80 shadow-[0_-4px_16px_rgba(74,16,29,0.06)] md:hidden flex justify-around items-center py-2 px-1 text-charcoal-900" aria-label="Mobile Navigation">
+  <nav id="mobileBottomNav" class="mobile-bottom-nav fixed bottom-0 inset-x-0 z-50 bg-[#FAF8F5]/98 backdrop-blur-md border-t border-[#EBE3D7] shadow-lg hidden items-center justify-around py-1.5 px-4 text-charcoal-900" aria-label="Mobile Navigation">
     
     <!-- Home -->
-    <button type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="flex flex-col items-center justify-center flex-1 py-1 text-maroon-900 focus:outline-none" aria-label="Home">
-      <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-      </svg>
-      <span class="text-[10px] font-semibold tracking-tight" data-i18n="nav_home">Home</span>
-    </button>
-
-    <!-- Collection / Suits -->
-    <a href="#newArrivals" class="flex flex-col items-center justify-center flex-1 py-1 text-charcoal-900 hover:text-maroon-800 focus:outline-none" aria-label="Shop Suits">
-      <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
-      </svg>
-      <span class="text-[10px] font-medium tracking-tight" data-i18n="nav_shop">Suits</span>
+    <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" class="flex flex-col items-center text-maroon-950 font-bold text-[10px] focus:outline-none" aria-label="Home">
+      <svg class="w-5 h-5 text-maroon-900" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+      <span class="mt-0.5" data-i18n="nav_home">Home</span>
     </a>
 
-    <!-- Custom Stitch Studio (Center Highlight Pill) -->
-    <button type="button" onclick="openMeasurementStudioFromHero()" class="flex flex-col items-center justify-center flex-1 py-1 -mt-3 focus:outline-none group" aria-label="Custom Stitching Studio">
-      <div class="w-10 h-10 rounded-full bg-maroon-900 text-gold-400 flex items-center justify-center shadow-md border-2 border-gold-400/50 group-hover:scale-105 transition-transform">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879a3 3 0 11-4.242-4.242L12 12z"/>
-        </svg>
-      </div>
-      <span class="text-[9px] font-bold text-maroon-900 tracking-tight mt-0.5">Stitch</span>
+    <!-- Loom / Catalog -->
+    <a href="#newArrivals" onclick="setCatalogFilter('all')" class="flex flex-col items-center text-gray-500 hover:text-maroon-900 text-[10px] focus:outline-none" aria-label="Loom Catalog">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+      <span class="mt-0.5">Loom</span>
+    </a>
+
+    <!-- Custom Studio Cutout Button -->
+    <button type="button" onclick="openMeasurementStudioFromHero()" class="flex flex-col items-center text-maroon-950 text-[10px] font-bold focus:outline-none group" aria-label="Tailor Studio">
+      <div class="w-9 h-9 rounded-full bg-maroon-900 text-gold-400 flex items-center justify-center text-base shadow-md -mt-3.5 border border-gold-500/40 group-hover:scale-105 transition-transform">✂</div>
+      <span class="mt-0.5">Studio</span>
     </button>
 
-    <!-- Wishlist -->
-    <button type="button" onclick="openWishlistDrawer()" class="flex flex-col items-center justify-center flex-1 py-1 text-charcoal-900 hover:text-maroon-800 relative focus:outline-none" aria-label="Wishlist">
+    <!-- Wishlist / Saved -->
+    <button type="button" onclick="openWishlistDrawer()" class="flex flex-col items-center text-gray-500 hover:text-maroon-900 text-[10px] relative focus:outline-none" aria-label="Saved Wishlist">
       <div class="relative">
-        <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-        </svg>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
         <span id="mobileBottomWishlistBadge" class="absolute -top-1 -right-2 w-3.5 h-3.5 bg-terracotta-700 text-ivory-50 text-[9px] font-bold rounded-full hidden items-center justify-center">0</span>
       </div>
-      <span class="text-[10px] font-medium tracking-tight">Wishlist</span>
+      <span class="mt-0.5">Saved</span>
     </button>
 
     <!-- Cart / Bag -->
-    <button type="button" onclick="openCartDrawer()" class="flex flex-col items-center justify-center flex-1 py-1 text-charcoal-900 hover:text-maroon-800 relative focus:outline-none" aria-label="Shopping Bag">
+    <button type="button" onclick="openCartDrawer()" class="flex flex-col items-center text-gray-500 hover:text-maroon-900 text-[10px] relative focus:outline-none" aria-label="Shopping Bag">
       <div class="relative">
-        <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-        </svg>
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
         <span id="mobileBottomCartBadge" class="absolute -top-1 -right-2 w-3.5 h-3.5 bg-maroon-800 text-ivory-50 text-[9px] font-bold rounded-full flex items-center justify-center">0</span>
       </div>
-      <span class="text-[10px] font-medium tracking-tight">Bag</span>
+      <span class="mt-0.5">Bag</span>
     </button>
 
   </nav>
