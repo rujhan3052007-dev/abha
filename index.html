@@ -2621,6 +2621,25 @@
               local.stockQuantity = dbProd.stock_quantity;
               local.price = dbProd.base_price || dbProd.price || local.price;
               local.stitchingFee = dbProd.stitching_price || dbProd.stitchingPrice || local.stitchingFee;
+            } else {
+              PRODUCTS.unshift({
+                id: dbProd.id,
+                sku: dbProd.sku,
+                name: dbProd.title || dbProd.name,
+                category: dbProd.category_name || dbProd.category || 'Pure Cotton Salwar Suits',
+                suitType: (dbProd.category_name || dbProd.category || '').toLowerCase().includes('silk') ? 'silk' : 'cotton',
+                price: dbProd.base_price || dbProd.price || 1850,
+                fabric: dbProd.fabric || '100% Pure Handloom Cotton',
+                color: dbProd.color || 'Artisanal Weave',
+                image: dbProd.primary_image || dbProd.photo || 'images/pink-leheriya-cotton-suit.jpg',
+                stitchingAvailable: true,
+                stitchingFee: dbProd.stitching_price || dbProd.stitchingPrice || dbProd.stitchingFee || 650,
+                isNewArrival: true,
+                isBestSeller: false,
+                rating: 5.0,
+                reviewsCount: 1,
+                description: dbProd.description || 'Authentic unstitched salwar suit dress material from ABHA atelier.'
+              });
             }
           });
           renderCategories('all');

@@ -677,6 +677,85 @@
       };
     },
 
+    registerStaff: function ({ name, email, phone, password, role = 'OWNER' }) {
+      if (!name || !password) throw new Error('Full name and password are required.');
+      const users = getTable('users', INITIAL_USERS);
+      const cleanEmail = (email || '').trim().toLowerCase();
+      const cleanPhone = (phone || '').trim();
+      const exists = users.find(u => (cleanEmail && u.email === cleanEmail) || (cleanPhone && u.phone === cleanPhone));
+      if (exists) {
+        throw new Error('An account with this email or mobile number already exists.');
+      }
+      const newUser = {
+        id: 'usr-' + Date.now(),
+        name: name.trim(),
+        email: cleanEmail,
+        phone: cleanPhone,
+        password: password,
+        role: role,
+        store_id: INITIAL_STORE.id,
+        created_at: new Date().toISOString()
+      };
+      users.push(newUser);
+      setTable('users', users);
+      recordAuditLog(newUser.name, role, 'STAFF_REGISTERED', 'USER', newUser.id, `New ${role} registered: ${newUser.name}`);
+      return {
+        token: 'abha_jwt_' + btoa(`${newUser.id}:${newUser.role}:${Date.now()}`),
+        user: {
+          id: newUser.id,
+          name: newUser.name,
+          email: newUser.email,
+          phone: newUser.phone,
+          role: newUser.role
+        }
+      };
+    },
+
+    addProduct: function (data) {
+      if (!data.title && !data.name) throw new Error('Product title is required.');
+      const products = getTable('products', INITIAL_PRODUCTS);
+      const newId = 'prod-' + Date.now();
+      const newSku = data.sku || ('ABHA-SLW-' + Math.floor(100 + Math.random() * 900));
+      const basePrice = parseFloat(data.base_price || data.price || 1850);
+      const stitchingFee = parseFloat(data.stitching_price || data.stitchingFee || 650);
+
+      const newProd = {
+        id: newId,
+        sku: newSku,
+        title: data.title || data.name,
+        name: data.title || data.name,
+        category_id: data.category_id || 'cat-cotton',
+        category_name: data.category_name || data.category || 'Pure Cotton Salwar Suits',
+        category: data.category_name || data.category || 'Pure Cotton Salwar Suits',
+        suitType: (data.category_name || data.category || '').toLowerCase().includes('silk') ? 'silk' : 'cotton',
+        fabric: data.fabric || '100% Pure Cotton (Top 2.5m, Bottom 2.5m, Dupatta 2.5m)',
+        color: data.color || 'Artisanal Weave',
+        base_price: basePrice,
+        price: basePrice,
+        stitching_price: stitchingFee,
+        stitchingPrice: stitchingFee,
+        stitchingFee: stitchingFee,
+        stitchingAvailable: true,
+        inventory_type: data.inventory_type || 'UNIQUE_1OF1',
+        is_unique_item: data.inventory_type !== 'QUANTITY',
+        stock_quantity: parseInt(data.stock_quantity || 1, 10),
+        is_sold_out: false,
+        primary_image: data.primary_image || data.photo || 'images/pink-leheriya-cotton-suit.jpg',
+        image: data.primary_image || data.photo || 'images/pink-leheriya-cotton-suit.jpg',
+        description: data.description || 'Authentic handcrafted unstitched salwar suit material ready for bespoke tailoring.',
+        rating: 5.0,
+        reviewsCount: 0,
+        isNewArrival: true,
+        isBestSeller: false,
+        created_at: new Date().toISOString()
+      };
+
+      products.unshift(newProd);
+      setTable('products', products);
+      recordAuditLog('Admin', 'OWNER', 'PRODUCT_ADDED', 'PRODUCT', newProd.id, `Added product ${newProd.title} (${newProd.sku})`);
+      return newProd;
+    },
+
     // Isomorphic API Call Dispatcher (Transparently handles all /api routes on GitHub Pages & Node)
     apiCall: async function (endpoint, options = {}) {
       const hasNode = await isBackendAvailable();
@@ -703,6 +782,10 @@
         return { success: true, data: this.getProducts(options.includeSold) };
       }
       if (pathname === '/api/admin/products') {
+        if (method === 'POST') {
+          const prod = this.addProduct(body);
+          return { success: true, data: prod };
+        }
         return { success: true, data: this.getAllProductsAdmin() };
       }
       if (pathname === '/api/categories') {
@@ -738,6 +821,10 @@
       }
 
       // Admin Dashboard & POS
+      if (pathname === '/api/auth/register' && method === 'POST') {
+        const auth = this.registerStaff(body);
+        return { success: true, token: auth.token, user: auth.user };
+      }
       if (pathname === '/api/auth/login' && method === 'POST') {
         const auth = this.authenticateStaff(body.identifier, body.password);
         return { success: true, token: auth.token, user: auth.user };

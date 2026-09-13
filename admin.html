@@ -479,8 +479,15 @@
     <div class="auth-box">
       <img src="images/logo/abha-favicon.svg" alt="ABHA Crest" class="auth-logo">
       <h2 class="auth-title">ABHA Operations Portal</h2>
-      <p class="auth-sub">Enter your staff credentials to access store operations</p>
+      <p class="auth-sub">Enter your staff credentials or register as Owner to manage boutique</p>
       
+      <!-- Toggle Sign In vs Register -->
+      <div style="display: flex; gap: 0.5rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--gray-200); padding-bottom: 0.75rem;">
+        <button type="button" id="tabBtnSignIn" onclick="showAuthMode('login')" style="flex: 1; padding: 0.4rem; font-size: 0.85rem; font-weight: 700; border: none; background: none; color: var(--maroon); border-bottom: 2px solid var(--maroon); cursor: pointer;">Sign In</button>
+        <button type="button" id="tabBtnRegister" onclick="showAuthMode('register')" style="flex: 1; padding: 0.4rem; font-size: 0.85rem; font-weight: 600; border: none; background: none; color: var(--gray-500); cursor: pointer;">+ Register as Owner</button>
+      </div>
+
+      <!-- Login Form -->
       <form id="adminLoginForm" onsubmit="handleAdminLogin(event)" style="display: flex; flex-direction: column; gap: 1rem; text-align: left;">
         <div>
           <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.35rem; display: block;">Email or Phone</label>
@@ -492,6 +499,28 @@
         </div>
         <div id="authError" style="color: var(--red-text); font-size: 0.8rem; display: none;"></div>
         <button type="submit" class="btn btn-primary" style="justify-content: center; padding: 0.8rem; font-size: 0.95rem; margin-top: 0.5rem;">Sign In to Dashboard</button>
+      </form>
+
+      <!-- Owner Registration Form -->
+      <form id="adminRegisterForm" onsubmit="handleOwnerRegistration(event)" style="display: none; flex-direction: column; gap: 0.85rem; text-align: left;">
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Full Name *</label>
+          <input type="text" id="regName" class="form-input" placeholder="e.g. Rujhan" required>
+        </div>
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Email Address *</label>
+          <input type="email" id="regEmail" class="form-input" placeholder="owner@abha.in" required>
+        </div>
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Mobile Phone *</label>
+          <input type="tel" id="regPhone" class="form-input" placeholder="9214837104" required>
+        </div>
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Set Password *</label>
+          <input type="password" id="regPassword" class="form-input" placeholder="••••••••••••" required minlength="6">
+        </div>
+        <div id="regAuthError" style="color: var(--red-text); font-size: 0.8rem; display: none;"></div>
+        <button type="submit" class="btn btn-primary" style="justify-content: center; padding: 0.8rem; font-size: 0.95rem; margin-top: 0.25rem;">Create Owner Account & Enter</button>
       </form>
       
       <div style="margin-top: 1.25rem; padding: 0.75rem; background: var(--gray-100); border-radius: 6px; text-align: center;">
@@ -879,49 +908,73 @@
   <div id="addProductModal" class="modal-backdrop">
     <div class="modal-card">
       <h3 class="panel-title" style="margin-bottom: 1.25rem;">Add New Salwar Suit Material</h3>
-      <form id="addProductForm" onsubmit="submitNewProduct(event)" style="display: flex; flex-direction: column; gap: 0.9rem;">
+      <form id="addProductForm" onsubmit="submitNewProduct(event)" style="display: flex; flex-direction: column; gap: 0.85rem;">
         <div>
           <label style="font-size: 0.8rem; font-weight: 600;">Product Title *</label>
-          <input type="text" name="title" class="form-input" required placeholder="e.g. Royal Indigo Handblock Cotton Suit">
+          <input type="text" id="npTitle" name="title" class="form-input" required placeholder="e.g. Royal Indigo Handblock Pure Cotton Suit">
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
           <div>
             <label style="font-size: 0.8rem; font-weight: 600;">SKU Code *</label>
-            <input type="text" name="sku" class="form-input" required placeholder="ABHA-SS-006">
+            <input type="text" id="npSku" name="sku" class="form-input" required placeholder="ABHA-SLW-006">
           </div>
           <div>
-            <label style="font-size: 0.8rem; font-weight: 600;">Fabric *</label>
-            <input type="text" name="fabric" class="form-input" required placeholder="Pure Cambric Cotton">
-          </div>
-        </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
-          <div>
-            <label style="font-size: 0.8rem; font-weight: 600;">Base Price (₹) *</label>
-            <input type="number" name="base_price" class="form-input" required placeholder="1850">
-          </div>
-          <div>
-            <label style="font-size: 0.8rem; font-weight: 600;">Stitching Fee (₹)</label>
-            <input type="number" name="stitching_price" class="form-input" value="450">
+            <label style="font-size: 0.8rem; font-weight: 600;">Category *</label>
+            <select id="npCategory" name="category" class="form-input">
+              <option value="Pure Cotton Salwar Suits">Pure Cotton Salwar Suits</option>
+              <option value="Chanderi Silk Salwar Suits">Chanderi Silk Salwar Suits</option>
+              <option value="Bandhani & Leheriya Suits">Bandhani & Leheriya Suits</option>
+              <option value="Mirror-Work Cotton Suits">Mirror-Work Cotton Suits</option>
+              <option value="Designer Printed Salwar Suits">Designer Printed Salwar Suits</option>
+            </select>
           </div>
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
           <div>
-            <label style="font-size: 0.8rem; font-weight: 600;">Inventory Type</label>
-            <select name="inventory_type" class="form-input">
-              <option value="UNIQUE_1OF1">Exclusive 1-of-1 Artisan</option>
+            <label style="font-size: 0.8rem; font-weight: 600;">Fabric Composition *</label>
+            <input type="text" id="npFabric" name="fabric" class="form-input" required placeholder="Pure Cotton (Top 2.5m, Bottom 2.5m, Dupatta 2.5m)">
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600;">Color / Shade</label>
+            <input type="text" id="npColor" name="color" class="form-input" placeholder="e.g. Royal Indigo & Gold">
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600;">Base Fabric Price (₹) *</label>
+            <input type="number" id="npPrice" name="base_price" class="form-input" required placeholder="1850">
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600;">Master Tailoring Fee (₹) *</label>
+            <input type="number" id="npStitching" name="stitching_price" class="form-input" value="650" required>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600;">Inventory Model</label>
+            <select id="npInventoryType" name="inventory_type" class="form-input">
+              <option value="UNIQUE_1OF1">Exclusive 1-of-1 Artisan (De-lists when sold)</option>
               <option value="QUANTITY">Quantity-based</option>
             </select>
           </div>
           <div>
-            <label style="font-size: 0.8rem; font-weight: 600;">Initial Stock</label>
-            <input type="number" name="stock_quantity" class="form-input" value="1">
+            <label style="font-size: 0.8rem; font-weight: 600;">Stock Units</label>
+            <input type="number" id="npStock" name="stock_quantity" class="form-input" value="1">
           </div>
         </div>
         <div>
-          <label style="font-size: 0.8rem; font-weight: 600;">Garment Photo Upload</label>
-          <input type="file" name="photo" class="form-input" accept="image/*">
+          <label style="font-size: 0.8rem; font-weight: 600;">Garment Image</label>
+          <input type="file" id="npPhotoFile" class="form-input" accept="image/*" onchange="handleProductPhotoSelect(event)">
+          <div id="npPhotoPreview" style="display: none; margin-top: 0.5rem; align-items: center; gap: 0.5rem;">
+            <img id="npPhotoImg" src="" style="width: 55px; height: 70px; object-fit: cover; border-radius: 4px; border: 1px solid var(--gray-300);">
+            <span style="font-size: 0.75rem; color: var(--green);">Photo ready to publish</span>
+          </div>
         </div>
-        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem;">
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600;">Garment Description</label>
+          <textarea id="npDesc" name="description" class="form-input" rows="2" placeholder="Fabric weave, neckline details, dupatta work, dimensions..."></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem;">
           <button type="button" class="btn btn-outline" onclick="closeAddProductModal()">Cancel</button>
           <button type="submit" class="btn btn-primary">Save Product</button>
         </div>
@@ -945,6 +998,62 @@
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Request failed');
       return data;
+    }
+
+    function showAuthMode(mode) {
+      const loginForm = document.getElementById('adminLoginForm');
+      const regForm = document.getElementById('adminRegisterForm');
+      const tabLogin = document.getElementById('tabBtnSignIn');
+      const tabReg = document.getElementById('tabBtnRegister');
+      if (mode === 'register') {
+        loginForm.style.display = 'none';
+        regForm.style.display = 'flex';
+        tabLogin.style.color = 'var(--gray-500)';
+        tabLogin.style.borderBottom = 'none';
+        tabReg.style.color = 'var(--maroon)';
+        tabReg.style.borderBottom = '2px solid var(--maroon)';
+      } else {
+        loginForm.style.display = 'flex';
+        regForm.style.display = 'none';
+        tabReg.style.color = 'var(--gray-500)';
+        tabReg.style.borderBottom = 'none';
+        tabLogin.style.color = 'var(--maroon)';
+        tabLogin.style.borderBottom = '2px solid var(--maroon)';
+      }
+    }
+
+    async function handleOwnerRegistration(e) {
+      e.preventDefault();
+      const errBox = document.getElementById('regAuthError');
+      errBox.style.display = 'none';
+
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const phone = document.getElementById('regPhone').value.trim();
+      const password = document.getElementById('regPassword').value;
+
+      try {
+        const res = await apiRequest('/api/auth/register', {
+          method: 'POST',
+          body: JSON.stringify({ name, email, phone, password, role: 'OWNER' })
+        });
+        authToken = res.token;
+        currentUser = res.user;
+        localStorage.setItem('abha_token', authToken);
+        document.getElementById('authGate').style.display = 'none';
+        document.getElementById('userNameDisplay').textContent = currentUser.name;
+        const badge = document.getElementById('userRoleBadge');
+        badge.textContent = currentUser.role;
+        badge.className = `role-badge role-${currentUser.role.toLowerCase()}`;
+        const roleSelect = document.getElementById('roleSwitcherSelect');
+        if (roleSelect) roleSelect.value = currentUser.role;
+        applyRolePermissions(currentUser.role);
+        loadDashboard();
+        loadPosItems();
+      } catch (err) {
+        errBox.textContent = err.message;
+        errBox.style.display = 'block';
+      }
     }
 
     function quickLogin(identifier, password) {
@@ -1431,25 +1540,82 @@
     function closeAddProductModal() {
       document.getElementById('addProductModal').classList.remove('open');
     }
+    let newProductImageBase64 = null;
+
+    function handleProductPhotoSelect(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          newProductImageBase64 = evt.target.result;
+          document.getElementById('npPhotoImg').src = evt.target.result;
+          document.getElementById('npPhotoPreview').style.display = 'flex';
+        };
+        reader.readAsDataURL(file);
+      }
+    }
 
     async function submitNewProduct(e) {
       e.preventDefault();
-      const form = document.getElementById('addProductForm');
-      const formData = new FormData(form);
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalText = submitBtn ? submitBtn.textContent : 'Save Product';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Saving & Publishing...';
+      }
+
+      const title = document.getElementById('npTitle').value.trim();
+      const sku = document.getElementById('npSku').value.trim();
+      const category = document.getElementById('npCategory').value;
+      const fabric = document.getElementById('npFabric').value.trim();
+      const color = document.getElementById('npColor').value.trim();
+      const price = parseFloat(document.getElementById('npPrice').value);
+      const stitchingFee = parseFloat(document.getElementById('npStitching').value) || 650;
+      const inventoryType = document.getElementById('npInventoryType').value;
+      const stock = parseInt(document.getElementById('npStock').value, 10) || 1;
+      const description = document.getElementById('npDesc').value.trim();
+
+      const image = newProductImageBase64 || 'images/pink-leheriya-cotton-suit.jpg';
 
       try {
-        const res = await fetch('/api/admin/products', {
+        await apiRequest('/api/admin/products', {
           method: 'POST',
-          headers: { 'Authorization': `Bearer ${authToken}` },
-          body: formData
+          body: JSON.stringify({
+            title,
+            name: title,
+            sku,
+            category_name: category,
+            category,
+            fabric,
+            color,
+            base_price: price,
+            price,
+            stitching_price: stitchingFee,
+            stitchingPrice: stitchingFee,
+            stitchingFee,
+            inventory_type: inventoryType,
+            stock_quantity: stock,
+            description,
+            primary_image: image,
+            photo: image
+          })
         });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Failed to save product');
+
         closeAddProductModal();
-        form.reset();
+        document.getElementById('addProductForm').reset();
+        newProductImageBase64 = null;
+        document.getElementById('npPhotoPreview').style.display = 'none';
         loadProductsAdmin();
-        alert('Product added successfully!');
-      } catch (err) { alert(err.message); }
+        loadPosItems();
+        alert(`Product "${title}" added successfully! It is now active in your catalog and live on your customer storefront.`);
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+        }
+      }
     }
 
     // Auto-init on page load
