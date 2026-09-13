@@ -7,6 +7,9 @@
   <meta name="description" content="Buy premium Indian Salwar Suit dress materials online and get them custom stitched to your exact measurements. Delivering across India with master tailoring expertise.">
   <meta name="keywords" content="dress materials, unstitched salwar suits, custom stitched suits, Indian salwar suits, pure cotton salwar suit, chanderi silk suit, bandhani dress material, tailor made salwar kameez India">
   <meta name="theme-color" content="#4A101D">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <link rel="icon" type="image/svg+xml" href="images/logo/abha-favicon.svg">
   
   <!-- Open Graph / Facebook -->
@@ -331,13 +334,13 @@
         </div>
 
         <!-- Official ABHA Royal Logo: Corner Crest + Theme Maroon Text (Contained under ABHA) -->
-        <div id="siteHeaderBrandLogo" class="flex-shrink-0 flex items-center lg:-ml-3">
-          <a href="admin.html" class="group flex items-center gap-2.5 sm:gap-3 focus:outline-none cursor-pointer" aria-label="ABHA Admin &amp; Operations Portal" title="ABHA Admin &amp; Operations Portal">
+        <div id="siteHeaderBrandLogo" class="flex-shrink-0 flex items-center lg:-ml-3 relative z-30 cursor-pointer" onclick="window.location.href='admin.html';">
+          <a href="admin.html" onclick="window.location.href='admin.html';" class="group flex items-center gap-2.5 sm:gap-3 focus:outline-none cursor-pointer" aria-label="ABHA Admin &amp; Operations Portal" title="Click to open ABHA Admin Portal">
             <!-- That circular figure on the corner -->
-            <img id="headerTargetCrest" src="images/logo/abha-crest-simplified.png?v=20260913_3" alt="ABHA Royal Crest" class="h-11 w-11 sm:h-12 sm:w-12 object-contain filter drop-shadow-sm transition-transform duration-300 group-hover:scale-105" />
+            <img id="headerTargetCrest" src="images/logo/abha-crest-simplified.png?v=20260913_4" alt="ABHA Royal Crest" class="h-11 w-11 sm:h-12 sm:w-12 object-contain filter drop-shadow-sm transition-transform duration-300 group-hover:scale-105 cursor-pointer" onclick="event.stopPropagation(); window.location.href='admin.html';" />
             
             <!-- Authentic Maroon Text: 'CLOTHING & TAILORING' under 'ABHA' (Does not go out of ABHA) -->
-            <img id="headerTargetText" src="images/logo/abha-text-maroon.png?v=20260913_3" alt="ABHA Clothing & Tailoring" class="h-9 sm:h-10 w-auto object-contain filter drop-shadow-sm" />
+            <img id="headerTargetText" src="images/logo/abha-text-maroon.png?v=20260913_4" alt="ABHA Clothing & Tailoring" class="h-9 sm:h-10 w-auto object-contain filter drop-shadow-sm cursor-pointer" onclick="event.stopPropagation(); window.location.href='admin.html';" />
             <span class="sr-only">ABHA Operations &amp; Admin Portal</span>
           </a>
         </div>
@@ -1371,13 +1374,13 @@
         
         <!-- Col 1: Brand -->
         <div class="lg:col-span-2 space-y-4">
-          <div class="flex items-center gap-3 mb-2">
-            <img src="images/logo/abha-crest-simplified.png?v=20260913_3" alt="ABHA Royal Crest" class="h-11 w-11 object-contain filter drop-shadow-sm" />
+          <a href="admin.html" onclick="window.location.href='admin.html';" class="flex items-center gap-3 mb-2 cursor-pointer group" title="Click to open ABHA Admin Portal">
+            <img src="images/logo/abha-crest-simplified.png?v=20260913_4" alt="ABHA Royal Crest" class="h-11 w-11 object-contain filter drop-shadow-sm group-hover:scale-105 transition-transform" />
             <div class="flex flex-col justify-center text-left">
               <span class="font-serif text-[24px] font-bold tracking-[0.18em] text-[#FAF7F2] uppercase leading-none">ABHA</span>
               <span class="text-[9px] font-semibold tracking-[0.28em] text-[#D4AF37] uppercase mt-1 leading-none whitespace-nowrap">• CLOTHING &amp; TAILORING •</span>
             </div>
-          </div>
+          </a>
           <p class="text-slate-400 text-xs leading-relaxed max-w-sm">
             Premium Indian dress materials and bespoke custom tailoring. Delivering authentic textiles and personalized stitching across India.
           </p>
@@ -4481,6 +4484,31 @@
 
     // Auto-trigger glide or skip if already seen
     document.addEventListener('DOMContentLoaded', () => {
+      // Fail-proof Admin portal navigation on ABHA logo click
+      const logoBox = document.getElementById('siteHeaderBrandLogo');
+      if (logoBox) {
+        logoBox.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = 'admin.html';
+        });
+      }
+      const crestImg = document.getElementById('headerTargetCrest');
+      if (crestImg) {
+        crestImg.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = 'admin.html';
+        });
+      }
+      const textImg = document.getElementById('headerTargetText');
+      if (textImg) {
+        textImg.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = 'admin.html';
+        });
+      }
       try {
         if (sessionStorage.getItem('abha_intro_shown') === 'true') {
           const portal = document.getElementById('abhaIntroPortal');
