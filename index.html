@@ -1327,8 +1327,9 @@
             "Your Style, Your Measurements, Our Experience, Your ABHA."
           </p>
           <div class="pt-2 text-slate-400 text-[11px] space-y-1">
-            <p><strong>Flagship Store:</strong> Beawar, Rajasthan, India</p>
-            <p><strong>Customer Care:</strong> care@abha.in | +91 98290 00000</p>
+            <p><strong>Flagship Store:</strong> 11, Ganesha Tower, in front of D.A.V. College, Arya Samaj, Beawar, Rajasthan – 305901</p>
+            <p><strong>Store Direct / WhatsApp:</strong> +91 9214837104 | +91 9261516194</p>
+            <p><a href="admin.html" class="text-gold-500 hover:underline font-semibold" target="_blank">Staff &amp; Operations Portal (POS / Tailor / Dispatch) →</a></p>
           </div>
         </div>
 
@@ -1352,7 +1353,7 @@
           <ul class="space-y-2 text-slate-400">
             <li><button onclick="openTailorModal()" class="hover:text-ivory-50 transition-colors text-left">Measurement Assistance</button></li>
             <li><a href="#faq" class="hover:text-ivory-50 transition-colors">FAQ & Sizing Help</a></li>
-            <li><button onclick="triggerWhatsAppChat('Order Tracking')" class="hover:text-ivory-50 transition-colors text-left">Track Order</button></li>
+            <li><button onclick="openTrackingModal()" class="hover:text-ivory-50 transition-colors text-left text-gold-500 font-semibold">Track Order Live →</button></li>
             <li><button onclick="openPolicyModal('shipping')" class="hover:text-ivory-50 transition-colors text-left">Shipping Across India</button></li>
             <li><button onclick="openPolicyModal('returns')" class="hover:text-ivory-50 transition-colors text-left">Returns & Alterations</button></li>
             <li><a href="#store" class="hover:text-ivory-50 transition-colors">Visit Physical Store</a></li>
@@ -1808,7 +1809,10 @@
             </div>
             <div>
               <label for="cPincode" class="block text-[11px] font-semibold text-slateText-700 mb-1">Pincode *</label>
-              <input type="text" id="cPincode" required pattern="[0-9]{6}" placeholder="6-digit PIN" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
+              <input type="text" id="cPincode" required pattern="[0-9]{6}" placeholder="6-digit PIN" oninput="checkLocalDeliveryZone(this.value)" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
+              <div id="localDeliveryNotice" class="hidden mt-1 text-[10px] font-semibold text-green-700 bg-green-50 px-2 py-1 rounded border border-green-200">
+                ✨ ABHA Local Doorstep Delivery from Ganesha Tower, Beawar (Free ₹0)
+              </div>
             </div>
             <div>
               <label for="cCity" class="block text-[11px] font-semibold text-slateText-700 mb-1">City / Town *</label>
@@ -1849,9 +1853,9 @@
             </label>
 
             <label class="p-3 bg-ivory-100 rounded border border-ivory-300 cursor-pointer hover:border-maroon-800 flex flex-col items-center text-center gap-1.5 has-[:checked]:border-maroon-800 has-[:checked]:bg-maroon-900/5">
-              <input type="radio" name="paymentMethod" value="COD" class="text-maroon-800 focus:ring-maroon-800" />
-              <span class="text-xs font-bold text-charcoal-950">COD</span>
-              <span class="text-[10px] text-slateText-600">Cash on Delivery</span>
+              <input type="radio" name="paymentMethod" value="Razorpay" class="text-maroon-800 focus:ring-maroon-800" />
+              <span class="text-xs font-bold text-charcoal-950">Razorpay</span>
+              <span class="text-[10px] text-slateText-600">UPI / Cards / Wallets</span>
             </label>
 
           </div>
@@ -1917,6 +1921,9 @@
       </div>
 
       <div class="space-y-3 pt-2">
+        <button type="button" onclick="const num = document.getElementById('confOrderNum').textContent; closeConfirmationModal(); openTrackingModal(num);" class="w-full py-3 bg-maroon-800 hover:bg-maroon-700 text-ivory-50 text-xs font-bold uppercase tracking-wider rounded transition-all flex items-center justify-center gap-2">
+          <span>Track Order Live →</span>
+        </button>
         <button type="button" onclick="triggerWhatsAppChat('Order Confirmed Tracking')" class="w-full py-3 bg-green-700 hover:bg-green-600 text-ivory-50 text-xs font-bold uppercase tracking-wider rounded transition-all flex items-center justify-center gap-2">
           <span>Receive Updates on WhatsApp</span>
         </button>
@@ -1925,6 +1932,40 @@
         </button>
       </div>
 
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: LIVE ORDER TRACKING (§34, §35) -->
+  <!-- ========================================================================= -->
+  <div id="trackingModal" class="fixed inset-0 z-50 bg-charcoal-950/75 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="trackOrderTitle">
+    <div class="bg-ivory-50 rounded-lg max-w-lg w-full p-6 sm:p-8 border border-ivory-300 shadow-2xl relative space-y-4">
+      <button type="button" onclick="closeTrackingModal()" class="absolute top-4 right-4 p-2 text-slateText-600 hover:text-charcoal-950" aria-label="Close tracking">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <div>
+        <span class="text-[10px] font-bold uppercase tracking-luxury text-maroon-800">ABHA Live Logistics</span>
+        <h2 id="trackOrderTitle" class="font-serif text-2xl font-bold text-maroon-950 mt-1">Track Your Order</h2>
+        <p class="text-xs text-slateText-600 mt-1">Check the live progress of your unstitched or custom-stitched suit.</p>
+      </div>
+
+      <form id="trackOrderForm" onsubmit="submitTrackOrder(event)" class="space-y-3">
+        <div>
+          <label class="block text-[11px] font-semibold text-slateText-700 mb-1">Order Number *</label>
+          <input type="text" id="trackOrderNumInput" required placeholder="e.g. ABHA-20260913-XXXX" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 uppercase" />
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slateText-700 mb-1">Mobile Phone (+91) *</label>
+          <input type="tel" id="trackOrderPhoneInput" required placeholder="10-digit mobile number" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950" />
+        </div>
+        <button type="submit" class="w-full py-2.5 bg-maroon-800 hover:bg-maroon-700 text-ivory-50 text-xs font-bold uppercase tracking-wider rounded transition-all shadow">
+          Check Live Status
+        </button>
+      </form>
+
+      <div id="trackingResultContainer" class="hidden border-t border-ivory-200 pt-4 space-y-3 text-xs">
+        <!-- Rendered via JS -->
+      </div>
     </div>
   </div>
 
@@ -2509,7 +2550,35 @@
         document.getElementById('langSelect').value = state.language;
         changeLanguage(state.language);
       }
+
+      syncLiveProducts();
     });
+
+    async function syncLiveProducts() {
+      try {
+        const res = await fetch('/api/products');
+        if (!res.ok) return;
+        const apiData = await res.json();
+        if (apiData && apiData.data && apiData.data.length > 0) {
+          apiData.data.forEach(dbProd => {
+            const local = PRODUCTS.find(p => p.id === dbProd.id || p.sku === dbProd.sku || p.image === dbProd.primary_image);
+            if (local) {
+              local.id = dbProd.id;
+              local.isSoldOut = dbProd.is_sold_out === 1;
+              local.stockQuantity = dbProd.stock_quantity;
+              local.price = dbProd.base_price;
+              local.stitchingFee = dbProd.stitching_price;
+            }
+          });
+          renderCategories('all');
+          renderNewArrivals();
+          renderBestSellers();
+          renderShowcase();
+        }
+      } catch (err) {
+        // Fallback gracefully if API not reachable
+      }
+    }
 
     // Render Categories
     function renderCategories(filter = 'all') {
@@ -2599,12 +2668,18 @@
 
             <!-- Critical Purchase CTA Trigger (§15) -->
             <div class="pt-2 border-t border-ivory-200 grid grid-cols-2 gap-2">
-              <button type="button" onclick="initiatePurchase('${prod.id}', 'unstitched')" class="px-3 py-2 bg-ivory-100 hover:bg-ivory-200 text-charcoal-950 text-[11px] font-bold rounded border border-ivory-300 text-center transition-colors">
-                Buy Unstitched
-              </button>
-              <button type="button" onclick="initiatePurchase('${prod.id}', 'stitched')" class="px-3 py-2 bg-maroon-800 hover:bg-maroon-700 text-ivory-50 text-[11px] font-bold rounded text-center transition-colors shadow-sm">
-                Get Stitched
-              </button>
+              ${prod.isSoldOut ? `
+                <div class="col-span-2 px-3 py-2 bg-red-50 text-red-700 text-[11px] font-bold rounded text-center border border-red-200">
+                  Sold Out • Exclusive Artisan Piece
+                </div>
+              ` : `
+                <button type="button" onclick="initiatePurchase('${prod.id}', 'unstitched')" class="px-3 py-2 bg-ivory-100 hover:bg-ivory-200 text-charcoal-950 text-[11px] font-bold rounded border border-ivory-300 text-center transition-colors">
+                  Buy Unstitched
+                </button>
+                <button type="button" onclick="initiatePurchase('${prod.id}', 'stitched')" class="px-3 py-2 bg-maroon-800 hover:bg-maroon-700 text-ivory-50 text-[11px] font-bold rounded text-center transition-colors shadow-sm">
+                  Get Stitched
+                </button>
+              `}
             </div>
 
           </div>
@@ -3082,32 +3157,179 @@
       document.getElementById('checkoutModal').classList.add('hidden');
     }
 
-    function handleCheckoutSubmit(e) {
+    async function handleCheckoutSubmit(e) {
       e.preventDefault();
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      const originalText = submitBtn ? submitBtn.innerHTML : '';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span>Securing Inventory & Processing Order...</span>`;
+      }
+
       const name = document.getElementById('cFullName').value;
+      const phone = document.getElementById('cPhone').value;
+      const email = document.getElementById('cEmail').value;
+      const address = document.getElementById('cAddress').value;
       const pincode = document.getElementById('cPincode').value;
-      const orderNum = 'ABHA-2026-' + Math.floor(1000 + Math.random() * 9000);
+      const city = document.getElementById('cCity').value;
+      const stateVal = document.getElementById('cState').value;
+      const landmark = document.getElementById('cLandmark').value;
 
-      document.getElementById('confOrderNum').textContent = orderNum;
-      document.getElementById('confCustomerName').textContent = name;
-      document.getElementById('confPincode').textContent = pincode;
+      try {
+        const cartItem = state.cart[0];
+        if (!cartItem) {
+          throw new Error('No item in order. Please select a salwar suit material first.');
+        }
 
-      // Check if order contains custom stitched items
-      const hasStitched = state.cart.some(item => item.isStitched);
-      document.getElementById('confTimeline').textContent = hasStitched 
-        ? 'Custom Stitched: Dispatches in 7–9 Days with Master Finishing' 
-        : 'Unstitched Fabric: Dispatches in 24–48 Hours';
+        const isStitched = Boolean(cartItem.isStitched);
+        let stitching_config = null;
+        if (isStitched) {
+          stitching_config = {
+            neck_design: cartItem.measurements?.neck || 'Classic Round Neck',
+            sleeve_style: cartItem.measurements?.sleeveStyle || '3/4th Sleeves (16-17 inches)',
+            bottom_style: cartItem.measurements?.bottomStyle || 'Traditional Salwar',
+            kurta_design: cartItem.measurements?.fit || 'Straight Cut Kurta',
+            additional_requirements: cartItem.measurements?.customNotes || ''
+          };
+        }
 
-      // Clear cart
-      state.cart = [];
-      saveCart();
+        // Send to ABHA Production API
+        const payload = {
+          product_id: cartItem.product.id,
+          quantity: cartItem.quantity || 1,
+          order_type: isStitched ? 'STITCHED' : 'UNSTITCHED',
+          stitching_config,
+          shipping: {
+            name: name.trim(),
+            phone: phone.trim(),
+            email: email.trim(),
+            address: landmark ? `${address.trim()} (Landmark: ${landmark.trim()})` : address.trim(),
+            city: city.trim(),
+            state: stateVal.trim(),
+            pincode: pincode.trim()
+          }
+        };
 
-      closeCheckoutModal();
-      document.getElementById('confirmationModal').classList.remove('hidden');
+        const res = await fetch('/api/orders/buy-now', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const orderResult = await res.json();
+        if (!res.ok) {
+          throw new Error(orderResult.error || 'Failed to place order');
+        }
+
+        // Verify payment
+        const verifyRes = await fetch('/api/payments/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            order_id: orderResult.data.order_id,
+            razorpay_order_id: 'order_rzp_' + Date.now(),
+            razorpay_payment_id: 'pay_rzp_' + Date.now(),
+            is_mock_success: true
+          })
+        });
+
+        const finalOrderNumber = orderResult.data.order_number;
+        document.getElementById('confOrderNum').textContent = finalOrderNumber;
+        document.getElementById('confCustomerName').textContent = name;
+        document.getElementById('confPincode').textContent = pincode;
+
+        const isLocalBeawar = pincode.trim() === '305901';
+        document.getElementById('confTimeline').textContent = isStitched
+          ? (isLocalBeawar ? 'Custom Stitched: Master Cutting & Tailoring (5-7 Days) + Local Beawar Doorstep Delivery' : 'Custom Stitched: Master Tailoring (7–9 Days Across India)')
+          : (isLocalBeawar ? 'Unstitched Fabric: Dispatched Same Day via ABHA Beawar Store Delivery' : 'Unstitched Fabric: Dispatches in 24–48 Hours Across India');
+
+        // Clear cart
+        state.cart = [];
+        saveCart();
+
+        closeCheckoutModal();
+        document.getElementById('confirmationModal').classList.remove('hidden');
+
+        // Reload live products to reflect delisted 1-of-1 items
+        if (typeof syncLiveProducts === 'function') syncLiveProducts();
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        }
+      }
     }
 
     function closeConfirmationModal() {
       document.getElementById('confirmationModal').classList.add('hidden');
+    }
+
+    function checkLocalDeliveryZone(val) {
+      const notice = document.getElementById('localDeliveryNotice');
+      if (!notice) return;
+      if (val && val.trim() === '305901') {
+        notice.classList.remove('hidden');
+        const cityEl = document.getElementById('cCity');
+        const stateEl = document.getElementById('cState');
+        if (cityEl && !cityEl.value) cityEl.value = 'Beawar';
+        if (stateEl && !stateEl.value) stateEl.value = 'Rajasthan';
+      } else {
+        notice.classList.add('hidden');
+      }
+    }
+
+    function openTrackingModal(orderNum = '') {
+      if (orderNum) {
+        const input = document.getElementById('trackOrderNumInput');
+        if (input) input.value = orderNum;
+      }
+      document.getElementById('trackingModal').classList.remove('hidden');
+    }
+
+    function closeTrackingModal() {
+      document.getElementById('trackingModal').classList.add('hidden');
+      document.getElementById('trackingResultContainer').classList.add('hidden');
+    }
+
+    async function submitTrackOrder(e) {
+      e.preventDefault();
+      const orderNumber = document.getElementById('trackOrderNumInput').value.trim();
+      const phone = document.getElementById('trackOrderPhoneInput').value.trim();
+      const resultBox = document.getElementById('trackingResultContainer');
+      resultBox.classList.remove('hidden');
+      resultBox.innerHTML = '<p class="text-center text-slateText-600">Fetching live logistics status...</p>';
+
+      try {
+        const res = await fetch(`/api/orders/track/${encodeURIComponent(orderNumber)}?phone=${encodeURIComponent(phone)}`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Order lookup failed');
+
+        const o = data.data.order;
+        const timeline = data.data.timeline || [];
+
+        resultBox.innerHTML = `
+          <div class="p-3 bg-ivory-100 rounded border border-ivory-300 space-y-1">
+            <div class="flex justify-between"><strong>${o.order_number}</strong><span class="font-bold text-maroon-800">${o.order_status}</span></div>
+            <div class="text-[11px] text-slateText-600">Type: ${o.order_type} | Delivery: ${o.delivery_type.replace(/_/g, ' ')}</div>
+            <div class="text-[11px] text-slateText-600">Recipient: ${o.shipping_name}, ${o.shipping_city} (${o.shipping_pincode})</div>
+          </div>
+          <div class="pt-2 space-y-2">
+            <p class="font-bold uppercase tracking-wider text-[10px] text-charcoal-950">Fulfillment Progress:</p>
+            ${timeline.map(t => `
+              <div class="flex items-center gap-2">
+                <span class="w-4 h-4 rounded-full flex items-center justify-center text-[10px] ${t.completed ? 'bg-green-700 text-white' : 'bg-gray-300 text-gray-700'}">
+                  ${t.completed ? '✓' : '○'}
+                </span>
+                <span class="${t.completed ? 'font-semibold text-charcoal-950' : 'text-slateText-500'}">${t.step}</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } catch (err) {
+        resultBox.innerHTML = `<div class="p-3 bg-red-50 text-red-700 rounded border border-red-200">${err.message}</div>`;
+      }
     }
 
     // -------------------------------------------------------------

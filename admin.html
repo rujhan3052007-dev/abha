@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ABHA Operations & Admin Portal</title>
+  <link rel="icon" type="image/svg+xml" href="images/logo/abha-favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --maroon: #5c1324;
+      --maroon-dark: #3f0a17;
+      --maroon-light: #7b1d33;
+      --gold: #c69234;
+      --gold-light: #dfb35e;
+      --gold-dim: #f3e9d2;
+      --cream: #faf7f2;
+      --white: #ffffff;
+      --charcoal: #232323;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-500: #64748b;
+      --gray-700: #334155;
+      --green-bg: #dcfce7;
+      --green-text: #15803d;
+      --blue-bg: #e0f2fe;
+      --blue-text: #0369a1;
+      --amber-bg: #fef3c7;
+      --amber-text: #b45309;
+      --red-bg: #fee2e2;
+      --red-text: #b91c1c;
+      --radius: 10px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg: 0 12px 28px rgba(0,0,0,0.12);
+      --font-serif: 'Cinzel', Georgia, serif;
+      --font-sans: 'Montserrat', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--cream);
+      color: var(--charcoal);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Bar */
+    .topbar {
+      background: var(--maroon);
+      color: var(--white);
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: inherit;
+    }
+    .topbar-logo {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+    .topbar-title {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      letter-spacing: 0.1em;
+      font-weight: 700;
+      color: var(--gold-light);
+    }
+    .topbar-tag {
+      font-size: 0.7rem;
+      background: rgba(255,255,255,0.15);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      margin-left: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .topbar-user {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.85rem;
+    }
+    .role-badge {
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .role-owner { background: #fef08a; color: #854d0e; }
+    .role-manager { background: #bae6fd; color: #075985; }
+    .role-tailor { background: #fed7aa; color: #9a3412; }
+    .role-delivery { background: #bbf7d0; color: #166534; }
+
+    .btn-logout {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: var(--white);
+      padding: 0.35rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+    .btn-logout:hover { background: rgba(255,255,255,0.25); }
+
+    /* Layout Container */
+    .portal-container {
+      display: flex;
+      flex: 1;
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      width: 260px;
+      background: var(--white);
+      border-right: 1px solid var(--gray-200);
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .nav-header {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gray-500);
+      margin: 1rem 0 0.4rem 0.6rem;
+      font-weight: 700;
+    }
+    .nav-header:first-child { margin-top: 0; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.7rem 0.9rem;
+      border-radius: 8px;
+      color: var(--gray-700);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+      transition: all 0.2s;
+    }
+    .nav-item:hover { background: var(--gray-100); color: var(--maroon); }
+    .nav-item.active {
+      background: var(--maroon);
+      color: var(--white);
+      font-weight: 600;
+    }
+    .nav-item .badge {
+      margin-left: auto;
+      background: var(--gold);
+      color: var(--white);
+      font-size: 0.75rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+    .nav-item.active .badge { background: var(--gold-light); color: var(--maroon-dark); }
+
+    /* Main Content Area */
+    .main-content {
+      flex: 1;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+    .page-section { display: none; }
+    .page-section.active { display: block; animation: fadeIn 0.25s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.75rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: 1.6rem;
+      color: var(--maroon);
+      font-weight: 700;
+    }
+    .section-desc {
+      font-size: 0.85rem;
+      color: var(--gray-500);
+      margin-top: 0.25rem;
+    }
+
+    /* KPI Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .kpi-card {
+      background: var(--white);
+      padding: 1.4rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .kpi-label { font-size: 0.8rem; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+    .kpi-val { font-size: 1.8rem; font-weight: 700; color: var(--maroon); font-family: var(--font-serif); }
+    .kpi-sub { font-size: 0.78rem; color: var(--gray-500); }
+
+    /* Card Panels & Tables */
+    .panel-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-sm);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+    .panel-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--charcoal);
+    }
+    .data-table-wrapper { overflow-x: auto; }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.875rem;
+    }
+    .data-table th {
+      background: var(--gray-50);
+      color: var(--gray-700);
+      padding: 0.8rem 1rem;
+      font-weight: 600;
+      border-bottom: 1px solid var(--gray-200);
+      white-space: nowrap;
+    }
+    .data-table td {
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid var(--gray-100);
+      color: var(--gray-700);
+      vertical-align: middle;
+    }
+    .data-table tr:hover td { background: var(--gray-50); }
+
+    /* Badges & Tags */
+    .tag {
+      display: inline-block;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .tag-soldout { background: var(--red-bg); color: var(--red-text); }
+    .tag-instock { background: var(--green-bg); color: var(--green-text); }
+    .tag-unique { background: var(--amber-bg); color: var(--amber-text); }
+    .tag-quantity { background: var(--blue-bg); color: var(--blue-text); }
+    .tag-stitched { background: #ede9fe; color: #6d28d9; }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--maroon); color: var(--white); }
+    .btn-primary:hover { background: var(--maroon-light); }
+    .btn-gold { background: var(--gold); color: var(--white); }
+    .btn-gold:hover { background: var(--gold-light); color: var(--maroon); }
+    .btn-outline { background: transparent; border: 1px solid var(--gray-300); color: var(--gray-700); }
+    .btn-outline:hover { background: var(--gray-100); }
+    .btn-sm { padding: 0.35rem 0.75rem; font-size: 0.8rem; }
+
+    /* POS Terminal Layout */
+    .pos-grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 1.5rem;
+    }
+    @media (max-width: 960px) {
+      .pos-grid { grid-template-columns: 1fr; }
+      .portal-container { flex-direction: column; }
+      .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--gray-200); }
+    }
+    .pos-scanner-box {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .form-input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--gray-300);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+    .form-input:focus { outline: none; border-color: var(--maroon); box-shadow: 0 0 0 3px rgba(92,19,36,0.1); }
+    .pos-item-picker {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      max-height: 480px;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+    }
+    .pos-card {
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--white);
+      text-align: center;
+    }
+    .pos-card:hover { border-color: var(--maroon); transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+    .pos-card.selected { border: 2px solid var(--gold); background: var(--gold-dim); }
+    .pos-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 4px; margin-bottom: 0.5rem; }
+    .pos-card h4 { font-size: 0.85rem; margin-bottom: 0.25rem; color: var(--charcoal); }
+    .pos-card .price { font-weight: 700; color: var(--maroon); font-size: 0.95rem; }
+
+    .pos-receipt-panel {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .receipt-row { display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--gray-700); }
+    .receipt-total { font-size: 1.25rem; font-weight: 700; color: var(--maroon); border-top: 2px dashed var(--gray-300); padding-top: 0.75rem; margin-top: 0.5rem; }
+
+    /* Tailor Pipeline & Reference Gallery */
+    .tailor-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .tailor-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--gray-100);
+      padding-bottom: 0.75rem;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .tailor-specs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.75rem;
+      background: var(--gray-50);
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      margin: 0.75rem 0;
+    }
+    .spec-item .label { font-size: 0.7rem; text-transform: uppercase; color: var(--gray-500); font-weight: 600; }
+    .spec-item .val { font-size: 0.85rem; font-weight: 600; color: var(--charcoal); }
+
+    .ref-images-strip {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+    }
+    .ref-img-thumb {
+      width: 90px;
+      height: 90px;
+      border-radius: 6px;
+      object-fit: cover;
+      border: 1px solid var(--gray-300);
+      cursor: pointer;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      max-width: 600px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 2rem;
+      position: relative;
+    }
+
+    /* Auth Gate Overlay */
+    #authGate {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--maroon);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .auth-box {
+      background: var(--white);
+      max-width: 420px;
+      width: 100%;
+      border-radius: var(--radius);
+      padding: 2.5rem 2rem;
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+    }
+    .auth-logo { width: 54px; height: 54px; margin-bottom: 1rem; }
+    .auth-title { font-family: var(--font-serif); color: var(--maroon); font-size: 1.5rem; margin-bottom: 0.25rem; font-weight: 700; }
+    .auth-sub { font-size: 0.85rem; color: var(--gray-500); margin-bottom: 1.75rem; }
+  </style>
+</head>
+<body>
+
+  <!-- AUTH GATE OVERLAY -->
+  <div id="authGate" style="display: flex;">
+    <div class="auth-box">
+      <img src="images/logo/abha-favicon.svg" alt="ABHA Crest" class="auth-logo">
+      <h2 class="auth-title">ABHA Operations Portal</h2>
+      <p class="auth-sub">Enter your staff credentials to access store operations</p>
+      
+      <form id="adminLoginForm" onsubmit="handleAdminLogin(event)" style="display: flex; flex-direction: column; gap: 1rem; text-align: left;">
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.35rem; display: block;">Email or Phone</label>
+          <input type="text" id="loginIdentifier" class="form-input" placeholder="admin@abha.in / 9214837104" required value="admin@abha.in">
+        </div>
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.35rem; display: block;">Password</label>
+          <input type="password" id="loginPassword" class="form-input" placeholder="••••••••••••" required value="AbhaAdmin2026!">
+        </div>
+        <div id="authError" style="color: var(--red-text); font-size: 0.8rem; display: none;"></div>
+        <button type="submit" class="btn btn-primary" style="justify-content: center; padding: 0.8rem; font-size: 0.95rem; margin-top: 0.5rem;">Sign In to Dashboard</button>
+      </form>
+      
+      <div style="margin-top: 1.5rem; border-top: 1px solid var(--gray-200); padding-top: 1rem; font-size: 0.75rem; color: var(--gray-500); text-align: center;">
+        Flagship Store: 11, Ganesha Tower, Beawar, Rajasthan (305901)
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="topbar">
+    <a href="#" class="topbar-brand">
+      <img src="images/logo/abha-favicon.svg" alt="ABHA Crest" class="topbar-logo">
+      <span class="topbar-title">ABHA</span>
+      <span class="topbar-tag">Operations Portal</span>
+    </a>
+    <div class="topbar-user">
+      <span id="userRoleBadge" class="role-badge role-owner">Owner</span>
+      <span id="userNameDisplay" style="font-weight: 600;">ABHA Management</span>
+      <button onclick="handleLogout()" class="btn-logout">Logout</button>
+    </div>
+  </header>
+
+  <!-- PORTAL CONTAINER -->
+  <div class="portal-container">
+    
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="nav-header">Overview</div>
+      <button class="nav-item active" onclick="switchTab('dashboard')">
+        <span>📊</span> Dashboard Overview
+      </button>
+
+      <div class="nav-header">Store Operations</div>
+      <button class="nav-item" onclick="switchTab('pos')">
+        <span>🏷️</span> Offline POS Billing
+      </button>
+      <button class="nav-item" onclick="switchTab('tailor')">
+        <span>✂️</span> Tailor Pipeline <span id="tailorBadge" class="badge">0</span>
+      </button>
+      <button class="nav-item" onclick="switchTab('deliveries')">
+        <span>🚚</span> Local Deliveries <span id="deliveryBadge" class="badge">0</span>
+      </button>
+
+      <div class="nav-header">Catalog & Business</div>
+      <button class="nav-item" onclick="switchTab('products')">
+        <span>👗</span> Products Catalog
+      </button>
+      <button class="nav-item" onclick="switchTab('categories')">
+        <span>📁</span> Categories & Future
+      </button>
+      <button class="nav-item" onclick="switchTab('reviews')">
+        <span>⭐</span> Customer Reviews
+      </button>
+
+      <div class="nav-header">System</div>
+      <button class="nav-item" onclick="switchTab('integrations')">
+        <span>⚙️</span> Integration Health
+      </button>
+      <button class="nav-item" onclick="switchTab('audit')">
+        <span>📜</span> Audit Logs
+      </button>
+    </aside>
+
+    <!-- MAIN VIEW -->
+    <main class="main-content">
+
+      <!-- 1. DASHBOARD OVERVIEW -->
+      <section id="section-dashboard" class="page-section active">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">Store Dashboard</h1>
+            <p class="section-desc">Real-time metrics for ABHA Flagship Store (Beawar) & Online Platform</p>
+          </div>
+          <button class="btn btn-gold" onclick="switchTab('pos')">⚡ Quick POS Bill</button>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <span class="kpi-label">Total Revenue</span>
+            <div id="kpiRevenue" class="kpi-val">₹0</div>
+            <span id="kpiSplit" class="kpi-sub">Online: ₹0 | Offline POS: ₹0</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">Active Orders</span>
+            <div id="kpiOrders" class="kpi-val">0</div>
+            <span class="kpi-sub">Total verified transactions</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">Stitching Queue</span>
+            <div id="kpiStitching" class="kpi-val">0</div>
+            <span class="kpi-sub">Garments in cutting / tailoring</span>
+          </div>
+          <div class="kpi-card">
+            <span class="kpi-label">Beawar Deliveries</span>
+            <div id="kpiDeliveries" class="kpi-val">0</div>
+            <span class="kpi-sub">Local doorstep dispatches</span>
+          </div>
+        </div>
+
+        <!-- Recent Orders Table -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <h3 class="panel-title">Recent Transactions</h3>
+            <button class="btn btn-outline btn-sm" onclick="loadDashboard()">Refresh</button>
+          </div>
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Order #</th>
+                  <th>Channel</th>
+                  <th>Customer</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody id="recentOrdersTable">
+                <tr><td colspan="7" style="text-align: center; color: var(--gray-500);">Loading recent orders...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. OFFLINE POS BILLING TERMINAL -->
+      <section id="section-pos" class="page-section">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">Flagship POS Billing Terminal</h1>
+            <p class="section-desc">11, Ganesha Tower, Beawar — Instant Walk-in Sale & Stock Synchronization</p>
+          </div>
+        </div>
+
+        <div class="pos-grid">
+          <div>
+            <div class="pos-scanner-box">
+              <input type="text" id="posSearchInput" class="form-input" placeholder="Scan barcode or enter SKU (e.g. ABHA-SS-001)..." onkeyup="filterPosItems()">
+              <button class="btn btn-primary" onclick="filterPosItems()">Search</button>
+            </div>
+            <div id="posItemsList" class="pos-item-picker">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Checkout / Receipt Bill -->
+          <div class="pos-receipt-panel">
+            <h3 class="panel-title">Counter Receipt</h3>
+            <div id="posSelectedProduct" style="padding: 0.75rem; background: var(--gray-50); border-radius: 6px; font-size: 0.85rem; color: var(--gray-500);">
+              No product selected. Click an item on the left to bill.
+            </div>
+
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Customer Name</label>
+              <input type="text" id="posCustomerName" class="form-input" placeholder="Walk-in Customer">
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Phone Number</label>
+              <input type="text" id="posCustomerPhone" class="form-input" placeholder="9214837104">
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Payment Method</label>
+              <select id="posPaymentMethod" class="form-input">
+                <option value="CASH">Cash Counter</option>
+                <option value="STORE_UPI">Store UPI QR</option>
+                <option value="STORE_CARD">Store Card Machine</option>
+              </select>
+            </div>
+
+            <div style="border-top: 1px solid var(--gray-200); padding-top: 0.75rem;">
+              <div class="receipt-row"><span>Item Subtotal:</span><span id="posSubtotal">₹0</span></div>
+              <div class="receipt-row"><span>Delivery:</span><span>₹0 (In Store)</span></div>
+              <div class="receipt-row receipt-total"><span>Total Bill:</span><span id="posTotal">₹0</span></div>
+            </div>
+
+            <button id="posSubmitBtn" class="btn btn-primary" style="justify-content: center; padding: 0.85rem;" onclick="submitPosBill()" disabled>Complete Sale & Sync Stock</button>
+            <div id="posFeedback" style="font-size: 0.8rem; text-align: center;"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. TAILOR WORKSPACE -->
+      <section id="section-tailor" class="page-section">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">Tailoring & Custom Stitching Pipeline</h1>
+            <p class="section-desc">Master Tailor Workspace — Customer Specs & Private Reference Vault</p>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="loadTailorQueue()">Refresh Queue</button>
+        </div>
+
+        <div id="tailorOrdersList">
+          <!-- Rendered via JS -->
+        </div>
+      </section>
+
+      <!-- 4. LOCAL DELIVERIES -->
+      <section id="section-deliveries" class="page-section">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">Local Delivery Dispatch</h1>
+            <p class="section-desc">Beawar Doorstep Home Delivery Management (PIN 305901)</p>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="loadDeliveryQueue()">Refresh</button>
+        </div>
+
+        <div class="panel-card">
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Order #</th>
+                  <th>Customer</th>
+                  <th>Address & Phone</th>
+                  <th>Method</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="deliveriesTable">
+                <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. PRODUCTS CATALOG -->
+      <section id="section-products" class="page-section">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">Products Management</h1>
+            <p class="section-desc">Authentic dress materials with 1-of-1 and quantity inventory tracking</p>
+          </div>
+          <button class="btn btn-primary" onclick="openAddProductModal()">+ Add New Product</button>
+        </div>
+
+        <div class="panel-card">
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Product Title & SKU</th>
+                  <th>Fabric</th>
+                  <th>Base Price</th>
+                  <th>Stitching Fee</th>
+                  <th>Inventory Type</th>
+                  <th>Stock</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="productsAdminTable">
+                <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. CATEGORIES & FUTURE -->
+      <section id="section-categories" class="page-section">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">Category Architecture</h1>
+            <p class="section-desc">Salwar Suits active; Sarees, Rajputi Poshak, and Men's configured for future launch</p>
+          </div>
+        </div>
+
+        <div class="panel-card">
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Category Name</th>
+                  <th>Slug</th>
+                  <th>Active Products</th>
+                  <th>Current State</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="categoriesAdminTable">
+                <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. CUSTOMER REVIEWS -->
+      <section id="section-reviews" class="page-section">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">Review Moderation</h1>
+            <p class="section-desc">Authentic verified customer reviews only. Zero fake reviews permitted.</p>
+          </div>
+        </div>
+
+        <div class="panel-card">
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Product</th>
+                  <th>Rating</th>
+                  <th>Review Text</th>
+                  <th>Date</th>
+                  <th>Moderation</th>
+                </tr>
+              </thead>
+              <tbody id="reviewsModerationTable">
+                <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. INTEGRATION HEALTH -->
+      <section id="section-integrations" class="page-section">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">Integration Health Status</h1>
+            <p class="section-desc">External payment gateways, SMS providers, and encrypted storage vaults</p>
+          </div>
+        </div>
+
+        <div id="integrationCardsGrid" class="kpi-grid">
+          <!-- Rendered via JS -->
+        </div>
+      </section>
+
+      <!-- 9. AUDIT LOGS -->
+      <section id="section-audit" class="page-section">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">Administrative Audit Trail</h1>
+            <p class="section-desc">Immutable history of administrative actions, billing, and inventory changes</p>
+          </div>
+        </div>
+
+        <div class="panel-card">
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>User</th>
+                  <th>Action</th>
+                  <th>Entity</th>
+                  <th>Details</th>
+                </tr>
+              </thead>
+              <tbody id="auditLogsTable">
+                <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ADD PRODUCT MODAL -->
+  <div id="addProductModal" class="modal-backdrop">
+    <div class="modal-card">
+      <h3 class="panel-title" style="margin-bottom: 1.25rem;">Add New Salwar Suit Material</h3>
+      <form id="addProductForm" onsubmit="submitNewProduct(event)" style="display: flex; flex-direction: column; gap: 0.9rem;">
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600;">Product Title *</label>
+          <input type="text" name="title" class="form-input" required placeholder="e.g. Royal Indigo Handblock Cotton Suit">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600;">SKU Code *</label>
+            <input type="text" name="sku" class="form-input" required placeholder="ABHA-SS-006">
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600;">Fabric *</label>
+            <input type="text" name="fabric" class="form-input" required placeholder="Pure Cambric Cotton">
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600;">Base Price (₹) *</label>
+            <input type="number" name="base_price" class="form-input" required placeholder="1850">
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600;">Stitching Fee (₹)</label>
+            <input type="number" name="stitching_price" class="form-input" value="450">
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600;">Inventory Type</label>
+            <select name="inventory_type" class="form-input">
+              <option value="UNIQUE_1OF1">Exclusive 1-of-1 Artisan</option>
+              <option value="QUANTITY">Quantity-based</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600;">Initial Stock</label>
+            <input type="number" name="stock_quantity" class="form-input" value="1">
+          </div>
+        </div>
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600;">Garment Photo Upload</label>
+          <input type="file" name="photo" class="form-input" accept="image/*">
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem;">
+          <button type="button" class="btn btn-outline" onclick="closeAddProductModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let authToken = localStorage.getItem('abha_token') || null;
+    let currentUser = null;
+    let cachedProducts = [];
+    let selectedPosProduct = null;
+
+    async function apiRequest(endpoint, options = {}) {
+      const headers = { 'Content-Type': 'application/json', ...options.headers };
+      if (authToken) headers['Authorization'] = `Bearer ${authToken}`;
+      const res = await fetch(endpoint, { ...options, headers });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Request failed');
+      return data;
+    }
+
+    async function init() {
+      if (authToken) {
+        try {
+          const me = await apiRequest('/api/auth/me');
+          currentUser = me.user;
+          document.getElementById('authGate').style.display = 'none';
+          document.getElementById('userNameDisplay').textContent = currentUser.name;
+          const badge = document.getElementById('userRoleBadge');
+          badge.textContent = currentUser.role;
+          badge.className = `role-badge role-${currentUser.role.toLowerCase()}`;
+          loadDashboard();
+          loadPosItems();
+        } catch (e) {
+          localStorage.removeItem('abha_token');
+          authToken = null;
+          document.getElementById('authGate').style.display = 'flex';
+        }
+      } else {
+        document.getElementById('authGate').style.display = 'flex';
+      }
+    }
+
+    async function handleAdminLogin(e) {
+      e.preventDefault();
+      const identifier = document.getElementById('loginIdentifier').value;
+      const password = document.getElementById('loginPassword').value;
+      const errBox = document.getElementById('authError');
+      errBox.style.display = 'none';
+
+      try {
+        const res = await apiRequest('/api/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ identifier, password })
+        });
+        authToken = res.token;
+        currentUser = res.user;
+        localStorage.setItem('abha_token', authToken);
+        document.getElementById('authGate').style.display = 'none';
+        document.getElementById('userNameDisplay').textContent = currentUser.name;
+        const badge = document.getElementById('userRoleBadge');
+        badge.textContent = currentUser.role;
+        badge.className = `role-badge role-${currentUser.role.toLowerCase()}`;
+        loadDashboard();
+        loadPosItems();
+      } catch (err) {
+        errBox.textContent = err.message;
+        errBox.style.display = 'block';
+      }
+    }
+
+    function handleLogout() {
+      localStorage.removeItem('abha_token');
+      window.location.reload();
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+      const activeBtn = Array.from(document.querySelectorAll('.nav-item')).find(b => b.getAttribute('onclick').includes(tabId));
+      if (activeBtn) activeBtn.classList.add('active');
+      const targetSec = document.getElementById(`section-${tabId}`);
+      if (targetSec) targetSec.classList.add('active');
+
+      if (tabId === 'dashboard') loadDashboard();
+      if (tabId === 'pos') loadPosItems();
+      if (tabId === 'tailor') loadTailorQueue();
+      if (tabId === 'deliveries') loadDeliveryQueue();
+      if (tabId === 'products') loadProductsAdmin();
+      if (tabId === 'categories') loadCategoriesAdmin();
+      if (tabId === 'reviews') loadReviewsModeration();
+      if (tabId === 'integrations') loadIntegrationsStatus();
+      if (tabId === 'audit') loadAuditLogs();
+    }
+
+    async function loadDashboard() {
+      try {
+        const data = await apiRequest('/api/admin/dashboard');
+        const fin = data.data.financials;
+        document.getElementById('kpiRevenue').textContent = `₹${fin.total_revenue.toLocaleString('en-IN')}`;
+        document.getElementById('kpiSplit').textContent = `Online: ₹${fin.online_revenue.toLocaleString('en-IN')} | Offline POS: ₹${fin.offline_revenue.toLocaleString('en-IN')}`;
+        document.getElementById('kpiOrders').textContent = fin.total_orders;
+        document.getElementById('kpiStitching').textContent = data.data.stitching_queue_count;
+        document.getElementById('kpiDeliveries').textContent = data.data.pending_deliveries_count;
+
+        document.getElementById('tailorBadge').textContent = data.data.stitching_queue_count;
+        document.getElementById('deliveryBadge').textContent = data.data.pending_deliveries_count;
+
+        const tbody = document.getElementById('recentOrdersTable');
+        if (data.data.recent_orders.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--gray-500);">No orders placed yet.</td></tr>`;
+          return;
+        }
+        tbody.innerHTML = data.data.recent_orders.map(o => `
+          <tr>
+            <td><strong>${o.order_number}</strong></td>
+            <td><span class="tag ${o.order_channel === 'ONLINE' ? 'tag-quantity' : 'tag-unique'}">${o.order_channel}</span></td>
+            <td>${o.shipping_name}</td>
+            <td><span class="tag ${o.order_type === 'STITCHED' ? 'tag-stitched' : 'tag-quantity'}">${o.order_type}</span></td>
+            <td><strong>₹${o.total_amount.toLocaleString('en-IN')}</strong></td>
+            <td><span class="tag ${o.order_status === 'DELIVERED' ? 'tag-instock' : 'tag-soldout'}">${o.order_status}</span></td>
+            <td style="font-size: 0.8rem; color: var(--gray-500);">${new Date(o.created_at).toLocaleString('en-IN')}</td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function loadPosItems() {
+      try {
+        const res = await apiRequest('/api/products');
+        cachedProducts = res.data;
+        renderPosItems(cachedProducts);
+      } catch (e) { console.error(e); }
+    }
+
+    function renderPosItems(items) {
+      const container = document.getElementById('posItemsList');
+      container.innerHTML = items.map(p => `
+        <div class="pos-card ${selectedPosProduct && selectedPosProduct.id === p.id ? 'selected' : ''}" onclick="selectPosItem('${p.id}')">
+          <img src="${p.primary_image || 'images/cream-lime-cotton-suit.jpg'}" alt="${p.title}">
+          <h4>${p.title}</h4>
+          <div style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 0.25rem;">SKU: ${p.sku}</div>
+          <div class="price">₹${p.base_price}</div>
+          <div style="margin-top: 0.4rem;">
+            ${p.is_sold_out ? '<span class="tag tag-soldout">Sold Out</span>' : `<span class="tag tag-instock">${p.stock_quantity} In Stock</span>`}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterPosItems() {
+      const q = document.getElementById('posSearchInput').value.toLowerCase().trim();
+      const filtered = cachedProducts.filter(p => p.title.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q));
+      renderPosItems(filtered);
+    }
+
+    function selectPosItem(id) {
+      selectedPosProduct = cachedProducts.find(p => p.id === id);
+      if (!selectedPosProduct) return;
+      renderPosItems(cachedProducts);
+
+      const panel = document.getElementById('posSelectedProduct');
+      panel.innerHTML = `
+        <div style="display: flex; gap: 0.75rem; align-items: center;">
+          <img src="${selectedPosProduct.primary_image}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+          <div>
+            <strong style="color: var(--charcoal); display: block;">${selectedPosProduct.title}</strong>
+            <span style="font-size: 0.75rem; color: var(--gray-500);">SKU: ${selectedPosProduct.sku}</span>
+          </div>
+        </div>
+      `;
+      document.getElementById('posSubtotal').textContent = `₹${selectedPosProduct.base_price}`;
+      document.getElementById('posTotal').textContent = `₹${selectedPosProduct.base_price}`;
+      document.getElementById('posSubmitBtn').disabled = selectedPosProduct.is_sold_out === 1;
+    }
+
+    async function submitPosBill() {
+      if (!selectedPosProduct) return;
+      const btn = document.getElementById('posSubmitBtn');
+      const feedback = document.getElementById('posFeedback');
+      btn.disabled = true;
+      btn.textContent = 'Processing...';
+
+      try {
+        const payload = {
+          sku_or_id: selectedPosProduct.sku,
+          quantity: 1,
+          payment_method: document.getElementById('posPaymentMethod').value,
+          customer_name: document.getElementById('posCustomerName').value || 'Walk-in Store Customer',
+          customer_phone: document.getElementById('posCustomerPhone').value || '9214837104'
+        };
+
+        const res = await apiRequest('/api/admin/pos/order', {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
+
+        feedback.innerHTML = `<span style="color: var(--green-text); font-weight: 600;">Bill Generated: ${res.data.order_number}! Stock updated.</span>`;
+        btn.textContent = 'Sale Completed!';
+        setTimeout(() => {
+          btn.textContent = 'Complete Sale & Sync Stock';
+          btn.disabled = false;
+          selectedPosProduct = null;
+          document.getElementById('posSelectedProduct').innerHTML = 'Select an item on the left to bill';
+          document.getElementById('posSubtotal').textContent = '₹0';
+          document.getElementById('posTotal').textContent = '₹0';
+          loadPosItems();
+          loadDashboard();
+        }, 2000);
+      } catch (err) {
+        feedback.innerHTML = `<span style="color: var(--red-text);">${err.message}</span>`;
+        btn.disabled = false;
+        btn.textContent = 'Retry Bill';
+      }
+    }
+
+    async function loadTailorQueue() {
+      const container = document.getElementById('tailorOrdersList');
+      try {
+        const res = await apiRequest('/api/tailor/queue');
+        if (res.data.length === 0) {
+          container.innerHTML = `<div class="panel-card" style="text-align: center; color: var(--gray-500);">No garments currently in tailoring queue. All orders completed!</div>`;
+          return;
+        }
+
+        container.innerHTML = res.data.map(item => `
+          <div class="tailor-card">
+            <div class="tailor-card-header">
+              <div>
+                <strong>${item.order_number}</strong> — <span style="color: var(--maroon); font-weight: 600;">${item.product_title}</span> (${item.product_sku})
+              </div>
+              <span class="tag tag-stitched">${item.stitching_status}</span>
+            </div>
+
+            <div class="tailor-specs-grid">
+              <div class="spec-item"><span class="label">Neck Design</span><div class="val">${item.neck_design}</div></div>
+              <div class="spec-item"><span class="label">Sleeve Style</span><div class="val">${item.sleeve_style}</div></div>
+              <div class="spec-item"><span class="label">Bottom Style</span><div class="val">${item.bottom_style}</div></div>
+              <div class="spec-item"><span class="label">Kurta Cut</span><div class="val">${item.kurta_design}</div></div>
+              <div class="spec-item"><span class="label">Customer</span><div class="val">${item.customer_name}</div></div>
+            </div>
+
+            ${item.additional_requirements ? `
+              <div style="margin-top: 0.5rem; font-size: 0.85rem; background: var(--amber-bg); color: var(--amber-text); padding: 0.5rem 0.75rem; border-radius: 4px;">
+                <strong>Special Note:</strong> ${item.additional_requirements}
+              </div>
+            ` : ''}
+
+            ${item.reference_images && item.reference_images.length > 0 ? `
+              <div style="margin-top: 0.75rem;">
+                <span style="font-size: 0.75rem; font-weight: 600; color: var(--gray-500);">Customer Reference Photos (Private Vault):</span>
+                <div class="ref-images-strip">
+                  ${item.reference_images.map(r => `
+                    <a href="/api/tailor/reference-image/${r.vault_storage_key}" target="_blank">
+                      <img src="/api/tailor/reference-image/${r.vault_storage_key}" class="ref-img-thumb" title="${r.original_filename}">
+                    </a>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
+
+            <div style="display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap;">
+              <button class="btn btn-outline btn-sm" onclick="advanceTailorStatus('${item.stitching_id}', 'IN_CUTTING')">Fabric Cutting</button>
+              <button class="btn btn-outline btn-sm" onclick="advanceTailorStatus('${item.stitching_id}', 'IN_STITCHING')">In Tailoring</button>
+              <button class="btn btn-outline btn-sm" onclick="advanceTailorStatus('${item.stitching_id}', 'FINISHING')">Finishing & Press</button>
+              <button class="btn btn-gold btn-sm" onclick="advanceTailorStatus('${item.stitching_id}', 'COMPLETED')">✓ Mark Stitching Completed</button>
+            </div>
+          </div>
+        `).join('');
+      } catch (e) {
+        container.innerHTML = `<div style="color: var(--red-text);">${e.message}</div>`;
+      }
+    }
+
+    async function advanceTailorStatus(stitchingId, status) {
+      try {
+        await apiRequest(`/api/tailor/orders/${stitchingId}/status`, {
+          method: 'PUT',
+          body: JSON.stringify({ status })
+        });
+        loadTailorQueue();
+        loadDashboard();
+      } catch (e) { alert(e.message); }
+    }
+
+    async function loadDeliveryQueue() {
+      const tbody = document.getElementById('deliveriesTable');
+      try {
+        const res = await apiRequest('/api/delivery/queue');
+        if (res.data.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--gray-500);">No deliveries pending dispatch.</td></tr>`;
+          return;
+        }
+        tbody.innerHTML = res.data.map(d => `
+          <tr>
+            <td><strong>${d.order_number}</strong></td>
+            <td><strong>${d.shipping_name}</strong><br><a href="tel:${d.shipping_phone}" style="color: var(--maroon);">${d.shipping_phone}</a></td>
+            <td>${d.shipping_address}, ${d.shipping_city} (${d.shipping_pincode})</td>
+            <td><span class="tag tag-unique">${d.delivery_method}</span></td>
+            <td><span class="tag ${d.delivery_status === 'DELIVERED' ? 'tag-instock' : 'tag-soldout'}">${d.delivery_status}</span></td>
+            <td>
+              <button class="btn btn-outline btn-sm" onclick="updateDeliveryStatus('${d.delivery_id}', 'OUT_FOR_DELIVERY')">Out for Delivery</button>
+              <button class="btn btn-gold btn-sm" onclick="updateDeliveryStatus('${d.delivery_id}', 'DELIVERED')">✓ Delivered</button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (e) { console.error(e); }
+    }
+
+    async function updateDeliveryStatus(id, status) {
+      try {
+        await apiRequest(`/api/delivery/orders/${id}/status`, {
+          method: 'PUT',
+          body: JSON.stringify({ status })
+        });
+        loadDeliveryQueue();
+        loadDashboard();
+      } catch (e) { alert(e.message); }
+    }
+
+    async function loadProductsAdmin() {
+      const tbody = document.getElementById('productsAdminTable');
+      try {
+        const res = await apiRequest('/api/admin/products');
+        tbody.innerHTML = res.data.map(p => `
+          <tr>
+            <td><img src="${p.primary_image}" style="width: 45px; height: 45px; object-fit: cover; border-radius: 4px;"></td>
+            <td><strong>${p.title}</strong><br><span style="font-size: 0.75rem; color: var(--gray-500);">${p.sku}</span></td>
+            <td>${p.fabric}</td>
+            <td><strong>₹${p.base_price}</strong></td>
+            <td>₹${p.stitching_price}</td>
+            <td><span class="tag ${p.inventory_type === 'UNIQUE_1OF1' ? 'tag-unique' : 'tag-quantity'}">${p.inventory_type}</span></td>
+            <td>${p.stock_quantity}</td>
+            <td>${p.is_sold_out ? '<span class="tag tag-soldout">Sold Out</span>' : '<span class="tag tag-instock">Active</span>'}</td>
+          </tr>
+        `).join('');
+      } catch (e) { console.error(e); }
+    }
+
+    async function loadCategoriesAdmin() {
+      const tbody = document.getElementById('categoriesAdminTable');
+      try {
+        const res = await apiRequest('/api/categories');
+        tbody.innerHTML = res.data.map(c => `
+          <tr>
+            <td><strong>${c.name}</strong></td>
+            <td><code>${c.slug}</code></td>
+            <td>${c.product_count}</td>
+            <td><span class="tag ${c.is_active ? 'tag-instock' : 'tag-unique'}">${c.badge_text || (c.is_active ? 'Active' : 'Coming Soon')}</span></td>
+            <td>
+              <button class="btn btn-outline btn-sm" onclick="toggleCategory('${c.id}', ${!c.is_active})">
+                ${c.is_active ? 'Set Coming Soon' : 'Activate Category'}
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (e) { console.error(e); }
+    }
+
+    async function toggleCategory(id, is_active) {
+      try {
+        await apiRequest(`/api/admin/categories/${id}/status`, {
+          method: 'PUT',
+          body: JSON.stringify({ is_active, badge_text: is_active ? 'Active' : 'Coming Soon' })
+        });
+        loadCategoriesAdmin();
+      } catch (e) { alert(e.message); }
+    }
+
+    async function loadReviewsModeration() {
+      const tbody = document.getElementById('reviewsModerationTable');
+      try {
+        const res = await apiRequest('/api/admin/reviews/pending');
+        if (res.data.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--gray-500);">No reviews currently awaiting moderation. (Zero fake reviews policy enforced).</td></tr>`;
+          return;
+        }
+        tbody.innerHTML = res.data.map(r => `
+          <tr>
+            <td><strong>${r.customer_name}</strong></td>
+            <td>${r.product_title} (${r.product_sku})</td>
+            <td>⭐ ${r.rating}/5</td>
+            <td>"${r.review_text}"</td>
+            <td style="font-size: 0.75rem;">${new Date(r.created_at).toLocaleDateString()}</td>
+            <td>
+              <button class="btn btn-primary btn-sm" onclick="moderateReview('${r.id}', 'approve')">Approve</button>
+              <button class="btn btn-outline btn-sm" onclick="moderateReview('${r.id}', 'reject')">Reject</button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (e) { console.error(e); }
+    }
+
+    async function moderateReview(id, action) {
+      try {
+        await apiRequest(`/api/admin/reviews/${id}/moderate`, {
+          method: 'PUT',
+          body: JSON.stringify({ action })
+        });
+        loadReviewsModeration();
+      } catch (e) { alert(e.message); }
+    }
+
+    async function loadIntegrationsStatus() {
+      const container = document.getElementById('integrationCardsGrid');
+      try {
+        const res = await apiRequest('/api/admin/integrations/status');
+        const data = res.data;
+        container.innerHTML = Object.entries(data).map(([key, info]) => `
+          <div class="kpi-card">
+            <span class="kpi-label">${key.replace(/_/g, ' ')}</span>
+            <div style="font-size: 1.1rem; font-weight: 700; color: var(--maroon); margin: 0.25rem 0;">${info.provider}</div>
+            <div>
+              <span class="tag ${info.status === 'Connected' ? 'tag-instock' : info.status === 'Ready to Connect' ? 'tag-unique' : 'tag-soldout'}">
+                ${info.status}
+              </span>
+            </div>
+            <p style="font-size: 0.8rem; color: var(--gray-500); margin-top: 0.5rem;">${info.description}</p>
+          </div>
+        `).join('');
+      } catch (e) { console.error(e); }
+    }
+
+    async function loadAuditLogs() {
+      const tbody = document.getElementById('auditLogsTable');
+      try {
+        const res = await apiRequest('/api/admin/audit-logs');
+        if (res.data.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--gray-500);">No administrative actions logged yet.</td></tr>`;
+          return;
+        }
+        tbody.innerHTML = res.data.map(a => `
+          <tr>
+            <td style="font-size: 0.8rem; color: var(--gray-500);">${new Date(a.created_at).toLocaleString('en-IN')}</td>
+            <td><strong>${a.user_name || 'System'}</strong> (${a.user_role || 'STAFF'})</td>
+            <td><code>${a.action}</code></td>
+            <td>${a.entity_type} (#${a.entity_id.slice(-8)})</td>
+            <td style="font-size: 0.75rem; color: var(--gray-700);"><code>${a.details_json}</code></td>
+          </tr>
+        `).join('');
+      } catch (e) { console.error(e); }
+    }
+
+    function openAddProductModal() {
+      document.getElementById('addProductModal').classList.add('open');
+    }
+    function closeAddProductModal() {
+      document.getElementById('addProductModal').classList.remove('open');
+    }
+
+    async function submitNewProduct(e) {
+      e.preventDefault();
+      const form = document.getElementById('addProductForm');
+      const formData = new FormData(form);
+
+      try {
+        const res = await fetch('/api/admin/products', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${authToken}` },
+          body: formData
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to save product');
+        closeAddProductModal();
+        form.reset();
+        loadProductsAdmin();
+        alert('Product added successfully!');
+      } catch (err) { alert(err.message); }
+    }
+
+    // Auto-init on page load
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

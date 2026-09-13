@@ -1,2 +1,10 @@
-﻿.agents/
+.agents/
 scratch/
+tools/
+node_modules/
+server/node_modules/
+server/data/*.sqlite*
+server/.env
+server/vault/
+.DS_Store
+*.log
