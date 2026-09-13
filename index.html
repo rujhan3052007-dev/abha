@@ -215,6 +215,11 @@
   <!-- ========================================================================= -->
   <div id="abhaIntroPortal" onclick="triggerIntroGlide()" ontouchstart="triggerIntroGlide()" class="fixed inset-0 z-50 w-screen h-screen overflow-hidden select-none cursor-pointer" style="touch-action: manipulation;" title="Tap anywhere to enter boutique">
     
+    <!-- Direct Skip / Enter Boutique Button -->
+    <button type="button" onclick="event.stopPropagation(); triggerIntroGlide();" class="absolute top-4 right-4 z-30 px-3.5 py-1.5 bg-charcoal-950/75 hover:bg-maroon-900 text-ivory-50 text-xs font-semibold rounded-full border border-gold-400/50 shadow-lg backdrop-blur-sm transition-all flex items-center gap-1.5 cursor-pointer">
+      <span>Enter Boutique</span> <span class="text-gold-400">&rarr;</span>
+    </button>
+
     <!-- Fullscreen Flat-Lay Artwork: Responsive for Mobile Portrait (9:16) & Desktop Landscape (16:9) -->
     <div id="introPortalBg" class="absolute inset-0 w-full h-full transition-opacity duration-800 ease-out">
       <picture>
@@ -4250,7 +4255,7 @@
         announcement: 'गासै भारतआव दैथायहरनाय | सिनाय गैयै सि बायना ला एबा नोंथांनि जोखायै सिहो',
         hero_shop_now: 'दासानो बाय',
         hero_get_stitched: 'जोखायै सिहो',
-        nav_home: 'न'',
+        nav_home: "न'",
         nav_shop: 'दुकान',
         nav_categories: 'थाखोफोर',
         nav_collections: 'बुथुमनाय',
@@ -4339,54 +4344,72 @@
       const portalBg = document.getElementById('introPortalBg');
       const portalEffects = document.getElementById('introPortalEffects');
 
-      if (!targetCrest || !targetText || !glidingCrest || !glidingText || !portal) return;
-
-      // 1. Reveal gliding elements right as motion starts
-      glidingCrest.style.opacity = '1';
-      glidingText.style.opacity = '1';
-
-      // 2. Measure starting and destination coordinates (center-to-center for 0px error)
-      const destCrestRect = targetCrest.getBoundingClientRect();
-      const startCrestRect = glidingCrest.getBoundingClientRect();
-      const dxCrest = (destCrestRect.left + destCrestRect.width / 2) - (startCrestRect.left + startCrestRect.width / 2);
-      const dyCrest = (destCrestRect.top + destCrestRect.height / 2) - (startCrestRect.top + startCrestRect.height / 2);
-      const scaleCrest = destCrestRect.height / startCrestRect.height;
-
-      const destTextRect = targetText.getBoundingClientRect();
-      const startTextRect = glidingText.getBoundingClientRect();
-      const dxText = (destTextRect.left + destTextRect.width / 2) - (startTextRect.left + startTextRect.width / 2);
-      const dyText = (destTextRect.top + destTextRect.height / 2) - (startTextRect.top + startTextRect.height / 2);
-      const scaleText = destTextRect.height / startTextRect.height;
-
-      // 3. Fade out shimmer & glint effects quickly
-      if (portalEffects) {
-        portalEffects.style.opacity = '0';
-        portalEffects.style.transition = 'opacity 0.35s ease-out';
-      }
-
-      // 4. Fade out the flat-lay photo backdrop to seamlessly reveal the website
-      if (portalBg) {
-        portalBg.style.opacity = '0';
-        portalBg.style.transition = 'opacity 0.75s cubic-bezier(0.2, 0.8, 0.2, 1)';
-      }
-
-      // 5. Drag & glide medallion from photo position into header corner
-      glidingCrest.style.transformOrigin = 'center center';
-      glidingCrest.style.transition = 'transform 0.85s cubic-bezier(0.16, 1, 0.3, 1)';
-      glidingCrest.style.transform = `translate(${dxCrest}px, ${dyCrest}px) scale(${scaleCrest})`;
-
-      // 6. Drag & glide text from photo position to right beside the crest
-      glidingText.style.transformOrigin = 'center center';
-      glidingText.style.transition = 'transform 0.85s cubic-bezier(0.16, 1, 0.3, 1)';
-      glidingText.style.transform = `translate(${dxText}px, ${dyText}px) scale(${scaleText})`;
-
-      // 7. Hide portal when drag finishes
+      // Guarantee that the portal is hidden after motion finishes
       setTimeout(() => {
-        portal.style.display = 'none';
-        portal.style.pointerEvents = 'none';
-      }, 900);
+        if (portal) {
+          portal.style.display = 'none';
+          portal.style.pointerEvents = 'none';
+        }
+      }, 950);
 
-      sessionStorage.setItem('abha_intro_shown', 'true');
+      try {
+        sessionStorage.setItem('abha_intro_shown', 'true');
+      } catch (e) {}
+
+      if (!targetCrest || !targetText || !glidingCrest || !glidingText || !portal) {
+        if (portal) {
+          portal.style.display = 'none';
+          portal.style.pointerEvents = 'none';
+        }
+        return;
+      }
+
+      try {
+        // 1. Reveal gliding elements right as motion starts
+        glidingCrest.style.opacity = '1';
+        glidingText.style.opacity = '1';
+
+        // 2. Measure starting and destination coordinates (center-to-center for 0px error)
+        const destCrestRect = targetCrest.getBoundingClientRect();
+        const startCrestRect = glidingCrest.getBoundingClientRect();
+        const dxCrest = (destCrestRect.left + destCrestRect.width / 2) - (startCrestRect.left + startCrestRect.width / 2);
+        const dyCrest = (destCrestRect.top + destCrestRect.height / 2) - (startCrestRect.top + startCrestRect.height / 2);
+        const scaleCrest = startCrestRect.height > 0 ? (destCrestRect.height / startCrestRect.height) : 0.35;
+
+        const destTextRect = targetText.getBoundingClientRect();
+        const startTextRect = glidingText.getBoundingClientRect();
+        const dxText = (destTextRect.left + destTextRect.width / 2) - (startTextRect.left + startTextRect.width / 2);
+        const dyText = (destTextRect.top + destTextRect.height / 2) - (startTextRect.top + startTextRect.height / 2);
+        const scaleText = startTextRect.height > 0 ? (destTextRect.height / startTextRect.height) : 0.45;
+
+        // 3. Fade out shimmer & glint effects quickly
+        if (portalEffects) {
+          portalEffects.style.opacity = '0';
+          portalEffects.style.transition = 'opacity 0.35s ease-out';
+        }
+
+        // 4. Fade out the flat-lay photo backdrop to seamlessly reveal the website
+        if (portalBg) {
+          portalBg.style.opacity = '0';
+          portalBg.style.transition = 'opacity 0.75s cubic-bezier(0.2, 0.8, 0.2, 1)';
+        }
+
+        // 5. Drag & glide medallion from photo position into header corner
+        glidingCrest.style.transformOrigin = 'center center';
+        glidingCrest.style.transition = 'transform 0.85s cubic-bezier(0.16, 1, 0.3, 1)';
+        glidingCrest.style.transform = `translate(${dxCrest}px, ${dyCrest}px) scale(${scaleCrest})`;
+
+        // 6. Drag & glide text from photo position to right beside the crest
+        glidingText.style.transformOrigin = 'center center';
+        glidingText.style.transition = 'transform 0.85s cubic-bezier(0.16, 1, 0.3, 1)';
+        glidingText.style.transform = `translate(${dxText}px, ${dyText}px) scale(${scaleText})`;
+      } catch (err) {
+        console.warn('Intro glide animation notice:', err);
+        if (portal) {
+          portal.style.display = 'none';
+          portal.style.pointerEvents = 'none';
+        }
+      }
     }
 
     function replayIntroPortal() {
@@ -4424,9 +4447,19 @@
       introGlideTimer = setTimeout(triggerIntroGlide, 2200);
     }
 
-    // Auto-trigger glide after 2.2s of animation (total flow 3.0s, within 2-3s window)
+    // Auto-trigger glide or skip if already seen
     document.addEventListener('DOMContentLoaded', () => {
-      introGlideTimer = setTimeout(triggerIntroGlide, 2200);
+      try {
+        if (sessionStorage.getItem('abha_intro_shown') === 'true') {
+          const portal = document.getElementById('abhaIntroPortal');
+          if (portal) {
+            portal.style.display = 'none';
+            portal.style.pointerEvents = 'none';
+          }
+          return;
+        }
+      } catch(e) {}
+      introGlideTimer = setTimeout(triggerIntroGlide, 2000);
     });
   </script>
 
