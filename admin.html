@@ -931,10 +931,8 @@
         <option value="MANAGER" style="color: #000;">Role: 📋 Manager (Catalog & POS)</option>
         <option value="TAILOR" style="color: #000;">Role: ✂️ Master Tailor (Atelier)</option>
         <option value="DELIVERY" style="color: #000;">Role: 🚚 Delivery Staff (Beawar)</option>
+        <option value="SELECT_ROLE" style="color: #000;">🔄 Switch Role...</option>
       </select>
-      <span id="userRoleBadge" class="role-badge role-owner">Owner</span>
-      <span id="userNameDisplay" style="font-weight: 600;">ABHA Management</span>
-      <button type="button" class="btn-switch-role" onclick="openRoleSelector()" title="Switch Portal Role">🔄 Switch Role</button>
       <button onclick="handleLogout()" class="btn-logout">Logout</button>
     </div>
   </header>
@@ -1510,7 +1508,8 @@
 
     function enterDashboardAs(user, isDirect = false) {
       document.getElementById('authGate').style.display = 'none';
-      document.getElementById('userNameDisplay').textContent = user.name;
+      const nameDisp = document.getElementById('userNameDisplay');
+      if (nameDisp) nameDisp.textContent = user.name;
       const badge = document.getElementById('userRoleBadge');
       if (badge) {
         badge.textContent = user.role;
@@ -1598,6 +1597,14 @@
     }
 
     function switchRoleOnTheFly(role) {
+      if (role === 'SELECT_ROLE') {
+        openRoleSelector();
+        if (currentUser && currentUser.role) {
+          const roleSelect = document.getElementById('roleSwitcherSelect');
+          if (roleSelect) roleSelect.value = currentUser.role;
+        }
+        return;
+      }
       const sessions = getRoleSessions();
       if (sessions[role] && sessions[role].token) {
         selectPortalRole(role);
