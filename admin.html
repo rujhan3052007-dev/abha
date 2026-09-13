@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="js/abha-store.js"></script>
   <style>
     :root {
       --maroon: #5c1324;
@@ -493,7 +494,17 @@
         <button type="submit" class="btn btn-primary" style="justify-content: center; padding: 0.8rem; font-size: 0.95rem; margin-top: 0.5rem;">Sign In to Dashboard</button>
       </form>
       
-      <div style="margin-top: 1.5rem; border-top: 1px solid var(--gray-200); padding-top: 1rem; font-size: 0.75rem; color: var(--gray-500); text-align: center;">
+      <div style="margin-top: 1.25rem; padding: 0.75rem; background: var(--gray-100); border-radius: 6px; text-align: center;">
+        <p style="font-size: 0.75rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.5rem;">One-Click Role Testing (Live GitHub Pages & Local):</p>
+        <div style="display: flex; gap: 0.4rem; justify-content: center; flex-wrap: wrap;">
+          <button type="button" class="btn btn-outline" style="padding: 0.3rem 0.5rem; font-size: 0.75rem;" onclick="quickLogin('admin@abha.in', 'AbhaAdmin2026!')">👑 Owner</button>
+          <button type="button" class="btn btn-outline" style="padding: 0.3rem 0.5rem; font-size: 0.75rem;" onclick="quickLogin('manager@abha.in', 'AbhaManager2026!')">📋 Manager</button>
+          <button type="button" class="btn btn-outline" style="padding: 0.3rem 0.5rem; font-size: 0.75rem;" onclick="quickLogin('master.tailor@abha.in', 'AbhaTailor2026!')">✂️ Tailor</button>
+          <button type="button" class="btn btn-outline" style="padding: 0.3rem 0.5rem; font-size: 0.75rem;" onclick="quickLogin('delivery@abha.in', 'AbhaDelivery2026!')">🚚 Delivery</button>
+        </div>
+      </div>
+      
+      <div style="margin-top: 1rem; border-top: 1px solid var(--gray-200); padding-top: 0.75rem; font-size: 0.75rem; color: var(--gray-500); text-align: center;">
         Flagship Store: 11, Ganesha Tower, Beawar, Rajasthan (305901)
       </div>
     </div>
@@ -507,6 +518,13 @@
       <span class="topbar-tag">Operations Portal</span>
     </a>
     <div class="topbar-user">
+      <a href="index.html" style="color: var(--gold-light); text-decoration: none; font-size: 0.8rem; font-weight: 600; padding: 0.3rem 0.6rem; border: 1px solid rgba(223,179,94,0.4); border-radius: 4px; transition: all 0.2s;">← Live Store</a>
+      <select id="roleSwitcherSelect" onchange="switchRoleOnTheFly(this.value)" style="background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); border-radius: 4px; padding: 0.25rem 0.5rem; font-size: 0.8rem; cursor: pointer;">
+        <option value="OWNER" style="color: #000;">Role: 👑 Owner (Full Access)</option>
+        <option value="MANAGER" style="color: #000;">Role: 📋 Manager (Catalog & POS)</option>
+        <option value="TAILOR" style="color: #000;">Role: ✂️ Master Tailor (Atelier)</option>
+        <option value="DELIVERY" style="color: #000;">Role: 🚚 Delivery Staff (Beawar)</option>
+      </select>
       <span id="userRoleBadge" class="role-badge role-owner">Owner</span>
       <span id="userNameDisplay" style="font-weight: 600;">ABHA Management</span>
       <button onclick="handleLogout()" class="btn-logout">Logout</button>
@@ -920,10 +938,65 @@
     async function apiRequest(endpoint, options = {}) {
       const headers = { 'Content-Type': 'application/json', ...options.headers };
       if (authToken) headers['Authorization'] = `Bearer ${authToken}`;
+      if (window.AbhaStore) {
+        return await window.AbhaStore.apiCall(endpoint, { ...options, headers });
+      }
       const res = await fetch(endpoint, { ...options, headers });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Request failed');
       return data;
+    }
+
+    function quickLogin(identifier, password) {
+      document.getElementById('loginIdentifier').value = identifier;
+      document.getElementById('loginPassword').value = password;
+      const form = document.getElementById('adminLoginForm');
+      if (form) form.requestSubmit();
+    }
+
+    function switchRoleOnTheFly(role) {
+      if (!currentUser) currentUser = { id: 'u-temp', name: 'Staff User' };
+      currentUser.role = role;
+      if (role === 'OWNER') {
+        currentUser.name = 'Owner (ABHA)';
+      } else if (role === 'MANAGER') {
+        currentUser.name = 'Store Manager (Beawar)';
+      } else if (role === 'TAILOR') {
+        currentUser.name = 'Master Tailor (ABHA Atelier)';
+      } else if (role === 'DELIVERY') {
+        currentUser.name = 'Beawar Delivery Staff';
+      }
+      document.getElementById('userNameDisplay').textContent = currentUser.name;
+      const badge = document.getElementById('userRoleBadge');
+      badge.textContent = role;
+      badge.className = `role-badge role-${role.toLowerCase()}`;
+      const roleSelect = document.getElementById('roleSwitcherSelect');
+      if (roleSelect) roleSelect.value = role;
+      applyRolePermissions(role);
+    }
+
+    function applyRolePermissions(role) {
+      const allNavItems = document.querySelectorAll('.sidebar .nav-item');
+      allNavItems.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        if (role === 'TAILOR') {
+          item.style.display = text.includes('tailor') ? 'flex' : 'none';
+        } else if (role === 'DELIVERY') {
+          item.style.display = text.includes('deliveries') ? 'flex' : 'none';
+        } else if (role === 'MANAGER') {
+          item.style.display = (text.includes('integrations') || text.includes('audit')) ? 'none' : 'flex';
+        } else {
+          item.style.display = 'flex';
+        }
+      });
+
+      if (role === 'TAILOR') {
+        switchTab('tailor');
+      } else if (role === 'DELIVERY') {
+        switchTab('deliveries');
+      } else {
+        switchTab('dashboard');
+      }
     }
 
     async function init() {
@@ -936,8 +1009,9 @@
           const badge = document.getElementById('userRoleBadge');
           badge.textContent = currentUser.role;
           badge.className = `role-badge role-${currentUser.role.toLowerCase()}`;
-          loadDashboard();
-          loadPosItems();
+          const roleSelect = document.getElementById('roleSwitcherSelect');
+          if (roleSelect) roleSelect.value = currentUser.role;
+          applyRolePermissions(currentUser.role);
         } catch (e) {
           localStorage.removeItem('abha_token');
           authToken = null;
@@ -968,8 +1042,9 @@
         const badge = document.getElementById('userRoleBadge');
         badge.textContent = currentUser.role;
         badge.className = `role-badge role-${currentUser.role.toLowerCase()}`;
-        loadDashboard();
-        loadPosItems();
+        const roleSelect = document.getElementById('roleSwitcherSelect');
+        if (roleSelect) roleSelect.value = currentUser.role;
+        applyRolePermissions(currentUser.role);
       } catch (err) {
         errBox.textContent = err.message;
         errBox.style.display = 'block';

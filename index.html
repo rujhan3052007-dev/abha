@@ -22,6 +22,7 @@
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/abha-store.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -268,19 +269,42 @@
         <span id="announcementText">Free Pan-India Express Delivery on All Salwar Suits | Bespoke Master Stitching Available</span>
       </div>
       <div class="flex items-center gap-4 text-[11px] tracking-wider uppercase font-medium">
-        <button onclick="openTailorModal()" class="hover:text-gold-500 transition-colors flex items-center gap-1">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-          Tailor Hotline: +91 98290 00000
-        </button>
+        <a href="admin.html" class="text-gold-400 hover:text-gold-300 transition-colors font-semibold flex items-center gap-1">
+          <span>⚙️</span> Admin / POS
+        </a>
         <span class="text-maroon-700" aria-hidden="true">|</span>
-        <!-- Language Selector -->
+        <a href="tel:+919214837104" class="hover:text-gold-500 transition-colors flex items-center gap-1">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+          Tailor Hotline: +91 9214837104
+        </a>
+        <span class="text-maroon-700" aria-hidden="true">|</span>
+        <!-- 22 Scheduled Indian Languages Architecture (§40, §122) -->
         <div class="relative inline-block text-left" id="langContainer">
           <label for="langSelect" class="sr-only">Choose Language</label>
-          <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-maroon-950 text-ivory-50 text-[11px] py-0.5 px-2 rounded border border-maroon-700 focus:outline-none focus:ring-1 focus:ring-gold-500 cursor-pointer">
+          <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-maroon-950 text-ivory-50 text-[11px] py-0.5 px-2 rounded border border-maroon-700 focus:outline-none focus:ring-1 focus:ring-gold-500 cursor-pointer max-w-[140px]">
             <option value="en">English</option>
             <option value="hi">हिन्दी (Hindi)</option>
-            <option value="gu">ગુજરાતી (Gujarati)</option>
+            <option value="bn">বাংলা (Bengali)</option>
+            <option value="te">తెలుగు (Telugu)</option>
             <option value="mr">मराठी (Marathi)</option>
+            <option value="ta">தமிழ் (Tamil)</option>
+            <option value="ur">اردو (Urdu)</option>
+            <option value="gu">ગુજરાતી (Gujarati)</option>
+            <option value="kn">ಕನ್ನಡ (Kannada)</option>
+            <option value="ml">മലയാളം (Malayalam)</option>
+            <option value="or">ଓଡ଼ିଆ (Odia)</option>
+            <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
+            <option value="as">অসমীয়া (Assamese)</option>
+            <option value="mai">मैथिली (Maithili)</option>
+            <option value="sat">संथाली (Santali)</option>
+            <option value="sa">संस्कृतम् (Sanskrit)</option>
+            <option value="ne">नेपाली (Nepali)</option>
+            <option value="kok">कोंकणी (Konkani)</option>
+            <option value="doi">डोगरी (Dogri)</option>
+            <option value="sd">सिन्धी (Sindhi)</option>
+            <option value="brx">बड़ो (Bodo)</option>
+            <option value="ks">कश्मीरी (Kashmiri)</option>
+            <option value="mni">মণিপুরী (Manipuri)</option>
           </select>
         </div>
       </div>
@@ -505,6 +529,35 @@
       <!-- Categories Grid -->
       <div id="categoryGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
         <!-- Populated via JavaScript dynamically for scalability -->
+      </div>
+
+      <!-- Future Categories Notice (§8: Zero fake products, strictly Coming Soon) -->
+      <div class="mt-8 pt-6 border-t border-ivory-200">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <span class="text-[10px] uppercase font-bold tracking-luxury text-maroon-800">Forthcoming Ateliers (§8)</span>
+            <h3 class="font-serif text-lg font-bold text-charcoal-950">Future Collections — Coming Soon</h3>
+          </div>
+          <span class="text-[11px] text-slateText-600 italic">Handcrafted loom curation underway</span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="p-3 bg-ivory-50 rounded border border-dashed border-maroon-800/30 text-center">
+            <span class="text-xs font-bold text-charcoal-950 block">Heritage Sarees</span>
+            <span class="text-[10px] text-maroon-800 font-semibold uppercase tracking-wider mt-0.5 inline-block bg-maroon-900/5 px-2 py-0.5 rounded">Coming Soon</span>
+          </div>
+          <div class="p-3 bg-ivory-50 rounded border border-dashed border-maroon-800/30 text-center">
+            <span class="text-xs font-bold text-charcoal-950 block">Rajputi Poshak</span>
+            <span class="text-[10px] text-maroon-800 font-semibold uppercase tracking-wider mt-0.5 inline-block bg-maroon-900/5 px-2 py-0.5 rounded">Coming Soon</span>
+          </div>
+          <div class="p-3 bg-ivory-50 rounded border border-dashed border-maroon-800/30 text-center">
+            <span class="text-xs font-bold text-charcoal-950 block">Chaniya Choli</span>
+            <span class="text-[10px] text-maroon-800 font-semibold uppercase tracking-wider mt-0.5 inline-block bg-maroon-900/5 px-2 py-0.5 rounded">Coming Soon</span>
+          </div>
+          <div class="p-3 bg-ivory-50 rounded border border-dashed border-maroon-800/30 text-center">
+            <span class="text-xs font-bold text-charcoal-950 block">Men's Collection</span>
+            <span class="text-[10px] text-maroon-800 font-semibold uppercase tracking-wider mt-0.5 inline-block bg-maroon-900/5 px-2 py-0.5 rounded">Coming Soon</span>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -1484,6 +1537,9 @@
   <!-- ========================================================================= -->
   <!-- MODAL 2: CUSTOM MEASUREMENT & PERSONALIZATION STUDIO (§17, 18, 19, 20, 21) -->
   <!-- ========================================================================= -->
+  <!-- ========================================================================= -->
+  <!-- MODAL 2: STITCHING CUSTOMIZATION STUDIO (§18, §19, §20, §21, §22, §23, §24, §25) -->
+  <!-- ========================================================================= -->
   <div id="measurementModal" class="fixed inset-0 z-50 bg-charcoal-950/75 backdrop-blur-sm hidden flex items-center justify-center p-2 sm:p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="measurementModalTitle">
     <div class="bg-ivory-50 rounded-lg max-w-2xl w-full p-6 sm:p-8 border border-ivory-300 shadow-2xl my-8 relative">
       
@@ -1493,182 +1549,225 @@
 
       <!-- Modal Header -->
       <div class="border-b border-ivory-200 pb-4">
-        <span class="text-[10px] font-bold uppercase tracking-luxury text-maroon-800">Atelier Tailoring Service</span>
-        <h2 id="measurementModalTitle" class="font-serif text-2xl font-bold text-maroon-950">Custom Measurement Studio</h2>
+        <span class="text-[10px] font-bold uppercase tracking-luxury text-maroon-800">Atelier Custom Tailoring Service</span>
+        <h2 id="measurementModalTitle" class="font-serif text-2xl font-bold text-maroon-950">Custom Stitching &amp; Design Studio</h2>
         <p class="text-xs text-slateText-600 mt-1" id="measureModalProductSubtitle">Customizing: Chanderi Silk Salwar Ensemble</p>
       </div>
 
-      <form id="measurementForm" onsubmit="handleMeasurementSubmit(event)" class="space-y-6 pt-6">
+      <form id="measurementForm" onsubmit="handleCustomizationReview(event)" class="space-y-6 pt-6">
         
-        <!-- Unit Switcher & Guide Toggle (§44) -->
-        <div class="flex items-center justify-between p-3 bg-ivory-100 rounded border border-ivory-200">
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-bold text-charcoal-900">Measurement Unit:</span>
-            <div class="inline-flex rounded border border-ivory-300 bg-ivory-50 p-0.5">
-              <button type="button" id="unitInches" onclick="setMeasurementUnit('in')" class="px-3 py-1 text-xs font-bold rounded bg-maroon-800 text-ivory-50">Inches (in)</button>
-              <button type="button" id="unitCm" onclick="setMeasurementUnit('cm')" class="px-3 py-1 text-xs font-bold rounded text-charcoal-900">Centimeters (cm)</button>
-            </div>
+        <!-- Measurement Studio Coming Soon Banner (§19) -->
+        <div class="p-4 bg-gradient-to-r from-ivory-100 via-gold-50/40 to-ivory-100 rounded-lg border border-gold-500/30 flex items-start gap-3.5">
+          <div class="w-9 h-9 rounded-full bg-maroon-800 text-gold-400 flex items-center justify-center text-base font-bold flex-shrink-0 shadow-sm">
+            ✂️
           </div>
-          <button type="button" onclick="toggleMeasurementVisualGuide()" class="text-xs text-maroon-800 font-semibold underline flex items-center gap-1">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            How to Measure
-          </button>
-        </div>
-
-        <!-- Visual Diagram Drawer (Expandable) -->
-        <div id="visualGuideDrawer" class="hidden p-4 rounded bg-gold-100/50 border border-gold-500/30 text-xs text-charcoal-900 space-y-2">
-          <p class="font-bold text-maroon-900">Quick Measuring Tips:</p>
-          <ul class="list-disc list-inside space-y-1 text-[11px] text-slateText-700">
-            <li><strong>Bust:</strong> Measure around the fullest part of the bust keeping tape level.</li>
-            <li><strong>Waist:</strong> Measure at your natural waistline (above navel).</li>
-            <li><strong>Hip:</strong> Measure around the widest portion of your hips.</li>
-            <li><strong>Kurta Length:</strong> From top of shoulder down to below knee (typical: 40-44 in).</li>
-          </ul>
-        </div>
-
-        <!-- Measurement Fields Grid (§17) -->
-        <div>
-          <h3 class="text-xs font-bold uppercase tracking-wider text-charcoal-950 mb-3">1. Body Measurements (<span id="unitLabel">Inches</span>)</h3>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            
-            <div>
-              <label for="mBust" class="block text-[11px] font-semibold text-slateText-700 mb-1">Bust / Chest *</label>
-              <input type="number" step="0.5" id="mBust" name="bust" required min="24" max="65" placeholder="e.g. 36" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
+          <div class="space-y-1">
+            <div class="flex items-center gap-2 flex-wrap">
+              <h4 class="font-serif text-xs font-bold text-maroon-950 uppercase tracking-wider">Measurement Studio — Coming Soon</h4>
+              <span class="text-[9px] bg-maroon-900 text-ivory-50 px-2 py-0.5 rounded font-bold uppercase tracking-wide">Standard Master Fit</span>
             </div>
-
-            <div>
-              <label for="mWaist" class="block text-[11px] font-semibold text-slateText-700 mb-1">Waist *</label>
-              <input type="number" step="0.5" id="mWaist" name="waist" required min="20" max="65" placeholder="e.g. 30" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
-            </div>
-
-            <div>
-              <label for="mHip" class="block text-[11px] font-semibold text-slateText-700 mb-1">Hip *</label>
-              <input type="number" step="0.5" id="mHip" name="hip" required min="26" max="70" placeholder="e.g. 38" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
-            </div>
-
-            <div>
-              <label for="mShoulder" class="block text-[11px] font-semibold text-slateText-700 mb-1">Shoulder *</label>
-              <input type="number" step="0.5" id="mShoulder" name="shoulder" required min="11" max="25" placeholder="e.g. 14.5" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
-            </div>
-
-            <div>
-              <label for="mSleeve" class="block text-[11px] font-semibold text-slateText-700 mb-1">Sleeve Length *</label>
-              <input type="number" step="0.5" id="mSleeve" name="sleeve" required min="4" max="30" placeholder="e.g. 17" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
-            </div>
-
-            <div>
-              <label for="mSuitLength" class="block text-[11px] font-semibold text-slateText-700 mb-1">Suit / Top Length *</label>
-              <input type="number" step="0.5" id="mSuitLength" name="suitLength" required min="28" max="55" placeholder="e.g. 42" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
-            </div>
-
-            <div>
-              <label for="mBottomLength" class="block text-[11px] font-semibold text-slateText-700 mb-1">Bottom Length *</label>
-              <input type="number" step="0.5" id="mBottomLength" name="bottomLength" required min="28" max="50" placeholder="e.g. 38" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
-            </div>
-
-            <div>
-              <label for="mFit" class="block text-[11px] font-semibold text-slateText-700 mb-1">Fit Preference</label>
-              <select id="mFit" name="fit" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800">
-                <option value="Regular Comfortable">Regular Comfortable</option>
-                <option value="Tailored Slim Fit">Tailored Slim Fit</option>
-                <option value="Relaxed Flare">Relaxed Flare</option>
-              </select>
-            </div>
-
+            <p class="text-[11px] text-slateText-700 leading-relaxed">
+              Our master tailors craft this suit to comfortable standard dimensions with generous 2-inch inside margins. After placing your order, our Beawar atelier team will also contact you on WhatsApp/Call to confirm your exact fitting preferences.
+            </p>
           </div>
         </div>
 
-        <!-- Custom Style Preferences (§19) -->
+        <!-- Custom Style Selections (§20) -->
         <div>
-          <h3 class="text-xs font-bold uppercase tracking-wider text-charcoal-950 mb-3">2. Style & Silhouettes</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-charcoal-950 mb-3">1. Custom Design Selections</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             
+            <!-- Neck Design -->
             <div>
-              <label for="mNeck" class="block text-[11px] font-semibold text-slateText-700 mb-1">Neck Style</label>
-              <select id="mNeck" name="neck" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800">
-                <option value="Classic Round">Classic Round Neck</option>
+              <label for="mNeck" class="block text-[11px] font-semibold text-slateText-700 mb-1">Neck Design *</label>
+              <select id="mNeck" name="neck" onchange="toggleOtherInput('mNeck', 'mNeckOther')" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800">
+                <option value="Classic Round Neck">Classic Round Neck</option>
                 <option value="V-Neck Elegant">V-Neck Elegant</option>
-                <option value="Boat Neck Modern">Boat Neck Modern</option>
-                <option value="Sweetheart Neck">Sweetheart Neck</option>
-                <option value="Mandarin Collar">Mandarin Collar with Slit</option>
+                <option value="U-Neck Traditional">U-Neck Traditional</option>
+                <option value="Square Neck">Square Neck</option>
+                <option value="Other">Other (Specify below)</option>
               </select>
+              <input type="text" id="mNeckOther" placeholder="Describe your custom neck style..." class="hidden mt-2 w-full px-3 py-1.5 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
             </div>
 
+            <!-- Sleeve Style -->
             <div>
-              <label for="mSleeveStyle" class="block text-[11px] font-semibold text-slateText-700 mb-1">Sleeve Style</label>
-              <select id="mSleeveStyle" name="sleeveStyle" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800">
+              <label for="mSleeveStyle" class="block text-[11px] font-semibold text-slateText-700 mb-1">Sleeve Style *</label>
+              <select id="mSleeveStyle" name="sleeveStyle" onchange="toggleOtherInput('mSleeveStyle', 'mSleeveOther')" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800">
                 <option value="3/4th Sleeves">3/4th Sleeves (Standard)</option>
                 <option value="Full Sleeves">Full Length Sleeves</option>
-                <option value="Elbow Length">Elbow Length</option>
-                <option value="Cap Sleeves">Cap Sleeves</option>
+                <option value="Half Sleeves">Half Sleeves</option>
                 <option value="Sleeveless">Sleeveless</option>
+                <option value="Other">Other (Specify below)</option>
               </select>
+              <input type="text" id="mSleeveOther" placeholder="Describe your custom sleeve style..." class="hidden mt-2 w-full px-3 py-1.5 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
             </div>
 
+            <!-- Bottom Style -->
             <div>
-              <label for="mBottomStyle" class="block text-[11px] font-semibold text-slateText-700 mb-1">Bottom Style</label>
-              <select id="mBottomStyle" name="bottomStyle" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800">
-                <option value="Straight Pant">Straight Cigarette Pant</option>
+              <label for="mBottomStyle" class="block text-[11px] font-semibold text-slateText-700 mb-1">Bottom Style *</label>
+              <select id="mBottomStyle" name="bottomStyle" onchange="toggleOtherInput('mBottomStyle', 'mBottomOther')" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800">
                 <option value="Traditional Salwar">Traditional Pleated Salwar</option>
+                <option value="Tailored Pant">Tailored Cigarette Pant</option>
+                <option value="Flared Palazzo">Flared Palazzo</option>
                 <option value="Churidar">Churidar</option>
-                <option value="Palazzo Flare">Palazzo Flare</option>
+                <option value="Other">Other (Specify below)</option>
               </select>
+              <input type="text" id="mBottomOther" placeholder="Describe your custom bottom style..." class="hidden mt-2 w-full px-3 py-1.5 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
+            </div>
+
+            <!-- Kurta Design -->
+            <div>
+              <label for="mKurtaCut" class="block text-[11px] font-semibold text-slateText-700 mb-1">Kurta Design / Silhouette *</label>
+              <select id="mKurtaCut" name="kurtaCut" onchange="toggleOtherInput('mKurtaCut', 'mKurtaOther')" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800">
+                <option value="Straight Cut Kurta">Straight Cut Kurta</option>
+                <option value="A-Line Classic">A-Line Classic</option>
+                <option value="Anarkali Flare">Anarkali Flare</option>
+                <option value="Flared Cut">Flared Cut</option>
+                <option value="Other">Other (Specify below)</option>
+              </select>
+              <input type="text" id="mKurtaOther" placeholder="Describe your custom kurta silhouette..." class="hidden mt-2 w-full px-3 py-1.5 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
             </div>
 
           </div>
         </div>
 
-        <!-- Custom Notes (§19) -->
+        <!-- Additional Requirements (§22) -->
         <div>
-          <label for="mNotes" class="block text-xs font-bold uppercase tracking-wider text-charcoal-950 mb-1">3. Additional Custom Notes</label>
-          <textarea id="mNotes" name="notes" rows="2" placeholder="e.g. Keep side slits 12 inches high, add extra margin inside, attach tassels on dupatta corners..." class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800"></textarea>
+          <label for="mNotes" class="block text-xs font-bold uppercase tracking-wider text-charcoal-950 mb-1">2. Additional Requirements</label>
+          <textarea id="mNotes" name="notes" rows="2" placeholder="Anything else you'd like ABHA to know?" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800"></textarea>
         </div>
 
-        <!-- Optional Reference Image Upload (§20) -->
+        <!-- Reference Images Upload (Up to 3 images) (§23) -->
         <div>
-          <span class="block text-xs font-bold uppercase tracking-wider text-charcoal-950 mb-1">4. Upload Reference Design (Optional)</span>
-          <p class="text-[11px] text-slateText-600 mb-2">Have a reference neck or sleeve photo from Pinterest/magazine? Upload it so our tailors can understand your requested styling.</p>
-          <div class="flex items-center gap-4">
-            <input type="file" id="mReferenceFile" accept="image/*" onchange="handleReferenceUpload(event)" class="text-xs text-slateText-600 file:mr-3 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-maroon-900/10 file:text-maroon-800 hover:file:bg-maroon-900/20 cursor-pointer" />
-            <div id="referencePreview" class="hidden w-12 h-12 rounded border border-ivory-300 overflow-hidden">
-              <img id="referenceImg" src="" alt="Reference thumbnail" class="w-full h-full object-cover" />
+          <div class="flex items-center justify-between mb-1">
+            <span class="block text-xs font-bold uppercase tracking-wider text-charcoal-950">3. Reference Images (Up to 3 Photos)</span>
+            <span class="text-[10px] text-slateText-500 font-semibold" id="refImageCounter">0 / 3 uploaded</span>
+          </div>
+          <p class="text-[11px] text-slateText-600 mb-2">Upload neck pattern or sleeve design inspiration from Pinterest/Instagram (JPG, PNG, WEBP):</p>
+          
+          <div class="space-y-3">
+            <input type="file" id="mReferenceFiles" accept="image/jpeg,image/png,image/webp" multiple onchange="handleMultiReferenceUpload(event)" class="text-xs text-slateText-600 file:mr-3 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-maroon-900/10 file:text-maroon-800 hover:file:bg-maroon-900/20 cursor-pointer w-full" />
+            
+            <!-- Reference Images Previews -->
+            <div id="referenceImagesPreviewContainer" class="flex gap-3 flex-wrap"></div>
+
+            <!-- Mandatory Legal Warning (§23) -->
+            <div class="p-3 bg-ivory-100 rounded border border-ivory-300 text-[11px] text-slateText-700 leading-relaxed italic">
+              <strong>Notice:</strong> Reference images are for design guidance. Final result may vary based on fabric, tailoring feasibility and construction.
             </div>
           </div>
         </div>
 
-        <!-- Tailor Assistance Option (§18) -->
-        <div class="p-3 bg-ivory-100 rounded border border-ivory-200 flex items-center justify-between text-xs">
-          <div class="flex items-center gap-2">
-            <input type="checkbox" id="mRequestAssistance" name="requestAssistance" class="rounded border-ivory-300 text-maroon-800 focus:ring-maroon-800" />
-            <label for="mRequestAssistance" class="font-semibold text-charcoal-900">Request master tailor review call before cutting</label>
+        <!-- WhatsApp / Phone Consultation Context (§24) -->
+        <div class="p-3 bg-ivory-100 rounded border border-ivory-200 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
+          <div>
+            <span class="font-bold text-charcoal-950">Have additional requirements or styling questions?</span>
+            <p class="text-[11px] text-slateText-600">Consult with our Beawar master tailor directly:</p>
           </div>
-          <span class="text-[11px] text-maroon-800 font-bold">Complimentary</span>
+          <div class="flex gap-2">
+            <button type="button" onclick="consultTailorWhatsApp()" class="px-3 py-1.5 rounded bg-green-700 hover:bg-green-600 text-ivory-50 font-bold text-[11px] flex items-center gap-1">
+              <span>💬</span> WhatsApp
+            </button>
+            <a href="tel:+919214837104" class="px-3 py-1.5 rounded bg-maroon-800 hover:bg-maroon-700 text-ivory-50 font-bold text-[11px] flex items-center gap-1">
+              <span>📞</span> Call ABHA
+            </a>
+          </div>
         </div>
 
         <!-- Stitching Price Summary (§21) -->
         <div class="p-4 bg-maroon-900/5 rounded border border-maroon-800/20 flex items-center justify-between">
           <div>
             <p class="text-xs font-bold text-charcoal-950">Transparent Pricing:</p>
-            <p class="text-[11px] text-slateText-600">Fabric Price + ₹750 Master Tailoring Fee</p>
+            <p class="text-[11px] text-slateText-600" id="mStitchPricingBreakdown">Fabric Price + Master Tailoring Fee</p>
           </div>
           <div class="text-right">
             <p class="text-xs text-slateText-600">Total with Stitching:</p>
-            <p class="font-serif text-lg font-bold text-maroon-900" id="mTotalCalculatedPrice">₹3,600</p>
+            <p class="font-serif text-lg font-bold text-maroon-900" id="mTotalCalculatedPrice">₹0</p>
           </div>
         </div>
 
-        <!-- Actions -->
+        <!-- Actions (§25) -->
         <div class="flex items-center justify-end gap-3 pt-4 border-t border-ivory-200">
           <button type="button" onclick="closeMeasurementModal()" class="px-5 py-2.5 bg-ivory-200 hover:bg-ivory-300 text-charcoal-900 text-xs font-semibold rounded">
             Cancel
           </button>
           <button type="submit" class="px-8 py-2.5 bg-maroon-800 hover:bg-maroon-700 text-ivory-50 text-xs font-bold uppercase tracking-wider rounded shadow-sm">
-            Save Measurements & Add to Cart
+            Review Your Selection →
           </button>
         </div>
 
       </form>
 
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 2B: CUSTOMIZATION REVIEW (§25) -->
+  <!-- ========================================================================= -->
+  <div id="reviewSelectionModal" class="fixed inset-0 z-50 bg-charcoal-950/75 backdrop-blur-sm hidden flex items-center justify-center p-2 sm:p-4 overflow-y-auto" role="dialog" aria-modal="true">
+    <div class="bg-ivory-50 rounded-lg max-w-lg w-full p-6 border border-ivory-300 shadow-2xl my-8 relative space-y-4">
+      <button type="button" onclick="closeReviewSelectionModal()" class="absolute top-4 right-4 p-2 text-slateText-600 hover:text-charcoal-950">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+      <div class="border-b border-ivory-200 pb-3">
+        <span class="text-[10px] font-bold uppercase tracking-luxury text-maroon-800">Order Pre-Review (§25)</span>
+        <h3 class="font-serif text-xl font-bold text-maroon-950">Review Your Selection</h3>
+        <p class="text-xs text-slateText-600 mt-0.5" id="revProductTitle"></p>
+      </div>
+      <div class="space-y-2 text-xs">
+        <div class="flex justify-between py-1 border-b border-ivory-200">
+          <span class="text-slateText-600">Product:</span>
+          <span class="font-semibold text-charcoal-950" id="revProductName"></span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-ivory-200">
+          <span class="text-slateText-600">Fabric Price:</span>
+          <span class="font-semibold text-charcoal-950" id="revFabricPrice"></span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-ivory-200">
+          <span class="text-slateText-600">Stitching Option:</span>
+          <span class="font-semibold text-maroon-800" id="revStitchingFee"></span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-ivory-200">
+          <span class="text-slateText-600">Selected Neck:</span>
+          <span class="font-semibold text-charcoal-950" id="revNeck"></span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-ivory-200">
+          <span class="text-slateText-600">Selected Sleeve:</span>
+          <span class="font-semibold text-charcoal-950" id="revSleeve"></span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-ivory-200">
+          <span class="text-slateText-600">Selected Bottom:</span>
+          <span class="font-semibold text-charcoal-950" id="revBottom"></span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-ivory-200">
+          <span class="text-slateText-600">Kurta Design:</span>
+          <span class="font-semibold text-charcoal-950" id="revKurta"></span>
+        </div>
+        <div id="revNotesRow" class="py-1 border-b border-ivory-200 hidden">
+          <span class="text-slateText-600 block mb-0.5">Additional Requirements:</span>
+          <p class="font-medium text-charcoal-950 italic" id="revNotes"></p>
+        </div>
+        <div id="revImagesRow" class="py-1 border-b border-ivory-200 hidden">
+          <span class="text-slateText-600 block mb-1">Attached Reference Photos:</span>
+          <div class="flex gap-2" id="revImagesList"></div>
+        </div>
+        <div class="flex justify-between py-2 pt-3 text-sm font-bold border-t border-ivory-300">
+          <span class="text-charcoal-950">Total Payable:</span>
+          <span class="text-maroon-900 font-serif text-lg" id="revTotalAmount">₹0</span>
+        </div>
+      </div>
+      <div class="p-3 bg-amber-50 rounded border border-amber-200 text-[10px] text-amber-900 leading-relaxed">
+        <strong>Important:</strong> Custom stitched orders cannot be cancelled once fabric cutting commences (§36). Stitched products have no return policy, with a 10-day alteration request window (§37).
+      </div>
+      <div class="flex gap-3 pt-2">
+        <button type="button" onclick="editCustomization()" class="w-1/2 py-2.5 bg-ivory-200 hover:bg-ivory-300 text-charcoal-900 text-xs font-semibold rounded">
+          ← Edit Selection
+        </button>
+        <button type="button" onclick="confirmSelectionAndProceed()" class="w-1/2 py-2.5 bg-maroon-800 hover:bg-maroon-700 text-ivory-50 text-xs font-bold uppercase tracking-wider rounded">
+          Confirm &amp; Continue →
+        </button>
+      </div>
     </div>
   </div>
 
@@ -2338,9 +2437,10 @@
     // -------------------------------------------------------------
     // 1. PRODUCT CATALOGUE DATA (§50) — SALWAR SUIT DRESS MATERIALS ONLY
     // -------------------------------------------------------------
-    const PRODUCTS = [
+    let PRODUCTS = [
       {
         id: 'prod-01',
+        sku: 'ABHA-SLW-001',
         name: 'Rani Pink Leheriya Pure Cotton Salwar Suit',
         category: 'Pure Cotton Salwar Suits',
         suitType: 'cotton',
@@ -2358,6 +2458,7 @@
       },
       {
         id: 'prod-02',
+        sku: 'ABHA-SLW-002',
         name: 'Mustard Heritage Bandhani Salwar Suit Material',
         category: 'Bandhani & Leheriya Suits',
         suitType: 'prints',
@@ -2375,6 +2476,7 @@
       },
       {
         id: 'prod-03',
+        sku: 'ABHA-SLW-003',
         name: 'Magenta Festive Chanderi Silk Salwar Suit Material',
         category: 'Chanderi Silk Salwar Suits',
         suitType: 'silk',
@@ -2392,6 +2494,7 @@
       },
       {
         id: 'prod-04',
+        sku: 'ABHA-SLW-004',
         name: 'Cream Handloom Cotton Mirror-Work Salwar Suit',
         category: 'Mirror-Work Cotton Suits',
         suitType: 'cotton',
@@ -2409,6 +2512,7 @@
       },
       {
         id: 'prod-05',
+        sku: 'ABHA-SLW-005',
         name: 'Teal Mandala Motif Pure Cotton Salwar Suit',
         category: 'Designer Printed Salwar Suits',
         suitType: 'cotton',
@@ -2423,59 +2527,9 @@
         rating: 4.9,
         reviewsCount: 34,
         description: 'Designer peacock teal unstitched salwar suit dress material featuring artistic circular mandala motifs, pearl embroidered neck placket, solid teal bottom, and coordinated soft cotton dupatta with tassel trim.'
-      },
-      {
-        id: 'prod-06',
-        name: 'Royal Haldi Bandhani Festive Suit Ensemble',
-        category: 'Bandhani & Leheriya Suits',
-        suitType: 'prints',
-        price: 2650,
-        fabric: 'Fine Cotton-Silk & Hand-Dyed Bandhani Dupatta',
-        color: 'Golden Mustard Yellow & Coral',
-        image: 'images/mustard-bandhani-chanderi-suit.jpg',
-        stitchingAvailable: true,
-        stitchingFee: 750,
-        isNewArrival: false,
-        isBestSeller: true,
-        rating: 4.9,
-        reviewsCount: 31,
-        description: 'Occasion-ready mustard salwar suit ensemble with detailed pleat artistry on the neckline, delicate mirror border, authentic tie-dye dupatta, and unstitched fabric ready for bespoke master tailoring.'
-      },
-      {
-        id: 'prod-07',
-        name: 'Breezy Rani Pink Cotton Daily Wear Salwar Suit',
-        category: 'Pure Cotton Salwar Suits',
-        suitType: 'cotton',
-        price: 1550,
-        fabric: '100% Breathable Soft Cotton (2.5m each)',
-        color: 'Bright Rani Pink with Diagonal Waves',
-        image: 'images/pink-leheriya-cotton-suit.jpg',
-        stitchingAvailable: true,
-        stitchingFee: 650,
-        isNewArrival: false,
-        isBestSeller: true,
-        rating: 4.8,
-        reviewsCount: 56,
-        description: 'Comfort-first daily wear pure cotton salwar suit dress material. High breathability, skin-friendly dyes, and full 2.5m top, bottom, and dupatta lengths suitable for any custom salwar or pant style.'
-      },
-      {
-        id: 'prod-08',
-        name: 'Artisan Mirror & Floral Handloom Salwar Suit',
-        category: 'Mirror-Work Cotton Suits',
-        suitType: 'cotton',
-        price: 2150,
-        fabric: 'Handloom Slub Cotton & Pure Chiffon Dupatta',
-        color: 'Warm Ivory & Lime Green Botanical',
-        image: 'images/cream-lime-cotton-suit.jpg',
-        stitchingAvailable: true,
-        stitchingFee: 650,
-        isNewArrival: false,
-        isBestSeller: false,
-        rating: 4.8,
-        reviewsCount: 22,
-        description: 'Distinctive artisanal ethnic salwar suit set. Features handcrafted mirror work lace down the front placket, contrast botanical dupatta, and unstitched bottom fabric with custom neck and sleeve tailoring.'
       }
     ];
+
 
     const CATEGORIES = [
       { name: 'Pure Cotton Salwar Suits', count: '100% Pure Cotton (2.5m)', type: 'cotton', img: 'images/pink-leheriya-cotton-suit.jpg' },
@@ -2498,24 +2552,12 @@
       activeProduct: null,
       activeUnit: 'in',
       uploadedReference: null,
+      uploadedReferences: [],
+      pendingCustomization: null,
       activeFilter: 'all',
       activeSort: 'featured',
       appliedCoupon: null,
-      savedProfile: JSON.parse(localStorage.getItem('abha_profile') || JSON.stringify({
-        name: 'Ananya Sharma',
-        phone: '9829000000',
-        email: 'ananya.sharma@example.com',
-        measurements: {
-          bust: 36,
-          waist: 30,
-          hip: 38,
-          shoulder: 14.5,
-          sleeve: 17,
-          suitLength: 42,
-          bottomLength: 38,
-          fit: 'Regular Comfortable'
-        }
-      }))
+      savedProfile: JSON.parse(localStorage.getItem('abha_profile') || 'null')
     };
 
     function saveCart() {
@@ -2556,18 +2598,24 @@
 
     async function syncLiveProducts() {
       try {
-        const res = await fetch('/api/products');
-        if (!res.ok) return;
-        const apiData = await res.json();
+        let apiData = null;
+        if (window.AbhaStore) {
+          apiData = await window.AbhaStore.apiCall('/api/products?includeSold=true');
+        } else {
+          const res = await fetch('/api/products');
+          if (res.ok) apiData = await res.json();
+        }
+
         if (apiData && apiData.data && apiData.data.length > 0) {
           apiData.data.forEach(dbProd => {
             const local = PRODUCTS.find(p => p.id === dbProd.id || p.sku === dbProd.sku || p.image === dbProd.primary_image);
             if (local) {
               local.id = dbProd.id;
-              local.isSoldOut = dbProd.is_sold_out === 1;
+              local.sku = dbProd.sku;
+              local.isSoldOut = Boolean(dbProd.is_sold_out === 1 || dbProd.is_sold_out === true || dbProd.stock_quantity <= 0);
               local.stockQuantity = dbProd.stock_quantity;
-              local.price = dbProd.base_price;
-              local.stitchingFee = dbProd.stitching_price;
+              local.price = dbProd.base_price || dbProd.price || local.price;
+              local.stitchingFee = dbProd.stitching_price || dbProd.stitchingPrice || local.stitchingFee;
             }
           });
           renderCategories('all');
@@ -2576,9 +2624,14 @@
           renderShowcase();
         }
       } catch (err) {
-        // Fallback gracefully if API not reachable
+        console.warn('Live catalog sync notice:', err);
       }
     }
+
+    // Reactive store update listener for instant 1-of-1 delisting (§11, §32)
+    window.addEventListener('abha-store-update', () => {
+      syncLiveProducts();
+    });
 
     // Render Categories
     function renderCategories(filter = 'all') {
@@ -2853,29 +2906,37 @@
 
     function openMeasurementStudioModal(product) {
       state.activeProduct = product;
-      document.getElementById('measureModalProductSubtitle').textContent = `Customizing: ${product.name} (Fabric Price: ₹${product.price})`;
+      state.uploadedReferences = [];
+      state.pendingCustomization = null;
+
+      document.getElementById('measureModalProductSubtitle').textContent = `Customizing: ${product.name} (Fabric Price: ₹${product.price.toLocaleString('en-IN')})`;
       const total = product.price + product.stitchingFee;
       document.getElementById('mTotalCalculatedPrice').textContent = `₹${total.toLocaleString('en-IN')}`;
-
-      // Pre-fill with saved measurements if available
-      if (state.savedProfile && state.savedProfile.measurements) {
-        const m = state.savedProfile.measurements;
-        const bEl = document.getElementById('mBust');
-        if (bEl && !bEl.value) bEl.value = m.bust || '';
-        const wEl = document.getElementById('mWaist');
-        if (wEl && !wEl.value) wEl.value = m.waist || '';
-        const hEl = document.getElementById('mHip');
-        if (hEl && !hEl.value) hEl.value = m.hip || '';
-        const sEl = document.getElementById('mShoulder');
-        if (sEl && !sEl.value) sEl.value = m.shoulder || '';
-        const slEl = document.getElementById('mSleeve');
-        if (slEl && !slEl.value) slEl.value = m.sleeve || '';
-        const stlEl = document.getElementById('mSuitLength');
-        if (stlEl && !stlEl.value) stlEl.value = m.suitLength || '';
-        const blEl = document.getElementById('mBottomLength');
-        if (blEl && !blEl.value) blEl.value = m.bottomLength || '';
+      const pricingEl = document.getElementById('mStitchPricingBreakdown');
+      if (pricingEl) {
+        pricingEl.textContent = `Fabric ₹${product.price.toLocaleString('en-IN')} + Master Tailoring ₹${product.stitchingFee.toLocaleString('en-IN')}`;
       }
 
+      // Reset selects & custom inputs
+      ['mNeck', 'mSleeveStyle', 'mBottomStyle', 'mKurtaCut'].forEach(id => {
+        const sel = document.getElementById(id);
+        if (sel) sel.selectedIndex = 0;
+      });
+      ['mNeckOther', 'mSleeveOther', 'mBottomOther', 'mKurtaOther'].forEach(id => {
+        const inp = document.getElementById(id);
+        if (inp) {
+          inp.value = '';
+          inp.classList.add('hidden');
+        }
+      });
+
+      const notesEl = document.getElementById('mNotes');
+      if (notesEl) notesEl.value = '';
+
+      const fileInp = document.getElementById('mReferenceFiles');
+      if (fileInp) fileInp.value = '';
+
+      renderReferencePreviews();
       document.getElementById('measurementModal').classList.remove('hidden');
     }
 
@@ -2883,75 +2944,181 @@
       document.getElementById('measurementModal').classList.add('hidden');
     }
 
-    function setMeasurementUnit(unit) {
-      state.activeUnit = unit;
-      document.getElementById('unitLabel').textContent = unit === 'in' ? 'Inches' : 'Centimeters';
-      if (unit === 'in') {
-        document.getElementById('unitInches').className = 'px-3 py-1 text-xs font-bold rounded bg-maroon-800 text-ivory-50';
-        document.getElementById('unitCm').className = 'px-3 py-1 text-xs font-bold rounded text-charcoal-900';
+    function toggleOtherInput(selectId, otherInputId) {
+      const sel = document.getElementById(selectId);
+      const other = document.getElementById(otherInputId);
+      if (!sel || !other) return;
+      if (sel.value === 'Other') {
+        other.classList.remove('hidden');
+        other.focus();
       } else {
-        document.getElementById('unitInches').className = 'px-3 py-1 text-xs font-bold rounded text-charcoal-900';
-        document.getElementById('unitCm').className = 'px-3 py-1 text-xs font-bold rounded bg-maroon-800 text-ivory-50';
+        other.classList.add('hidden');
+        other.value = '';
       }
     }
 
-    function toggleMeasurementVisualGuide() {
-      const drawer = document.getElementById('visualGuideDrawer');
-      drawer.classList.toggle('hidden');
-    }
+    function handleMultiReferenceUpload(event) {
+      const files = Array.from(event.target.files || []);
+      if (!files.length) return;
 
-    function handleReferenceUpload(e) {
-      const file = e.target.files[0];
-      if (file) {
+      const remainingSlots = 3 - state.uploadedReferences.length;
+      if (remainingSlots <= 0) {
+        showToast('Maximum 3 reference images allowed (§23).');
+        event.target.value = '';
+        return;
+      }
+
+      const filesToProcess = files.slice(0, remainingSlots);
+      let loaded = 0;
+
+      filesToProcess.forEach(file => {
         const reader = new FileReader();
-        reader.onload = function(evt) {
-          state.uploadedReference = evt.target.result;
-          document.getElementById('referenceImg').src = evt.target.result;
-          document.getElementById('referencePreview').classList.remove('hidden');
+        reader.onload = (e) => {
+          state.uploadedReferences.push({
+            dataUrl: e.target.result,
+            name: file.name
+          });
+          loaded++;
+          if (loaded === filesToProcess.length) {
+            renderReferencePreviews();
+            event.target.value = '';
+          }
         };
         reader.readAsDataURL(file);
-      }
+      });
     }
 
-    function handleMeasurementSubmit(event) {
-      event.preventDefault();
-      const form = event.target;
-      const data = new FormData(form);
+    function renderReferencePreviews() {
+      const container = document.getElementById('referenceImagesPreviewContainer');
+      const counter = document.getElementById('refImageCounter');
+      if (counter) {
+        counter.textContent = `${state.uploadedReferences.length} / 3 uploaded`;
+      }
+      if (!container) return;
 
-      const measurements = {
-        unit: state.activeUnit,
-        bust: data.get('bust'),
-        waist: data.get('waist'),
-        hip: data.get('hip'),
-        shoulder: data.get('shoulder'),
-        sleeve: data.get('sleeve'),
-        suitLength: data.get('suitLength'),
-        bottomLength: data.get('bottomLength'),
-        fit: data.get('fit'),
-        neck: data.get('neck'),
-        sleeveStyle: data.get('sleeveStyle'),
-        bottomStyle: data.get('bottomStyle'),
-        customNotes: data.get('notes') || '',
-        referenceImage: state.uploadedReference || null,
-        tailorAssistanceRequested: document.getElementById('mRequestAssistance').checked
+      if (state.uploadedReferences.length === 0) {
+        container.innerHTML = '';
+        return;
+      }
+
+      container.innerHTML = state.uploadedReferences.map((ref, idx) => `
+        <div class="relative w-20 h-20 rounded border border-ivory-300 overflow-hidden bg-ivory-100 group shadow-sm">
+          <img src="${ref.dataUrl}" alt="Reference Photo ${idx + 1}" class="w-full h-full object-cover" />
+          <button type="button" onclick="removeReferenceImage(${idx})" class="absolute top-1 right-1 w-5 h-5 bg-charcoal-950/80 text-white rounded-full flex items-center justify-center text-xs hover:bg-maroon-800 transition-colors" title="Remove image">
+            ✕
+          </button>
+          <span class="absolute bottom-0 inset-x-0 bg-charcoal-950/60 text-ivory-50 text-[8px] text-center truncate px-1 py-0.5">Photo ${idx + 1}</span>
+        </div>
+      `).join('');
+    }
+
+    function removeReferenceImage(index) {
+      state.uploadedReferences.splice(index, 1);
+      renderReferencePreviews();
+    }
+
+    function consultTailorWhatsApp() {
+      const prod = state.activeProduct || PRODUCTS[0];
+      const text = encodeURIComponent(`Hello ABHA Atelier (Beawar), I would like master tailor consultation regarding custom stitching for ${prod.name} (SKU: ${prod.sku || 'N/A'}, ₹${prod.price}).`);
+      window.open(`https://wa.me/919214837104?text=${text}`, '_blank');
+    }
+
+    // Step 2B: Customization Review (§25)
+    function handleCustomizationReview(event) {
+      event.preventDefault();
+      const product = state.activeProduct;
+      if (!product) return;
+
+      const getVal = (selectId, otherId) => {
+        const sel = document.getElementById(selectId);
+        const other = document.getElementById(otherId);
+        if (sel && sel.value === 'Other' && other && other.value.trim()) {
+          return `Custom: ${other.value.trim()}`;
+        }
+        return sel ? sel.value : '';
       };
+
+      const neck = getVal('mNeck', 'mNeckOther');
+      const sleeve = getVal('mSleeveStyle', 'mSleeveOther');
+      const bottom = getVal('mBottomStyle', 'mBottomOther');
+      const kurta = getVal('mKurtaCut', 'mKurtaOther');
+      const notes = (document.getElementById('mNotes')?.value || '').trim();
+
+      state.pendingCustomization = {
+        neck,
+        sleeve,
+        bottom,
+        kurta,
+        notes,
+        reference_images: state.uploadedReferences.map(r => r.dataUrl)
+      };
+
+      // Populate Review Modal (§25)
+      document.getElementById('revProductTitle').textContent = product.name;
+      document.getElementById('revProductName').textContent = product.name;
+      document.getElementById('revFabricPrice').textContent = `₹${product.price.toLocaleString('en-IN')}`;
+      document.getElementById('revStitchingFee').textContent = `+ ₹${product.stitchingFee.toLocaleString('en-IN')} (Master Tailoring)`;
+      document.getElementById('revNeck').textContent = neck;
+      document.getElementById('revSleeve').textContent = sleeve;
+      document.getElementById('revBottom').textContent = bottom;
+      document.getElementById('revKurta').textContent = kurta;
+
+      const notesRow = document.getElementById('revNotesRow');
+      if (notesRow) {
+        if (notes) {
+          notesRow.classList.remove('hidden');
+          document.getElementById('revNotes').textContent = `"${notes}"`;
+        } else {
+          notesRow.classList.add('hidden');
+        }
+      }
+
+      const imgRow = document.getElementById('revImagesRow');
+      const imgList = document.getElementById('revImagesList');
+      if (imgRow && imgList) {
+        if (state.uploadedReferences.length > 0) {
+          imgRow.classList.remove('hidden');
+          imgList.innerHTML = state.uploadedReferences.map(r => `
+            <img src="${r.dataUrl}" class="w-12 h-12 object-cover rounded border border-ivory-300" alt="Reference" />
+          `).join('');
+        } else {
+          imgRow.classList.add('hidden');
+          imgList.innerHTML = '';
+        }
+      }
+
+      const total = product.price + product.stitchingFee;
+      document.getElementById('revTotalAmount').textContent = `₹${total.toLocaleString('en-IN')}`;
+
+      closeMeasurementModal();
+      document.getElementById('reviewSelectionModal').classList.remove('hidden');
+    }
+
+    function closeReviewSelectionModal() {
+      document.getElementById('reviewSelectionModal').classList.add('hidden');
+    }
+
+    function editCustomization() {
+      closeReviewSelectionModal();
+      document.getElementById('measurementModal').classList.remove('hidden');
+    }
+
+    function confirmSelectionAndProceed() {
+      closeReviewSelectionModal();
+      if (!state.activeProduct || !state.pendingCustomization) return;
 
       addToCartDirect({
         product: state.activeProduct,
         isStitched: true,
         stitchingFee: state.activeProduct.stitchingFee,
-        measurements: measurements,
-        customNotes: data.get('notes') || 'Stitched to Measurements'
+        measurements: state.pendingCustomization,
+        customNotes: state.pendingCustomization.notes || 'Custom Tailored Ensemble'
       });
 
-      closeMeasurementModal();
-      showToast(`Custom measurements saved! Added to your bag.`);
+      showToast(`Custom tailoring details confirmed! Added ${state.activeProduct.name} to bag.`);
       openCartDrawer();
     }
 
-    // -------------------------------------------------------------
-    // 5. SHOPPING CART LOGIC & DRAWER (§22)
-    // -------------------------------------------------------------
     function addToCartDirect(cartItem) {
       state.cart.push({
         cartItemId: 'item_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
@@ -3163,7 +3330,7 @@
       const originalText = submitBtn ? submitBtn.innerHTML : '';
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.innerHTML = `<span>Securing Inventory & Processing Order...</span>`;
+        submitBtn.innerHTML = '<span>Securing Inventory & Processing Order...</span>';
       }
 
       const name = document.getElementById('cFullName').value;
@@ -3178,7 +3345,7 @@
       try {
         const cartItem = state.cart[0];
         if (!cartItem) {
-          throw new Error('No item in order. Please select a salwar suit material first.');
+          throw new Error('No item in bag. Please select a salwar suit material first.');
         }
 
         const isStitched = Boolean(cartItem.isStitched);
@@ -3186,14 +3353,14 @@
         if (isStitched) {
           stitching_config = {
             neck_design: cartItem.measurements?.neck || 'Classic Round Neck',
-            sleeve_style: cartItem.measurements?.sleeveStyle || '3/4th Sleeves (16-17 inches)',
-            bottom_style: cartItem.measurements?.bottomStyle || 'Traditional Salwar',
-            kurta_design: cartItem.measurements?.fit || 'Straight Cut Kurta',
-            additional_requirements: cartItem.measurements?.customNotes || ''
+            sleeve_style: cartItem.measurements?.sleeve || cartItem.measurements?.sleeveStyle || '3/4th Sleeves',
+            bottom_style: cartItem.measurements?.bottom || cartItem.measurements?.bottomStyle || 'Traditional Salwar',
+            kurta_design: cartItem.measurements?.kurta || cartItem.measurements?.fit || 'Straight Cut Kurta',
+            additional_requirements: cartItem.measurements?.notes || cartItem.measurements?.customNotes || '',
+            reference_images: cartItem.measurements?.reference_images || []
           };
         }
 
-        // Send to ABHA Production API
         const payload = {
           product_id: cartItem.product.id,
           quantity: cartItem.quantity || 1,
@@ -3210,30 +3377,47 @@
           }
         };
 
-        const res = await fetch('/api/orders/buy-now', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        const orderResult = await res.json();
-        if (!res.ok) {
-          throw new Error(orderResult.error || 'Failed to place order');
+        // Call ABHA Isomorphic Engine / Production API
+        let orderResult;
+        if (window.AbhaStore) {
+          orderResult = await window.AbhaStore.apiCall('/api/orders/buy-now', {
+            method: 'POST',
+            body: payload
+          });
+        } else {
+          const res = await fetch('/api/orders/buy-now', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          orderResult = await res.json();
+          if (!res.ok) throw new Error(orderResult.error || 'Failed to place order');
         }
 
-        // Verify payment
-        const verifyRes = await fetch('/api/payments/verify', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            order_id: orderResult.data.order_id,
-            razorpay_order_id: 'order_rzp_' + Date.now(),
-            razorpay_payment_id: 'pay_rzp_' + Date.now(),
-            is_mock_success: true
-          })
-        });
+        const orderData = orderResult.data;
 
-        const finalOrderNumber = orderResult.data.order_number;
+        // Verify payment
+        const verifyPayload = {
+          order_id: orderData.order_id,
+          razorpay_order_id: 'order_rzp_' + Date.now(),
+          razorpay_payment_id: 'pay_rzp_' + Date.now(),
+          is_mock_success: true
+        };
+
+        if (window.AbhaStore) {
+          await window.AbhaStore.apiCall('/api/payments/verify', {
+            method: 'POST',
+            body: verifyPayload
+          });
+        } else {
+          await fetch('/api/payments/verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(verifyPayload)
+          });
+        }
+
+        const finalOrderNumber = orderData.order_number;
         document.getElementById('confOrderNum').textContent = finalOrderNumber;
         document.getElementById('confCustomerName').textContent = name;
         document.getElementById('confPincode').textContent = pincode;
@@ -3250,8 +3434,8 @@
         closeCheckoutModal();
         document.getElementById('confirmationModal').classList.remove('hidden');
 
-        // Reload live products to reflect delisted 1-of-1 items
-        if (typeof syncLiveProducts === 'function') syncLiveProducts();
+        // Refresh live products to delist 1-of-1 sold item
+        syncLiveProducts();
       } catch (err) {
         alert(err.message);
       } finally {
@@ -3302,9 +3486,14 @@
       resultBox.innerHTML = '<p class="text-center text-slateText-600">Fetching live logistics status...</p>';
 
       try {
-        const res = await fetch(`/api/orders/track/${encodeURIComponent(orderNumber)}?phone=${encodeURIComponent(phone)}`);
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Order lookup failed');
+        let data;
+        if (window.AbhaStore) {
+          data = await window.AbhaStore.apiCall(`/api/orders/track/${encodeURIComponent(orderNumber)}?phone=${encodeURIComponent(phone)}`);
+        } else {
+          const res = await fetch(`/api/orders/track/${encodeURIComponent(orderNumber)}?phone=${encodeURIComponent(phone)}`);
+          data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Order lookup failed');
+        }
 
         const o = data.data.order;
         const timeline = data.data.timeline || [];
@@ -3312,7 +3501,7 @@
         resultBox.innerHTML = `
           <div class="p-3 bg-ivory-100 rounded border border-ivory-300 space-y-1">
             <div class="flex justify-between"><strong>${o.order_number}</strong><span class="font-bold text-maroon-800">${o.order_status}</span></div>
-            <div class="text-[11px] text-slateText-600">Type: ${o.order_type} | Delivery: ${o.delivery_type.replace(/_/g, ' ')}</div>
+            <div class="text-[11px] text-slateText-600">Type: ${o.order_type} | Delivery: ${(o.delivery_type || '').replace(/_/g, ' ')}</div>
             <div class="text-[11px] text-slateText-600">Recipient: ${o.shipping_name}, ${o.shipping_city} (${o.shipping_pincode})</div>
           </div>
           <div class="pt-2 space-y-2">
@@ -3800,16 +3989,320 @@
         nav_store: 'स्टोअरला भेट द्या',
         nav_about: 'आमच्याबद्दल',
         nav_faq: 'वारंवार विचारले जाणारे प्रश्न'
+      },
+      pa: {
+        announcement: 'ਪੂਰੇ ਭਾਰਤ ਵਿੱਚ ਡਿਲੀਵਰੀ | ਬਿਨਾਂ ਸਿਲਿਆ ਕੱਪੜਾ ਖਰੀਦੋ ਜਾਂ ਆਪਣੇ ਨਾਪ ਅਨੁਸਾਰ ਸਿਲਵਾਓ',
+        hero_shop_now: 'ਹੁਣੇ ਖਰੀਦੋ',
+        hero_get_stitched: 'ਨਾਪ ਨਾਲ ਸਿਲਵਾਓ',
+        nav_home: 'ਮੁੱਖ ਪੰਨਾ',
+        nav_shop: 'ਖਰੀਦਦਾਰੀ',
+        nav_categories: 'ਸ਼੍ਰੇਣੀਆਂ',
+        nav_collections: 'ਸੰਗ੍ਰਹਿ',
+        nav_new_arrivals: 'ਨਵੇਂ ਆਗਮਨ',
+        nav_best_sellers: 'ਸਭ ਤੋਂ ਵੱਧ ਵਿਕਣ ਵਾਲੇ',
+        nav_difference: 'ਆਭਾ ਦੀ ਵਿਸ਼ੇਸ਼ਤਾ',
+        nav_measurements: 'ਤੁਹਾਡੇ ਨਾਪ ਅਨੁਸਾਰ',
+        nav_store: 'ਸਟੋਰ ਤੇ ਆਓ',
+        nav_about: 'ਸਾਡੇ ਬਾਰੇ',
+        nav_faq: 'ਸਵਾਲ-ਜਵਾਬ'
+      },
+      bn: {
+        announcement: 'সমগ্র ভারতে ডেলিভারি | সেলাইবিহীন পোশাক কিনুন বা আপনার মাপে সেলাই করান',
+        hero_shop_now: 'এখনই কিনুন',
+        hero_get_stitched: 'মাপে সেলাই করান',
+        nav_home: 'হোম',
+        nav_shop: 'কেনাকাটা',
+        nav_categories: 'বিভাগসমূহ',
+        nav_collections: 'সংগ্রহ',
+        nav_new_arrivals: 'নতুন আগমন',
+        nav_best_sellers: 'সর্বাধিক বিক্রীত',
+        nav_difference: 'আভার বিশিষ্টতা',
+        nav_measurements: 'আপনার মাপে তৈরি',
+        nav_store: 'স্টোরে আসুন',
+        nav_about: 'আমাদের কথা',
+        nav_faq: 'প্রশ্নোত্তর'
+      },
+      ta: {
+        announcement: 'இந்தியா முழுவதும் டெலிவரி | தைக்கப்படாத ஆடை வாங்கவும் அல்லது உங்கள் அளவுக்கு தைக்கவும்',
+        hero_shop_now: 'இப்போதே வாங்குங்கள்',
+        hero_get_stitched: 'அளவுக்கு தைத்துக் கொள்ளுங்கள்',
+        nav_home: 'முகப்பு',
+        nav_shop: 'ஷாப்',
+        nav_categories: 'வகைகள்',
+        nav_collections: 'தொகுப்புகள்',
+        nav_new_arrivals: 'புதிய வரவுகள்',
+        nav_best_sellers: 'அதிகம் விற்பனையானவை',
+        nav_difference: 'ஆபாவின் தனித்துவம்',
+        nav_measurements: 'உங்கள் அளவிற்கு ஏற்ப',
+        nav_store: 'கடைக்கு வாருங்கள்',
+        nav_about: 'எங்களை பற்றி',
+        nav_faq: 'அடிக்கடி கேட்கப்படும் கேள்விகள்'
+      },
+      te: {
+        announcement: 'భారతదేశ వ్యాప్తంగా డెలివరీ | కుట్టని వస్త్రం కొనండి లేదా మీ కొలత ప్రకారం కుట్టించుకోండి',
+        hero_shop_now: 'ఇప్పుడే కొనండి',
+        hero_get_stitched: 'కొలత ప్రకారం కుట్టించుకోండి',
+        nav_home: 'హోమ్',
+        nav_shop: 'షాప్',
+        nav_categories: 'వర్గాలు',
+        nav_collections: 'కలెక్షన్స్',
+        nav_new_arrivals: 'కొత్తగా వచ్చినవి',
+        nav_best_sellers: 'అత్యధికంగా అమ్ముడైనవి',
+        nav_difference: 'ఆభా ప్రత్యేకత',
+        nav_measurements: 'మీ కొలతలకు అనుగుణంగా',
+        nav_store: 'స్టోర్ సందర్శించండి',
+        nav_about: 'మా గురించి',
+        nav_faq: 'ప్రశ్నోత్తరాలు'
+      },
+      kn: {
+        announcement: 'ಭಾರತದಾದ್ಯಂತ ಡೆಲಿವರಿ | ಹೊಲಿಯದ ಬಟ್ಟೆ ಖರೀದಿಸಿ ಅಥವಾ ನಿಮ್ಮ ಅಳತೆಗೆ ಹೊಲಿಸಿಕೊಳ್ಳಿ',
+        hero_shop_now: 'ಈಗಲೇ ಖರೀದಿಸಿ',
+        hero_get_stitched: 'ಅಳತೆಗೆ ಹೊಲಿಸಿಕೊಳ್ಳಿ',
+        nav_home: 'ಮುಖಪುಟ',
+        nav_shop: 'ಖರೀದಿ',
+        nav_categories: 'ವರ್ಗಗಳು',
+        nav_collections: 'ಸಂಗ್ರಹಗಳು',
+        nav_new_arrivals: 'ಹೊಸ ಆಗಮನಗಳು',
+        nav_best_sellers: 'ಅತ್ಯುತ್ತಮ ಮಾರಾಟ',
+        nav_difference: 'ಆಭಾ ವಿಶೇಷತೆ',
+        nav_measurements: 'ನಿಮ್ಮ ಅಳತೆಗೆ ತಕ್ಕಂತೆ',
+        nav_store: 'ಅಂಗಡಿಗೆ ಭೇಟಿ ನೀಡಿ',
+        nav_about: 'ನಮ್ಮ ಬಗ್ಗೆ',
+        nav_faq: 'ಪ್ರಶ್ನೋತ್ತರ'
+      },
+      ml: {
+        announcement: 'ഇന്ത്യയിലുടനീളം ഡെലിവറി | തുന്നാത്ത വസ്ത്രം വാങ്ങുകയോ അളവനുസരിച്ച് തുന്നിക്കുകയോ ചെയ്യാം',
+        hero_shop_now: 'ഇപ്പോൾ വാങ്ങുക',
+        hero_get_stitched: 'അളവനുസരിച്ച് തുന്നിക്കുക',
+        nav_home: 'ഹോം',
+        nav_shop: 'ഷോപ്പ്',
+        nav_categories: 'വിഭാഗങ്ങൾ',
+        nav_collections: 'ശേഖരങ്ങൾ',
+        nav_new_arrivals: 'പുതിയ വരവുകൾ',
+        nav_best_sellers: 'കൂടുതൽ വിറ്റഴിക്കപ്പെടുന്നവ',
+        nav_difference: 'ആഭയുടെ പ്രത്യേകത',
+        nav_measurements: 'നിങ്ങളുടെ അളവനുസരിച്ച്',
+        nav_store: 'സ്റ്റോർ സന്ദർശിക്കുക',
+        nav_about: 'ഞങ്ങളെക്കുറിച്ച്',
+        nav_faq: 'ചോദ്യോത്തരങ്ങൾ'
+      },
+      or: {
+        announcement: 'ସମଗ୍ର ଭାରତରେ ଡେଲିଭରୀ | ଅସିଲେଇ ପୋଷାକ କିଣନ୍ତୁ କିମ୍ବା ଆପଣଙ୍କ ମାପ ଅନୁଯାୟୀ ସିଲେଇ କରାନ୍ତୁ',
+        hero_shop_now: 'ଏବେ କିଣନ୍ତୁ',
+        hero_get_stitched: 'ମାପ ଅନୁଯାୟୀ ସିଲେଇ କରାନ୍ତୁ',
+        nav_home: 'ହୋମ୍',
+        nav_shop: 'ଦୋକାନ',
+        nav_categories: 'ଶ୍ରେଣୀ',
+        nav_collections: 'ସଂଗ୍ରହ',
+        nav_new_arrivals: 'ନୂତନ ଆଗମନ',
+        nav_best_sellers: 'ସର୍ବାଧିକ ବିକ୍ରି',
+        nav_difference: 'ଆଭା ର ବିଶେଷତା',
+        nav_measurements: 'ଆପଣଙ୍କ ମାପ ଅନୁସାରେ',
+        nav_store: 'ଷ୍ଟୋର ଦେଖନ୍ତୁ',
+        nav_about: 'ଆମ ବିଷୟରେ',
+        nav_faq: 'ପ୍ରଶ୍ନୋତ୍ତର'
+      },
+      as: {
+        announcement: 'সমগ্ৰ ভাৰতত ডেলিভাৰী | নিসিলা কাপোৰ কিনক বা নিজৰ জোখ অনুসৰি চিলাই কৰক',
+        hero_shop_now: 'এতিয়াই কিনক',
+        hero_get_stitched: 'জোখমতে চিলাই কৰক',
+        nav_home: 'ঘৰ',
+        nav_shop: 'দোকান',
+        nav_categories: 'শ্ৰেণীসমূহ',
+        nav_collections: 'সংগ্ৰহ',
+        nav_new_arrivals: 'নতুন আগমন',
+        nav_best_sellers: 'সৰ্বাধিক বিক্ৰী',
+        nav_difference: 'আভাৰ বিশেষত্ব',
+        nav_measurements: 'আপোনাৰ জোখ অনুসৰি',
+        nav_store: 'দোকান চাওক',
+        nav_about: 'আমাৰ বিষয়ে',
+        nav_faq: 'প্ৰশ্নোত্তৰ'
+      },
+      ur: {
+        announcement: 'پورے ہندوستان میں ڈیلیوری | ان سلا کپڑا خریدیں یا اپنے ناپ کے مطابق سلوائیں',
+        hero_shop_now: 'ابھی خریدیں',
+        hero_get_stitched: 'ناپ کے مطابق سلوائیں',
+        nav_home: 'ہوم',
+        nav_shop: 'شاپ',
+        nav_categories: 'اقسام',
+        nav_collections: 'مجموعہ',
+        nav_new_arrivals: 'نئی آمد',
+        nav_best_sellers: 'سب سے زیادہ فروخت',
+        nav_difference: 'آبھا کی خصوصیت',
+        nav_measurements: 'آپ کے ناپ کے مطابق',
+        nav_store: 'اسٹور تشریف لائیں',
+        nav_about: 'ہمارے متعلق',
+        nav_faq: 'عمومی سوالات'
+      },
+      sa: {
+        announcement: 'समग्र भारते प्रदेयम् | अस्यूतं वस्त्रं क्रीणातु अथवा स्वीयाङ्कानुसारेण सीव्यतु',
+        hero_shop_now: 'अधुनैव क्रीणातु',
+        hero_get_stitched: 'अङ्कानुसारेण सीव्यतु',
+        nav_home: 'गृहम्',
+        nav_shop: 'विपणनम्',
+        nav_categories: 'वर्गाः',
+        nav_collections: 'संग्रहः',
+        nav_new_arrivals: 'नवीन प्रवेषाः',
+        nav_best_sellers: 'सर्वाधिकाभिमताः',
+        nav_difference: 'आभा वैशिष्ट्यम्',
+        nav_measurements: 'भवदङ्कानुसारम्',
+        nav_store: 'विपणिदर्शनम्',
+        nav_about: 'अस्मद्विषये',
+        nav_faq: 'प्रश्नोत्तराणि'
+      },
+      ks: {
+        announcement: 'سٲری ہندوستانس منٛز ڈلیوری | ان سیتھ کپڑ ہیو یا پننہِ ماپہِ رٹہِ سوزیو',
+        hero_shop_now: 'ونئے ہیو',
+        hero_get_stitched: 'ماپہِ پؠٹھ سوزیو',
+        nav_home: 'ہوم',
+        nav_shop: 'دکان',
+        nav_categories: 'قسم',
+        nav_collections: 'کلیکشن',
+        nav_new_arrivals: 'نو آمد',
+        nav_best_sellers: 'زیادہ کناون',
+        nav_difference: 'آبھا خصوصیت',
+        nav_measurements: 'تہندِ ماپہِ مطابق',
+        nav_store: 'دکان وچھو',
+        nav_about: 'امان بارس منٛز',
+        nav_faq: 'سوالات'
+      },
+      sd: {
+        announcement: 'سموري ڀارت ۾ پهچ | اڻ سبيو ڪپڙو وٺو يا پنهنجي ماپ مطابق سبرايو',
+        hero_shop_now: 'هاڻي خريد ڪريو',
+        hero_get_stitched: 'ماپ سان سبرايو',
+        nav_home: 'گهر',
+        nav_shop: 'خريداري',
+        nav_categories: 'قسم',
+        nav_collections: 'مجموعو',
+        nav_new_arrivals: 'نئون اسٽاڪ',
+        nav_best_sellers: 'تمام گهڻو وڪرو',
+        nav_difference: 'آڀا جي سڃاڻپ',
+        nav_measurements: 'توهان جي ماپ موجب',
+        nav_store: 'دڪان ڏسو',
+        nav_about: 'اسان بابت',
+        nav_faq: 'سوال جواب'
+      },
+      mai: {
+        announcement: 'संपूर्ण भारत मे डिलीवरी | बिना सिलायल कपड़ा कीनू वा अपन नाप सं सिलाउ',
+        hero_shop_now: 'एखने कीनू',
+        hero_get_stitched: 'नाप सं सिलाउ',
+        nav_home: 'गृह',
+        nav_shop: 'दुकान',
+        nav_categories: 'श्रेणी सभ',
+        nav_collections: 'संग्रह',
+        nav_new_arrivals: 'नव आगमन',
+        nav_best_sellers: 'सर्वाधिक लोकप्रिय',
+        nav_difference: 'आभा के विशेषता',
+        nav_measurements: 'अहाँक नाप सं',
+        nav_store: 'स्टोर पर आउ',
+        nav_about: 'हमरा सबहक विषय मे',
+        nav_faq: 'प्रश्नोत्तरी'
+      },
+      kok: {
+        announcement: 'सगळ्या भारतांत पाववणी | शिवूंक नाशिल्लें कापड विकतें घिया वा तुमच्या मापा प्रमाण शिवून घिया',
+        hero_shop_now: 'आतांच विकतें घिया',
+        hero_get_stitched: 'मापा प्रमाण शिवून घिया',
+        nav_home: 'घर',
+        nav_shop: 'दुकान',
+        nav_categories: 'वर्ग',
+        nav_collections: 'कलेक्शन',
+        nav_new_arrivals: 'नवें आयिल्लें',
+        nav_best_sellers: 'चड खपपी',
+        nav_difference: 'आभाचे खाशेलपण',
+        nav_measurements: 'तुमच्या मापा प्रमाण',
+        nav_store: 'दुकानांत भेट दिया',
+        nav_about: 'आमच्या विशीं',
+        nav_faq: 'विचारिल्ले प्रश्न'
+      },
+      doi: {
+        announcement: 'सारे भारत च डिलीवरी | बिन सीते दा कपड़ा लओ जां अपने नापे कन्ने सिलाओ',
+        hero_shop_now: 'हुने खरीदो',
+        hero_get_stitched: 'नापे कन्ने सिलाओ',
+        nav_home: 'होम',
+        nav_shop: 'दुकान',
+        nav_categories: 'किस्मां',
+        nav_collections: 'संग्रह',
+        nav_new_arrivals: 'नवें आए दे',
+        nav_best_sellers: 'सब शा मते बिक्कदे',
+        nav_difference: 'आभा दी ख़ासियत',
+        nav_measurements: 'तुहांदे नापे मुताबिक',
+        nav_store: 'स्टोर पर आओ',
+        nav_about: 'साढ़े बारै',
+        nav_faq: 'सवाल-जवाब'
+      },
+      ne: {
+        announcement: 'सम्पूर्ण भारतभर डेलिभरी | नसिइएको कपडा किन्नुहोस् वा आफ्नो नाप अनुसार सिलाउनुहोस्',
+        hero_shop_now: 'अहिले किन्नुहोस्',
+        hero_get_stitched: 'नाप अनुसार सिलाउनुहोस्',
+        nav_home: 'गृह',
+        nav_shop: 'पसल',
+        nav_categories: 'वर्गहरू',
+        nav_collections: 'संकलन',
+        nav_new_arrivals: 'नयाँ आगमन',
+        nav_best_sellers: 'धेरै बिक्री भएका',
+        nav_difference: 'आभाको विशेषता',
+        nav_measurements: 'तपाईंको नाप अनुसार',
+        nav_store: 'स्टोरमा आउनुहोस्',
+        nav_about: 'हाम्रो बारेमा',
+        nav_faq: 'प्रायः सोधिने प्रश्नहरू'
+      },
+      brx: {
+        announcement: 'गासै भारतआव दैथायहरनाय | सिनाय गैयै सि बायना ला एबा नोंथांनि जोखायै सिहो',
+        hero_shop_now: 'दासानो बाय',
+        hero_get_stitched: 'जोखायै सिहो',
+        nav_home: 'न'',
+        nav_shop: 'दुकान',
+        nav_categories: 'थाखोफोर',
+        nav_collections: 'बुथुमनाय',
+        nav_new_arrivals: 'गोदान फैनाय',
+        nav_best_sellers: 'जोबोर फाननाय',
+        nav_difference: 'आभानि जुदाथि',
+        nav_measurements: 'नोंथांनि जोखायै',
+        nav_store: 'दुकान नायहै',
+        nav_about: 'जोंनि सोमोन्दै',
+        nav_faq: 'सोंलु आरो फिननाय'
+      },
+      sat: {
+        announcement: 'ᱜᱚᱴᱟ ᱵᱷᱟᱨᱚᱛ ᱨᱮ ᱰᱮᱞᱤᱵᱷᱟᱨᱤ | ᱵᱟᱝ ᱥᱮᱞᱟᱭᱟᱜ ᱠᱤᱪᱨᱤᱡ ᱦᱟᱛᱟᱣ ᱢᱮ ᱥᱮ ᱟᱢᱟᱜ ᱢᱟᱯ ᱞᱮᱠᱟᱛᱮ ᱥᱮᱞᱟᱭ ᱢᱮ',
+        hero_shop_now: 'ᱱᱤᱛ ᱜᱮ ᱦᱟᱛᱟᱣ ᱢᱮ',
+        hero_get_stitched: 'ᱢᱟᱯ ᱞᱮᱠᱟᱛᱮ ᱥᱮᱞᱟᱭ ᱢᱮ',
+        nav_home: 'ᱚᱲᱟᱜ',
+        nav_shop: 'ᱫᱚᱠᱟᱱ',
+        nav_categories: 'ᱦᱟᱹᱴᱤᱧ',
+        nav_collections: 'ᱠᱚᱞᱮᱠᱥᱚᱱ',
+        nav_new_arrivals: 'ᱱᱟᱣᱟ ᱦᱮᱡ ᱟᱠᱟᱱ',
+        nav_best_sellers: 'ᱵᱟᱹᱲᱛᱤ ᱟᱹᱠᱷᱨᱤᱧ',
+        nav_difference: 'ᱟᱵᱷᱟ ᱨᱮᱱᱟᱜ ᱵᱤᱥᱮᱥ',
+        nav_measurements: 'ᱟᱢᱟᱜ ᱢᱟᱯ ᱞᱮᱠᱟᱛᱮ',
+        nav_store: 'ᱫᱚᱠᱟᱱ ᱧᱮᱞ ᱢᱮ',
+        nav_about: 'ᱟᱞᱮ ᱵᱟᱵᱚᱛ',
+        nav_faq: 'ᱠᱩᱠᱞᱤ-ᱛᱮᱞᱟ'
+      },
+      mni: {
+        announcement: 'ভারত পুম্বদা য়ৌহনবা | শাবা য়াদবা ফি লৈবীয়ু নত্রগা মশাগী চাংদা শাবীয়ু',
+        hero_shop_now: 'হৌজিক লৈবীয়ু',
+        hero_get_stitched: 'চাংদা শাবীয়ু',
+        nav_home: 'য়ুম',
+        nav_shop: 'দোকান',
+        nav_categories: 'কাংলুপ',
+        nav_collections: 'খোমরকপা',
+        nav_new_arrivals: 'অনৌবা লাকপা',
+        nav_best_sellers: 'খ্বাইদগী য়াম্না য়োনবা',
+        nav_difference: 'আভাগী তোপ-তোপ্পা',
+        nav_measurements: 'নহাক্কী চাংগী মতুংইন্না',
+        nav_store: 'দোকান্দা চৎপীয়ু',
+        nav_about: 'ঐখোয়গী মরমদা',
+        nav_faq: 'হংলকপা ৱাহংসিং'
       }
     };
 
     function changeLanguage(lang) {
       state.language = lang;
       localStorage.setItem('abha_lang', lang);
-      const dict = TRANSLATIONS[lang] || TRANSLATIONS.en;
+      const dict = TRANSLATIONS[lang] || TRANSLATIONS.hi || TRANSLATIONS.en;
       
       const annEl = document.getElementById('announcementText');
-      if (annEl) annEl.textContent = dict.announcement;
+      if (annEl && dict.announcement) annEl.textContent = dict.announcement;
       
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
@@ -3817,7 +4310,7 @@
           el.textContent = dict[key];
         }
       });
-      showToast(`Language changed to ${lang.toUpperCase()}`);
+      showToast(`Language switched to ${lang.toUpperCase()}`);
     }
 
     function quickPurchaseSpecial(id) {
