@@ -37,8 +37,8 @@
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="js/abha-store.js"></script>
-  <script src="js/abha-style-ai.js"></script>
+  <script src="js/abha-store.js?v=20260918_2"></script>
+  <script src="js/abha-style-ai.js?v=20260918_2"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -469,11 +469,14 @@
         </div>
 
         <!-- Desktop Navigation Links -->
-        <nav class="hidden lg:flex items-center space-x-8 text-sm font-medium text-charcoal-900" aria-label="Primary Navigation">
+        <nav class="hidden lg:flex items-center space-x-6 text-sm font-medium text-charcoal-900" aria-label="Primary Navigation">
           <a href="#" class="text-maroon-800 border-b border-maroon-800 pb-0.5" data-i18n="nav_home">Home</a>
           <a href="#categories" class="hover:text-maroon-800 transition-colors" data-i18n="nav_shop">Shop</a>
-          <a href="#categories" class="hover:text-maroon-800 transition-colors" data-i18n="nav_categories">Categories</a>
+          <a href="#newArrivals" class="hover:text-maroon-800 transition-colors" data-i18n="nav_new_arrivals">New Arrivals</a>
           <a href="#featured" class="hover:text-maroon-800 transition-colors" data-i18n="nav_collections">Collections</a>
+          <button type="button" onclick="openStyleAiFromHero()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-maroon-900 to-charcoal-950 text-gold-300 hover:text-white border border-gold-400/60 shadow-xs text-xs font-bold transition hover:scale-105">
+            <span class="text-gold-400 animate-pulse">✨</span> Style AI (360° Try-On)
+          </button>
           <a href="#about" class="hover:text-maroon-800 transition-colors" data-i18n="nav_about">About</a>
         </nav>
 
@@ -484,6 +487,11 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
           </button>
 
+
+          <!-- Quick Style AI Try-On Pill Button -->
+          <button type="button" onclick="openStyleAiFromHero()" class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gold-400/20 hover:bg-gold-400/30 text-maroon-950 border border-gold-500/50 text-xs font-bold transition shadow-2xs" title="Open 360° Virtual Fitting Room">
+            <span class="text-gold-600">✨</span> Try-On AI
+          </button>
 
           <!-- Account Trigger (§30) -->
           <button type="button" onclick="openAccountDrawer()" class="p-2 hover:text-maroon-800 transition-colors hidden md:block" aria-label="Customer account and saved measurements">
@@ -503,6 +511,15 @@
 
     <!-- Mobile Drawer Menu -->
     <div id="mobileMenu" class="hidden lg:hidden border-t border-ivory-200 bg-ivory-50 px-4 pt-4 pb-6 space-y-3">
+      <!-- High-visibility Style AI banner in mobile menu -->
+      <button type="button" onclick="toggleMobileMenu(); openStyleAiFromHero();" class="w-full flex items-center justify-between p-3.5 rounded-xl bg-gradient-to-r from-maroon-950 via-maroon-900 to-charcoal-950 text-gold-300 border border-gold-400/50 shadow-md font-bold text-sm text-left">
+        <span class="flex items-center gap-2">
+          <span class="w-7 h-7 rounded-full bg-gold-400 text-maroon-950 flex items-center justify-center text-xs font-black">✨</span>
+          <span>ABHA Style AI (360° Try-On)</span>
+        </span>
+        <span class="text-[10px] uppercase tracking-wider bg-gold-400 text-maroon-950 px-2 py-0.5 rounded font-black">TRY NOW</span>
+      </button>
+
       <a href="#" onclick="toggleMobileMenu()" class="block text-base font-medium text-maroon-900 py-1" data-i18n="nav_home">Home</a>
       <a href="#categories" onclick="toggleMobileMenu()" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1" data-i18n="nav_shop">Shop Categories</a>
       <a href="#newArrivals" onclick="toggleMobileMenu()" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1" data-i18n="nav_new_arrivals">New Arrivals</a>
@@ -549,8 +566,8 @@
           <a href="#newArrivals" class="px-4 py-2 bg-gold-500 hover:bg-gold-400 text-charcoal-950 text-xs font-bold rounded-lg shadow-sm text-center">
             Explore Loom
           </a>
-          <button type="button" onclick="openMeasurementStudioFromHero()" class="px-3.5 py-2 border border-ivory-200/50 text-ivory-50 text-xs font-semibold rounded-lg text-center">
-            Custom Tailor Studio
+          <button type="button" onclick="openStyleAiFromHero()" class="px-3.5 py-2 bg-gradient-to-r from-gold-500 to-gold-400 text-charcoal-950 text-xs font-bold rounded-lg text-center flex items-center gap-1.5 shadow-sm">
+            <span>✨</span> Style AI (360° Try-On)
           </button>
         </div>
       </div>
@@ -625,9 +642,8 @@
             <a href="#newArrivals" class="w-full sm:w-auto px-8 py-3.5 bg-maroon-800 hover:bg-maroon-700 text-ivory-50 text-sm font-semibold rounded shadow-sm hover:shadow transition-all text-center tracking-wide" data-i18n="hero_shop_now">
               Shop Now
             </a>
-            <button type="button" onclick="openMeasurementStudioFromHero()" class="w-full sm:w-auto px-8 py-3.5 bg-ivory-50 hover:bg-ivory-100 text-maroon-900 border border-maroon-800/40 text-sm font-semibold rounded transition-all text-center flex items-center justify-center gap-2" data-i18n="hero_get_stitched">
-              <svg class="w-4 h-4 text-maroon-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879a3 3 0 11-4.242-4.242L12 12z"/></svg>
-              Get It Stitched
+            <button type="button" onclick="openStyleAiFromHero()" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-gold-500 to-gold-400 hover:from-gold-400 hover:to-gold-300 text-maroon-950 border border-gold-400 text-sm font-bold rounded shadow-md hover:shadow-lg transition-all text-center flex items-center justify-center gap-2">
+              <span class="text-base">✨</span> Try with ABHA Style AI (360° Try-On)
             </button>
           </div>
 
@@ -670,9 +686,9 @@
                     <span class="text-[10px] uppercase font-bold tracking-wider text-maroon-800">Bespoke Fitting Studio</span>
                     <p class="text-xs font-semibold text-charcoal-950">Pure Cotton Leheriya Salwar Suit</p>
                   </div>
-                  <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-gold-100 text-gold-600 border border-gold-500/20">
-                    Stitching Available
-                  </span>
+                  <button type="button" onclick="openStyleAiFromHero()" class="inline-flex items-center px-2.5 py-1 rounded text-[11px] font-bold bg-maroon-900 text-gold-300 border border-gold-400/40 shadow-xs hover:scale-105 transition">
+                    ✨ 360° Virtual Try-On
+                  </button>
                 </div>
                 <div class="mt-2 text-[11px] text-slateText-600 flex items-center gap-3">
                   <span>✓ 100% Pure Cotton (Top 2.5m, Bottom 2.5m, Dupatta 2.5m)</span>
@@ -755,6 +771,45 @@
         </div>
       </div>
 
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 7B. ABHA STYLE AI — TRY BEFORE YOU STITCH SPOTLIGHT BANNER (§Entry Points) -->
+  <!-- ========================================================================= -->
+  <section class="py-12 bg-gradient-to-r from-maroon-950 via-maroon-900 to-charcoal-950 text-ivory-50 border-b border-gold-500/30 relative overflow-hidden" aria-label="ABHA Style AI Virtual Try-On">
+    <div class="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-gold-500/10 blur-3xl pointer-events-none"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        
+        <div class="lg:col-span-8 space-y-3 text-center sm:text-left">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-400/15 border border-gold-400/40 text-gold-300 text-xs font-bold uppercase tracking-wider">
+            <span>✨</span> ABHA Style AI Virtual Fitting Room
+          </div>
+          <h2 class="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-ivory-50">
+            Try Before You Stitch
+          </h2>
+          <p class="text-xs sm:text-sm text-ivory-100/80 max-w-2xl leading-relaxed">
+            See your selected ABHA dress material as a custom-stitched outfit on your personalized 360° virtual avatar before placing your order. Customize neckline, Stand Patti, sleeves, and pockets in real time.
+          </p>
+          <div class="flex flex-wrap items-center justify-center sm:justify-start gap-4 pt-2 text-xs text-gold-300/90 font-medium">
+            <span class="flex items-center gap-1">✓ 360° Interactive View</span>
+            <span class="flex items-center gap-1">✓ Exact Fabric &amp; Print Preserved</span>
+            <span class="flex items-center gap-1">✓ Real Tailor Specification</span>
+          </div>
+        </div>
+
+        <div class="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col justify-center gap-3">
+          <button type="button" onclick="openStyleAiFromHero()" class="px-8 py-4 bg-gradient-to-r from-gold-500 to-gold-400 hover:from-gold-400 hover:to-gold-300 text-maroon-950 text-xs font-bold uppercase tracking-wider rounded-xl shadow-lg transition-transform hover:scale-105 flex items-center justify-center gap-2">
+            <span>TRY WITH ABHA STYLE AI</span>
+            <span>&rarr;</span>
+          </button>
+          <button type="button" onclick="document.getElementById('newArrivals').scrollIntoView({behavior:'smooth'})" class="px-6 py-3 bg-white/10 hover:bg-white/20 text-ivory-100 border border-white/20 text-xs font-semibold uppercase tracking-wider rounded-xl transition text-center">
+            Browse Authentic Fabrics
+          </button>
+        </div>
+
+      </div>
     </div>
   </section>
 
@@ -1025,44 +1080,7 @@
 
   <!-- ========================================================================= -->
   
-  <!-- ========================================================================= -->
-  <!-- 7B. ABHA STYLE AI — TRY BEFORE YOU STITCH SPOTLIGHT BANNER (§Entry Points) -->
-  <!-- ========================================================================= -->
-  <section class="py-12 bg-gradient-to-r from-maroon-950 via-maroon-900 to-charcoal-950 text-ivory-50 border-b border-gold-500/30 relative overflow-hidden" aria-label="ABHA Style AI Virtual Try-On">
-    <div class="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-gold-500/10 blur-3xl pointer-events-none"></div>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-        
-        <div class="lg:col-span-8 space-y-3 text-center sm:text-left">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-400/15 border border-gold-400/40 text-gold-300 text-xs font-bold uppercase tracking-wider">
-            <span>✨</span> ABHA Style AI Virtual Fitting Room
-          </div>
-          <h2 class="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-ivory-50">
-            Try Before You Stitch
-          </h2>
-          <p class="text-xs sm:text-sm text-ivory-100/80 max-w-2xl leading-relaxed">
-            See your selected ABHA dress material as a custom-stitched outfit on your personalized 360° virtual avatar before placing your order. Customize neckline, Stand Patti, sleeves, and pockets in real time.
-          </p>
-          <div class="flex flex-wrap items-center justify-center sm:justify-start gap-4 pt-2 text-xs text-gold-300/90 font-medium">
-            <span class="flex items-center gap-1">✓ 360° Interactive View</span>
-            <span class="flex items-center gap-1">✓ Exact Fabric &amp; Print Preserved</span>
-            <span class="flex items-center gap-1">✓ Real Tailor Specification</span>
-          </div>
-        </div>
 
-        <div class="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col justify-center gap-3">
-          <button type="button" onclick="openStyleAiFromHero()" class="px-8 py-4 bg-gradient-to-r from-gold-500 to-gold-400 hover:from-gold-400 hover:to-gold-300 text-maroon-950 text-xs font-bold uppercase tracking-wider rounded-xl shadow-lg transition-transform hover:scale-105 flex items-center justify-center gap-2">
-            <span>TRY WITH ABHA STYLE AI</span>
-            <span>&rarr;</span>
-          </button>
-          <button type="button" onclick="document.getElementById('newArrivals').scrollIntoView({behavior:'smooth'})" class="px-6 py-3 bg-white/10 hover:bg-white/20 text-ivory-100 border border-white/20 text-xs font-semibold uppercase tracking-wider rounded-xl transition text-center">
-            Browse Authentic Fabrics
-          </button>
-        </div>
-
-      </div>
-    </div>
-  </section>
 
   <!-- 8. MADE TO YOUR MEASUREMENTS (§26) -->
   <!-- ========================================================================= -->
@@ -1744,6 +1762,17 @@
   <!-- ========================================================================= -->
   <!-- FLOATING WHATSAPP BUTTON (§32) -->
   <!-- ========================================================================= -->
+  <!-- Floating ABHA Style AI Trigger -->
+  <aside aria-label="ABHA Style AI 360 Try-On Assistant" class="fixed bottom-20 left-4 sm:bottom-6 sm:left-6 z-40">
+    <button type="button" onclick="openStyleAiFromHero()" class="flex items-center gap-2.5 px-4 py-3 rounded-full bg-gradient-to-r from-maroon-950 via-maroon-900 to-charcoal-950 text-ivory-50 shadow-2xl hover:shadow-2xl transition-luxury border-2 border-gold-400/80 hover:scale-105 group" aria-label="Open ABHA Style AI 360 Virtual Try-On">
+      <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gold-400 text-maroon-950 flex items-center justify-center text-xs sm:text-sm font-black shadow animate-pulse">✨</span>
+      <div class="text-left">
+        <span class="block text-[9px] uppercase tracking-wider text-gold-300 font-extrabold leading-none">Virtual Try-On</span>
+        <span class="block text-xs font-serif font-bold text-white leading-tight">ABHA Style AI 360°</span>
+      </div>
+    </button>
+  </aside>
+
   <aside aria-label="Quick WhatsApp assistance" class="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40">
     <button type="button" onclick="triggerWhatsAppChat('Floating Action')" class="flex items-center gap-2 px-4 py-3 rounded-full bg-green-700 hover:bg-green-600 text-ivory-50 shadow-lg hover:shadow-xl transition-luxury border border-green-600 text-xs font-bold" aria-label="Chat on WhatsApp with ABHA Tailoring Support">
       <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.553 1.764.815 2.79.815 3.182 0 5.77-2.587 5.77-5.766.001-3.183-2.585-5.8-5.769-5.8zm3.374 8.243c-.147.418-.844.793-1.189.845-.345.053-.787.069-1.272-.088-.309-.1-.707-.234-1.223-.462-2.158-.956-3.565-3.176-3.673-3.322-.108-.147-.872-1.163-.872-2.218 0-1.055.553-1.574.75-1.785.197-.212.43-.265.574-.265.144 0 .287.002.412.008.132.007.309-.05.483.368.177.424.606 1.482.659 1.589.053.107.089.232.018.375-.072.143-.108.232-.215.358-.108.125-.227.28-.324.375-.108.107-.221.223-.095.439.126.216.559.923 1.2 1.494.825.736 1.521.964 1.737 1.071.216.107.342.089.469-.054.126-.143.538-.625.681-.839.144-.214.287-.179.484-.107.197.072 1.254.591 1.469.699.215.107.359.161.412.25.054.089.054.518-.093.936z"/></svg>
@@ -4252,6 +4281,11 @@
               ${categoryBadge}
             </span>
 
+            <!-- 360 AI Try-On Pill on Image -->
+            <button type="button" onclick="openStyleAiFromProduct('${prod.id}', event)" class="absolute top-2 right-11 bg-maroon-950/90 hover:bg-maroon-900 backdrop-blur-xs text-gold-300 text-[9px] font-bold px-2 py-0.5 rounded-full shadow-xs border border-gold-400/40 transition hover:scale-105" title="Click to Try On in 360°">
+              ✨ 360° AI
+            </button>
+
             <!-- Wishlist Heart Button -->
             <button type="button" onclick="toggleWishlist('${prod.id}', event)" class="absolute top-2 right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 border border-[#EBE3D7] flex items-center justify-center text-gray-500 hover:text-red-500 shadow-xs transition" aria-label="Save to wishlist">
               <svg class="w-4 h-4 ${isWishlisted ? 'fill-red-500 text-red-500' : 'fill-none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
@@ -4303,8 +4337,8 @@
                   Sold Out
                 </div>
               ` : `
-                <button type="button" onclick="openStyleAiFromProduct('${prod.id}', event)" class="w-full py-1.5 px-2 bg-gold-400/15 hover:bg-gold-400/25 text-maroon-950 rounded text-[9px] sm:text-[10px] font-bold border border-gold-500/40 flex items-center justify-center gap-1 transition shadow-2xs">
-                  <span class="text-gold-600">✨</span> Try with ABHA Style AI
+                <button type="button" onclick="openStyleAiFromProduct('${prod.id}', event)" class="w-full py-2 px-2.5 bg-gradient-to-r from-maroon-950 via-maroon-900 to-charcoal-950 hover:from-maroon-900 hover:to-charcoal-900 text-gold-300 rounded-lg text-[10px] sm:text-xs font-bold border border-gold-400/60 flex items-center justify-center gap-1.5 transition shadow-xs">
+                  <span class="text-gold-400">✨</span> Try with ABHA Style AI (360°)
                 </button>
                 <div class="grid grid-cols-2 gap-1.5">
                   <button type="button" onclick="initiatePurchase('${prod.id}', 'unstitched')" class="py-1.5 px-1 rounded text-[10px] sm:text-xs font-bold border border-maroon-900/40 text-maroon-950 hover:bg-maroon-900/5 text-center transition">
@@ -6117,9 +6151,9 @@
     </a>
 
     <!-- Custom Studio Cutout Button -->
-    <button type="button" onclick="openMeasurementStudioFromHero()" class="flex flex-col items-center text-maroon-950 text-[10px] font-bold focus:outline-none group" aria-label="Tailor Studio">
-      <div class="w-9 h-9 rounded-full bg-maroon-900 text-gold-400 flex items-center justify-center text-base shadow-md -mt-3.5 border border-gold-500/40 group-hover:scale-105 transition-transform">✂</div>
-      <span class="mt-0.5">Studio</span>
+    <button type="button" onclick="openStyleAiFromHero()" class="flex flex-col items-center text-maroon-950 text-[10px] font-bold focus:outline-none group" aria-label="ABHA Style AI Virtual Try-On">
+      <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-maroon-950 to-maroon-800 text-gold-400 flex items-center justify-center text-base shadow-md -mt-4 border-2 border-gold-400 group-hover:scale-110 transition-transform">✨</div>
+      <span class="mt-0.5 font-extrabold text-maroon-950">Style AI</span>
     </button>
 
     <!-- Wishlist / Saved -->
