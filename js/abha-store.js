@@ -28,6 +28,11 @@
     whatsapp: '+91 9214837104',
     instagram: '@abha_tailor_and_creation',
     pincode: '305901',
+    maps_url: 'https://maps.app.goo.gl/7LgvjMtZ2vYo3rvF8',
+    coordinates: {
+      latitude: 26.1010065,
+      longitude: 74.3155576
+    },
     is_active: true
   };
 
@@ -416,6 +421,9 @@
       productId,
       orderType = 'UNSTITCHED', // 'UNSTITCHED' or 'STITCHED'
       stitchingConfig = null,
+      designId = null,
+      tailoringSpecification = null,
+      avatarPreview = null,
       customer = {},
       shipping = {},
       deliveryType = 'PAN_INDIA_COURIER'
@@ -479,6 +487,9 @@
         stitching_id: 'stitch-' + Date.now(),
         stitching_status: orderType === 'STITCHED' ? 'PENDING' : null,
         stitching_config: orderType === 'STITCHED' ? stitchingConfig : null,
+        design_id: designId || (stitchingConfig && stitchingConfig.designId) || null,
+        tailoring_specification: tailoringSpecification || (stitchingConfig && stitchingConfig.tailoringSpecification) || null,
+        avatar_preview_ref: avatarPreview || (stitchingConfig && stitchingConfig.avatarPreview) || null,
         cancellation_allowed: true, // Forbidden after stitching begins (§36)
         alteration_window_days: orderType === 'STITCHED' ? 10 : 0, // §37
         created_at: new Date().toISOString()
@@ -803,10 +814,28 @@
           productId: body.product_id,
           orderType: body.order_type,
           stitchingConfig: body.stitching_config,
+          designId: body.design_id || body.stitching_config?.designId,
+          tailoringSpecification: body.tailoring_specification || body.stitching_config?.tailoringSpecification,
+          avatarPreview: body.avatar_preview || body.stitching_config?.avatarPreview,
           shipping: body.shipping,
           customer: body.shipping
         });
         return { success: true, data: { order_id: order.id, order_number: order.order_number, total_amount: order.total_amount } };
+      }
+
+      // ABHA Style AI Virtual Try-on & Saved Designs API
+      if (pathname === '/api/style-ai/save-design' && method === 'POST') {
+        if (typeof window !== 'undefined' && window.AbhaStyleAI) {
+          const saved = window.AbhaStyleAI.SavedDesignsService.saveDesign(body);
+          return { success: true, data: saved };
+        }
+        return { success: true, data: { id: 'ABHA-DESIGN-' + Date.now() } };
+      }
+      if (pathname === '/api/style-ai/designs' && method === 'GET') {
+        if (typeof window !== 'undefined' && window.AbhaStyleAI) {
+          return { success: true, data: window.AbhaStyleAI.SavedDesignsService.getDesigns() };
+        }
+        return { success: true, data: [] };
       }
       if (pathname === '/api/payments/verify' && method === 'POST') {
         const order = this.confirmPayment(body.order_id, body);
@@ -886,11 +915,18 @@
           product_title: o.product_title,
           product_sku: o.product_sku,
           stitching_status: o.stitching_status || 'PENDING',
-          neck_design: o.stitching_config?.neck || 'Classic Round',
-          sleeve_style: o.stitching_config?.sleeve || '3/4th Sleeves',
-          bottom_style: o.stitching_config?.bottom || 'Traditional Salwar',
-          kurta_design: o.stitching_config?.kurta || 'Straight Cut',
+          design_id: o.design_id || o.stitching_config?.designId || 'ABHA-DESIGN-LEGACY',
+          tailoring_specification: o.tailoring_specification || o.stitching_config?.tailoringSpecification || null,
+          avatar_preview: o.avatar_preview_ref || o.stitching_config?.avatarPreview || null,
+          neck_design: o.tailoring_specification?.stitchingDetails?.kurta?.neckDesign || o.stitching_config?.neck || 'Classic Round',
+          sleeve_style: o.tailoring_specification?.stitchingDetails?.kurta?.sleeves?.style || o.stitching_config?.sleeve || '3/4th Sleeves',
+          stand_patti: o.tailoring_specification?.stitchingDetails?.kurta?.standPatti || (o.stitching_config?.standPatti ? { required: true, styleId: o.stitching_config.standPattiStyle || 'SP-01' } : { required: false }),
+          pockets: o.tailoring_specification?.stitchingDetails?.kurta?.pockets || o.stitching_config?.pockets || 'No pocket',
+          bottom_style: o.tailoring_specification?.stitchingDetails?.bottom?.style || o.stitching_config?.bottom || 'Traditional Salwar',
+          kurta_design: o.tailoring_specification?.stitchingDetails?.kurta?.silhouette || o.stitching_config?.kurta || 'Straight Cut',
+          measurements: o.tailoring_specification?.anatomicalMeasurements || o.stitching_config?.measurements || null,
           customer_name: o.customer_name || o.shipping_name,
+          customer_phone: o.customer_phone || o.shipping_phone,
           additional_requirements: o.stitching_config?.notes || '',
           reference_images: (o.stitching_config?.reference_images || []).map((img, i) => ({
             vault_storage_key: `ref_${o.order_number}_${i}`,

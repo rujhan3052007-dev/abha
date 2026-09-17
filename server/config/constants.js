@@ -19,7 +19,12 @@ module.exports = {
       ADDRESS_LINE2: 'In front of D.A.V. College, Arya Samaj',
       CITY: 'Beawar',
       STATE: 'Rajasthan',
-      PINCODE: '305901'
+      PINCODE: '305901',
+      MAPS_URL: 'https://maps.app.goo.gl/7LgvjMtZ2vYo3rvF8',
+      COORDINATES: {
+        LATITUDE: 26.1010065,
+        LONGITUDE: 74.3155576
+      }
     }
   },
 
@@ -141,5 +146,12 @@ module.exports = {
       { id: 'high_low', label: 'High-Low Hem Kurta', description: 'Contemporary front-short back-long hem' },
       { id: 'custom', label: 'Custom Kurta Design', description: 'Custom pattern discussed via call/notes' }
     ]
+  },
+
+  STYLE_AI: {
+    ENABLED: true,
+    STAND_PATTI_PRESETS: ['SP-01', 'SP-02', 'SP-03', 'SP-04'],
+    SUPPORTED_GARMENTS: ['Salwar Suit', 'Kurta', 'Saree', 'Lehenga'],
+    DEFAULT_STITCHING_FEE: 650
   }
 };
