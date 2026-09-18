@@ -40,6 +40,8 @@
   const INITIAL_PRODUCTS = [
     {
       id: 'prod-01',
+      tryonImage: 'images/tryon/rani-pink-leheriya-tryon.jpg',
+      fabricBreakdown: {"tryonImage":"images/tryon/rani-pink-leheriya-tryon.jpg","upper":{"title":"Kurta / Kameez Fabric","length":"2.5 Meters","material":"100% Pure Breathable Cotton","pattern":"Rajasthani Leheriya Diagonal Waves","color":"Rani Pink & Crisp White","neckDetail":"Intricate Gota Patti & Thread Yoke Placket","recommendedSilhouette":"Straight Cut or A-Line Flare"},"bottom":{"title":"Bottom Fabric (Pants / Salwar)","length":"2.5 Meters","material":"100% Breathable Cotton","pattern":"Matching Fine Leheriya Coordinate","color":"Coordinated Rani Pink","recommendedCut":"Straight Cigarette Pants or Classic Salwar"},"dupatta":{"title":"Dupatta","length":"2.5 Meters","material":"Soft Pure Cotton Voile","pattern":"Matching Leheriya with Gota Kiran Lace Border","drape":"One-Shoulder Atelier Drape"}},
       title: 'Rani Pink Leheriya Pure Cotton Salwar Suit',
       name: 'Rani Pink Leheriya Pure Cotton Salwar Suit',
       sku: 'ABHA-SS-001',
@@ -73,6 +75,8 @@
     },
     {
       id: 'prod-02',
+      tryonImage: 'images/tryon/mustard-bandhani-tryon.jpg',
+      fabricBreakdown: {"tryonImage":"images/tryon/mustard-bandhani-tryon.jpg","upper":{"title":"Kurta / Kameez Fabric","length":"2.5 Meters","material":"Handloom Cotton-Silk","pattern":"Traditional Hand-Tied Bandhani Dots","color":"Haldi Mustard with Rani Pink Accents","neckDetail":"Handcrafted Pleated Placket with Hanging Pearls & Potli","recommendedSilhouette":"Straight Cut or Princess Line"},"bottom":{"title":"Bottom Fabric (Pants / Salwar)","length":"2.5 Meters","material":"Handloom Cotton-Silk Blend","pattern":"Solid Rich Mustard Weave","color":"Haldi Mustard","recommendedCut":"Tapered Trousers or Patiala Salwar"},"dupatta":{"title":"Dupatta","length":"2.5 Meters","material":"Authentic Hand-Tied Bandhej Silk","pattern":"Two-Tone Mustard & Rani Pink with Colorful Tassels","drape":"Full Royal Wrap or Single Shoulder Drape"}},
       title: 'Mustard Heritage Bandhani Salwar Suit Material',
       name: 'Mustard Heritage Bandhani Salwar Suit Material',
       sku: 'ABHA-SS-002',
@@ -106,6 +110,8 @@
     },
     {
       id: 'prod-03',
+      tryonImage: 'images/tryon/magenta-chanderi-tryon.jpg',
+      fabricBreakdown: {"tryonImage":"images/tryon/magenta-chanderi-tryon.jpg","upper":{"title":"Kurta / Kameez Fabric","length":"2.5 Meters","material":"Pure Chanderi Silk","pattern":"Tree-of-Life Fine Silver Zari & Sequin Threadwork","color":"Deep Magenta Wine","neckDetail":"Royal Embroidered Yoke & Stand Patti Collar Frame","recommendedSilhouette":"Straight Cut or Subtle A-Line"},"bottom":{"title":"Bottom Fabric (Pants / Salwar)","length":"2.5 Meters","material":"Pure Cotton-Silk Coordinate","pattern":"Rich Deep Solid Wine with Subtle Sheen","color":"Matching Magenta Wine","recommendedCut":"Churidar or Narrow Cigarette Pants"},"dupatta":{"title":"Dupatta","length":"2.5 Meters","material":"Pure Chanderi Silk Weave","pattern":"Zari Weave Border with Micro Motif Bootis","drape":"Graceful Side Fall or Pleated Fold"}},
       title: 'Magenta Festive Chanderi Silk Salwar Suit Material',
       name: 'Magenta Festive Chanderi Silk Salwar Suit Material',
       sku: 'ABHA-SS-003',
@@ -139,6 +145,8 @@
     },
     {
       id: 'prod-04',
+      tryonImage: 'images/tryon/cream-lime-tryon.jpg',
+      fabricBreakdown: {"tryonImage":"images/tryon/cream-lime-tryon.jpg","upper":{"title":"Kurta / Kameez Fabric","length":"2.5 Meters","material":"Pure Slub Handloom Cotton","pattern":"Artisanal Mirror-Work Lace Placket with Potli Accents","color":"Natural Ivory Cream","neckDetail":"Gleaming Mirror-Work Placket & Collar Inlay","recommendedSilhouette":"Straight Cut with High Side Slits"},"bottom":{"title":"Bottom Fabric (Pants / Salwar)","length":"2.5 Meters","material":"Slub Handloom Cotton","pattern":"Plain Natural Cream Weave","color":"Ivory Cream","recommendedCut":"Straight Cropped Pants with Mirror Hem"},"dupatta":{"title":"Dupatta","length":"2.5 Meters","material":"Lightweight Floral Printed Voile","pattern":"Vibrant Lime Green with Floral Motifs & Mirror Lace","drape":"Fluid Diagonal Drape"}},
       title: 'Cream Handloom Cotton Mirror-Work Salwar Suit',
       name: 'Cream Handloom Cotton Mirror-Work Salwar Suit',
       sku: 'ABHA-SS-004',
@@ -172,6 +180,8 @@
     },
     {
       id: 'prod-05',
+      tryonImage: 'images/tryon/teal-mandala-tryon.jpg',
+      fabricBreakdown: {"tryonImage":"images/tryon/teal-mandala-tryon.jpg","upper":{"title":"Kurta / Kameez Fabric","length":"2.5 Meters","material":"100% Fine Combed Cotton","pattern":"Rajasthani Mandala Motif Traditional Block Print","color":"Peacock Teal with Warm Ochre Accents","neckDetail":"Mandala Geometric Yoke with Contrast Piping","recommendedSilhouette":"Straight Longline Kurta"},"bottom":{"title":"Bottom Fabric (Pants / Salwar)","length":"2.5 Meters","material":"Fine Combed Cotton","pattern":"Solid Deep Peacock Teal","color":"Peacock Teal","recommendedCut":"Straight Cigarette Trousers"},"dupatta":{"title":"Dupatta","length":"2.5 Meters","material":"Pure Breathable Cotton Malmal","pattern":"All-Over Mandala Artwork Border & Pallu","drape":"Classic Dual-Shoulder or Loose Arm Wrap"}},
       title: 'Teal Mandala Motif Pure Cotton Salwar Suit',
       name: 'Teal Mandala Motif Pure Cotton Salwar Suit',
       sku: 'ABHA-SS-005',

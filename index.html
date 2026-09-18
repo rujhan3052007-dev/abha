@@ -37,8 +37,8 @@
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="js/abha-store.js?v=20260918_2"></script>
-  <script src="js/abha-style-ai.js?v=20260918_2"></script>
+  <script src="js/abha-store.js?v=20260918_3"></script>
+  <script src="js/abha-style-ai.js?v=20260918_3"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -2756,21 +2756,39 @@
         <!-- ================= STAGE 3: INTERACTIVE 360° VIRTUAL FITTING ROOM ================= -->
         <div id="styleAiStage3" class="h-full flex flex-col lg:flex-row overflow-hidden hidden">
           
-          <!-- Left / Center: Interactive 360 Canvas Viewport -->
-          <div class="w-full lg:w-7/12 h-[340px] sm:h-[420px] lg:h-full bg-gradient-to-b from-ivory-100 to-ivory-200 relative flex flex-col items-center justify-center select-none border-b lg:border-b-0 lg:border-r border-ivory-300 overflow-hidden">
+          <!-- Left / Center: Interactive Try-On Canvas Viewport -->
+          <div class="w-full lg:w-7/12 h-[380px] sm:h-[460px] lg:h-full bg-gradient-to-b from-ivory-100 to-ivory-200 relative flex flex-col items-center justify-center select-none border-b lg:border-b-0 lg:border-r border-ivory-300 overflow-hidden">
             
-            <!-- Interactive Canvas -->
-            <canvas id="styleAiCanvas" width="600" height="720" class="w-full h-full max-h-[640px] object-contain cursor-grab active:cursor-grabbing"></canvas>
+            <!-- Top Mode Switcher Bar -->
+            <div class="absolute top-3 left-3 right-3 flex items-center justify-between z-20 pointer-events-auto">
+              <div class="inline-flex p-1 bg-charcoal-950/85 backdrop-blur-md rounded-xl border border-gold-400/40 shadow-md gap-1">
+                <button type="button" id="btnModeRealistic" onclick="setStyleAiMode('realistic')" class="px-3 py-1.5 text-[11px] font-bold rounded-lg bg-gold-400 text-maroon-950 shadow-xs flex items-center gap-1 transition">
+                  <span>✨</span> Realistic Try-On
+                </button>
+                <button type="button" id="btnMode360" onclick="setStyleAiMode('360_seam')" class="px-3 py-1.5 text-[11px] font-bold rounded-lg text-ivory-100 hover:text-white hover:bg-white/10 flex items-center gap-1 transition">
+                  <span>🔄</span> 360° Seam View
+                </button>
+              </div>
 
-            <!-- 360 Compass & Drag Instruction Overlay -->
-            <div class="absolute top-3 left-3 bg-charcoal-950/80 backdrop-blur-xs text-ivory-50 text-[10px] sm:text-[11px] font-semibold px-2.5 py-1 rounded-full border border-gold-400/30 flex items-center gap-1.5 shadow-sm">
+              <!-- Toggle HD Studio Model vs Customer Photo -->
+              <button type="button" id="btnToggleHdModel" onclick="toggleStyleAiHdModel()" class="px-3 py-1.5 bg-gradient-to-r from-maroon-950 to-charcoal-950 text-gold-300 hover:text-white text-[10px] sm:text-[11px] font-bold rounded-xl border border-gold-400/50 shadow-md flex items-center gap-1.5 transition hover:scale-105">
+                <span id="hdModelIcon">📸</span>
+                <span id="hdModelLabel">View HD Studio Model</span>
+              </button>
+            </div>
+
+            <!-- Interactive Canvas -->
+            <canvas id="styleAiCanvas" width="600" height="720" class="w-full h-full max-h-[640px] object-contain"></canvas>
+
+            <!-- 360 Compass & Drag Instruction Overlay (Visible in 360_seam mode) -->
+            <div id="seamCompassOverlay" class="hidden absolute top-16 left-3 bg-charcoal-950/80 backdrop-blur-xs text-ivory-50 text-[10px] sm:text-[11px] font-semibold px-2.5 py-1 rounded-full border border-gold-400/30 flex items-center gap-1.5 shadow-sm">
               <span class="animate-spin text-gold-400">🔄</span>
               <span>Drag to Rotate 360°</span>
               <span class="text-gold-300 font-mono" id="angleDisplay">0°</span>
             </div>
 
-            <!-- Angle Selector Pills -->
-            <div class="absolute bottom-3 left-3 right-3 sm:left-auto sm:right-3 flex items-center justify-center gap-1 bg-charcoal-950/85 backdrop-blur-xs p-1 rounded-lg border border-gold-400/30 shadow-md">
+            <!-- Angle Selector Pills (Visible in 360_seam mode) -->
+            <div id="seamAnglePills" class="hidden absolute bottom-3 left-3 right-3 sm:left-auto sm:right-3 flex items-center justify-center gap-1 bg-charcoal-950/85 backdrop-blur-xs p-1 rounded-lg border border-gold-400/30 shadow-md">
               <button type="button" onclick="setFittingRoomAngle(0)" class="px-2.5 py-1 text-[10px] font-bold rounded text-ivory-50 hover:bg-maroon-800 transition" id="angBtn0">Front</button>
               <button type="button" onclick="setFittingRoomAngle(45)" class="px-2.5 py-1 text-[10px] font-bold rounded text-ivory-50 hover:bg-maroon-800 transition" id="angBtn45">45°</button>
               <button type="button" onclick="setFittingRoomAngle(90)" class="px-2.5 py-1 text-[10px] font-bold rounded text-ivory-50 hover:bg-maroon-800 transition" id="angBtn90">Side</button>
@@ -2782,8 +2800,8 @@
             </div>
 
             <!-- Subtle Legal Disclaimer Pill -->
-            <div class="absolute bottom-12 left-3 hidden sm:block bg-ivory-50/90 backdrop-blur-xs text-slateText-600 text-[9px] px-2 py-0.5 rounded border border-ivory-300">
-              Virtual preview — actual garment appearance may vary slightly.
+            <div class="absolute bottom-3 left-3 hidden sm:block bg-ivory-50/90 backdrop-blur-xs text-slateText-600 text-[9px] px-2 py-0.5 rounded border border-ivory-300">
+              Virtual preview — authentic handloom textures &amp; bespoke tailoring proportions.
             </div>
           </div>
 
@@ -2814,6 +2832,27 @@
 
             <!-- Customization Controls Accordion / Form -->
             <div class="p-4 sm:p-5 space-y-4 flex-1">
+
+              <!-- AI Fabric Decomposition (Upper, Bottom, Dupatta Identified) -->
+              <div class="p-3.5 bg-gradient-to-br from-gold-50/80 to-ivory-100 border border-gold-400/40 rounded-xl space-y-2 shadow-2xs">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-5 h-5 rounded-full bg-maroon-900 text-gold-300 flex items-center justify-center text-xs font-bold">🧵</span>
+                    <div>
+                      <h4 class="text-xs font-bold text-maroon-950">AI Fabric Decomposition</h4>
+                      <p class="text-[9px] text-slateText-600">3-Piece Unstitched Material Identified</p>
+                    </div>
+                  </div>
+                  <span class="text-[9px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <span>✓</span> AI Verified
+                  </span>
+                </div>
+
+                <!-- 3 Segment Cards Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1" id="fabricDecompositionContainer">
+                  <!-- Rendered dynamically by populateFabricDecomposition() -->
+                </div>
+              </div>
               
               <!-- AI Stylist Recommendation Chip -->
               <div id="aiSuggestionBox" class="p-3 bg-gold-50 border border-gold-400/40 rounded-xl space-y-1.5">
@@ -3638,6 +3677,85 @@
       next();
     }
 
+    function setStyleAiMode(mode) {
+      if (!styleAiEngine) return;
+      styleAiEngine.setViewMode(mode);
+
+      const btnR = document.getElementById('btnModeRealistic');
+      const btnS = document.getElementById('btnMode360');
+      const compass = document.getElementById('seamCompassOverlay');
+      const angPills = document.getElementById('seamAnglePills');
+
+      if (mode === 'realistic') {
+        if (btnR) btnR.className = 'px-3 py-1.5 text-[11px] font-bold rounded-lg bg-gold-400 text-maroon-950 shadow-xs flex items-center gap-1 transition';
+        if (btnS) btnS.className = 'px-3 py-1.5 text-[11px] font-bold rounded-lg text-ivory-100 hover:text-white hover:bg-white/10 flex items-center gap-1 transition';
+        if (compass) compass.classList.add('hidden');
+        if (angPills) angPills.classList.add('hidden');
+      } else {
+        if (btnR) btnR.className = 'px-3 py-1.5 text-[11px] font-bold rounded-lg text-ivory-100 hover:text-white hover:bg-white/10 flex items-center gap-1 transition';
+        if (btnS) btnS.className = 'px-3 py-1.5 text-[11px] font-bold rounded-lg bg-gold-400 text-maroon-950 shadow-xs flex items-center gap-1 transition';
+        if (compass) compass.classList.remove('hidden');
+        if (angPills) angPills.classList.remove('hidden');
+      }
+    }
+
+    function toggleStyleAiHdModel() {
+      if (!styleAiEngine) return;
+      const isHd = styleAiEngine.toggleHdModel();
+      const lbl = document.getElementById('hdModelLabel');
+      const ico = document.getElementById('hdModelIcon');
+      if (isHd) {
+        if (lbl) lbl.textContent = styleAiState.photoDataUrl ? 'Show My Photo Fit' : 'HD Studio Model Active';
+        if (ico) ico.textContent = '👤';
+      } else {
+        if (lbl) lbl.textContent = 'View HD Studio Model';
+        if (ico) ico.textContent = '📸';
+      }
+    }
+
+    function populateFabricDecomposition(product) {
+      const container = document.getElementById('fabricDecompositionContainer');
+      if (!container || typeof AbhaStyleAI === 'undefined' || !AbhaStyleAI.FabricDecompositionService) return;
+
+      const decomp = AbhaStyleAI.FabricDecompositionService.getBreakdown(product);
+      if (!decomp) return;
+
+      container.innerHTML = `
+        <!-- Upper Fabric -->
+        <div class="p-2 bg-white rounded-lg border border-gold-400/30 shadow-2xs space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-[9px] font-bold uppercase tracking-wider text-maroon-800">Upper (Kurta)</span>
+            <span class="text-[9px] font-extrabold text-charcoal-900 bg-gold-100 px-1.5 py-0.5 rounded">${decomp.upper.length}</span>
+          </div>
+          <p class="text-[10px] font-bold text-gray-900 line-clamp-1">${decomp.upper.title}</p>
+          <p class="text-[9px] text-gray-600 line-clamp-2">${decomp.upper.pattern} • ${decomp.upper.neckDetail}</p>
+          <div class="pt-0.5 text-[8px] font-semibold text-emerald-700">✓ ${decomp.upper.recommendedSilhouette}</div>
+        </div>
+
+        <!-- Bottom Fabric -->
+        <div class="p-2 bg-white rounded-lg border border-gold-400/30 shadow-2xs space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-[9px] font-bold uppercase tracking-wider text-maroon-800">Bottom (Pants)</span>
+            <span class="text-[9px] font-extrabold text-charcoal-900 bg-gold-100 px-1.5 py-0.5 rounded">${decomp.bottom.length}</span>
+          </div>
+          <p class="text-[10px] font-bold text-gray-900 line-clamp-1">${decomp.bottom.title}</p>
+          <p class="text-[9px] text-gray-600 line-clamp-2">${decomp.bottom.material} • ${decomp.bottom.color}</p>
+          <div class="pt-0.5 text-[8px] font-semibold text-emerald-700">✓ ${decomp.bottom.recommendedCut}</div>
+        </div>
+
+        <!-- Dupatta -->
+        <div class="p-2 bg-white rounded-lg border border-gold-400/30 shadow-2xs space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-[9px] font-bold uppercase tracking-wider text-maroon-800">Dupatta</span>
+            <span class="text-[9px] font-extrabold text-charcoal-900 bg-gold-100 px-1.5 py-0.5 rounded">${decomp.dupatta.length}</span>
+          </div>
+          <p class="text-[10px] font-bold text-gray-900 line-clamp-1">${decomp.dupatta.title}</p>
+          <p class="text-[9px] text-gray-600 line-clamp-2">${decomp.dupatta.material} • ${decomp.dupatta.pattern}</p>
+          <div class="pt-0.5 text-[8px] font-semibold text-emerald-700">✓ ${decomp.dupatta.drape}</div>
+        </div>
+      `;
+    }
+
     function initFittingRoomEngine() {
       const canvas = document.getElementById('styleAiCanvas');
       if (!canvas) return;
@@ -3662,13 +3780,25 @@
       document.getElementById('fitRoomProdCategory').textContent = prod.category || 'Authentic Handloom';
       document.getElementById('fitRoomProdPrice').textContent = `₹${(prod.price || prod.base_price).toLocaleString('en-IN')} + ₹${prod.stitchingFee || 650} Stitching`;
 
-      // Load data into 360 engine
+      // Populate AI Fabric Decomposition Cards
+      populateFabricDecomposition(prod);
+
+      // Load data into engine
       styleAiEngine.loadData({
         product: prod,
         garmentConfig: cfg,
         measurements: m,
         photoUrl: photo
       });
+
+      // Default to realistic mode
+      setStyleAiMode('realistic');
+
+      // Update HD Model toggle button label
+      const hdLbl = document.getElementById('hdModelLabel');
+      if (hdLbl) {
+        hdLbl.textContent = photo ? 'View HD Studio Model' : 'HD Studio Model Active';
+      }
 
       // Update UI button active states
       syncCustomControlsUI();
@@ -3999,6 +4129,8 @@
     let PRODUCTS = [
       {
         id: 'prod-01',
+        tryonImage: 'images/tryon/rani-pink-leheriya-tryon.jpg',
+        fabricBreakdown: {"tryonImage":"images/tryon/rani-pink-leheriya-tryon.jpg","upper":{"title":"Kurta / Kameez Fabric","length":"2.5 Meters","material":"100% Pure Breathable Cotton","pattern":"Rajasthani Leheriya Diagonal Waves","color":"Rani Pink & Crisp White","neckDetail":"Intricate Gota Patti & Thread Yoke Placket","recommendedSilhouette":"Straight Cut or A-Line Flare"},"bottom":{"title":"Bottom Fabric (Pants / Salwar)","length":"2.5 Meters","material":"100% Breathable Cotton","pattern":"Matching Fine Leheriya Coordinate","color":"Coordinated Rani Pink","recommendedCut":"Straight Cigarette Pants or Classic Salwar"},"dupatta":{"title":"Dupatta","length":"2.5 Meters","material":"Soft Pure Cotton Voile","pattern":"Matching Leheriya with Gota Kiran Lace Border","drape":"One-Shoulder Atelier Drape"}},
         sku: 'ABHA-SLW-001',
         name: 'Rani Pink Leheriya Pure Cotton Salwar Suit',
         category: 'Pure Cotton Salwar Suits',
@@ -4019,6 +4151,8 @@
       },
       {
         id: 'prod-02',
+        tryonImage: 'images/tryon/mustard-bandhani-tryon.jpg',
+        fabricBreakdown: {"tryonImage":"images/tryon/mustard-bandhani-tryon.jpg","upper":{"title":"Kurta / Kameez Fabric","length":"2.5 Meters","material":"Handloom Cotton-Silk","pattern":"Traditional Hand-Tied Bandhani Dots","color":"Haldi Mustard with Rani Pink Accents","neckDetail":"Handcrafted Pleated Placket with Hanging Pearls & Potli","recommendedSilhouette":"Straight Cut or Princess Line"},"bottom":{"title":"Bottom Fabric (Pants / Salwar)","length":"2.5 Meters","material":"Handloom Cotton-Silk Blend","pattern":"Solid Rich Mustard Weave","color":"Haldi Mustard","recommendedCut":"Tapered Trousers or Patiala Salwar"},"dupatta":{"title":"Dupatta","length":"2.5 Meters","material":"Authentic Hand-Tied Bandhej Silk","pattern":"Two-Tone Mustard & Rani Pink with Colorful Tassels","drape":"Full Royal Wrap or Single Shoulder Drape"}},
         sku: 'ABHA-SLW-002',
         name: 'Mustard Heritage Bandhani Salwar Suit Material',
         category: 'Bandhani & Leheriya Suits',
@@ -4039,6 +4173,8 @@
       },
       {
         id: 'prod-03',
+        tryonImage: 'images/tryon/magenta-chanderi-tryon.jpg',
+        fabricBreakdown: {"tryonImage":"images/tryon/magenta-chanderi-tryon.jpg","upper":{"title":"Kurta / Kameez Fabric","length":"2.5 Meters","material":"Pure Chanderi Silk","pattern":"Tree-of-Life Fine Silver Zari & Sequin Threadwork","color":"Deep Magenta Wine","neckDetail":"Royal Embroidered Yoke & Stand Patti Collar Frame","recommendedSilhouette":"Straight Cut or Subtle A-Line"},"bottom":{"title":"Bottom Fabric (Pants / Salwar)","length":"2.5 Meters","material":"Pure Cotton-Silk Coordinate","pattern":"Rich Deep Solid Wine with Subtle Sheen","color":"Matching Magenta Wine","recommendedCut":"Churidar or Narrow Cigarette Pants"},"dupatta":{"title":"Dupatta","length":"2.5 Meters","material":"Pure Chanderi Silk Weave","pattern":"Zari Weave Border with Micro Motif Bootis","drape":"Graceful Side Fall or Pleated Fold"}},
         sku: 'ABHA-SLW-003',
         name: 'Magenta Festive Chanderi Silk Salwar Suit Material',
         category: 'Chanderi Silk Salwar Suits',
@@ -4059,6 +4195,8 @@
       },
       {
         id: 'prod-04',
+        tryonImage: 'images/tryon/cream-lime-tryon.jpg',
+        fabricBreakdown: {"tryonImage":"images/tryon/cream-lime-tryon.jpg","upper":{"title":"Kurta / Kameez Fabric","length":"2.5 Meters","material":"Pure Slub Handloom Cotton","pattern":"Artisanal Mirror-Work Lace Placket with Potli Accents","color":"Natural Ivory Cream","neckDetail":"Gleaming Mirror-Work Placket & Collar Inlay","recommendedSilhouette":"Straight Cut with High Side Slits"},"bottom":{"title":"Bottom Fabric (Pants / Salwar)","length":"2.5 Meters","material":"Slub Handloom Cotton","pattern":"Plain Natural Cream Weave","color":"Ivory Cream","recommendedCut":"Straight Cropped Pants with Mirror Hem"},"dupatta":{"title":"Dupatta","length":"2.5 Meters","material":"Lightweight Floral Printed Voile","pattern":"Vibrant Lime Green with Floral Motifs & Mirror Lace","drape":"Fluid Diagonal Drape"}},
         sku: 'ABHA-SLW-004',
         name: 'Cream Handloom Cotton Mirror-Work Salwar Suit',
         category: 'Mirror-Work Cotton Suits',
@@ -4079,6 +4217,8 @@
       },
       {
         id: 'prod-05',
+        tryonImage: 'images/tryon/teal-mandala-tryon.jpg',
+        fabricBreakdown: {"tryonImage":"images/tryon/teal-mandala-tryon.jpg","upper":{"title":"Kurta / Kameez Fabric","length":"2.5 Meters","material":"100% Fine Combed Cotton","pattern":"Rajasthani Mandala Motif Traditional Block Print","color":"Peacock Teal with Warm Ochre Accents","neckDetail":"Mandala Geometric Yoke with Contrast Piping","recommendedSilhouette":"Straight Longline Kurta"},"bottom":{"title":"Bottom Fabric (Pants / Salwar)","length":"2.5 Meters","material":"Fine Combed Cotton","pattern":"Solid Deep Peacock Teal","color":"Peacock Teal","recommendedCut":"Straight Cigarette Trousers"},"dupatta":{"title":"Dupatta","length":"2.5 Meters","material":"Pure Breathable Cotton Malmal","pattern":"All-Over Mandala Artwork Border & Pallu","drape":"Classic Dual-Shoulder or Loose Arm Wrap"}},
         sku: 'ABHA-SLW-005',
         name: 'Teal Mandala Motif Pure Cotton Salwar Suit',
         category: 'Designer Printed Salwar Suits',
