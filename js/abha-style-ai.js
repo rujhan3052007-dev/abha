@@ -515,14 +515,12 @@ ${spec.stitchingDetails.atelierNotes}
   };
 
 
-  // 6. Visual Fitting Engine — Photorealistic Customer Try-On & 360° Atelier Seam View
+  // 6. Visual Fitting Engine — 3D Realistic Measurement Avatar & 360° Try-On Engine
   class VisualFittingEngine {
     constructor(canvasElement, options = {}) {
       this.canvas = canvasElement;
       this.ctx = canvasElement.getContext('2d');
       this.options = options;
-      this.viewMode = 'realistic'; // 'realistic' (primary) or '360_seam'
-      this.useHdModel = false;
       this.currentAngle = 0; // 0 to 360 degrees
       this.zoomLevel = 1.0;
       this.panOffset = { x: 0, y: 0 };
@@ -533,11 +531,38 @@ ${spec.stitchingDetails.atelierNotes}
       this.garmentConfig = { ...DEFAULT_GARMENT_CONFIG };
       this.measurements = { ...DEFAULT_MEASUREMENTS };
       this.customerPhoto = null;
-      this.tryonImageObj = null;
-      this.fabricTexturePattern = null;
-      this.fabricImageObj = null;
+      this.showMeasurementLines = true;
+      this.viewMode = '3d_avatar'; // '3d_avatar' or 'customer_photo'
+
+      // Pre-load 3D multi-angle avatar assets
+      this.avatarAngles = {
+        front: null,
+        angle45: null,
+        side: null,
+        back: null
+      };
+      this.loadAngleAssets();
+
       this.history = [];
       this.initEventListeners();
+    }
+
+    loadAngleAssets() {
+      const angles = [
+        { key: 'front', url: 'images/tryon/avatar_front.jpg' },
+        { key: 'angle45', url: 'images/tryon/avatar_45.jpg' },
+        { key: 'side', url: 'images/tryon/avatar_side.jpg' },
+        { key: 'back', url: 'images/tryon/avatar_back.jpg' }
+      ];
+
+      angles.forEach(({ key, url }) => {
+        const img = new Image();
+        img.onload = () => {
+          this.avatarAngles[key] = img;
+          this.render();
+        };
+        img.src = url;
+      });
     }
 
     initEventListeners() {
@@ -545,7 +570,6 @@ ${spec.stitchingDetails.atelierNotes}
       const c = this.canvas;
 
       c.addEventListener('mousedown', (e) => {
-        if (this.viewMode !== '360_seam') return;
         this.isDragging = true;
         this.dragStartX = e.clientX;
         this.dragStartAngle = this.currentAngle;
@@ -553,7 +577,7 @@ ${spec.stitchingDetails.atelierNotes}
       });
 
       window.addEventListener('mousemove', (e) => {
-        if (!this.isDragging || this.viewMode !== '360_seam') return;
+        if (!this.isDragging) return;
         const deltaX = e.clientX - this.dragStartX;
         let newAngle = (this.dragStartAngle + deltaX * 0.65) % 360;
         if (newAngle < 0) newAngle += 360;
@@ -563,12 +587,11 @@ ${spec.stitchingDetails.atelierNotes}
       window.addEventListener('mouseup', () => {
         if (this.isDragging) {
           this.isDragging = false;
-          c.style.cursor = this.viewMode === '360_seam' ? 'grab' : 'default';
+          c.style.cursor = 'grab';
         }
       });
 
       c.addEventListener('touchstart', (e) => {
-        if (this.viewMode !== '360_seam') return;
         if (e.touches.length === 1) {
           this.isDragging = true;
           this.dragStartX = e.touches[0].clientX;
@@ -577,7 +600,7 @@ ${spec.stitchingDetails.atelierNotes}
       }, { passive: true });
 
       c.addEventListener('touchmove', (e) => {
-        if (!this.isDragging || e.touches.length !== 1 || this.viewMode !== '360_seam') return;
+        if (!this.isDragging || e.touches.length !== 1) return;
         const deltaX = e.touches[0].clientX - this.dragStartX;
         let newAngle = (this.dragStartAngle + deltaX * 0.75) % 360;
         if (newAngle < 0) newAngle += 360;
@@ -587,21 +610,6 @@ ${spec.stitchingDetails.atelierNotes}
       c.addEventListener('touchend', () => {
         this.isDragging = false;
       });
-    }
-
-    setViewMode(mode) {
-      this.viewMode = mode;
-      if (this.canvas) {
-        this.canvas.style.cursor = mode === '360_seam' ? 'grab' : 'default';
-      }
-      this.render();
-      if (this.options.onModeChange) this.options.onModeChange(mode);
-    }
-
-    toggleHdModel() {
-      this.useHdModel = !this.useHdModel;
-      this.render();
-      return this.useHdModel;
     }
 
     setAngle(angle) {
@@ -624,53 +632,71 @@ ${spec.stitchingDetails.atelierNotes}
       this.render();
     }
 
+    toggleMeasurementLines() {
+      this.showMeasurementLines = !this.showMeasurementLines;
+      this.render();
+      return this.showMeasurementLines;
+    }
+
+    setBodyPreset(presetName) {
+      if (presetName === 'slim') {
+        this.measurements.bust = 32;
+        this.measurements.waist = 26;
+        this.measurements.hip = 34;
+      } else if (presetName === 'plus' || presetName === 'curvy') {
+        this.measurements.bust = 42;
+        this.measurements.waist = 36;
+        this.measurements.hip = 46;
+      } else {
+        // regular medium
+        this.measurements.bust = 36;
+        this.measurements.waist = 30;
+        this.measurements.hip = 38;
+      }
+      this.render();
+      return { ...this.measurements };
+    }
+
+    setViewMode(mode) {
+      this.viewMode = mode;
+      this.render();
+    }
+
+    toggleHdModel() {
+      if (this.customerPhoto) {
+        this.viewMode = this.viewMode === 'customer_photo' ? '3d_avatar' : 'customer_photo';
+      } else {
+        this.viewMode = this.viewMode === 'realistic' ? '3d_avatar' : 'realistic';
+      }
+      this.render();
+      return this.viewMode === 'realistic' || this.viewMode === 'customer_photo';
+    }
+
     loadData({ product, garmentConfig, measurements, photoUrl }) {
       this.product = product;
       if (garmentConfig) this.garmentConfig = { ...garmentConfig };
       if (measurements) this.measurements = { ...measurements };
       this.pushHistory();
 
-      // Load Try-On HD Image
-      if (product) {
-        const tryonUrl = product.tryonImage || (product.fabricBreakdown && product.fabricBreakdown.tryonImage);
-        if (tryonUrl) {
-          const tImg = new Image();
-          if (tryonUrl.startsWith('http')) tImg.crossOrigin = 'anonymous';
-          tImg.onload = () => {
-            this.tryonImageObj = tImg;
-            this.render();
-          };
-          tImg.src = tryonUrl;
-        }
-
-        const fabricUrl = product.image || product.primary_image;
-        if (fabricUrl) {
-          const img = new Image();
-          if (fabricUrl.startsWith('http')) img.crossOrigin = 'anonymous';
-          img.onload = () => {
-            this.fabricImageObj = img;
-            try {
-              this.fabricTexturePattern = this.ctx.createPattern(img, 'repeat');
-            } catch (e) {
-              console.warn('Pattern creation note:', e);
-            }
-            this.render();
-          };
-          img.src = fabricUrl;
-        }
+      // Preload product try-on image if available
+      if (product && (product.tryonImage || product.image)) {
+        const tImg = new Image();
+        tImg.onload = () => {
+          this.productTryonImage = tImg;
+          if (this.viewMode === 'realistic') this.render();
+        };
+        tImg.src = product.tryonImage || product.image;
       }
 
       if (photoUrl) {
         const pImg = new Image();
         pImg.onload = () => {
           this.customerPhoto = pImg;
-          this.useHdModel = false;
           this.render();
         };
         pImg.src = photoUrl;
       } else {
         this.customerPhoto = null;
-        this.useHdModel = true;
         this.render();
       }
     }
@@ -696,6 +722,11 @@ ${spec.stitchingDetails.atelierNotes}
       this.render();
     }
 
+    updateMeasurements(newMeasurements) {
+      Object.assign(this.measurements, newMeasurements);
+      this.render();
+    }
+
     resetConfig() {
       this.pushHistory();
       this.garmentConfig = { ...DEFAULT_GARMENT_CONFIG };
@@ -711,498 +742,277 @@ ${spec.stitchingDetails.atelierNotes}
       ctx.save();
       ctx.clearRect(0, 0, w, h);
 
-      if (this.viewMode === '360_seam') {
-        this.render360SeamView(ctx, w, h);
-      } else {
-        this.renderRealisticTryOn(ctx, w, h);
-      }
-
-      ctx.restore();
-    }
-
-    // =========================================================================
-    // REALISTIC TRY-ON ENGINE (Customer Photo or HD Studio Model)
-    // =========================================================================
-    renderRealisticTryOn(ctx, w, h) {
-      // 1. Luxury Boutique Background Backdrop
-      const grad = ctx.createLinearGradient(0, 0, 0, h);
-      grad.addColorStop(0, '#FAF8F5');
-      grad.addColorStop(0.6, '#F3ECE4');
-      grad.addColorStop(1, '#E8DFD3');
-      ctx.fillStyle = grad;
+      // Luxury Atelier Studio Background
+      const bgGrad = ctx.createLinearGradient(0, 0, 0, h);
+      bgGrad.addColorStop(0, '#FAF8F5');
+      bgGrad.addColorStop(0.55, '#F3ECE4');
+      bgGrad.addColorStop(1, '#E6DCD1');
+      ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, w, h);
 
-      // Floor Shadow
+      // Floor Pedestal & Soft Radial Shadow
       ctx.beginPath();
-      ctx.ellipse(w * 0.5, h * 0.94, w * 0.35, 16, 0, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(26, 18, 14, 0.14)';
+      ctx.ellipse(w * 0.5, h * 0.94, w * 0.36, 18, 0, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(26, 18, 14, 0.16)';
       ctx.fill();
 
-      // Case A: User chose to view HD Studio Model OR has not uploaded customer photo yet
-      if (this.useHdModel || !this.customerPhoto) {
-        if (this.tryonImageObj && this.tryonImageObj.complete && this.tryonImageObj.naturalWidth > 0) {
-          const img = this.tryonImageObj;
-          const imgAspect = img.naturalWidth / img.naturalHeight;
-          const canvasAspect = w / h;
-          let drawW, drawH, drawX, drawY;
+      // If customer chose to view their uploaded photo directly
+      if (this.viewMode === 'customer_photo' && this.customerPhoto && this.customerPhoto.complete) {
+        this.renderCustomerPhotoView(ctx, w, h);
+        ctx.restore();
+        return;
+      }
 
-          if (imgAspect > canvasAspect) {
-            drawW = w * 0.96;
-            drawH = drawW / imgAspect;
-          } else {
-            drawH = h * 0.96;
-            drawW = drawH * imgAspect;
-          }
-          drawX = (w - drawW) / 2;
-          drawY = (h - drawH) / 2;
-
-          ctx.save();
-          ctx.translate(w * 0.5 + this.panOffset.x, h * 0.5 + this.panOffset.y);
-          ctx.scale(this.zoomLevel, this.zoomLevel);
-          ctx.translate(-w * 0.5, -h * 0.5);
-
-          // Render high-fashion try-on image
-          ctx.drawImage(img, drawX, drawY, drawW, drawH);
-
-          // Reactive Tailoring Annotations overlay
-          this.renderReactiveOverlays(ctx, drawX, drawY, drawW, drawH);
-
+      // If customer chose photorealistic catalog try-on view
+      if (this.viewMode === 'realistic') {
+        if (this.productTryonImage && this.productTryonImage.complete && this.productTryonImage.naturalWidth > 0) {
+          this.renderRealisticCatalogView(ctx, w, h);
           ctx.restore();
           return;
         }
       }
 
-      // Case B: Customer uploaded photo — Real Body Adaptive Try-On
-      if (this.customerPhoto && this.customerPhoto.complete && this.customerPhoto.naturalWidth > 0) {
-        const photo = this.customerPhoto;
-        const imgAspect = photo.naturalWidth / photo.naturalHeight;
-        let drawW, drawH, drawX, drawY;
+      // Main 3D Realistic Measurement Avatar View
+      this.render3DAvatar(ctx, w, h);
 
-        if (imgAspect > w / h) {
-          drawW = w;
-          drawH = drawW / imgAspect;
-        } else {
-          drawH = h;
-          drawW = drawH * imgAspect;
-        }
-        drawX = (w - drawW) / 2;
-        drawY = (h - drawH) / 2;
-
-        ctx.save();
-        ctx.translate(w * 0.5 + this.panOffset.x, h * 0.5 + this.panOffset.y);
-        ctx.scale(this.zoomLevel, this.zoomLevel);
-        ctx.translate(-w * 0.5, -h * 0.5);
-
-        // 1. Draw customer's ACTUAL photo with 100% fidelity (face, hair, smile, background preserved)
-        ctx.drawImage(photo, drawX, drawY, drawW, drawH);
-
-        // 2. Synthesize Tailored Garment onto Customer's Actual Body
-        this.renderGarmentOnCustomerPhoto(ctx, drawX, drawY, drawW, drawH);
-
-        ctx.restore();
-      }
-    }
-
-    renderGarmentOnCustomerPhoto(ctx, x, y, w, h) {
-      const config = this.garmentConfig;
-      const m = this.measurements;
-      const primaryColor = (this.product && this.product.color) ? this.getSuitColorHex(this.product.id) : '#B31B4D';
-
-      // Estimate anatomical anchor coordinates on customer's body
-      const centerX = x + w * 0.5;
-      const neckY = y + h * 0.28;
-      const bustY = y + h * 0.38;
-      const waistY = y + h * 0.48;
-      const hipY = y + h * 0.58;
-      const kurtaEndY = y + h * 0.74;
-      const pantsEndY = y + h * 0.90;
-
-      const halfShoulder = w * 0.22;
-      const halfBust = w * 0.20;
-      const halfWaist = w * 0.17;
-      let halfHip = w * 0.22;
-      if (config.kurtaSilhouette === 'A-line') halfHip = w * 0.26;
-      else if (config.kurtaSilhouette === 'Anarkali') halfHip = w * 0.32;
-
-      // 1. Draw Stitched Straight Pants / Salwar on Lower Body
-      ctx.save();
-      ctx.fillStyle = primaryColor;
-      ctx.beginPath();
-      // Left leg
-      ctx.moveTo(centerX - halfWaist * 0.7, hipY);
-      ctx.lineTo(centerX - 4, hipY);
-      ctx.lineTo(centerX - 8, pantsEndY);
-      ctx.lineTo(centerX - halfWaist * 0.65, pantsEndY);
-      ctx.closePath();
-      ctx.fill();
-
-      // Right leg
-      ctx.beginPath();
-      ctx.moveTo(centerX + 4, hipY);
-      ctx.lineTo(centerX + halfWaist * 0.7, hipY);
-      ctx.lineTo(centerX + halfWaist * 0.65, pantsEndY);
-      ctx.lineTo(centerX + 8, pantsEndY);
-      ctx.closePath();
-      ctx.fill();
-
-      // Pant Hem Border (Gota / Leheriya coordinate)
-      ctx.fillStyle = '#D4AF37';
-      ctx.fillRect(centerX - halfWaist * 0.65, pantsEndY - 6, halfWaist * 0.6, 3);
-      ctx.fillRect(centerX + 8, pantsEndY - 6, halfWaist * 0.6, 3);
-      ctx.restore();
-
-      // 2. Draw Stitched Kurta Silhouette over Torso
-      ctx.save();
-      ctx.beginPath();
-      ctx.moveTo(centerX - halfShoulder, neckY);
-      ctx.quadraticCurveTo(centerX - halfBust, bustY, centerX - halfWaist, waistY);
-      ctx.quadraticCurveTo(centerX - halfHip * 0.9, hipY, centerX - halfHip, kurtaEndY);
-      ctx.lineTo(centerX + halfHip, kurtaEndY);
-      ctx.quadraticCurveTo(centerX + halfHip * 0.9, hipY, centerX + halfWaist, waistY);
-      ctx.quadraticCurveTo(centerX + halfBust, bustY, centerX + halfShoulder, neckY);
-      ctx.closePath();
-
-      // Fabric texture or rich handloom color
-      if (this.fabricTexturePattern) {
-        ctx.fillStyle = this.fabricTexturePattern;
-      } else {
-        ctx.fillStyle = primaryColor;
-      }
-      ctx.fill();
-
-      // Natural cloth lighting & fold depth via soft shading
-      const drapeGrad = ctx.createLinearGradient(centerX - halfHip, 0, centerX + halfHip, 0);
-      drapeGrad.addColorStop(0, 'rgba(0,0,0,0.22)');
-      drapeGrad.addColorStop(0.2, 'rgba(255,255,255,0.12)');
-      drapeGrad.addColorStop(0.5, 'rgba(0,0,0,0.02)');
-      drapeGrad.addColorStop(0.8, 'rgba(255,255,255,0.1)');
-      drapeGrad.addColorStop(1, 'rgba(0,0,0,0.25)');
-      ctx.fillStyle = drapeGrad;
-      ctx.fill();
-
-      // Tailoring Side Slit indicator
-      if (config.sideSlits) {
-        ctx.strokeStyle = 'rgba(0,0,0,0.35)';
-        ctx.lineWidth = 1.8;
-        ctx.beginPath();
-        ctx.moveTo(centerX + halfWaist * 0.95, waistY + (hipY - waistY) * 0.6);
-        ctx.lineTo(centerX + halfHip, kurtaEndY);
-        ctx.stroke();
-      }
-      ctx.restore();
-
-      // 3. Draw Tailored Sleeves along Arms
-      this.renderAdaptiveSleeves(ctx, centerX, neckY, bustY, halfShoulder, config.sleeveLength, primaryColor);
-
-      // 4. Draw Neckline & Structured Stand Patti Collar directly on customer's neck
-      this.renderAdaptiveNeckline(ctx, centerX, neckY, halfShoulder, config);
-
-      // 5. Draw Elegant Translucent Dupatta Drape on One Shoulder
-      this.renderAdaptiveDupatta(ctx, centerX, neckY, halfShoulder, kurtaEndY, primaryColor);
-    }
-
-    renderAdaptiveSleeves(ctx, centerX, neckY, bustY, halfShoulder, sleeveLength, color) {
-      if (sleeveLength === 'Sleeveless') return;
-      ctx.save();
-      ctx.fillStyle = this.fabricTexturePattern || color;
-
-      let sleeveEndY = bustY;
-      if (sleeveLength === 'Short') sleeveEndY = neckY + (bustY - neckY) * 0.9;
-      else if (sleeveLength === '3/4') sleeveEndY = bustY + (bustY - neckY) * 1.1;
-      else if (sleeveLength === 'Full') sleeveEndY = bustY + (bustY - neckY) * 2.2;
-
-      // Left arm sleeve
-      ctx.beginPath();
-      ctx.moveTo(centerX - halfShoulder, neckY);
-      ctx.lineTo(centerX - halfShoulder - 24, neckY + 12);
-      ctx.lineTo(centerX - halfShoulder - 16, sleeveEndY);
-      ctx.lineTo(centerX - halfShoulder + 10, sleeveEndY - 6);
-      ctx.closePath();
-      ctx.fill();
-
-      // Right arm sleeve
-      ctx.beginPath();
-      ctx.moveTo(centerX + halfShoulder, neckY);
-      ctx.lineTo(centerX + halfShoulder + 24, neckY + 12);
-      ctx.lineTo(centerX + halfShoulder + 16, sleeveEndY);
-      ctx.lineTo(centerX + halfShoulder - 10, sleeveEndY - 6);
-      ctx.closePath();
-      ctx.fill();
-
-      // Zari hem piping on sleeve cuffs
-      ctx.fillStyle = '#D4AF37';
-      ctx.fillRect(centerX - halfShoulder - 16, sleeveEndY - 3, 26, 2.5);
-      ctx.fillRect(centerX + halfShoulder - 10, sleeveEndY - 3, 26, 2.5);
       ctx.restore();
     }
 
-    renderAdaptiveNeckline(ctx, centerX, neckY, halfShoulder, config) {
-      ctx.save();
-      const neckWidth = halfShoulder * 0.38;
-      let neckDepth = 32;
-      if (config.neckDepth === 'Deep') neckDepth = 46;
+    render3DAvatar(ctx, w, h) {
+      // 1. Determine Angle Image & Flip Direction
+      const ang = (this.currentAngle % 360 + 360) % 360;
+      let activeImage = this.avatarAngles.front;
+      let isMirrored = false;
+      let angleLabel = 'Front 0°';
 
-      // Draw Neck Cutout to preserve customer's real skin
-      ctx.save();
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.beginPath();
-      ctx.moveTo(centerX - neckWidth, neckY);
-      if (config.neckDesign === 'V-neck') {
-        ctx.lineTo(centerX, neckY + neckDepth);
-        ctx.lineTo(centerX + neckWidth, neckY);
-      } else if (config.neckDesign === 'Square') {
-        ctx.lineTo(centerX - neckWidth, neckY + neckDepth);
-        ctx.lineTo(centerX + neckWidth, neckY + neckDepth);
-        ctx.lineTo(centerX + neckWidth, neckY);
+      if (ang >= 337.5 || ang < 22.5) {
+        activeImage = this.avatarAngles.front;
+        angleLabel = 'Front 0°';
+      } else if (ang >= 22.5 && ang < 67.5) {
+        activeImage = this.avatarAngles.angle45;
+        angleLabel = 'Three-Quarter 45°';
+      } else if (ang >= 67.5 && ang < 112.5) {
+        activeImage = this.avatarAngles.side;
+        angleLabel = 'Side Profile 90°';
+      } else if (ang >= 112.5 && ang < 157.5) {
+        activeImage = this.avatarAngles.angle45;
+        isMirrored = false;
+        angleLabel = 'Rear-Angle 135°';
+      } else if (ang >= 157.5 && ang < 202.5) {
+        activeImage = this.avatarAngles.back;
+        angleLabel = 'Back View 180°';
+      } else if (ang >= 202.5 && ang < 247.5) {
+        activeImage = this.avatarAngles.angle45;
+        isMirrored = true;
+        angleLabel = 'Rear-Angle 225°';
+      } else if (ang >= 247.5 && ang < 292.5) {
+        activeImage = this.avatarAngles.side;
+        isMirrored = true;
+        angleLabel = 'Side Profile 270°';
       } else {
-        ctx.quadraticCurveTo(centerX, neckY + neckDepth * 1.3, centerX + neckWidth, neckY);
+        activeImage = this.avatarAngles.angle45;
+        isMirrored = true;
+        angleLabel = 'Three-Quarter 315°';
       }
-      ctx.closePath();
-      ctx.fill();
-      ctx.restore();
 
-      // Neckline Zari Piping / Gota Patti Border
-      ctx.strokeStyle = '#D4AF37';
-      ctx.lineWidth = 2.0;
-      ctx.beginPath();
-      ctx.moveTo(centerX - neckWidth, neckY);
-      if (config.neckDesign === 'V-neck') {
-        ctx.lineTo(centerX, neckY + neckDepth);
-        ctx.lineTo(centerX + neckWidth, neckY);
-      } else {
-        ctx.quadraticCurveTo(centerX, neckY + neckDepth * 1.3, centerX + neckWidth, neckY);
+      // Fallback if image not yet loaded
+      if (!activeImage || !activeImage.complete) {
+        activeImage = this.avatarAngles.front;
       }
-      ctx.stroke();
 
-      // Stand Patti (Mandarin Collar) Presets (SP-01 to SP-04)
-      if (config.standPatti) {
-        const styleId = config.standPattiStyle || 'SP-01';
-        ctx.save();
-        ctx.fillStyle = this.fabricTexturePattern || '#851A38';
-        ctx.strokeStyle = '#D4AF37';
-        ctx.lineWidth = 2.0;
-
-        // Structured Collar Band around neck
-        ctx.beginPath();
-        ctx.moveTo(centerX - neckWidth - 4, neckY);
-        ctx.lineTo(centerX - neckWidth - 2, neckY - 18);
-        ctx.quadraticCurveTo(centerX, neckY - 24, centerX + neckWidth + 2, neckY - 18);
-        ctx.lineTo(centerX + neckWidth + 4, neckY);
-        ctx.lineTo(centerX + neckWidth - 3, neckY);
-        ctx.quadraticCurveTo(centerX, neckY - 10, centerX - neckWidth + 3, neckY);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-
-        // Placket with Potli Buttons / Threadwork
-        const placketH = styleId === 'SP-02' ? 65 : 50;
-        ctx.fillStyle = '#FFF9F0';
-        ctx.fillRect(centerX - 4.5, neckY + 12, 9, placketH);
-        ctx.strokeRect(centerX - 4.5, neckY + 12, 9, placketH);
-
-        // Potli Buttons
+      if (!activeImage || !activeImage.complete || activeImage.naturalWidth === 0) {
         ctx.fillStyle = '#851A38';
-        for (let by = neckY + 22; by < neckY + 12 + placketH - 6; by += 12) {
-          ctx.beginPath();
-          ctx.arc(centerX, by, 2.5, 0, Math.PI * 2);
-          ctx.fill();
-        }
-        ctx.restore();
+        ctx.font = 'bold 14px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Loading 3D Realistic Avatar...', w * 0.5, h * 0.5);
+        return;
       }
-      ctx.restore();
-    }
 
-    renderAdaptiveDupatta(ctx, centerX, neckY, halfShoulder, kurtaEndY, color) {
+      // 2. Dynamic Measurement Morphing Scales
+      const m = this.measurements;
+      const bustInches = m.bust || 36;
+      const waistInches = m.waist || 30;
+      const hipInches = m.hip || 38;
+
+      const bustRatio = Math.max(0.85, Math.min(1.25, bustInches / 36));
+      const waistRatio = Math.max(0.85, Math.min(1.25, waistInches / 30));
+      const hipRatio = Math.max(0.85, Math.min(1.25, hipInches / 38));
+
+      // Weighted proportional horizontal scale
+      const bodyWidthScale = (bustRatio * 0.35 + waistRatio * 0.35 + hipRatio * 0.30);
+
+      // Height scaling
+      const heightInches = m.height || 64;
+      const heightScale = Math.max(0.92, Math.min(1.08, heightInches / 64));
+
+      // 3. Draw Scaled 3D Avatar Image
       ctx.save();
-      ctx.globalAlpha = 0.85;
-      ctx.fillStyle = color;
+      ctx.translate(w * 0.5 + this.panOffset.x, h * 0.49 + this.panOffset.y);
+      ctx.scale(this.zoomLevel, this.zoomLevel);
 
-      // Soft shoulder drape over left side
-      ctx.beginPath();
-      ctx.moveTo(centerX - halfShoulder - 6, neckY - 6);
-      ctx.quadraticCurveTo(centerX - halfShoulder - 30, neckY + 60, centerX - halfShoulder - 26, kurtaEndY + 30);
-      ctx.lineTo(centerX - halfShoulder - 2, kurtaEndY + 30);
-      ctx.quadraticCurveTo(centerX - halfShoulder - 8, neckY + 60, centerX - halfShoulder + 12, neckY + 10);
-      ctx.closePath();
-      ctx.fill();
+      // Apply body measurement scaling
+      const baseH = h * 0.88 * heightScale;
+      const imgAspect = activeImage.naturalWidth / activeImage.naturalHeight;
+      const baseW = baseH * imgAspect;
+      const scaledW = baseW * bodyWidthScale;
 
-      // Zari border trim on dupatta edge
+      ctx.save();
+      if (isMirrored) {
+        ctx.scale(-1, 1);
+      }
+
+      // Draw Avatar
+      ctx.drawImage(activeImage, -scaledW * 0.5, -baseH * 0.5, scaledW, baseH);
+      ctx.restore();
+
+      // 4. Draw Measurement Calibration Rings (if active)
+      if (this.showMeasurementLines) {
+        this.renderMeasurementRings(ctx, scaledW, baseH, bustInches, waistInches, hipInches);
+      }
+
+      // 5. Draw Stand Patti & Neckline Callout Badge
+      this.renderAtelierDetailsBadge(ctx, -scaledW * 0.5, -baseH * 0.5, scaledW, baseH);
+
+      ctx.restore();
+
+      // Angle readout watermark at bottom
+      ctx.fillStyle = 'rgba(26, 18, 14, 0.7)';
+      ctx.font = '600 11px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(`Perspective: ${angleLabel}`, w * 0.5, h - 16);
+    }
+
+    renderMeasurementRings(ctx, scaledW, baseH, bustIn, waistIn, hipIn) {
+      const centerY = 0;
+      const bustY = centerY - baseH * 0.17;
+      const waistY = centerY - baseH * 0.05;
+      const hipY = centerY + baseH * 0.09;
+
+      const halfW = scaledW * 0.42;
+
+      ctx.save();
       ctx.strokeStyle = '#D4AF37';
-      ctx.lineWidth = 2.0;
+      ctx.lineWidth = 1.2;
+      ctx.setLineDash([4, 4]);
+
+      // Bust line
+      ctx.beginPath();
+      ctx.moveTo(-halfW, bustY);
+      ctx.lineTo(halfW, bustY);
       ctx.stroke();
+
+      // Waist line
+      ctx.beginPath();
+      ctx.moveTo(-halfW * 0.88, waistY);
+      ctx.lineTo(halfW * 0.88, waistY);
+      ctx.stroke();
+
+      // Hip line
+      ctx.beginPath();
+      ctx.moveTo(-halfW * 1.05, hipY);
+      ctx.lineTo(halfW * 1.05, hipY);
+      ctx.stroke();
+
+      ctx.setLineDash([]);
+
+      // Inch labels
+      ctx.fillStyle = '#6B1D2F';
+      ctx.font = 'bold 9px sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(`Bust ${bustIn}"`, halfW + 42, bustY + 3);
+      ctx.fillText(`Waist ${waistIn}"`, halfW * 0.88 + 44, waistY + 3);
+      ctx.fillText(`Hip ${hipIn}"`, halfW * 1.05 + 38, hipY + 3);
+
       ctx.restore();
     }
 
-    renderReactiveOverlays(ctx, x, y, w, h) {
-      // Dynamic live tag showing Stand Patti status
-      if (this.garmentConfig.standPatti) {
+    renderAtelierDetailsBadge(ctx, x, y, w, h) {
+      const cfg = this.garmentConfig;
+      if (!cfg) return;
+
+      // Stand Patti Tag
+      if (cfg.standPatti) {
         ctx.save();
+        const badgeX = w * 0.45;
+        const badgeY = -h * 0.28;
+
         ctx.fillStyle = 'rgba(26, 18, 14, 0.85)';
         ctx.strokeStyle = '#D4AF37';
         ctx.lineWidth = 1;
-        const tagX = x + w * 0.55;
-        const tagY = y + h * 0.18;
         ctx.beginPath();
-        ctx.roundRect(tagX, tagY, 130, 26, 6);
+        ctx.roundRect(badgeX, badgeY, 140, 36, 6);
         ctx.fill();
         ctx.stroke();
 
+        ctx.fillStyle = '#D4AF37';
+        ctx.font = 'bold 9px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText('✨ STAND PATTI COLLAR', badgeX + 8, badgeY + 14);
+
         ctx.fillStyle = '#FAF7F2';
         ctx.font = 'bold 10px sans-serif';
-        ctx.fillText(`✨ Stand Patti: ${this.garmentConfig.standPattiStyle || 'SP-01'}`, tagX + 8, tagY + 16);
+        ctx.fillText(`${cfg.standPattiStyle || 'SP-01'} (Mandarin)`, badgeX + 8, badgeY + 28);
         ctx.restore();
       }
     }
 
-    getSuitColorHex(prodId) {
-      switch (prodId) {
-        case 'prod-01': return '#B31B4D'; // Rani Pink
-        case 'prod-02': return '#D98200'; // Mustard Yellow
-        case 'prod-03': return '#6A1039'; // Magenta Wine
-        case 'prod-04': return '#E6DFCE'; // Cream
-        case 'prod-05': return '#125B66'; // Teal
-        default: return '#B31B4D';
+    renderCustomerPhotoView(ctx, w, h) {
+      const photo = this.customerPhoto;
+      const imgAspect = photo.naturalWidth / photo.naturalHeight;
+      let drawW, drawH, drawX, drawY;
+
+      if (imgAspect > w / h) {
+        drawW = w * 0.96;
+        drawH = drawW / imgAspect;
+      } else {
+        drawH = h * 0.96;
+        drawW = drawH * imgAspect;
       }
-    }
+      drawX = (w - drawW) / 2;
+      drawY = (h - drawH) / 2;
 
-    // =========================================================================
-    // TECHNICAL 360° ATELIER SEAM VIEW (For rotating to inspect back seams & darts)
-    // =========================================================================
-    render360SeamView(ctx, w, h) {
-      // Warm Ivory Studio
-      const grad = ctx.createRadialGradient(w * 0.5, h * 0.35, 30, w * 0.5, h * 0.5, h * 0.65);
-      grad.addColorStop(0, '#FFFFFF');
-      grad.addColorStop(0.65, '#FAF7F2');
-      grad.addColorStop(1, '#EDE7DF');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, w, h);
-
-      ctx.beginPath();
-      ctx.ellipse(w * 0.5, h * 0.94, w * 0.3, 14, 0, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(26, 26, 26, 0.12)';
-      ctx.fill();
-
-      ctx.translate(w * 0.5 + this.panOffset.x, h * 0.48 + this.panOffset.y);
+      ctx.save();
+      ctx.translate(w * 0.5 + this.panOffset.x, h * 0.5 + this.panOffset.y);
       ctx.scale(this.zoomLevel, this.zoomLevel);
+      ctx.translate(-w * 0.5, -h * 0.5);
 
-      const rad = (this.currentAngle * Math.PI) / 180;
-      const cosA = Math.cos(rad);
-      const sinA = Math.sin(rad);
-      const isBackView = this.currentAngle > 90 && this.currentAngle < 270;
-      const perspectiveSkew = Math.abs(cosA);
-
-      // Draw Anatomical Model
-      this.drawAvatarBase(ctx, cosA, sinA, isBackView, perspectiveSkew);
-      this.drawBottomGarment(ctx, cosA, sinA, isBackView, perspectiveSkew);
-      this.drawKurtaGarment(ctx, cosA, sinA, isBackView, perspectiveSkew);
-      this.drawFabricLighting(ctx, cosA, isBackView);
-    }
-
-    drawAvatarBase(ctx, cosA, sinA, isBackView, perspectiveSkew) {
-      ctx.save();
-      const headY = -230;
-      const headRadius = 24;
-
-      ctx.fillStyle = '#D4A88E';
-      ctx.beginPath();
-      ctx.rect(-10 * perspectiveSkew, headY + 18, 20 * perspectiveSkew, 35);
-      ctx.fill();
-
-      ctx.fillStyle = isBackView ? '#3B2A22' : '#EACBB5';
-      ctx.beginPath();
-      ctx.arc(0, headY, headRadius, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = '#2A1B14';
-      ctx.beginPath();
-      ctx.arc(0, headY - 14, 18, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.drawImage(photo, drawX, drawY, drawW, drawH);
       ctx.restore();
     }
 
-    drawBottomGarment(ctx, cosA, sinA, isBackView, perspectiveSkew) {
-      ctx.save();
-      const bottomType = this.garmentConfig.bottomType || 'Straight Pants';
-      const startY = 40;
-      const endY = 240;
-      const primaryColor = (this.product && this.product.color) ? this.getSuitColorHex(this.product.id) : '#5C1D24';
-
-      ctx.fillStyle = this.fabricTexturePattern || primaryColor;
-      ctx.beginPath();
-      ctx.moveTo(-24 * perspectiveSkew, startY);
-      ctx.lineTo(24 * perspectiveSkew, startY);
-      ctx.lineTo(18 * perspectiveSkew, endY);
-      ctx.lineTo(7 * perspectiveSkew, endY);
-      ctx.lineTo(0, startY + 50);
-      ctx.lineTo(-7 * perspectiveSkew, endY);
-      ctx.lineTo(-18 * perspectiveSkew, endY);
-      ctx.closePath();
-      ctx.fill();
-
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.15)';
-      ctx.lineWidth = 1.2;
-      ctx.stroke();
-      ctx.restore();
-    }
-
-    drawKurtaGarment(ctx, cosA, sinA, isBackView, perspectiveSkew) {
-      ctx.save();
-      const config = this.garmentConfig;
-      const measurements = this.measurements;
-      const primaryColor = (this.product && this.product.color) ? this.getSuitColorHex(this.product.id) : '#B31B4D';
-
-      ctx.fillStyle = this.fabricTexturePattern || primaryColor;
-
-      const bustWidth = (measurements.bust ? (measurements.bust / 36) * 38 : 38) * Math.max(0.35, perspectiveSkew);
-      const waistWidth = (measurements.waist ? (measurements.waist / 32) * 32 : 32) * Math.max(0.35, perspectiveSkew);
-      const hipWidth = (measurements.hip ? (measurements.hip / 38) * 44 : 44) * Math.max(0.35, perspectiveSkew);
-
-      let bottomFlare = 0;
-      if (config.kurtaSilhouette === 'A-line') bottomFlare = 20 * perspectiveSkew;
-      else if (config.kurtaSilhouette === 'Anarkali') bottomFlare = 45 * perspectiveSkew;
-
-      const baseLength = measurements.kurtaLength || config.kurtaLengthInches || 42;
-      const kurtaBottomY = 20 + (baseLength - 40) * 4.5;
-
-      ctx.beginPath();
-      ctx.moveTo(-bustWidth, -170);
-      ctx.lineTo(bustWidth, -170);
-      ctx.quadraticCurveTo(bustWidth + 4, -80, waistWidth, -40);
-      ctx.quadraticCurveTo(hipWidth + 5, 20, hipWidth + bottomFlare, kurtaBottomY);
-      ctx.lineTo(-hipWidth - bottomFlare, kurtaBottomY);
-      ctx.quadraticCurveTo(-hipWidth - 5, 20, -waistWidth, -40);
-      ctx.quadraticCurveTo(-bustWidth - 4, -80, -bustWidth, -170);
-      ctx.closePath();
-      ctx.fill();
-
-      // Tailor back darts / seams indicator
-      if (isBackView) {
-        ctx.strokeStyle = '#D4AF37';
-        ctx.lineWidth = 1.2;
-        ctx.setLineDash([4, 4]);
-        ctx.beginPath();
-        ctx.moveTo(-waistWidth * 0.4, -130);
-        ctx.lineTo(-waistWidth * 0.4, 0);
-        ctx.moveTo(waistWidth * 0.4, -130);
-        ctx.lineTo(waistWidth * 0.4, 0);
-        ctx.stroke();
-        ctx.setLineDash([]);
+    renderRealisticCatalogView(ctx, w, h) {
+      const img = this.productTryonImage;
+      if (!img || !img.complete || img.naturalWidth === 0) {
+        this.render3DAvatar(ctx, w, h);
+        return;
       }
 
-      ctx.restore();
-    }
+      const imgAspect = img.naturalWidth / img.naturalHeight;
+      let drawW, drawH, drawX, drawY;
 
-    drawFabricLighting(ctx, cosA, isBackView) {
+      if (imgAspect > w / h) {
+        drawW = w * 0.94;
+        drawH = drawW / imgAspect;
+      } else {
+        drawH = h * 0.94;
+        drawW = drawH * imgAspect;
+      }
+      drawX = (w - drawW) / 2;
+      drawY = (h - drawH) / 2;
+
       ctx.save();
-      const shadowGradient = ctx.createLinearGradient(-100, 0, 100, 0);
-      shadowGradient.addColorStop(0, 'rgba(0, 0, 0, 0.25)');
-      shadowGradient.addColorStop(0.35, 'rgba(255, 255, 255, 0.08)');
-      shadowGradient.addColorStop(0.7, 'rgba(255, 255, 255, 0.0)');
-      shadowGradient.addColorStop(1, 'rgba(0, 0, 0, 0.3)');
+      ctx.translate(w * 0.5 + this.panOffset.x, h * 0.5 + this.panOffset.y);
+      ctx.scale(this.zoomLevel, this.zoomLevel);
+      ctx.translate(-w * 0.5, -h * 0.5);
 
-      ctx.fillStyle = shadowGradient;
-      ctx.fillRect(-150, -180, 300, 440);
+      ctx.drawImage(img, drawX, drawY, drawW, drawH);
       ctx.restore();
+
+      // Realistic tryon label badge
+      ctx.fillStyle = 'rgba(26, 18, 14, 0.75)';
+      ctx.font = '600 11px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('✨ Photorealistic Atelier Try-On Preview', w * 0.5, h - 16);
     }
   }
 

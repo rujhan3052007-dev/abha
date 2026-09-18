@@ -37,8 +37,8 @@
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="js/abha-store.js?v=20260918_3"></script>
-  <script src="js/abha-style-ai.js?v=20260918_3"></script>
+  <script src="js/abha-store.js?v=20260918_4"></script>
+  <script src="js/abha-style-ai.js?v=20260918_4"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -2762,11 +2762,11 @@
             <!-- Top Mode Switcher Bar -->
             <div class="absolute top-3 left-3 right-3 flex items-center justify-between z-20 pointer-events-auto">
               <div class="inline-flex p-1 bg-charcoal-950/85 backdrop-blur-md rounded-xl border border-gold-400/40 shadow-md gap-1">
-                <button type="button" id="btnModeRealistic" onclick="setStyleAiMode('realistic')" class="px-3 py-1.5 text-[11px] font-bold rounded-lg bg-gold-400 text-maroon-950 shadow-xs flex items-center gap-1 transition">
-                  <span>✨</span> Realistic Try-On
+                <button type="button" id="btnMode360" onclick="setStyleAiMode('3d_avatar')" class="px-3 py-1.5 text-[11px] font-bold rounded-lg bg-gold-400 text-maroon-950 shadow-xs flex items-center gap-1 transition">
+                  <span>👗</span> 3D Avatar (360°)
                 </button>
-                <button type="button" id="btnMode360" onclick="setStyleAiMode('360_seam')" class="px-3 py-1.5 text-[11px] font-bold rounded-lg text-ivory-100 hover:text-white hover:bg-white/10 flex items-center gap-1 transition">
-                  <span>🔄</span> 360° Seam View
+                <button type="button" id="btnModeRealistic" onclick="setStyleAiMode('realistic')" class="px-3 py-1.5 text-[11px] font-bold rounded-lg text-ivory-100 hover:text-white hover:bg-white/10 flex items-center gap-1 transition">
+                  <span>✨</span> Realistic Try-On
                 </button>
               </div>
 
@@ -2780,19 +2780,19 @@
             <!-- Interactive Canvas -->
             <canvas id="styleAiCanvas" width="600" height="720" class="w-full h-full max-h-[640px] object-contain"></canvas>
 
-            <!-- 360 Compass & Drag Instruction Overlay (Visible in 360_seam mode) -->
-            <div id="seamCompassOverlay" class="hidden absolute top-16 left-3 bg-charcoal-950/80 backdrop-blur-xs text-ivory-50 text-[10px] sm:text-[11px] font-semibold px-2.5 py-1 rounded-full border border-gold-400/30 flex items-center gap-1.5 shadow-sm">
-              <span class="animate-spin text-gold-400">🔄</span>
+            <!-- 360 Compass & Drag Instruction Overlay (Active for 3D avatar) -->
+            <div id="seamCompassOverlay" class="absolute top-16 left-3 bg-charcoal-950/85 backdrop-blur-xs text-ivory-50 text-[10px] sm:text-[11px] font-semibold px-2.5 py-1 rounded-full border border-gold-400/30 flex items-center gap-1.5 shadow-sm">
+              <span class="text-gold-400">🔄</span>
               <span>Drag to Rotate 360°</span>
               <span class="text-gold-300 font-mono" id="angleDisplay">0°</span>
             </div>
 
-            <!-- Angle Selector Pills (Visible in 360_seam mode) -->
-            <div id="seamAnglePills" class="hidden absolute bottom-3 left-3 right-3 sm:left-auto sm:right-3 flex items-center justify-center gap-1 bg-charcoal-950/85 backdrop-blur-xs p-1 rounded-lg border border-gold-400/30 shadow-md">
-              <button type="button" onclick="setFittingRoomAngle(0)" class="px-2.5 py-1 text-[10px] font-bold rounded text-ivory-50 hover:bg-maroon-800 transition" id="angBtn0">Front</button>
+            <!-- Angle Selector Pills & Camera Zoom -->
+            <div id="seamAnglePills" class="absolute bottom-3 left-3 right-3 sm:left-auto sm:right-3 flex items-center justify-center gap-1 bg-charcoal-950/85 backdrop-blur-xs p-1 rounded-lg border border-gold-400/30 shadow-md">
+              <button type="button" onclick="setFittingRoomAngle(0)" class="px-2.5 py-1 text-[10px] font-bold rounded bg-gold-400 text-maroon-950 transition" id="angBtn0">Front 0°</button>
               <button type="button" onclick="setFittingRoomAngle(45)" class="px-2.5 py-1 text-[10px] font-bold rounded text-ivory-50 hover:bg-maroon-800 transition" id="angBtn45">45°</button>
-              <button type="button" onclick="setFittingRoomAngle(90)" class="px-2.5 py-1 text-[10px] font-bold rounded text-ivory-50 hover:bg-maroon-800 transition" id="angBtn90">Side</button>
-              <button type="button" onclick="setFittingRoomAngle(180)" class="px-2.5 py-1 text-[10px] font-bold rounded text-ivory-50 hover:bg-maroon-800 transition" id="angBtn180">Back</button>
+              <button type="button" onclick="setFittingRoomAngle(90)" class="px-2.5 py-1 text-[10px] font-bold rounded text-ivory-50 hover:bg-maroon-800 transition" id="angBtn90">Side 90°</button>
+              <button type="button" onclick="setFittingRoomAngle(180)" class="px-2.5 py-1 text-[10px] font-bold rounded text-ivory-50 hover:bg-maroon-800 transition" id="angBtn180">Back 180°</button>
               <div class="h-4 w-px bg-white/20 mx-1"></div>
               <button type="button" onclick="zoomFittingRoom(0.1)" class="px-1.5 py-1 text-[11px] text-ivory-50 hover:text-gold-400 font-bold" title="Zoom In">+</button>
               <button type="button" onclick="zoomFittingRoom(-0.1)" class="px-1.5 py-1 text-[11px] text-ivory-50 hover:text-gold-400 font-bold" title="Zoom Out">-</button>
@@ -2851,6 +2851,68 @@
                 <!-- 3 Segment Cards Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1" id="fabricDecompositionContainer">
                   <!-- Rendered dynamically by populateFabricDecomposition() -->
+                </div>
+              </div>
+
+              <!-- 3D Body Avatar Calibration & Measurement Presets (§3D Avatar Morphing) -->
+              <div class="p-3.5 bg-gradient-to-br from-ivory-100 to-ivory-200 border border-maroon-800/20 rounded-xl space-y-3 shadow-2xs">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-5 h-5 rounded-full bg-gold-500 text-charcoal-950 flex items-center justify-center text-xs font-bold">👗</span>
+                    <div>
+                      <h4 class="text-xs font-bold text-charcoal-950">3D Body Avatar &amp; Measurements</h4>
+                      <p class="text-[9px] text-slateText-600">Dynamic 360° Real-time Fitting Morph</p>
+                    </div>
+                  </div>
+                  <button type="button" onclick="toggleMeasurementLinesUI()" id="btnToggleMeasurementLines" class="text-[9px] font-bold bg-gold-400/20 hover:bg-gold-400/30 text-maroon-950 border border-gold-500/40 px-2 py-0.5 rounded-full flex items-center gap-1 transition" title="Toggle gold measurement calibration lines">
+                    <span>📐</span> <span id="measurementLinesLabel">Hide Lines</span>
+                  </button>
+                </div>
+
+                <!-- 3 Body Preset Quick Pills -->
+                <div class="space-y-1">
+                  <span class="text-[9px] font-bold uppercase tracking-wider text-slateText-600 block">Quick Body Presets:</span>
+                  <div class="grid grid-cols-3 gap-1.5">
+                    <button type="button" id="btnPresetSlim" onclick="setBodyPresetUI('slim')" class="btn-preset-opt py-1.5 px-1 text-[10px] font-bold rounded border text-center transition bg-ivory-50 border-ivory-300 hover:border-maroon-800 text-charcoal-900">
+                      👗 Slim Fit<br><span class="text-[8px] font-normal text-slateText-500">32-26-34</span>
+                    </button>
+                    <button type="button" id="btnPresetRegular" onclick="setBodyPresetUI('regular')" class="btn-preset-opt py-1.5 px-1 text-[10px] font-bold rounded border text-center transition bg-maroon-800 text-ivory-50 border-maroon-800 shadow-xs">
+                      👗 Regular<br><span class="text-[8px] font-normal text-gold-200">36-30-38</span>
+                    </button>
+                    <button type="button" id="btnPresetCurvy" onclick="setBodyPresetUI('curvy')" class="btn-preset-opt py-1.5 px-1 text-[10px] font-bold rounded border text-center transition bg-ivory-50 border-ivory-300 hover:border-maroon-800 text-charcoal-900">
+                      👗 Curvy Plus<br><span class="text-[8px] font-normal text-slateText-500">42-36-46</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Live Measurement Sliders (Bust, Waist, Hip) -->
+                <div class="space-y-2 pt-1 border-t border-ivory-300/80 text-xs">
+                  <!-- Bust Slider -->
+                  <div>
+                    <div class="flex items-center justify-between text-[11px] mb-1">
+                      <span class="font-semibold text-charcoal-900">Bust Circumference</span>
+                      <span class="font-mono font-bold text-maroon-800" id="bustValDisplay">36.0 in</span>
+                    </div>
+                    <input type="range" id="sliderBust" min="30" max="48" step="0.5" value="36" oninput="handleMeasurementSliderChange('bust', this.value)" class="w-full accent-maroon-800 h-1.5 bg-ivory-300 rounded cursor-pointer" />
+                  </div>
+
+                  <!-- Waist Slider -->
+                  <div>
+                    <div class="flex items-center justify-between text-[11px] mb-1">
+                      <span class="font-semibold text-charcoal-900">Waist Circumference</span>
+                      <span class="font-mono font-bold text-maroon-800" id="waistValDisplay">30.0 in</span>
+                    </div>
+                    <input type="range" id="sliderWaist" min="24" max="44" step="0.5" value="30" oninput="handleMeasurementSliderChange('waist', this.value)" class="w-full accent-maroon-800 h-1.5 bg-ivory-300 rounded cursor-pointer" />
+                  </div>
+
+                  <!-- Hip Slider -->
+                  <div>
+                    <div class="flex items-center justify-between text-[11px] mb-1">
+                      <span class="font-semibold text-charcoal-900">Hip Circumference</span>
+                      <span class="font-mono font-bold text-maroon-800" id="hipValDisplay">38.0 in</span>
+                    </div>
+                    <input type="range" id="sliderHip" min="32" max="52" step="0.5" value="38" oninput="handleMeasurementSliderChange('hip', this.value)" class="w-full accent-maroon-800 h-1.5 bg-ivory-300 rounded cursor-pointer" />
+                  </div>
                 </div>
               </div>
               
@@ -3682,18 +3744,18 @@
       styleAiEngine.setViewMode(mode);
 
       const btnR = document.getElementById('btnModeRealistic');
-      const btnS = document.getElementById('btnMode360');
+      const btn3D = document.getElementById('btnMode360');
       const compass = document.getElementById('seamCompassOverlay');
       const angPills = document.getElementById('seamAnglePills');
 
       if (mode === 'realistic') {
         if (btnR) btnR.className = 'px-3 py-1.5 text-[11px] font-bold rounded-lg bg-gold-400 text-maroon-950 shadow-xs flex items-center gap-1 transition';
-        if (btnS) btnS.className = 'px-3 py-1.5 text-[11px] font-bold rounded-lg text-ivory-100 hover:text-white hover:bg-white/10 flex items-center gap-1 transition';
+        if (btn3D) btn3D.className = 'px-3 py-1.5 text-[11px] font-bold rounded-lg text-ivory-100 hover:text-white hover:bg-white/10 flex items-center gap-1 transition';
         if (compass) compass.classList.add('hidden');
         if (angPills) angPills.classList.add('hidden');
       } else {
         if (btnR) btnR.className = 'px-3 py-1.5 text-[11px] font-bold rounded-lg text-ivory-100 hover:text-white hover:bg-white/10 flex items-center gap-1 transition';
-        if (btnS) btnS.className = 'px-3 py-1.5 text-[11px] font-bold rounded-lg bg-gold-400 text-maroon-950 shadow-xs flex items-center gap-1 transition';
+        if (btn3D) btn3D.className = 'px-3 py-1.5 text-[11px] font-bold rounded-lg bg-gold-400 text-maroon-950 shadow-xs flex items-center gap-1 transition';
         if (compass) compass.classList.remove('hidden');
         if (angPills) angPills.classList.remove('hidden');
       }
@@ -3711,6 +3773,98 @@
         if (lbl) lbl.textContent = 'View HD Studio Model';
         if (ico) ico.textContent = '📸';
       }
+    }
+
+    function setBodyPresetUI(preset) {
+      if (!styleAiEngine) return;
+      const m = styleAiEngine.setBodyPreset(preset);
+      if (!styleAiState.measurements) styleAiState.measurements = {};
+      Object.assign(styleAiState.measurements, m);
+
+      // Update slider inputs and labels
+      const sBust = document.getElementById('sliderBust');
+      const sWaist = document.getElementById('sliderWaist');
+      const sHip = document.getElementById('sliderHip');
+      const dBust = document.getElementById('bustValDisplay');
+      const dWaist = document.getElementById('waistValDisplay');
+      const dHip = document.getElementById('hipValDisplay');
+
+      if (sBust && m.bust) { sBust.value = m.bust; if (dBust) dBust.textContent = `${Number(m.bust).toFixed(1)} in`; }
+      if (sWaist && m.waist) { sWaist.value = m.waist; if (dWaist) dWaist.textContent = `${Number(m.waist).toFixed(1)} in`; }
+      if (sHip && m.hip) { sHip.value = m.hip; if (dHip) dHip.textContent = `${Number(m.hip).toFixed(1)} in`; }
+
+      // Update preset buttons styling
+      const btnSlim = document.getElementById('btnPresetSlim');
+      const btnRegular = document.getElementById('btnPresetRegular');
+      const btnCurvy = document.getElementById('btnPresetCurvy');
+
+      [btnSlim, btnRegular, btnCurvy].forEach(b => {
+        if (b) b.className = 'btn-preset-opt py-1.5 px-1 text-[10px] font-bold rounded border text-center transition bg-ivory-50 border-ivory-300 hover:border-maroon-800 text-charcoal-900';
+      });
+
+      if (preset === 'slim' && btnSlim) {
+        btnSlim.className = 'btn-preset-opt py-1.5 px-1 text-[10px] font-bold rounded border text-center transition bg-maroon-800 text-ivory-50 border-maroon-800 shadow-xs';
+      } else if ((preset === 'curvy' || preset === 'plus') && btnCurvy) {
+        btnCurvy.className = 'btn-preset-opt py-1.5 px-1 text-[10px] font-bold rounded border text-center transition bg-maroon-800 text-ivory-50 border-maroon-800 shadow-xs';
+      } else if (btnRegular) {
+        btnRegular.className = 'btn-preset-opt py-1.5 px-1 text-[10px] font-bold rounded border text-center transition bg-maroon-800 text-ivory-50 border-maroon-800 shadow-xs';
+      }
+
+      showToast(`👗 Applied ${preset === 'slim' ? 'Slim Fit' : preset === 'curvy' ? 'Curvy Plus' : 'Regular Medium'} body proportions!`);
+    }
+
+    function handleMeasurementSliderChange(key, val) {
+      if (!styleAiEngine) return;
+      const num = parseFloat(val);
+      const disp = document.getElementById(`${key}ValDisplay`);
+      if (disp) disp.textContent = `${num.toFixed(1)} in`;
+
+      if (!styleAiState.measurements) styleAiState.measurements = {};
+      styleAiState.measurements[key] = num;
+
+      styleAiEngine.updateMeasurements({ [key]: num });
+
+      // Reset preset active pill highlights since custom measurement entered
+      const btnSlim = document.getElementById('btnPresetSlim');
+      const btnRegular = document.getElementById('btnPresetRegular');
+      const btnCurvy = document.getElementById('btnPresetCurvy');
+      [btnSlim, btnRegular, btnCurvy].forEach(b => {
+        if (b) b.className = 'btn-preset-opt py-1.5 px-1 text-[10px] font-bold rounded border text-center transition bg-ivory-50 border-ivory-300 hover:border-maroon-800 text-charcoal-900';
+      });
+    }
+
+    function toggleMeasurementLinesUI() {
+      if (!styleAiEngine) return;
+      const isShowing = styleAiEngine.toggleMeasurementLines();
+      const lbl = document.getElementById('measurementLinesLabel');
+      if (lbl) lbl.textContent = isShowing ? 'Hide Lines' : 'Show Lines';
+    }
+
+    function updateAnglePillsUI(angle) {
+      const ang = (angle % 360 + 360) % 360;
+      const pills = [
+        { id: 'angBtn0', min: 337.5, max: 22.5, wrap: true },
+        { id: 'angBtn45', min: 22.5, max: 67.5 },
+        { id: 'angBtn90', min: 67.5, max: 135 },
+        { id: 'angBtn180', min: 135, max: 225 }
+      ];
+
+      pills.forEach(p => {
+        const btn = document.getElementById(p.id);
+        if (!btn) return;
+        let isActive = false;
+        if (p.wrap) {
+          isActive = ang >= p.min || ang < p.max;
+        } else {
+          isActive = ang >= p.min && ang < p.max;
+        }
+
+        if (isActive) {
+          btn.className = 'px-2.5 py-1 text-[10px] font-bold rounded bg-gold-400 text-maroon-950 transition';
+        } else {
+          btn.className = 'px-2.5 py-1 text-[10px] font-bold rounded text-ivory-50 hover:bg-maroon-800 transition';
+        }
+      });
     }
 
     function populateFabricDecomposition(product) {
@@ -3765,6 +3919,7 @@
           onAngleChange: (ang) => {
             const disp = document.getElementById('angleDisplay');
             if (disp) disp.textContent = `${ang}°`;
+            updateAnglePillsUI(ang);
           }
         });
       }
@@ -3791,8 +3946,21 @@
         photoUrl: photo
       });
 
-      // Default to realistic mode
-      setStyleAiMode('realistic');
+      // Default to 3D Avatar mode
+      setStyleAiMode('3d_avatar');
+
+      // Sync slider UI with initial measurements
+      if (m) {
+        const sBust = document.getElementById('sliderBust');
+        const sWaist = document.getElementById('sliderWaist');
+        const sHip = document.getElementById('sliderHip');
+        const dBust = document.getElementById('bustValDisplay');
+        const dWaist = document.getElementById('waistValDisplay');
+        const dHip = document.getElementById('hipValDisplay');
+        if (sBust && m.bust) { sBust.value = m.bust; if (dBust) dBust.textContent = `${Number(m.bust).toFixed(1)} in`; }
+        if (sWaist && m.waist) { sWaist.value = m.waist; if (dWaist) dWaist.textContent = `${Number(m.waist).toFixed(1)} in`; }
+        if (sHip && m.hip) { sHip.value = m.hip; if (dHip) dHip.textContent = `${Number(m.hip).toFixed(1)} in`; }
+      }
 
       // Update HD Model toggle button label
       const hdLbl = document.getElementById('hdModelLabel');
@@ -3806,7 +3974,10 @@
     }
 
     function setFittingRoomAngle(angle) {
-      if (styleAiEngine) styleAiEngine.setAngle(angle);
+      if (styleAiEngine) {
+        styleAiEngine.setAngle(angle);
+        updateAnglePillsUI(angle);
+      }
     }
 
     function zoomFittingRoom(delta) {
@@ -3814,7 +3985,10 @@
     }
 
     function resetFittingRoomView() {
-      if (styleAiEngine) styleAiEngine.resetView();
+      if (styleAiEngine) {
+        styleAiEngine.resetView();
+        updateAnglePillsUI(0);
+      }
     }
 
     function updateStyleOption(group, val) {
