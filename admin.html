@@ -929,8 +929,14 @@
             <input type="text" id="loginIdentifier" class="form-input" placeholder="admin@abha.in / 9214837104" required>
           </div>
           <div>
-            <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Password</label>
-            <input type="password" id="loginPassword" class="form-input" placeholder="••••••••••••" required>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700);">Password</label>
+              <button type="button" onclick="togglePasswordVisibility('loginPassword', 'btnToggleLoginPass')" id="btnToggleLoginPass" style="background: none; border: none; font-size: 0.75rem; color: var(--maroon); cursor: pointer; font-weight: 600;">👁️ Show Password</button>
+            </div>
+            <div style="position: relative;">
+              <input type="password" id="loginPassword" class="form-input" placeholder="••••••••••••" required style="padding-right: 2.2rem;">
+              <button type="button" onclick="togglePasswordVisibility('loginPassword', 'btnToggleLoginPass')" style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--gray-500); font-size: 0.9rem;" aria-label="Toggle password visibility">👁️</button>
+            </div>
           </div>
           
           <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: var(--gray-700); cursor: pointer; user-select: none; margin-top: -0.2rem;">
@@ -957,8 +963,14 @@
             <input type="tel" id="regPhone" class="form-input" placeholder="9214837104" required>
           </div>
           <div>
-            <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.2rem; display: block;">Set Password *</label>
-            <input type="password" id="regPassword" class="form-input" placeholder="••••••••••••" required minlength="6">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.2rem;">
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700);">Set Password *</label>
+              <button type="button" onclick="togglePasswordVisibility('regPassword', 'btnToggleRegPass')" id="btnToggleRegPass" style="background: none; border: none; font-size: 0.75rem; color: var(--maroon); cursor: pointer; font-weight: 600;">👁️ Show</button>
+            </div>
+            <div style="position: relative;">
+              <input type="password" id="regPassword" class="form-input" placeholder="••••••••••••" required minlength="6" style="padding-right: 2.2rem;">
+              <button type="button" onclick="togglePasswordVisibility('regPassword', 'btnToggleRegPass')" style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--gray-500); font-size: 0.9rem;" aria-label="Toggle password visibility">👁️</button>
+            </div>
           </div>
           <div id="regAuthError" style="color: var(--red-text); font-size: 0.8rem; display: none;"></div>
           <button type="submit" class="btn btn-primary" style="justify-content: center; padding: 0.75rem; font-size: 0.95rem; margin-top: 0.25rem;">Create Owner Account & Enter</button>
@@ -1571,8 +1583,14 @@
           </div>
         </div>
         <div>
-          <label style="font-size: 0.8rem; font-weight: 600;">Temporary Password *</label>
-          <input type="password" id="mgrPassword" class="form-input" required placeholder="••••••••••••" minlength="6" value="AbhaManager2026!">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+            <label style="font-size: 0.8rem; font-weight: 600;">Temporary Password *</label>
+            <button type="button" onclick="togglePasswordVisibility('mgrPassword', 'btnToggleMgrPass')" id="btnToggleMgrPass" style="background: none; border: none; font-size: 0.75rem; color: var(--maroon); cursor: pointer; font-weight: 600;">👁️ Show</button>
+          </div>
+          <div style="position: relative;">
+            <input type="password" id="mgrPassword" class="form-input" required placeholder="••••••••••••" minlength="6" value="AbhaManager2026!" style="padding-right: 2.2rem;">
+            <button type="button" onclick="togglePasswordVisibility('mgrPassword', 'btnToggleMgrPass')" style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--gray-500); font-size: 0.9rem;" aria-label="Toggle password visibility">👁️</button>
+          </div>
         </div>
         <div id="mgrFormError" style="color: var(--red-text); font-size: 0.8rem; display: none;"></div>
         <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem;">
@@ -1665,8 +1683,14 @@
           </div>
         </div>
         <div>
-          <label style="font-size: 0.8rem; font-weight: 600;">Temporary Password</label>
-          <input type="password" id="empPassword" class="form-input" value="AbhaStaff2026!">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+            <label style="font-size: 0.8rem; font-weight: 600;">Temporary Password</label>
+            <button type="button" onclick="togglePasswordVisibility('empPassword', 'btnToggleEmpPass')" id="btnToggleEmpPass" style="background: none; border: none; font-size: 0.75rem; color: var(--maroon); cursor: pointer; font-weight: 600;">👁️ Show</button>
+          </div>
+          <div style="position: relative;">
+            <input type="password" id="empPassword" class="form-input" value="AbhaStaff2026!" style="padding-right: 2.2rem;">
+            <button type="button" onclick="togglePasswordVisibility('empPassword', 'btnToggleEmpPass')" style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--gray-500); font-size: 0.9rem;" aria-label="Toggle password visibility">👁️</button>
+          </div>
         </div>
         <div id="empFormError" style="color: var(--red-text); font-size: 0.8rem; display: none;"></div>
         <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem;">
@@ -1751,6 +1775,29 @@
   </div>
 
   <script>
+    function togglePasswordVisibility(inputId, btnId) {
+      const input = document.getElementById(inputId);
+      if (!input) return;
+      const isHidden = input.type === 'password';
+      input.type = isHidden ? 'text' : 'password';
+
+      const btn = btnId ? document.getElementById(btnId) : null;
+      if (btn) {
+        const hasWordPassword = btn.textContent.toLowerCase().includes('password');
+        btn.innerHTML = isHidden
+          ? (hasWordPassword ? '🙈 Hide Password' : '🙈 Hide')
+          : (hasWordPassword ? '👁️ Show Password' : '👁️ Show');
+      }
+
+      // Also update any inline icon button inside the input container if present
+      if (input.parentElement) {
+        const inlineBtn = input.parentElement.querySelector('button[aria-label="Toggle password visibility"]');
+        if (inlineBtn) {
+          inlineBtn.textContent = isHidden ? '🙈' : '👁️';
+        }
+      }
+    }
+
     let authToken = localStorage.getItem('abha_token') || null;
     let currentUser = null;
     let cachedProducts = [];
@@ -2271,6 +2318,10 @@
 
     function closeCreateManagerModal() {
       document.getElementById('createManagerModal').classList.remove('open');
+      const input = document.getElementById('mgrPassword');
+      if (input && input.type === 'text') {
+        togglePasswordVisibility('mgrPassword', 'btnToggleMgrPass');
+      }
     }
 
     async function submitCreateManager(e) {
@@ -2518,6 +2569,10 @@
 
     function closeCreateEmployeeModal() {
       document.getElementById('createEmployeeModal').classList.remove('open');
+      const input = document.getElementById('empPassword');
+      if (input && input.type === 'text') {
+        togglePasswordVisibility('empPassword', 'btnToggleEmpPass');
+      }
     }
 
     function handleEmpDeptChange(dept) {

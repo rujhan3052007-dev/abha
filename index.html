@@ -3182,8 +3182,22 @@
 
       <form onsubmit="handleOwnerAccessSubmit(event)" class="space-y-3 text-left">
         <div>
-          <label for="ownerPinInput" class="block text-[11px] font-semibold text-slateText-700 mb-1">Passcode / PIN *</label>
-          <input type="password" id="ownerPinInput" autocomplete="current-password" placeholder="Enter PIN / Passcode" required class="w-full px-3 py-2.5 bg-ivory-100 border border-ivory-300 rounded text-sm font-bold text-charcoal-950 text-center tracking-widest focus:outline-none focus:ring-1 focus:ring-maroon-800" />
+          <div class="flex justify-between items-center mb-1">
+            <label for="ownerPinInput" class="block text-[11px] font-semibold text-slateText-700">Passcode / PIN *</label>
+            <button type="button" onclick="toggleOwnerPinVisibility()" class="text-[11px] font-semibold text-maroon-800 hover:text-maroon-950 flex items-center gap-1 focus:outline-none cursor-pointer" id="btnToggleOwnerPin">
+              <span id="ownerPinToggleIcon">👁️</span>
+              <span id="ownerPinToggleText">Show Password</span>
+            </button>
+          </div>
+          <div class="relative">
+            <input type="password" id="ownerPinInput" autocomplete="current-password" placeholder="Enter PIN / Passcode" required class="w-full px-3 py-2.5 pr-10 bg-ivory-100 border border-ivory-300 rounded text-sm font-bold text-charcoal-950 text-center tracking-widest focus:outline-none focus:ring-1 focus:ring-maroon-800" />
+            <button type="button" onclick="toggleOwnerPinVisibility()" class="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 text-slateText-500 hover:text-charcoal-950 focus:outline-none cursor-pointer" aria-label="Toggle password visibility">
+              <svg id="ownerPinEyeSvg" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+            </button>
+          </div>
           <p id="ownerPinError" class="text-[11px] text-red-600 mt-1 hidden font-semibold text-center"></p>
         </div>
 
@@ -3661,9 +3675,42 @@
       setTimeout(() => input?.focus(), 80);
     }
 
+    function toggleOwnerPinVisibility() {
+      const pinInput = document.getElementById('ownerPinInput');
+      const toggleText = document.getElementById('ownerPinToggleText');
+      const toggleIcon = document.getElementById('ownerPinToggleIcon');
+      const eyeSvg = document.getElementById('ownerPinEyeSvg');
+      if (!pinInput) return;
+
+      const isHidden = pinInput.type === 'password';
+      pinInput.type = isHidden ? 'text' : 'password';
+
+      if (toggleText) toggleText.textContent = isHidden ? 'Hide Password' : 'Show Password';
+      if (toggleIcon) toggleIcon.textContent = isHidden ? '🙈' : '👁️';
+
+      if (eyeSvg) {
+        if (isHidden) {
+          // Eye with slash (Hide)
+          eyeSvg.innerHTML = `
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+          `;
+        } else {
+          // Eye (Show)
+          eyeSvg.innerHTML = `
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+          `;
+        }
+      }
+    }
+
     function closeOwnerAccessModal() {
       const modal = document.getElementById('ownerAuthModal');
       if (modal) modal.classList.add('hidden');
+      const pinInput = document.getElementById('ownerPinInput');
+      if (pinInput && pinInput.type === 'text') {
+        toggleOwnerPinVisibility();
+      }
     }
 
     function handleOwnerAccessSubmit(e) {
