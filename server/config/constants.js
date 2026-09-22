@@ -36,6 +36,70 @@ module.exports = {
     CUSTOMER: 'CUSTOMER'
   },
 
+  DEPARTMENTS: {
+    STORE: 'STORE',
+    TAILORING: 'TAILORING',
+    DELIVERY: 'DELIVERY',
+    OPERATIONS: 'OPERATIONS',
+    ACCOUNTS: 'ACCOUNTS'
+  },
+
+  EMPLOYEE_STATUSES: {
+    PENDING: 'PENDING',
+    ACTIVE: 'ACTIVE',
+    SUSPENDED: 'SUSPENDED',
+    REVOKED: 'REVOKED',
+    INACTIVE: 'INACTIVE'
+  },
+
+  PERMISSIONS: {
+    ORDERS_VIEW: 'orders.view',
+    ORDERS_CREATE: 'orders.create',
+    ORDERS_EDIT: 'orders.edit',
+    ORDERS_CANCEL: 'orders.cancel',
+    ORDERS_ASSIGN: 'orders.assign',
+    PRODUCTS_VIEW: 'products.view',
+    PRODUCTS_CREATE: 'products.create',
+    PRODUCTS_EDIT: 'products.edit',
+    PRODUCTS_DELETE: 'products.delete',
+    INVENTORY_VIEW: 'inventory.view',
+    INVENTORY_ADJUST: 'inventory.adjust',
+    POS_ACCESS: 'pos.access',
+    POS_BILL: 'pos.bill',
+    TAILORING_VIEW: 'tailoring.view',
+    TAILORING_ASSIGN: 'tailoring.assign',
+    TAILORING_UPDATE_STATUS: 'tailoring.update_status',
+    TAILORING_QC: 'tailoring.qc',
+    TAILORING_EMPLOYEE_AUTHORIZE: 'tailoring.employee.authorize',
+    DELIVERY_VIEW: 'delivery.view',
+    DELIVERY_ASSIGN: 'delivery.assign',
+    DELIVERY_UPDATE_STATUS: 'delivery.update_status',
+    DELIVERY_REPORT_ISSUE: 'delivery.report_issue',
+    DELIVERY_EMPLOYEE_CREATE: 'delivery.create_employee',
+    DELIVERY_EMPLOYEE_AUTHORIZE: 'delivery.employee.authorize',
+    DELIVERY_EMPLOYEE_SUSPEND: 'delivery.suspend_employee',
+    EMPLOYEES_VIEW: 'employees.view',
+    EMPLOYEES_CREATE: 'employees.create',
+    EMPLOYEES_EDIT: 'employees.edit',
+    EMPLOYEES_AUTHORIZE: 'employees.authorize',
+    EMPLOYEES_SUSPEND: 'employees.suspend',
+    EMPLOYEES_REVOKE: 'employees.revoke',
+    MANAGERS_VIEW: 'managers.view',
+    MANAGERS_CREATE: 'managers.create',
+    MANAGERS_EDIT: 'managers.edit',
+    MANAGERS_PERMISSIONS: 'managers.manage_permissions',
+    MANAGERS_SUSPEND: 'managers.suspend',
+    REPORTS_VIEW: 'reports.view',
+    REPORTS_EXPORT: 'reports.export',
+    PAYMENTS_VIEW: 'payments.view',
+    REFUNDS_CREATE: 'refunds.create',
+    REVIEWS_VIEW: 'reviews.view',
+    REVIEWS_MODERATE: 'reviews.moderate',
+    SETTINGS_VIEW: 'settings.view',
+    SETTINGS_EDIT: 'settings.edit',
+    AUDIT_VIEW: 'audit.view'
+  },
+
   INVENTORY_TYPES: {
     UNIQUE_1OF1: 'UNIQUE_1OF1',
     QUANTITY: 'QUANTITY'

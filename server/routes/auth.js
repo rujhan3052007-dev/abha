@@ -41,11 +41,11 @@ router.post('/login', async (req, res, next) => {
     const db = getDb();
     const user = await db.get(`
       SELECT * FROM users 
-      WHERE (email = ? OR phone = ?) AND is_active = 1
+      WHERE (email = ? OR phone = ?)
     `, [identifier.trim().toLowerCase(), identifier.trim()]);
 
     if (!user || !user.password_hash) {
-      return res.status(401).json({ success: false, error: 'Invalid credentials or inactive account' });
+      return res.status(401).json({ success: false, error: 'Invalid credentials' });
     }
 
     const isMatch = bcrypt.compareSync(password, user.password_hash);
@@ -53,7 +53,62 @@ router.post('/login', async (req, res, next) => {
       return res.status(401).json({ success: false, error: 'Invalid credentials' });
     }
 
-    const token = generateToken(user);
+    let employeeInfo = null;
+    let permissions = [];
+
+    if (user.role === ROLES.OWNER) {
+      permissions = ['*'];
+    } else {
+      const emp = await db.get('SELECT * FROM employees WHERE user_id = ?', [user.id]);
+      if (emp) {
+        if (emp.status === 'SUSPENDED') {
+          return res.status(403).json({
+            success: false,
+            error: 'Your employee account is suspended. Contact ABHA Owner.'
+          });
+        }
+        if (emp.status === 'REVOKED' || emp.status === 'INACTIVE') {
+          return res.status(403).json({
+            success: false,
+            error: 'Employee access has been revoked.'
+          });
+        }
+        if (emp.status === 'PENDING') {
+          return res.status(403).json({
+            success: false,
+            error: 'Employee authorization is pending approval.'
+          });
+        }
+
+        employeeInfo = emp;
+        if (emp.permissions_override_json) {
+          try {
+            permissions = JSON.parse(emp.permissions_override_json);
+          } catch {}
+        }
+        if (!permissions || permissions.length === 0) {
+          const roleRows = await db.all('SELECT permission_code FROM role_permissions WHERE role_code = ?', [emp.role_code]);
+          permissions = roleRows.map(r => r.permission_code);
+        }
+      }
+    }
+
+    if (user.is_active === 0 && !employeeInfo) {
+      return res.status(403).json({ success: false, error: 'Account has been deactivated. Access denied.' });
+    }
+
+    const tokenPayload = {
+      id: user.id,
+      name: user.name,
+      phone: user.phone,
+      email: user.email,
+      role: user.role,
+      department: employeeInfo ? employeeInfo.department_code : (user.role === ROLES.OWNER ? 'ALL' : null),
+      permissions: permissions
+    };
+
+    const token = jwt.sign(tokenPayload, JWT_SECRET, { expiresIn: '7d' });
+
     res.json({
       success: true,
       message: `Welcome back, ${user.name}`,
@@ -63,7 +118,11 @@ router.post('/login', async (req, res, next) => {
         name: user.name,
         phone: user.phone,
         email: user.email,
-        role: user.role
+        role: user.role,
+        department: employeeInfo ? employeeInfo.department_code : (user.role === ROLES.OWNER ? 'ALL' : null),
+        employee_code: employeeInfo ? employeeInfo.employee_code : null,
+        status: employeeInfo ? employeeInfo.status : 'ACTIVE',
+        permissions: permissions
       }
     });
   } catch (err) {
@@ -202,7 +261,20 @@ router.get('/me', verifyToken, async (req, res, next) => {
     if (!user) {
       return res.status(404).json({ success: false, error: 'User not found' });
     }
-    res.json({ success: true, user });
+
+    const emp = await db.get('SELECT * FROM employees WHERE user_id = ?', [req.user.id]);
+    const permissions = req.user.role === ROLES.OWNER ? ['*'] : (req.user.permissions || []);
+
+    res.json({
+      success: true,
+      user: {
+        ...user,
+        department: emp ? emp.department_code : (user.role === ROLES.OWNER ? 'ALL' : null),
+        employee_code: emp ? emp.employee_code : null,
+        status: emp ? emp.status : 'ACTIVE',
+        permissions: permissions
+      }
+    });
   } catch (err) {
     next(err);
   }

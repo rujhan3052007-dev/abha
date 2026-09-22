@@ -315,9 +315,208 @@ async function seed() {
         'usr_owner_01',
         'Initial store stock intake'
       ]);
+    } else {
+      await db.run(`
+        UPDATE products 
+        SET stock_quantity = ?, is_sold_out = 0, is_active = 1 
+        WHERE sku = ?
+      `, [p.stock_quantity, p.sku]);
     }
   }
-  console.log('[ABHA Seed] Real Salwar Suit dress material products seeded with inventory audit logs.');
+
+  // Ensure admin_audit_logs has modern columns
+  const auditCols = await db.all("PRAGMA table_info(admin_audit_logs)");
+  const auditColNames = auditCols.map(c => c.name);
+  if (!auditColNames.includes('actor_name')) {
+    await db.run("ALTER TABLE admin_audit_logs ADD COLUMN actor_name TEXT");
+  }
+  if (!auditColNames.includes('actor_role')) {
+    await db.run("ALTER TABLE admin_audit_logs ADD COLUMN actor_role TEXT");
+  }
+  if (!auditColNames.includes('previous_value')) {
+    await db.run("ALTER TABLE admin_audit_logs ADD COLUMN previous_value TEXT");
+  }
+  if (!auditColNames.includes('new_value')) {
+    await db.run("ALTER TABLE admin_audit_logs ADD COLUMN new_value TEXT");
+  }
+  // 5. Seed Departments, Roles, Permissions & Initial Employees
+  const { DEPARTMENTS, PERMISSIONS, EMPLOYEE_STATUSES } = require('../config/constants');
+  
+  // Departments
+  const deptList = [
+    { code: 'STORE', name: 'Store & Retail POS', desc: 'In-store customer experience, POS counter billing, stock levels' },
+    { code: 'TAILORING', name: 'Bespoke Atelier & Tailoring', desc: 'Garment craftsmanship, cutting, stitching, QC, alterations' },
+    { code: 'DELIVERY', name: 'Delivery & Logistics', desc: 'Doorstep deliveries in Beawar and Pan-India courier dispatches' },
+    { code: 'OPERATIONS', name: 'Operations & Dispatch', desc: 'Order lifecycle pipeline, processing, packaging, cross-team coordination' },
+    { code: 'ACCOUNTS', name: 'Accounts & Finance', desc: 'Payment tracking, revenue reconciliation, transaction ledgers' }
+  ];
+
+  for (const d of deptList) {
+    const exists = await db.get('SELECT id FROM departments WHERE code = ?', [d.code]);
+    if (!exists) {
+      await db.run(
+        'INSERT INTO departments (id, name, code, description, is_active) VALUES (?, ?, ?, ?, 1)',
+        [`dept_${d.code.toLowerCase()}`, d.name, d.code, d.desc]
+      );
+    }
+  }
+
+  // Permissions
+  for (const [key, permCode] of Object.entries(PERMISSIONS)) {
+    const exists = await db.get('SELECT id FROM permissions WHERE code = ?', [permCode]);
+    if (!exists) {
+      const [mod, act] = permCode.split('.');
+      await db.run(
+        'INSERT INTO permissions (id, module, action, code, description) VALUES (?, ?, ?, ?, ?)',
+        [`perm_${key.toLowerCase()}`, mod, act || 'access', permCode, `Permission to ${act || 'access'} ${mod}`]
+      );
+    }
+  }
+
+  // Predefined Roles
+  const rolesList = [
+    { code: 'STORE_MANAGER', name: 'Store Manager', dept: 'STORE', isSys: 1 },
+    { code: 'POS_STAFF', name: 'POS Counter Staff', dept: 'STORE', isSys: 1 },
+    { code: 'TAILORING_MANAGER', name: 'Tailoring Manager', dept: 'TAILORING', isSys: 1 },
+    { code: 'TAILOR', name: 'Master Tailor', dept: 'TAILORING', isSys: 1 },
+    { code: 'QC_STAFF', name: 'Quality Check Staff', dept: 'TAILORING', isSys: 1 },
+    { code: 'DELIVERY_MANAGER', name: 'Delivery Manager', dept: 'DELIVERY', isSys: 1 },
+    { code: 'DELIVERY_BOY', name: 'Delivery Boy', dept: 'DELIVERY', isSys: 1 },
+    { code: 'OPERATIONS_MANAGER', name: 'Operations Manager', dept: 'OPERATIONS', isSys: 1 },
+    { code: 'ACCOUNTS_MANAGER', name: 'Accounts Manager', dept: 'ACCOUNTS', isSys: 1 }
+  ];
+
+  for (const r of rolesList) {
+    const exists = await db.get('SELECT id FROM roles WHERE code = ?', [r.code]);
+    if (!exists) {
+      await db.run(
+        'INSERT INTO roles (id, name, code, department_code, description, is_system) VALUES (?, ?, ?, ?, ?, ?)',
+        [`role_${r.code.toLowerCase()}`, r.name, r.code, r.dept, `Role for ${r.name}`, r.isSys]
+      );
+    }
+  }
+
+  // Seed Default Role Permissions
+  const rolePermissionsMap = {
+    STORE_MANAGER: [
+      PERMISSIONS.ORDERS_VIEW, PERMISSIONS.ORDERS_CREATE, PERMISSIONS.ORDERS_EDIT, PERMISSIONS.ORDERS_ASSIGN,
+      PERMISSIONS.PRODUCTS_VIEW, PERMISSIONS.PRODUCTS_CREATE, PERMISSIONS.PRODUCTS_EDIT,
+      PERMISSIONS.INVENTORY_VIEW, PERMISSIONS.INVENTORY_ADJUST,
+      PERMISSIONS.POS_ACCESS, PERMISSIONS.POS_BILL,
+      PERMISSIONS.EMPLOYEES_VIEW, PERMISSIONS.EMPLOYEES_CREATE, PERMISSIONS.EMPLOYEES_AUTHORIZE, PERMISSIONS.EMPLOYEES_SUSPEND,
+      PERMISSIONS.REVIEWS_VIEW, PERMISSIONS.REVIEWS_MODERATE
+    ],
+    POS_STAFF: [
+      PERMISSIONS.POS_ACCESS, PERMISSIONS.POS_BILL,
+      PERMISSIONS.PRODUCTS_VIEW, PERMISSIONS.INVENTORY_VIEW
+    ],
+    TAILORING_MANAGER: [
+      PERMISSIONS.TAILORING_VIEW, PERMISSIONS.TAILORING_ASSIGN, PERMISSIONS.TAILORING_UPDATE_STATUS,
+      PERMISSIONS.TAILORING_QC, PERMISSIONS.TAILORING_EMPLOYEE_AUTHORIZE,
+      PERMISSIONS.EMPLOYEES_VIEW
+    ],
+    TAILOR: [
+      PERMISSIONS.TAILORING_VIEW, PERMISSIONS.TAILORING_UPDATE_STATUS
+    ],
+    QC_STAFF: [
+      PERMISSIONS.TAILORING_VIEW, PERMISSIONS.TAILORING_QC
+    ],
+    DELIVERY_MANAGER: [
+      PERMISSIONS.DELIVERY_VIEW, PERMISSIONS.DELIVERY_ASSIGN, PERMISSIONS.DELIVERY_UPDATE_STATUS,
+      PERMISSIONS.DELIVERY_REPORT_ISSUE, PERMISSIONS.DELIVERY_EMPLOYEE_CREATE,
+      PERMISSIONS.DELIVERY_EMPLOYEE_AUTHORIZE, PERMISSIONS.DELIVERY_EMPLOYEE_SUSPEND,
+      PERMISSIONS.EMPLOYEES_VIEW
+    ],
+    DELIVERY_BOY: [
+      PERMISSIONS.DELIVERY_VIEW, PERMISSIONS.DELIVERY_UPDATE_STATUS, PERMISSIONS.DELIVERY_REPORT_ISSUE
+    ],
+    OPERATIONS_MANAGER: [
+      PERMISSIONS.ORDERS_VIEW, PERMISSIONS.ORDERS_EDIT, PERMISSIONS.ORDERS_ASSIGN,
+      PERMISSIONS.TAILORING_VIEW, PERMISSIONS.DELIVERY_VIEW,
+      PERMISSIONS.INVENTORY_VIEW, PERMISSIONS.EMPLOYEES_VIEW, PERMISSIONS.REPORTS_VIEW
+    ],
+    ACCOUNTS_MANAGER: [
+      PERMISSIONS.ORDERS_VIEW, PERMISSIONS.REPORTS_VIEW, PERMISSIONS.REPORTS_EXPORT,
+      PERMISSIONS.PAYMENTS_VIEW, PERMISSIONS.REFUNDS_CREATE
+    ]
+  };
+
+  for (const [rCode, pCodes] of Object.entries(rolePermissionsMap)) {
+    for (const pCode of pCodes) {
+      await db.run(
+        'INSERT OR IGNORE INTO role_permissions (role_code, permission_code) VALUES (?, ?)',
+        [rCode, pCode]
+      );
+    }
+  }
+
+  // Seed Initial Employees
+  const empList = [
+    {
+      id: 'emp_mgr_01',
+      user_id: 'usr_manager_01',
+      employee_code: 'ABHA-M-001',
+      name: 'Store Manager',
+      mobile: BRAND.PHONE_SECONDARY,
+      email: 'manager@abha.in',
+      department_code: 'STORE',
+      role_code: 'STORE_MANAGER',
+      status: 'ACTIVE',
+      assigned_area: 'Beawar Flagship Store',
+      joining_date: '2026-01-01',
+      authorized_by_user_id: 'usr_owner_01',
+      authorized_by_name: 'ABHA Owner'
+    },
+    {
+      id: 'emp_tailor_01',
+      user_id: 'usr_tailor_01',
+      employee_code: 'ABHA-T-001',
+      name: 'Master Tailor (Beawar)',
+      mobile: '9829000001',
+      email: 'master.tailor@abha.in',
+      department_code: 'TAILORING',
+      role_code: 'TAILOR',
+      status: 'ACTIVE',
+      assigned_area: 'Beawar Atelier',
+      joining_date: '2026-01-01',
+      authorized_by_user_id: 'usr_owner_01',
+      authorized_by_name: 'ABHA Owner'
+    },
+    {
+      id: 'emp_del_01',
+      user_id: 'usr_delivery_01',
+      employee_code: 'ABHA-D-001',
+      name: 'Local Delivery Fleet',
+      mobile: '9829000002',
+      email: 'delivery@abha.in',
+      department_code: 'DELIVERY',
+      role_code: 'DELIVERY_BOY',
+      status: 'ACTIVE',
+      assigned_area: 'Beawar City 305901',
+      joining_date: '2026-01-01',
+      authorized_by_user_id: 'usr_owner_01',
+      authorized_by_name: 'ABHA Owner'
+    }
+  ];
+
+  for (const emp of empList) {
+    const exists = await db.get('SELECT id FROM employees WHERE user_id = ?', [emp.user_id]);
+    if (!exists) {
+      await db.run(`
+        INSERT INTO employees (
+          id, user_id, employee_code, name, mobile, email, department_code, role_code,
+          status, assigned_area, joining_date, authorized_by_user_id, authorized_by_name,
+          authorized_at, is_active
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, 1)
+      `, [
+        emp.id, emp.user_id, emp.employee_code, emp.name, emp.mobile, emp.email,
+        emp.department_code, emp.role_code, emp.status, emp.assigned_area, emp.joining_date,
+        emp.authorized_by_user_id, emp.authorized_by_name
+      ]);
+    }
+  }
+
+  console.log('[ABHA Seed] RBAC Departments, Permissions, Roles, and Initial Staff initialized.');
 
   console.log('[ABHA Seed] Database seeding completed successfully.');
 }

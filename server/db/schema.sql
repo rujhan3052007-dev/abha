@@ -270,15 +270,94 @@ CREATE TABLE IF NOT EXISTS reviews (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- 16. ADMIN AUDIT LOGS
+-- 16. ADMIN AUDIT LOGS (Granular History Tracking)
 CREATE TABLE IF NOT EXISTS admin_audit_logs (
     id TEXT PRIMARY KEY,
     user_id TEXT REFERENCES users(id) ON DELETE SET NULL,
+    actor_name TEXT,
+    actor_role TEXT,
     action TEXT NOT NULL,
     entity_type TEXT NOT NULL,
     entity_id TEXT NOT NULL,
+    previous_value TEXT,
+    new_value TEXT,
     details_json TEXT,
     ip_address TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 17. DEPARTMENTS (Store, Tailoring, Delivery, Operations, Accounts + Custom)
+CREATE TABLE IF NOT EXISTS departments (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    code TEXT UNIQUE NOT NULL,
+    description TEXT,
+    is_active INTEGER NOT NULL DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 18. ROLES
+CREATE TABLE IF NOT EXISTS roles (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    code TEXT UNIQUE NOT NULL,
+    department_code TEXT REFERENCES departments(code) ON DELETE SET NULL,
+    description TEXT,
+    is_system INTEGER NOT NULL DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 19. PERMISSIONS (MODULE.ACTION)
+CREATE TABLE IF NOT EXISTS permissions (
+    id TEXT PRIMARY KEY,
+    module TEXT NOT NULL,
+    action TEXT NOT NULL,
+    code TEXT UNIQUE NOT NULL,
+    description TEXT
+);
+
+-- 20. ROLE PERMISSIONS
+CREATE TABLE IF NOT EXISTS role_permissions (
+    role_code TEXT NOT NULL,
+    permission_code TEXT NOT NULL,
+    PRIMARY KEY (role_code, permission_code)
+);
+
+-- 21. EMPLOYEES (Structured Lifecycle: PENDING, ACTIVE, SUSPENDED, REVOKED, INACTIVE)
+CREATE TABLE IF NOT EXISTS employees (
+    id TEXT PRIMARY KEY,
+    user_id TEXT UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+    employee_code TEXT UNIQUE NOT NULL,
+    name TEXT NOT NULL,
+    mobile TEXT NOT NULL,
+    email TEXT,
+    department_code TEXT NOT NULL,
+    role_code TEXT NOT NULL,
+    status TEXT NOT NULL CHECK(status IN ('PENDING', 'ACTIVE', 'SUSPENDED', 'REVOKED', 'INACTIVE')) DEFAULT 'PENDING',
+    assigned_area TEXT,
+    emergency_contact TEXT,
+    joining_date TEXT,
+    permissions_override_json TEXT, -- JSON array of custom module.action permissions
+    authorized_by_user_id TEXT REFERENCES users(id) ON DELETE SET NULL,
+    authorized_by_name TEXT,
+    authorized_at DATETIME,
+    is_active INTEGER NOT NULL DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 22. EMPLOYEE AUTHORIZATIONS (Approval Workflow & Historic Audit Trail)
+CREATE TABLE IF NOT EXISTS employee_authorizations (
+    id TEXT PRIMARY KEY,
+    employee_id TEXT NOT NULL REFERENCES employees(id) ON DELETE CASCADE,
+    requested_by_user_id TEXT REFERENCES users(id) ON DELETE SET NULL,
+    action TEXT NOT NULL CHECK(action IN ('CREATE', 'AUTHORIZE', 'SUSPEND', 'REACTIVATE', 'REVOKE')),
+    previous_status TEXT,
+    new_status TEXT NOT NULL,
+    authorized_by_user_id TEXT REFERENCES users(id) ON DELETE SET NULL,
+    authorized_by_name TEXT,
+    authorized_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    notes TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -291,3 +370,7 @@ CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(order_status);
 CREATE INDEX IF NOT EXISTS idx_orders_number ON orders(order_number);
 CREATE INDEX IF NOT EXISTS idx_inventory_tx_product ON inventory_transactions(product_id);
 CREATE INDEX IF NOT EXISTS idx_reviews_product ON reviews(product_id, is_approved);
+CREATE INDEX IF NOT EXISTS idx_employees_department ON employees(department_code);
+CREATE INDEX IF NOT EXISTS idx_employees_status ON employees(status);
+CREATE INDEX IF NOT EXISTS idx_audit_actor ON admin_audit_logs(user_id);
+CREATE INDEX IF NOT EXISTS idx_audit_entity ON admin_audit_logs(entity_type, entity_id);

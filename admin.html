@@ -338,6 +338,77 @@
     .tag-unique { background: var(--amber-bg); color: var(--amber-text); }
     .tag-quantity { background: var(--blue-bg); color: var(--blue-text); }
     .tag-stitched { background: #ede9fe; color: #6d28d9; }
+    .tag-pending { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+    .tag-active { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+    .tag-suspended { background: #ffedd5; color: #c2410c; border: 1px solid #fed7aa; }
+    .tag-revoked { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+
+    /* Permission Matrix Styles */
+    .perm-matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .perm-module-card {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 0.85rem;
+    }
+    .perm-module-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .perm-module-title {
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: var(--maroon);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .perm-item-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 0.4rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .perm-item-row input {
+      margin-top: 2px;
+      accent-color: var(--maroon);
+    }
+
+    /* Delivery Tasks & Cards */
+    .delivery-task-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .delivery-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--gray-100);
+      padding-bottom: 0.65rem;
+      margin-bottom: 0.65rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .delivery-action-btn-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      flex-wrap: wrap;
+    }
 
     /* Buttons */
     .btn {
@@ -949,38 +1020,47 @@
         <div style="display: flex; align-items: center; gap: 0.5rem;"><img src="images/logo/abha-crest-simplified.png?v=20260913_4" alt="ABHA Crest" style="width: 32px; height: 32px; object-fit: contain;"><img src="images/logo/abha-text-maroon.png?v=20260913_4" alt="ABHA" style="height: 24px; width: auto; object-fit: contain;"></div>
         <button type="button" class="btn-sidebar-close" onclick="closeAdminSidebar()" aria-label="Close menu">&times;</button>
       </div>
-      <div class="nav-header">Overview</div>
-      <button class="nav-item active" onclick="switchTab('dashboard')">
+
+      <div class="nav-header" id="navHeaderOverview">Overview</div>
+      <button class="nav-item active" id="navItemDashboard" onclick="switchTab('dashboard')" data-perm="orders.view">
         <span>📊</span> Dashboard Overview
       </button>
 
-      <div class="nav-header">Store Operations</div>
-      <button class="nav-item" onclick="switchTab('pos')">
-        <span>🏷️</span> Offline POS Billing
+      <div class="nav-header" id="navHeaderGovernance">Organization & Staff</div>
+      <button class="nav-item" id="navItemManagers" onclick="switchTab('managers')" data-perm="managers.view" data-owner="true">
+        <span>👔</span> Manager Governance
       </button>
-      <button class="nav-item" onclick="switchTab('tailor')">
-        <span>✂️</span> Tailor Pipeline <span id="tailorBadge" class="badge">0</span>
-      </button>
-      <button class="nav-item" onclick="switchTab('deliveries')">
-        <span>🚚</span> Local Deliveries <span id="deliveryBadge" class="badge">0</span>
+      <button class="nav-item" id="navItemEmployees" onclick="switchTab('employees')" data-perm="employees.view">
+        <span>👥</span> Department Staff
       </button>
 
-      <div class="nav-header">Catalog & Business</div>
-      <button class="nav-item" onclick="switchTab('products')">
+      <div class="nav-header" id="navHeaderOps">Store Operations</div>
+      <button class="nav-item" id="navItemPos" onclick="switchTab('pos')" data-perm="pos.access">
+        <span>🏷️</span> Offline POS Billing
+      </button>
+      <button class="nav-item" id="navItemTailor" onclick="switchTab('tailor')" data-perm="tailoring.view">
+        <span>✂️</span> Atelier & Tailoring <span id="tailorBadge" class="badge">0</span>
+      </button>
+      <button class="nav-item" id="navItemDeliveries" onclick="switchTab('deliveries')" data-perm="delivery.view">
+        <span>🚚</span> Delivery & Logistics <span id="deliveryBadge" class="badge">0</span>
+      </button>
+
+      <div class="nav-header" id="navHeaderCatalog">Catalog & Business</div>
+      <button class="nav-item" id="navItemProducts" onclick="switchTab('products')" data-perm="products.view">
         <span>👗</span> Products Catalog
       </button>
-      <button class="nav-item" onclick="switchTab('categories')">
+      <button class="nav-item" id="navItemCategories" onclick="switchTab('categories')" data-perm="products.view">
         <span>📁</span> Categories & Future
       </button>
-      <button class="nav-item" onclick="switchTab('reviews')">
+      <button class="nav-item" id="navItemReviews" onclick="switchTab('reviews')" data-perm="reviews.view">
         <span>⭐</span> Customer Reviews
       </button>
 
-      <div class="nav-header">System</div>
-      <button class="nav-item" onclick="switchTab('integrations')">
+      <div class="nav-header" id="navHeaderSystem">System</div>
+      <button class="nav-item" id="navItemIntegrations" onclick="switchTab('integrations')" data-perm="settings.view" data-owner="true">
         <span>⚙️</span> Integration Health
       </button>
-      <button class="nav-item" onclick="switchTab('audit')">
+      <button class="nav-item" id="navItemAudit" onclick="switchTab('audit')" data-perm="audit.view">
         <span>📜</span> Audit Logs
       </button>
     </aside>
@@ -1042,6 +1122,90 @@
               </thead>
               <tbody id="recentOrdersTable">
                 <tr><td colspan="7" style="text-align: center; color: var(--gray-500);">Loading recent orders...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. MANAGERS GOVERNANCE (OWNER ONLY) -->
+      <section id="section-managers" class="page-section">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">Department Managers Governance</h1>
+            <p class="section-desc">Owner Executive Portal — Designate managers, configure custom permission matrices, and supervise department leadership</p>
+          </div>
+          <button class="btn btn-gold" onclick="openCreateManagerModal()">+ Designate New Manager</button>
+        </div>
+
+        <div class="panel-card">
+          <div class="panel-header">
+            <h3 class="panel-title">Active & Registered Managers</h3>
+            <button class="btn btn-outline btn-sm" onclick="loadManagersAdmin()">Refresh</button>
+          </div>
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Manager</th>
+                  <th>Employee Code</th>
+                  <th>Department</th>
+                  <th>Role</th>
+                  <th>Assigned Area</th>
+                  <th>Status</th>
+                  <th>Active Permissions</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="managersTableBody">
+                <tr><td colspan="8" style="text-align: center; color: var(--gray-500);">Loading managers...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. DEPARTMENT STAFF DIRECTORY & AUTHORIZATION -->
+      <section id="section-employees" class="page-section">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">Department Employees & Authorization</h1>
+            <p class="section-desc">Structured employee lifecycle management — Pending, Active, Suspended, or Revoked</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+            <select id="employeeDeptFilter" class="form-input" style="width: auto; padding: 0.5rem; font-size: 0.85rem;" onchange="loadEmployeesAdmin()">
+              <option value="ALL">All Departments</option>
+              <option value="STORE">Store & Retail POS</option>
+              <option value="TAILORING">Tailoring Atelier</option>
+              <option value="DELIVERY">Delivery Fleet</option>
+              <option value="OPERATIONS">Operations</option>
+              <option value="ACCOUNTS">Accounts</option>
+            </select>
+            <button class="btn btn-gold" onclick="openCreateEmployeeModal()">+ Add Employee</button>
+          </div>
+        </div>
+
+        <div class="panel-card">
+          <div class="panel-header">
+            <h3 class="panel-title">Staff Members</h3>
+            <button class="btn btn-outline btn-sm" onclick="loadEmployeesAdmin()">Refresh</button>
+          </div>
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Employee Name & Contact</th>
+                  <th>Department</th>
+                  <th>Role</th>
+                  <th>Assigned Area</th>
+                  <th>Status</th>
+                  <th>Authorized By</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="employeesTableBody">
+                <tr><td colspan="8" style="text-align: center; color: var(--gray-500);">Loading employees...</td></tr>
               </tbody>
             </table>
           </div>
@@ -1129,15 +1293,16 @@
           <button class="btn btn-outline btn-sm" onclick="loadDeliveryQueue()">Refresh</button>
         </div>
 
-        <div class="panel-card">
-          <div class="data-table-wrapper">
+        <div class="panel-card" id="deliveriesPanelCard">
+          <div id="deliveryBoyCards" style="display: none;"></div>
+          <div class="data-table-wrapper" id="deliveriesTableWrapper">
             <table class="data-table">
               <thead>
                 <tr>
                   <th>Order #</th>
                   <th>Customer</th>
                   <th>Address & Phone</th>
-                  <th>Method</th>
+                  <th>Method & Fleet</th>
                   <th>Status</th>
                   <th>Actions</th>
                 </tr>
@@ -1261,7 +1426,11 @@
         <div class="section-header">
           <div>
             <h1 class="section-title">Administrative Audit Trail</h1>
-            <p class="section-desc">Immutable history of administrative actions, billing, and inventory changes</p>
+            <p class="section-desc">Immutable history of administrative actions, employee authorizations, permissions, and billing</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <input type="text" id="auditSearchInput" class="form-input" placeholder="Search actor, action, entity..." onkeyup="filterAuditLogs()" style="max-width: 280px; padding: 0.45rem 0.75rem; font-size: 0.85rem;">
+            <button class="btn btn-outline btn-sm" onclick="loadAuditLogs()">Refresh</button>
           </div>
         </div>
 
@@ -1271,9 +1440,11 @@
               <thead>
                 <tr>
                   <th>Timestamp</th>
-                  <th>User</th>
+                  <th>Actor & Role</th>
                   <th>Action</th>
                   <th>Entity</th>
+                  <th>Previous State</th>
+                  <th>New State</th>
                   <th>Details</th>
                 </tr>
               </thead>
@@ -1361,6 +1532,219 @@
         <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem;">
           <button type="button" class="btn btn-outline" onclick="closeAddProductModal()">Cancel</button>
           <button type="submit" class="btn btn-primary">Save Product</button>
+        </div>
+      </form>
+    </div>
+  <!-- CREATE MANAGER MODAL (OWNER ONLY) -->
+  <div id="createManagerModal" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 580px;">
+      <h3 class="panel-title" style="margin-bottom: 1.25rem;">Designate Department Manager</h3>
+      <form id="createManagerForm" onsubmit="submitCreateManager(event)" style="display: flex; flex-direction: column; gap: 0.85rem;">
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600;">Full Name *</label>
+          <input type="text" id="mgrName" class="form-input" required placeholder="e.g. Vikramaditya Rathore">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600;">Email Address *</label>
+            <input type="email" id="mgrEmail" class="form-input" required placeholder="manager.store@abha.in">
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600;">Mobile Phone *</label>
+            <input type="tel" id="mgrMobile" class="form-input" required placeholder="9829000003">
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600;">Department *</label>
+            <select id="mgrDept" class="form-input" required>
+              <option value="STORE">Store & Retail POS</option>
+              <option value="TAILORING">Tailoring Atelier</option>
+              <option value="DELIVERY">Delivery & Logistics</option>
+              <option value="OPERATIONS">Operations & Dispatch</option>
+              <option value="ACCOUNTS">Accounts & Finance</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600;">Assigned Area</label>
+            <input type="text" id="mgrArea" class="form-input" placeholder="e.g. Beawar Flagship Store">
+          </div>
+        </div>
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600;">Temporary Password *</label>
+          <input type="password" id="mgrPassword" class="form-input" required placeholder="••••••••••••" minlength="6" value="AbhaManager2026!">
+        </div>
+        <div id="mgrFormError" style="color: var(--red-text); font-size: 0.8rem; display: none;"></div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem;">
+          <button type="button" class="btn btn-outline" onclick="closeCreateManagerModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create Manager</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- PERMISSION MATRIX MODAL (OWNER ONLY) -->
+  <div id="permissionMatrixModal" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 780px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1px solid var(--gray-200); padding-bottom: 0.75rem;">
+        <div>
+          <h3 class="panel-title" style="margin-bottom: 0.25rem;">Permission Matrix Governance</h3>
+          <p id="permMatrixSubtitle" style="font-size: 0.82rem; color: var(--gray-500);">Grant or revoke granular system permissions</p>
+        </div>
+        <button type="button" class="btn btn-outline btn-sm" onclick="closePermissionMatrixModal()">&times;</button>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; background: var(--gray-100); padding: 0.6rem 0.85rem; border-radius: 6px;">
+        <span style="font-size: 0.82rem; font-weight: 600; color: var(--charcoal);">Quick Actions:</span>
+        <div style="display: flex; gap: 0.5rem;">
+          <button type="button" class="btn btn-outline btn-sm" onclick="toggleAllMatrixPerms(true)">Select All</button>
+          <button type="button" class="btn btn-outline btn-sm" onclick="toggleAllMatrixPerms(false)">Clear All</button>
+        </div>
+      </div>
+
+      <div id="permMatrixContainer" class="perm-matrix-grid">
+        <!-- Rendered dynamically grouped by module -->
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem; border-top: 1px solid var(--gray-200); padding-top: 1rem;">
+        <button type="button" class="btn btn-outline" onclick="closePermissionMatrixModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" id="btnSavePermissions" onclick="savePermissionMatrix()">Save & Enforce Permissions</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CREATE EMPLOYEE MODAL (MANAGERS & OWNER) -->
+  <div id="createEmployeeModal" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 540px;">
+      <h3 class="panel-title" style="margin-bottom: 1.25rem;">Add New Department Staff</h3>
+      <form id="createEmployeeForm" onsubmit="submitCreateEmployee(event)" style="display: flex; flex-direction: column; gap: 0.85rem;">
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600;">Full Name *</label>
+          <input type="text" id="empName" class="form-input" required placeholder="e.g. Ramesh Kumar">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600;">Mobile Phone *</label>
+            <input type="tel" id="empMobile" class="form-input" required placeholder="9829000004">
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600;">Email Address</label>
+            <input type="email" id="empEmail" class="form-input" placeholder="staff@abha.in">
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600;">Department *</label>
+            <select id="empDept" class="form-input" required onchange="handleEmpDeptChange(this.value)">
+              <option value="STORE">Store & Retail POS</option>
+              <option value="TAILORING">Tailoring Atelier</option>
+              <option value="DELIVERY">Delivery Fleet</option>
+              <option value="OPERATIONS">Operations</option>
+              <option value="ACCOUNTS">Accounts</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600;">Role Designation *</label>
+            <select id="empRole" class="form-input" required>
+              <option value="POS Counter Staff">POS Counter Staff</option>
+              <option value="Sales Associate">Sales Associate</option>
+            </select>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600;">Assigned Area</label>
+            <input type="text" id="empArea" class="form-input" placeholder="Beawar 305901">
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600;">Initial Status</label>
+            <select id="empInitialStatus" class="form-input">
+              <option value="PENDING">Pending Authorization</option>
+              <option value="ACTIVE">Active Immediate</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600;">Temporary Password</label>
+          <input type="password" id="empPassword" class="form-input" value="AbhaStaff2026!">
+        </div>
+        <div id="empFormError" style="color: var(--red-text); font-size: 0.8rem; display: none;"></div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem;">
+          <button type="button" class="btn btn-outline" onclick="closeCreateEmployeeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create Employee</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- REPORT DELIVERY ISSUE MODAL -->
+  <div id="reportIssueModal" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 480px;">
+      <h3 class="panel-title" style="margin-bottom: 0.5rem;">⚠️ Report Delivery Issue</h3>
+      <p id="reportIssueOrderNum" style="font-size: 0.85rem; color: var(--gray-500); margin-bottom: 1rem;"></p>
+      <form id="reportIssueForm" onsubmit="submitDeliveryIssue(event)" style="display: flex; flex-direction: column; gap: 0.85rem;">
+        <input type="hidden" id="reportIssueDeliveryId">
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600;">Issue Reason *</label>
+          <select id="issueReasonSelect" class="form-input" required>
+            <option value="Customer Not Available / Unreachable">Customer Not Available / Phone Unreachable</option>
+            <option value="Premises Locked / Door Closed">Premises Locked / Door Closed</option>
+            <option value="Incorrect or Incomplete Address">Incorrect or Incomplete Address</option>
+            <option value="Customer Requested Rescheduling">Customer Requested Rescheduling</option>
+            <option value="Cash / Payment Issue">Cash / Payment Issue</option>
+            <option value="Customer Refused Delivery">Customer Refused Delivery</option>
+            <option value="Other Issue">Other Issue</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600;">Details & Notes</label>
+          <textarea id="issueNotesText" class="form-input" rows="3" placeholder="Provide details (e.g. called 3 times, neighbor said customer out of town)..."></textarea>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem;">
+          <button type="button" class="btn btn-outline" onclick="closeReportIssueModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="background: var(--red-text);">Submit Issue Report</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ASSIGN DELIVERY BOY MODAL -->
+  <div id="assignDeliveryModal" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 450px;">
+      <h3 class="panel-title" style="margin-bottom: 0.5rem;">Assign Delivery Staff</h3>
+      <p id="assignDeliveryOrderNum" style="font-size: 0.85rem; color: var(--gray-500); margin-bottom: 1rem;"></p>
+      <form id="assignDeliveryForm" onsubmit="submitAssignDelivery(event)" style="display: flex; flex-direction: column; gap: 0.85rem;">
+        <input type="hidden" id="assignDeliveryId">
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600;">Select Delivery Boy *</label>
+          <select id="assignDeliveryBoySelect" class="form-input" required>
+            <!-- Rendered dynamically -->
+          </select>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem;">
+          <button type="button" class="btn btn-outline" onclick="closeAssignDeliveryModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Assign Order</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ASSIGN TAILOR MODAL -->
+  <div id="assignTailorModal" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 450px;">
+      <h3 class="panel-title" style="margin-bottom: 0.5rem;">Assign Master Tailor</h3>
+      <p id="assignTailorOrderNum" style="font-size: 0.85rem; color: var(--gray-500); margin-bottom: 1rem;"></p>
+      <form id="assignTailorForm" onsubmit="submitAssignTailor(event)" style="display: flex; flex-direction: column; gap: 0.85rem;">
+        <input type="hidden" id="assignTailorStitchingId">
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600;">Select Master Tailor *</label>
+          <select id="assignTailorSelect" class="form-input" required>
+            <!-- Rendered dynamically -->
+          </select>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem;">
+          <button type="button" class="btn btn-outline" onclick="closeAssignTailorModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Assign Garment</button>
         </div>
       </form>
     </div>
@@ -1512,20 +1896,17 @@
       if (nameDisp) nameDisp.textContent = user.name;
       const badge = document.getElementById('userRoleBadge');
       if (badge) {
-        badge.textContent = user.role;
-        badge.className = `role-badge role-${user.role.toLowerCase()}`;
+        badge.textContent = user.department ? `${user.role} (${user.department})` : user.role;
+        badge.className = `role-badge role-${(user.role || '').toLowerCase()}`;
       }
       const roleSelect = document.getElementById('roleSwitcherSelect');
       if (roleSelect) roleSelect.value = user.role;
 
-      applyRolePermissions(user.role);
+      applyRolePermissions(user);
 
       if (isDirect) {
         showDirectAccessToast(`Direct access granted as ${user.name || user.role}`);
       }
-
-      loadDashboard();
-      loadPosItems();
     }
 
     async function apiRequest(endpoint, options = {}) {
@@ -1614,27 +1995,77 @@
       }
     }
 
-    function applyRolePermissions(role) {
+    function hasPermission(user, perm) {
+      if (!user) return false;
+      if (user.role === 'OWNER') return true;
+      if (!user.permissions || !Array.isArray(user.permissions)) return false;
+      return user.permissions.includes(perm);
+    }
+
+    function isNavVisible(elemId) {
+      const el = document.getElementById(elemId);
+      return el && el.style.display !== 'none';
+    }
+
+    function toggleElemDisplay(elemId, show) {
+      const el = document.getElementById(elemId);
+      if (el) el.style.display = show ? 'block' : 'none';
+    }
+
+    function applyRolePermissions(userOrRole) {
+      const user = (typeof userOrRole === 'object' && userOrRole !== null)
+        ? userOrRole
+        : { role: userOrRole, permissions: [] };
+
+      const isOwner = user.role === 'OWNER';
       const allNavItems = document.querySelectorAll('.sidebar .nav-item');
+      let firstVisibleTab = null;
+
       allNavItems.forEach(item => {
-        const text = item.textContent.toLowerCase();
-        if (role === 'TAILOR') {
-          item.style.display = text.includes('tailor') ? 'flex' : 'none';
-        } else if (role === 'DELIVERY') {
-          item.style.display = text.includes('deliveries') ? 'flex' : 'none';
-        } else if (role === 'MANAGER') {
-          item.style.display = (text.includes('integrations') || text.includes('audit')) ? 'none' : 'flex';
+        const isOwnerOnly = item.getAttribute('data-owner') === 'true';
+        const requiredPerm = item.getAttribute('data-perm');
+
+        let visible = false;
+        if (isOwner) {
+          visible = true;
+        } else if (isOwnerOnly) {
+          visible = false;
+        } else if (requiredPerm) {
+          visible = hasPermission(user, requiredPerm);
         } else {
-          item.style.display = 'flex';
+          visible = true;
+        }
+
+        item.style.display = visible ? 'flex' : 'none';
+        if (visible && !firstVisibleTab) {
+          const onclick = item.getAttribute('onclick') || '';
+          const match = onclick.match(/switchTab\('([^']+)'\)/);
+          if (match) firstVisibleTab = match[1];
         }
       });
 
-      if (role === 'TAILOR') {
+      // Update Section Nav Headers visibility
+      const overviewVisible = isNavVisible('navItemDashboard');
+      const govVisible = isNavVisible('navItemManagers') || isNavVisible('navItemEmployees');
+      const opsVisible = isNavVisible('navItemPos') || isNavVisible('navItemTailor') || isNavVisible('navItemDeliveries');
+      const catalogVisible = isNavVisible('navItemProducts') || isNavVisible('navItemCategories') || isNavVisible('navItemReviews');
+      const systemVisible = isNavVisible('navItemIntegrations') || isNavVisible('navItemAudit');
+
+      toggleElemDisplay('navHeaderOverview', overviewVisible);
+      toggleElemDisplay('navHeaderGovernance', govVisible);
+      toggleElemDisplay('navHeaderOps', opsVisible);
+      toggleElemDisplay('navHeaderCatalog', catalogVisible);
+      toggleElemDisplay('navHeaderSystem', systemVisible);
+
+      // Default tab selection
+      if (user.role === 'TAILOR' && isNavVisible('navItemTailor')) {
         switchTab('tailor');
-      } else if (role === 'DELIVERY') {
+      } else if (user.role === 'DELIVERY' && isNavVisible('navItemDeliveries')) {
         switchTab('deliveries');
-      } else {
+      } else if (overviewVisible) {
         switchTab('dashboard');
+      } else if (firstVisibleTab) {
+        switchTab(firstVisibleTab);
       }
     }
 
@@ -1714,12 +2145,17 @@
       closeAdminSidebar();
       document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
-      const activeBtn = Array.from(document.querySelectorAll('.nav-item')).find(b => b.getAttribute('onclick').includes(tabId));
+      const activeBtn = Array.from(document.querySelectorAll('.nav-item')).find(b => {
+        const oc = b.getAttribute('onclick') || '';
+        return oc.includes(`'${tabId}'`) || oc.includes(`"${tabId}"`);
+      });
       if (activeBtn) activeBtn.classList.add('active');
       const targetSec = document.getElementById(`section-${tabId}`);
       if (targetSec) targetSec.classList.add('active');
 
       if (tabId === 'dashboard') loadDashboard();
+      if (tabId === 'managers') loadManagersAdmin();
+      if (tabId === 'employees') loadEmployeesAdmin();
       if (tabId === 'pos') loadPosItems();
       if (tabId === 'tailor') loadTailorQueue();
       if (tabId === 'deliveries') loadDeliveryQueue();
@@ -1734,17 +2170,23 @@
       try {
         const data = await apiRequest('/api/admin/dashboard');
         const fin = data.data.financials;
-        document.getElementById('kpiRevenue').textContent = `₹${fin.total_revenue.toLocaleString('en-IN')}`;
-        document.getElementById('kpiSplit').textContent = `Online: ₹${fin.online_revenue.toLocaleString('en-IN')} | Offline POS: ₹${fin.offline_revenue.toLocaleString('en-IN')}`;
-        document.getElementById('kpiOrders').textContent = fin.total_orders;
-        document.getElementById('kpiStitching').textContent = data.data.stitching_queue_count;
-        document.getElementById('kpiDeliveries').textContent = data.data.pending_deliveries_count;
+        if (fin) {
+          document.getElementById('kpiRevenue').textContent = `₹${(fin.total_revenue || 0).toLocaleString('en-IN')}`;
+          document.getElementById('kpiSplit').textContent = `Online: ₹${(fin.online_revenue || 0).toLocaleString('en-IN')} | Offline POS: ₹${(fin.offline_revenue || 0).toLocaleString('en-IN')}`;
+          document.getElementById('kpiOrders').textContent = fin.total_orders || 0;
+        } else {
+          document.getElementById('kpiRevenue').textContent = `₹*** (Restricted)`;
+          document.getElementById('kpiSplit').textContent = `Online: Restricted | POS: Restricted`;
+          document.getElementById('kpiOrders').textContent = '—';
+        }
+        document.getElementById('kpiStitching').textContent = data.data.stitching_queue_count || 0;
+        document.getElementById('kpiDeliveries').textContent = data.data.pending_deliveries_count || 0;
 
-        document.getElementById('tailorBadge').textContent = data.data.stitching_queue_count;
-        document.getElementById('deliveryBadge').textContent = data.data.pending_deliveries_count;
+        document.getElementById('tailorBadge').textContent = data.data.stitching_queue_count || 0;
+        document.getElementById('deliveryBadge').textContent = data.data.pending_deliveries_count || 0;
 
         const tbody = document.getElementById('recentOrdersTable');
-        if (data.data.recent_orders.length === 0) {
+        if (!data.data.recent_orders || data.data.recent_orders.length === 0) {
           tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--gray-500);">No orders placed yet.</td></tr>`;
           return;
         }
@@ -1752,9 +2194,9 @@
           <tr>
             <td><strong>${o.order_number}</strong></td>
             <td><span class="tag ${o.order_channel === 'ONLINE' ? 'tag-quantity' : 'tag-unique'}">${o.order_channel}</span></td>
-            <td>${o.shipping_name}</td>
+            <td>${o.shipping_name || 'Walk-in'}</td>
             <td><span class="tag ${o.order_type === 'STITCHED' ? 'tag-stitched' : 'tag-quantity'}">${o.order_type}</span></td>
-            <td><strong>₹${o.total_amount.toLocaleString('en-IN')}</strong></td>
+            <td><strong>${o.total_amount != null ? '₹' + Number(o.total_amount).toLocaleString('en-IN') : '₹*** (Restricted)'}</strong></td>
             <td><span class="tag ${o.order_status === 'DELIVERED' ? 'tag-instock' : 'tag-soldout'}">${o.order_status}</span></td>
             <td style="font-size: 0.8rem; color: var(--gray-500);">${new Date(o.created_at).toLocaleString('en-IN')}</td>
           </tr>
@@ -1762,6 +2204,385 @@
       } catch (err) {
         console.error(err);
       }
+    }
+
+    // ==========================================
+    // MANAGER GOVERNANCE & PERMISSION MATRIX (OWNER)
+    // ==========================================
+    let currentMatrixManagerId = null;
+    let allSystemPermissions = [];
+
+    async function loadManagersAdmin() {
+      const tbody = document.getElementById('managersTableBody');
+      try {
+        const res = await apiRequest('/api/admin/managers');
+        const managers = res.data || [];
+        if (managers.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--gray-500);">No managers designated yet.</td></tr>`;
+          return;
+        }
+        tbody.innerHTML = managers.map(m => {
+          const statusTag = m.status === 'ACTIVE'
+            ? '<span class="tag tag-active">Active</span>'
+            : m.status === 'SUSPENDED'
+            ? '<span class="tag tag-suspended">Suspended</span>'
+            : m.status === 'REVOKED'
+            ? '<span class="tag tag-revoked">Revoked</span>'
+            : `<span class="tag tag-pending">${m.status}</span>`;
+
+          const permCount = (m.permissions || []).length;
+          const statusToggleBtn = m.status === 'ACTIVE'
+            ? `<button class="btn btn-outline btn-sm" onclick="toggleManagerStatus('${m.id}', 'ACTIVE')" style="color: var(--amber-text); border-color: var(--amber-text);">Suspend</button>`
+            : m.status === 'SUSPENDED'
+            ? `<button class="btn btn-outline btn-sm" onclick="toggleManagerStatus('${m.id}', 'SUSPENDED')" style="color: var(--green-text); border-color: var(--green-text);">Reactivate</button>`
+            : '';
+
+          const revokeBtn = m.status !== 'REVOKED'
+            ? `<button class="btn btn-outline btn-sm" onclick="revokeManagerStatus('${m.id}')" style="color: var(--red-text); border-color: var(--red-text);">Revoke</button>`
+            : '';
+
+          return `
+            <tr>
+              <td><strong>${m.name}</strong><br><span style="font-size: 0.75rem; color: var(--gray-500);">${m.email}</span></td>
+              <td><code>${m.employee_code || '—'}</code></td>
+              <td><span class="tag tag-quantity">${m.department || 'STORE'}</span></td>
+              <td>${m.role_title || m.role}</td>
+              <td>${m.assigned_area || 'Beawar'}</td>
+              <td>${statusTag}</td>
+              <td><span class="badge" style="font-size: 0.8rem; background: var(--maroon); color: white;">${permCount} Perms</span></td>
+              <td style="white-space: nowrap; display: flex; gap: 0.35rem; align-items: center;">
+                <button class="btn btn-primary btn-sm" onclick="openPermissionMatrixModal('${m.id}', '${m.name.replace(/'/g, "\\'")}')">Matrix</button>
+                ${statusToggleBtn}
+                ${revokeBtn}
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="8" style="color: var(--red-text);">${err.message}</td></tr>`;
+      }
+    }
+
+    function openCreateManagerModal() {
+      document.getElementById('createManagerForm').reset();
+      document.getElementById('mgrFormError').style.display = 'none';
+      document.getElementById('createManagerModal').classList.add('open');
+    }
+
+    function closeCreateManagerModal() {
+      document.getElementById('createManagerModal').classList.remove('open');
+    }
+
+    async function submitCreateManager(e) {
+      e.preventDefault();
+      const errBox = document.getElementById('mgrFormError');
+      errBox.style.display = 'none';
+
+      const name = document.getElementById('mgrName').value.trim();
+      const email = document.getElementById('mgrEmail').value.trim();
+      const mobile = document.getElementById('mgrMobile').value.trim();
+      const department = document.getElementById('mgrDept').value;
+      const assigned_area = document.getElementById('mgrArea').value.trim() || 'Beawar';
+      const password = document.getElementById('mgrPassword').value;
+
+      try {
+        await apiRequest('/api/admin/managers', {
+          method: 'POST',
+          body: JSON.stringify({ name, email, mobile, department, assigned_area, password })
+        });
+        closeCreateManagerModal();
+        loadManagersAdmin();
+        alert(`Manager "${name}" designated successfully.`);
+      } catch (err) {
+        errBox.textContent = err.message;
+        errBox.style.display = 'block';
+      }
+    }
+
+    async function openPermissionMatrixModal(managerId, managerName) {
+      currentMatrixManagerId = managerId;
+      document.getElementById('permMatrixSubtitle').textContent = `Configuring permissions for ${managerName}`;
+      const container = document.getElementById('permMatrixContainer');
+      container.innerHTML = '<div style="color: var(--gray-500); padding: 1rem;">Loading permissions catalog...</div>';
+      document.getElementById('permissionMatrixModal').classList.add('open');
+
+      try {
+        const [permsRes, mgrsRes] = await Promise.all([
+          apiRequest('/api/admin/permissions'),
+          apiRequest('/api/admin/managers')
+        ]);
+        allSystemPermissions = permsRes.data || [];
+        const manager = (mgrsRes.data || []).find(m => m.id === managerId);
+        const activePerms = new Set(manager ? (manager.permissions || []) : []);
+
+        const grouped = {};
+        allSystemPermissions.forEach(p => {
+          if (!grouped[p.module]) grouped[p.module] = [];
+          grouped[p.module].push(p);
+        });
+
+        const moduleIcons = {
+          orders: '📦',
+          delivery: '🚚',
+          tailoring: '✂️',
+          inventory: '👗',
+          staff: '👥',
+          pos: '🏷️',
+          finance: '💰',
+          system: '⚙️'
+        };
+
+        container.innerHTML = Object.entries(grouped).map(([mod, perms]) => {
+          const modIcon = moduleIcons[mod] || '🔒';
+          const modTitle = mod.charAt(0).toUpperCase() + mod.slice(1);
+          const allChecked = perms.every(p => activePerms.has(p.code));
+
+          return `
+            <div class="perm-module-card">
+              <div class="perm-module-header">
+                <div>
+                  <span style="font-size: 1.1rem; margin-right: 0.35rem;">${modIcon}</span>
+                  <strong>${modTitle} Module</strong>
+                </div>
+                <label style="font-size: 0.75rem; color: var(--gray-600); cursor: pointer; display: flex; align-items: center; gap: 0.35rem;">
+                  <input type="checkbox" onchange="toggleModulePerms('${mod}', this.checked)" ${allChecked ? 'checked' : ''}> Select Module
+                </label>
+              </div>
+              <div class="perm-list" id="modList_${mod}">
+                ${perms.map(p => `
+                  <div class="perm-item">
+                    <input type="checkbox" id="chk_${p.code.replace(/\./g, '_')}" value="${p.code}" data-module="${mod}" ${activePerms.has(p.code) ? 'checked' : ''}>
+                    <label for="chk_${p.code.replace(/\./g, '_')}">
+                      ${p.name}
+                      <span class="perm-code">${p.code}</span>
+                    </label>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        container.innerHTML = `<div style="color: var(--red-text); padding: 1rem;">${err.message}</div>`;
+      }
+    }
+
+    function closePermissionMatrixModal() {
+      document.getElementById('permissionMatrixModal').classList.remove('open');
+      currentMatrixManagerId = null;
+    }
+
+    function toggleModulePerms(mod, isChecked) {
+      const checkboxes = document.querySelectorAll(`#modList_${mod} input[type="checkbox"]`);
+      checkboxes.forEach(cb => cb.checked = isChecked);
+    }
+
+    function toggleAllMatrixPerms(isChecked) {
+      const checkboxes = document.querySelectorAll('#permMatrixContainer input[type="checkbox"]');
+      checkboxes.forEach(cb => cb.checked = isChecked);
+    }
+
+    async function savePermissionMatrix() {
+      if (!currentMatrixManagerId) return;
+      const btn = document.getElementById('btnSavePermissions');
+      const originalText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Enforcing...';
+
+      try {
+        const checked = Array.from(document.querySelectorAll('#permMatrixContainer .perm-item input[type="checkbox"]:checked'))
+          .map(cb => cb.value);
+
+        await apiRequest(`/api/admin/managers/${currentMatrixManagerId}/permissions`, {
+          method: 'PUT',
+          body: JSON.stringify({ permissions: checked })
+        });
+
+        closePermissionMatrixModal();
+        loadManagersAdmin();
+        alert('Permission matrix updated and enforced successfully.');
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }
+    }
+
+    async function toggleManagerStatus(managerId, currentStatus) {
+      const newStatus = currentStatus === 'ACTIVE' ? 'SUSPENDED' : 'ACTIVE';
+      if (!confirm(`Are you sure you want to change this manager's status to ${newStatus}?`)) return;
+      try {
+        await apiRequest(`/api/admin/managers/${managerId}/status`, {
+          method: 'PUT',
+          body: JSON.stringify({ status: newStatus })
+        });
+        loadManagersAdmin();
+      } catch (err) { alert(err.message); }
+    }
+
+    async function revokeManagerStatus(managerId) {
+      if (!confirm('Are you sure you want to PERMANENTLY REVOKE this manager? They will immediately lose system access while all order and audit histories remain intact.')) return;
+      try {
+        await apiRequest(`/api/admin/managers/${managerId}/status`, {
+          method: 'PUT',
+          body: JSON.stringify({ status: 'REVOKED' })
+        });
+        loadManagersAdmin();
+      } catch (err) { alert(err.message); }
+    }
+
+    // ==========================================
+    // DEPARTMENT EMPLOYEES & AUTHORIZATION
+    // ==========================================
+    const DEPT_ROLES_MAP = {
+      STORE: ['POS Counter Staff', 'Sales Associate', 'Store Assistant'],
+      TAILORING: ['Master Tailor', 'Cutting Specialist', 'Finishing & Press Staff'],
+      DELIVERY: ['Delivery Boy', 'Dispatch Coordinator'],
+      OPERATIONS: ['Operations Staff', 'Quality Control Specialist', 'Inventory Specialist'],
+      ACCOUNTS: ['Accounts Assistant', 'Cashier']
+    };
+
+    async function loadEmployeesAdmin() {
+      const tbody = document.getElementById('employeesTableBody');
+      const deptFilter = document.getElementById('employeeDeptFilter').value;
+      try {
+        const query = deptFilter && deptFilter !== 'ALL' ? `?department=${deptFilter}` : '';
+        const res = await apiRequest(`/api/admin/employees${query}`);
+        const employees = res.data || [];
+        if (employees.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--gray-500);">No employees found for selected department.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = employees.map(emp => {
+          const statusTag = emp.status === 'ACTIVE'
+            ? '<span class="tag tag-active">Active</span>'
+            : emp.status === 'SUSPENDED'
+            ? '<span class="tag tag-suspended">Suspended</span>'
+            : emp.status === 'REVOKED'
+            ? '<span class="tag tag-revoked">Revoked</span>'
+            : `<span class="tag tag-pending">Pending Auth</span>`;
+
+          let actions = '';
+          if (emp.status === 'PENDING') {
+            actions = `
+              <button class="btn btn-primary btn-sm" onclick="authorizeEmployeeAdmin('${emp.id}', 'ACTIVE')">✓ Authorize</button>
+              <button class="btn btn-outline btn-sm" onclick="updateEmployeeStatusAdmin('${emp.id}', 'REVOKED')" style="color: var(--red-text); border-color: var(--red-text);">Decline</button>
+            `;
+          } else if (emp.status === 'ACTIVE') {
+            actions = `
+              <button class="btn btn-outline btn-sm" onclick="updateEmployeeStatusAdmin('${emp.id}', 'SUSPENDED')" style="color: var(--amber-text); border-color: var(--amber-text);">Suspend</button>
+              <button class="btn btn-outline btn-sm" onclick="updateEmployeeStatusAdmin('${emp.id}', 'REVOKED')" style="color: var(--red-text); border-color: var(--red-text);">Revoke</button>
+            `;
+          } else if (emp.status === 'SUSPENDED') {
+            actions = `
+              <button class="btn btn-outline btn-sm" onclick="updateEmployeeStatusAdmin('${emp.id}', 'ACTIVE')" style="color: var(--green-text); border-color: var(--green-text);">Reactivate</button>
+              <button class="btn btn-outline btn-sm" onclick="updateEmployeeStatusAdmin('${emp.id}', 'REVOKED')" style="color: var(--red-text); border-color: var(--red-text);">Revoke</button>
+            `;
+          }
+
+          const authorizedByText = emp.authorized_by_name
+            ? `${emp.authorized_by_name} (${emp.authorized_by_role || 'MANAGER'})`
+            : (emp.status === 'PENDING' ? '<span style="color: var(--amber-text); font-style: italic;">Awaiting Review</span>' : 'System Initial');
+
+          return `
+            <tr>
+              <td><code>${emp.employee_code || '—'}</code></td>
+              <td><strong>${emp.name}</strong><br><span style="font-size: 0.75rem; color: var(--gray-500);">${emp.mobile || ''} ${emp.email ? '• ' + emp.email : ''}</span></td>
+              <td><span class="tag tag-quantity">${emp.department || 'STORE'}</span></td>
+              <td>${emp.role_title || emp.role}</td>
+              <td>${emp.assigned_area || 'Beawar'}</td>
+              <td>${statusTag}</td>
+              <td style="font-size: 0.8rem;">${authorizedByText}</td>
+              <td style="white-space: nowrap; display: flex; gap: 0.35rem; align-items: center;">${actions}</td>
+            </tr>
+          `;
+        }).join('');
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="8" style="color: var(--red-text);">${err.message}</td></tr>`;
+      }
+    }
+
+    function openCreateEmployeeModal() {
+      document.getElementById('createEmployeeForm').reset();
+      document.getElementById('empFormError').style.display = 'none';
+      if (currentUser && currentUser.department) {
+        document.getElementById('empDept').value = currentUser.department;
+        handleEmpDeptChange(currentUser.department);
+      } else {
+        handleEmpDeptChange('STORE');
+      }
+      document.getElementById('createEmployeeModal').classList.add('open');
+    }
+
+    function closeCreateEmployeeModal() {
+      document.getElementById('createEmployeeModal').classList.remove('open');
+    }
+
+    function handleEmpDeptChange(dept) {
+      const select = document.getElementById('empRole');
+      const roles = DEPT_ROLES_MAP[dept] || ['Staff Associate'];
+      select.innerHTML = roles.map(r => `<option value="${r}">${r}</option>`).join('');
+    }
+
+    async function submitCreateEmployee(e) {
+      e.preventDefault();
+      const errBox = document.getElementById('empFormError');
+      errBox.style.display = 'none';
+
+      const name = document.getElementById('empName').value.trim();
+      const mobile = document.getElementById('empMobile').value.trim();
+      const email = document.getElementById('empEmail').value.trim();
+      const department = document.getElementById('empDept').value;
+      const role_title = document.getElementById('empRole').value;
+      const assigned_area = document.getElementById('empArea').value.trim() || 'Beawar';
+      const initial_status = document.getElementById('empInitialStatus').value;
+      const password = document.getElementById('empPassword').value;
+
+      try {
+        await apiRequest('/api/admin/employees', {
+          method: 'POST',
+          body: JSON.stringify({
+            name,
+            mobile,
+            email,
+            department,
+            role_title,
+            assigned_area,
+            status: initial_status,
+            password
+          })
+        });
+        closeCreateEmployeeModal();
+        loadEmployeesAdmin();
+        alert(`Employee "${name}" registered successfully.`);
+      } catch (err) {
+        errBox.textContent = err.message;
+        errBox.style.display = 'block';
+      }
+    }
+
+    async function authorizeEmployeeAdmin(id, status) {
+      if (!confirm(`Confirm authorization of this employee to ${status}?`)) return;
+      try {
+        await apiRequest(`/api/admin/employees/${id}/authorize`, {
+          method: 'PUT',
+          body: JSON.stringify({ status })
+        });
+        loadEmployeesAdmin();
+      } catch (err) { alert(err.message); }
+    }
+
+    async function updateEmployeeStatusAdmin(id, status) {
+      if (!confirm(`Are you sure you want to change employee status to ${status}?`)) return;
+      try {
+        await apiRequest(`/api/admin/employees/${id}/status`, {
+          method: 'PUT',
+          body: JSON.stringify({ status })
+        });
+        loadEmployeesAdmin();
+      } catch (err) { alert(err.message); }
     }
 
     async function loadPosItems() {
@@ -1853,31 +2674,56 @@
       }
     }
 
+    // ==========================================
+    // TAILOR WORKSPACE & PIPELINE
+    // ==========================================
     async function loadTailorQueue() {
       const container = document.getElementById('tailorOrdersList');
+      const isStaffTailor = currentUser && currentUser.role === 'TAILOR';
+      const endpoint = isStaffTailor ? '/api/tailor/my-tasks' : '/api/tailor/queue';
+
       try {
-        const res = await apiRequest('/api/tailor/queue');
-        if (res.data.length === 0) {
+        const res = await apiRequest(endpoint);
+        const tasks = res.data || [];
+        if (tasks.length === 0) {
           container.innerHTML = `<div class="panel-card" style="text-align: center; color: var(--gray-500);">No garments currently in tailoring queue. All orders completed!</div>`;
           return;
         }
 
-        container.innerHTML = res.data.map(item => `
+        container.innerHTML = tasks.map(item => `
           <div class="tailor-card">
             <div class="tailor-card-header">
               <div>
-                <strong>${item.order_number}</strong> — <span style="color: var(--maroon); font-weight: 600;">${item.product_title}</span> (${item.product_sku})
+                <strong>${item.order_number}</strong> — <span style="color: var(--maroon); font-weight: 600;">${item.product_title || 'Salwar Suit'}</span> (${item.product_sku || 'SKU'})
+                ${item.assigned_tailor_name ? `<div style="font-size: 0.8rem; color: var(--gray-600); margin-top: 0.2rem;">Assigned Tailor: <strong>${item.assigned_tailor_name}</strong></div>` : '<div style="font-size: 0.8rem; color: var(--amber-text); margin-top: 0.2rem;">⚠️ Unassigned Garment</div>'}
               </div>
-              <span class="tag tag-stitched">${item.stitching_status}</span>
+              <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <span class="tag tag-stitched">${item.stitching_status}</span>
+                ${!isStaffTailor ? `<button class="btn btn-outline btn-sm" onclick="openAssignTailorModal('${item.stitching_id}', '${item.order_number}')">Assign Tailor</button>` : ''}
+              </div>
             </div>
 
             <div class="tailor-specs-grid">
-              <div class="spec-item"><span class="label">Neck Design</span><div class="val">${item.neck_design}</div></div>
-              <div class="spec-item"><span class="label">Sleeve Style</span><div class="val">${item.sleeve_style}</div></div>
-              <div class="spec-item"><span class="label">Bottom Style</span><div class="val">${item.bottom_style}</div></div>
-              <div class="spec-item"><span class="label">Kurta Cut</span><div class="val">${item.kurta_design}</div></div>
-              <div class="spec-item"><span class="label">Customer</span><div class="val">${item.customer_name}</div></div>
+              <div class="spec-item"><span class="label">Neck Design</span><div class="val">${item.neck_design || 'Standard'}</div></div>
+              <div class="spec-item"><span class="label">Sleeve Style</span><div class="val">${item.sleeve_style || 'Regular'}</div></div>
+              <div class="spec-item"><span class="label">Bottom Style</span><div class="val">${item.bottom_style || 'Salwar'}</div></div>
+              <div class="spec-item"><span class="label">Kurta Cut</span><div class="val">${item.kurta_design || 'Straight'}</div></div>
+              <div class="spec-item"><span class="label">Customer</span><div class="val">${item.customer_name || 'Customer'}</div></div>
             </div>
+
+            ${(item.measurements || item.bust || item.waist || item.length) ? `
+              <div style="margin-top: 0.75rem; background: var(--gray-50); padding: 0.6rem 0.85rem; border-radius: 6px; border: 1px solid var(--gray-200);">
+                <div style="font-size: 0.75rem; font-weight: 600; color: var(--gray-600); margin-bottom: 0.35rem;">📏 Custom Body Measurements:</div>
+                <div style="display: flex; gap: 1.25rem; font-size: 0.82rem; color: var(--charcoal); flex-wrap: wrap;">
+                  ${item.bust ? `<span>Bust: <strong>${item.bust}"</strong></span>` : ''}
+                  ${item.waist ? `<span>Waist: <strong>${item.waist}"</strong></span>` : ''}
+                  ${item.hip ? `<span>Hip: <strong>${item.hip}"</strong></span>` : ''}
+                  ${item.length ? `<span>Length: <strong>${item.length}"</strong></span>` : ''}
+                  ${item.shoulder ? `<span>Shoulder: <strong>${item.shoulder}"</strong></span>` : ''}
+                  ${item.armhole ? `<span>Armhole: <strong>${item.armhole}"</strong></span>` : ''}
+                </div>
+              </div>
+            ` : ''}
 
             ${item.additional_requirements ? `
               <div style="margin-top: 0.5rem; font-size: 0.85rem; background: var(--amber-bg); color: var(--amber-text); padding: 0.5rem 0.75rem; border-radius: 4px;">
@@ -1891,7 +2737,7 @@
                 <div class="ref-images-strip">
                   ${item.reference_images.map(r => `
                     <a href="/api/tailor/reference-image/${r.vault_storage_key}" target="_blank">
-                      <img src="/api/tailor/reference-image/${r.vault_storage_key}" class="ref-img-thumb" title="${r.original_filename}">
+                      <img src="/api/tailor/reference-image/${r.vault_storage_key}" class="ref-img-thumb" title="${r.original_filename || 'Reference'}">
                     </a>
                   `).join('')}
                 </div>
@@ -1918,32 +2764,148 @@
           body: JSON.stringify({ status })
         });
         loadTailorQueue();
-        loadDashboard();
+        if (hasPermission(currentUser, 'orders.view')) loadDashboard();
       } catch (e) { alert(e.message); }
     }
 
-    async function loadDeliveryQueue() {
-      const tbody = document.getElementById('deliveriesTable');
+    async function openAssignTailorModal(stitchingId, orderNum) {
+      document.getElementById('assignTailorStitchingId').value = stitchingId;
+      document.getElementById('assignTailorOrderNum').textContent = `Order: ${orderNum}`;
+      const select = document.getElementById('assignTailorSelect');
+      select.innerHTML = '<option value="">Loading tailors...</option>';
+      document.getElementById('assignTailorModal').classList.add('open');
+
       try {
-        const res = await apiRequest('/api/delivery/queue');
-        if (res.data.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--gray-500);">No deliveries pending dispatch.</td></tr>`;
+        const res = await apiRequest('/api/admin/employees?department=TAILORING');
+        const tailors = (res.data || []).filter(e => e.status === 'ACTIVE');
+        if (tailors.length === 0) {
+          select.innerHTML = '<option value="">No active tailors available</option>';
           return;
         }
-        tbody.innerHTML = res.data.map(d => `
-          <tr>
-            <td><strong>${d.order_number}</strong></td>
-            <td><strong>${d.shipping_name}</strong><br><a href="tel:${d.shipping_phone}" style="color: var(--maroon);">${d.shipping_phone}</a></td>
-            <td>${d.shipping_address}, ${d.shipping_city} (${d.shipping_pincode})</td>
-            <td><span class="tag tag-unique">${d.delivery_method}</span></td>
-            <td><span class="tag ${d.delivery_status === 'DELIVERED' ? 'tag-instock' : 'tag-soldout'}">${d.delivery_status}</span></td>
-            <td>
-              <button class="btn btn-outline btn-sm" onclick="updateDeliveryStatus('${d.delivery_id}', 'OUT_FOR_DELIVERY')">Out for Delivery</button>
-              <button class="btn btn-gold btn-sm" onclick="updateDeliveryStatus('${d.delivery_id}', 'DELIVERED')">✓ Delivered</button>
-            </td>
-          </tr>
-        `).join('');
-      } catch (e) { console.error(e); }
+        select.innerHTML = tailors.map(t => `<option value="${t.id}">${t.name} (${t.role_title || 'Tailor'})</option>`).join('');
+      } catch (err) {
+        select.innerHTML = `<option value="">Error: ${err.message}</option>`;
+      }
+    }
+
+    function closeAssignTailorModal() {
+      document.getElementById('assignTailorModal').classList.remove('open');
+    }
+
+    async function submitAssignTailor(e) {
+      e.preventDefault();
+      const stitchingId = document.getElementById('assignTailorStitchingId').value;
+      const tailor_id = document.getElementById('assignTailorSelect').value;
+      if (!tailor_id) return;
+
+      try {
+        await apiRequest(`/api/tailor/orders/${stitchingId}/assign`, {
+          method: 'PUT',
+          body: JSON.stringify({ tailor_id })
+        });
+        closeAssignTailorModal();
+        loadTailorQueue();
+        alert('Garment successfully assigned to Master Tailor.');
+      } catch (err) { alert(err.message); }
+    }
+
+    // ==========================================
+    // DELIVERY & LOGISTICS
+    // ==========================================
+    async function loadDeliveryQueue() {
+      const isDeliveryBoy = currentUser && currentUser.role === 'DELIVERY';
+      const cardsContainer = document.getElementById('deliveryBoyCards');
+      const tableWrapper = document.getElementById('deliveriesTableWrapper');
+      const tbody = document.getElementById('deliveriesTable');
+
+      if (isDeliveryBoy) {
+        cardsContainer.style.display = 'grid';
+        cardsContainer.style.gridTemplateColumns = 'repeat(auto-fit, minmax(320px, 1fr))';
+        cardsContainer.style.gap = '1rem';
+        tableWrapper.style.display = 'none';
+
+        try {
+          const res = await apiRequest('/api/delivery/my-deliveries');
+          const deliveries = res.data || [];
+          if (deliveries.length === 0) {
+            cardsContainer.innerHTML = `<div class="panel-card" style="text-align: center; color: var(--gray-500); grid-column: 1 / -1;">No deliveries assigned to you right now. Stand by for dispatch!</div>`;
+            return;
+          }
+
+          cardsContainer.innerHTML = deliveries.map(d => {
+            const mapsQuery = encodeURIComponent(`${d.shipping_address || ''}, ${d.shipping_city || 'Beawar'} ${d.shipping_pincode || '305901'}`);
+            return `
+              <div class="delivery-task-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                  <div>
+                    <strong style="font-size: 1.05rem; color: var(--charcoal);">${d.order_number}</strong>
+                    <div style="font-size: 0.85rem; color: var(--maroon); font-weight: 600; margin-top: 0.15rem;">${d.shipping_name || 'Customer'}</div>
+                  </div>
+                  <span class="tag ${d.delivery_status === 'DELIVERED' ? 'tag-instock' : d.delivery_status === 'OUT_FOR_DELIVERY' ? 'tag-quantity' : 'tag-unique'}">${d.delivery_status}</span>
+                </div>
+
+                <div style="font-size: 0.85rem; color: var(--gray-600); margin-bottom: 0.75rem; background: var(--gray-50); padding: 0.6rem; border-radius: 6px;">
+                  📍 <strong>Delivery Address:</strong><br>
+                  ${d.shipping_address || 'Address on file'}<br>
+                  ${d.shipping_city || 'Beawar'} (${d.shipping_pincode || '305901'})
+                </div>
+
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 0.85rem; flex-wrap: wrap;">
+                  <a href="tel:${d.shipping_phone}" class="btn btn-outline btn-sm" style="flex: 1; text-align: center;">
+                    📞 Call ${d.shipping_phone}
+                  </a>
+                  <a href="https://www.google.com/maps/search/?api=1&query=${mapsQuery}" target="_blank" class="btn btn-outline btn-sm" style="flex: 1; text-align: center;">
+                    🗺️ Open Maps
+                  </a>
+                </div>
+
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; border-top: 1px solid var(--gray-200); padding-top: 0.75rem;">
+                  <button class="btn btn-outline btn-sm" style="flex: 1;" onclick="updateDeliveryStatus('${d.delivery_id}', 'OUT_FOR_DELIVERY')">
+                    🚀 Out for Delivery
+                  </button>
+                  <button class="btn btn-gold btn-sm" style="flex: 1;" onclick="updateDeliveryStatus('${d.delivery_id}', 'DELIVERED')">
+                    ✓ Delivered
+                  </button>
+                  <button class="btn btn-outline btn-sm" style="color: var(--red-text); border-color: var(--red-text);" onclick="openReportIssueModal('${d.delivery_id}', '${d.order_number}')">
+                    ⚠️ Issue
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
+        } catch (e) {
+          cardsContainer.innerHTML = `<div style="color: var(--red-text); grid-column: 1 / -1;">${e.message}</div>`;
+        }
+      } else {
+        cardsContainer.style.display = 'none';
+        tableWrapper.style.display = 'block';
+
+        try {
+          const res = await apiRequest('/api/delivery/queue');
+          const deliveries = res.data || [];
+          if (deliveries.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--gray-500);">No deliveries pending dispatch.</td></tr>`;
+            return;
+          }
+          tbody.innerHTML = deliveries.map(d => `
+            <tr>
+              <td><strong>${d.order_number}</strong></td>
+              <td><strong>${d.shipping_name || 'Customer'}</strong><br><a href="tel:${d.shipping_phone}" style="color: var(--maroon);">${d.shipping_phone}</a></td>
+              <td>${d.shipping_address || ''}, ${d.shipping_city || 'Beawar'} (${d.shipping_pincode || '305901'})</td>
+              <td>
+                <span class="tag tag-unique">${d.delivery_method || 'EXPRESS'}</span><br>
+                ${d.assigned_to_name ? `<span style="font-size: 0.75rem; color: var(--gray-600);">Staff: <strong>${d.assigned_to_name}</strong></span>` : '<span style="font-size: 0.75rem; color: var(--amber-text);">Unassigned</span>'}
+              </td>
+              <td><span class="tag ${d.delivery_status === 'DELIVERED' ? 'tag-instock' : d.delivery_status === 'OUT_FOR_DELIVERY' ? 'tag-quantity' : 'tag-soldout'}">${d.delivery_status}</span></td>
+              <td style="white-space: nowrap; display: flex; gap: 0.35rem; align-items: center;">
+                <button class="btn btn-outline btn-sm" onclick="openAssignDeliveryModal('${d.delivery_id}', '${d.order_number}')">Assign</button>
+                <button class="btn btn-outline btn-sm" onclick="updateDeliveryStatus('${d.delivery_id}', 'OUT_FOR_DELIVERY')">Out</button>
+                <button class="btn btn-gold btn-sm" onclick="updateDeliveryStatus('${d.delivery_id}', 'DELIVERED')">✓ Done</button>
+              </td>
+            </tr>
+          `).join('');
+        } catch (e) { console.error(e); }
+      }
     }
 
     async function updateDeliveryStatus(id, status) {
@@ -1953,8 +2915,77 @@
           body: JSON.stringify({ status })
         });
         loadDeliveryQueue();
-        loadDashboard();
+        if (hasPermission(currentUser, 'orders.view')) loadDashboard();
       } catch (e) { alert(e.message); }
+    }
+
+    async function openAssignDeliveryModal(deliveryId, orderNum) {
+      document.getElementById('assignDeliveryId').value = deliveryId;
+      document.getElementById('assignDeliveryOrderNum').textContent = `Order: ${orderNum}`;
+      const select = document.getElementById('assignDeliveryBoySelect');
+      select.innerHTML = '<option value="">Loading delivery fleet...</option>';
+      document.getElementById('assignDeliveryModal').classList.add('open');
+
+      try {
+        const res = await apiRequest('/api/admin/employees?department=DELIVERY');
+        const staff = (res.data || []).filter(e => e.status === 'ACTIVE');
+        if (staff.length === 0) {
+          select.innerHTML = '<option value="">No active delivery staff available</option>';
+          return;
+        }
+        select.innerHTML = staff.map(s => `<option value="${s.id}">${s.name} (${s.assigned_area || 'Beawar'})</option>`).join('');
+      } catch (err) {
+        select.innerHTML = `<option value="">Error: ${err.message}</option>`;
+      }
+    }
+
+    function closeAssignDeliveryModal() {
+      document.getElementById('assignDeliveryModal').classList.remove('open');
+    }
+
+    async function submitAssignDelivery(e) {
+      e.preventDefault();
+      const deliveryId = document.getElementById('assignDeliveryId').value;
+      const employee_id = document.getElementById('assignDeliveryBoySelect').value;
+      if (!employee_id) return;
+
+      try {
+        await apiRequest(`/api/delivery/orders/${deliveryId}/assign`, {
+          method: 'PUT',
+          body: JSON.stringify({ employee_id })
+        });
+        closeAssignDeliveryModal();
+        loadDeliveryQueue();
+        alert('Order assigned to delivery staff successfully.');
+      } catch (err) { alert(err.message); }
+    }
+
+    function openReportIssueModal(deliveryId, orderNum) {
+      document.getElementById('reportIssueDeliveryId').value = deliveryId;
+      document.getElementById('reportIssueOrderNum').textContent = `Order: ${orderNum}`;
+      document.getElementById('issueNotesText').value = '';
+      document.getElementById('reportIssueModal').classList.add('open');
+    }
+
+    function closeReportIssueModal() {
+      document.getElementById('reportIssueModal').classList.remove('open');
+    }
+
+    async function submitDeliveryIssue(e) {
+      e.preventDefault();
+      const deliveryId = document.getElementById('reportIssueDeliveryId').value;
+      const reason = document.getElementById('issueReasonSelect').value;
+      const notes = document.getElementById('issueNotesText').value.trim();
+
+      try {
+        await apiRequest(`/api/delivery/orders/${deliveryId}/issue`, {
+          method: 'POST',
+          body: JSON.stringify({ reason, notes })
+        });
+        closeReportIssueModal();
+        loadDeliveryQueue();
+        alert('Delivery issue reported and logged to audit trail.');
+      } catch (err) { alert(err.message); }
     }
 
     async function loadProductsAdmin() {
@@ -2060,24 +3091,84 @@
       } catch (e) { console.error(e); }
     }
 
+    // ==========================================
+    // AUDIT LOGS & GOVERNANCE TRAIL
+    // ==========================================
+    let allAuditLogs = [];
+
     async function loadAuditLogs() {
       const tbody = document.getElementById('auditLogsTable');
       try {
         const res = await apiRequest('/api/admin/audit-logs');
-        if (res.data.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--gray-500);">No administrative actions logged yet.</td></tr>`;
-          return;
-        }
-        tbody.innerHTML = res.data.map(a => `
+        allAuditLogs = res.data || [];
+        renderAuditLogs(allAuditLogs);
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="7" style="color: var(--red-text);">${e.message}</td></tr>`;
+      }
+    }
+
+    function renderAuditLogs(logs) {
+      const tbody = document.getElementById('auditLogsTable');
+      if (logs.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--gray-500);">No administrative actions logged yet.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = logs.map(a => {
+        const prevText = a.prev_state ? `<pre style="font-size: 0.72rem; max-width: 180px; overflow-x: auto; margin: 0; background: var(--gray-100); padding: 0.25rem 0.4rem; border-radius: 4px;">${formatStateSnippet(a.prev_state)}</pre>` : '—';
+        const newText = a.new_state ? `<pre style="font-size: 0.72rem; max-width: 180px; overflow-x: auto; margin: 0; background: var(--gray-100); padding: 0.25rem 0.4rem; border-radius: 4px;">${formatStateSnippet(a.new_state)}</pre>` : '—';
+        const detailsText = a.details_json ? `<span style="font-size: 0.75rem; color: var(--gray-600);">${formatDetailsSnippet(a.details_json)}</span>` : '—';
+
+        return `
           <tr>
-            <td style="font-size: 0.8rem; color: var(--gray-500);">${new Date(a.created_at).toLocaleString('en-IN')}</td>
-            <td><strong>${a.user_name || 'System'}</strong> (${a.user_role || 'STAFF'})</td>
+            <td style="font-size: 0.8rem; color: var(--gray-500); white-space: nowrap;">${new Date(a.created_at).toLocaleString('en-IN')}</td>
+            <td><strong>${a.user_name || 'System'}</strong><br><span style="font-size: 0.75rem; color: var(--gray-500);">${a.user_role || 'STAFF'}</span></td>
             <td><code>${a.action}</code></td>
-            <td>${a.entity_type} (#${a.entity_id.slice(-8)})</td>
-            <td style="font-size: 0.75rem; color: var(--gray-700);"><code>${a.details_json}</code></td>
+            <td>${a.entity_type || '—'}<br><span style="font-size: 0.75rem; color: var(--gray-500);">#${(a.entity_id || '').slice(-8)}</span></td>
+            <td>${prevText}</td>
+            <td>${newText}</td>
+            <td>${detailsText}</td>
           </tr>
-        `).join('');
-      } catch (e) { console.error(e); }
+        `;
+      }).join('');
+    }
+
+    function formatStateSnippet(val) {
+      if (!val) return '';
+      if (typeof val === 'string') {
+        try {
+          const parsed = JSON.parse(val);
+          return JSON.stringify(parsed, null, 1).slice(0, 100);
+        } catch(e) {
+          return val.slice(0, 100);
+        }
+      }
+      return JSON.stringify(val).slice(0, 100);
+    }
+
+    function formatDetailsSnippet(val) {
+      if (!val) return '';
+      if (typeof val === 'string') {
+        try {
+          const parsed = JSON.parse(val);
+          return Object.entries(parsed).map(([k, v]) => `${k}: ${v}`).join(', ');
+        } catch(e) {
+          return val;
+        }
+      }
+      return JSON.stringify(val);
+    }
+
+    function filterAuditLogs() {
+      const q = (document.getElementById('auditSearchInput').value || '').toLowerCase().trim();
+      if (!q) {
+        renderAuditLogs(allAuditLogs);
+        return;
+      }
+      const filtered = allAuditLogs.filter(a => {
+        const text = `${a.user_name || ''} ${a.user_role || ''} ${a.action || ''} ${a.entity_type || ''} ${a.entity_id || ''} ${JSON.stringify(a.details_json || '')}`.toLowerCase();
+        return text.includes(q);
+      });
+      renderAuditLogs(filtered);
     }
 
     function openAddProductModal() {

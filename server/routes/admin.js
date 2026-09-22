@@ -7,10 +7,14 @@
 const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
 const { getDb } = require('../config/database');
-const { verifyToken, requireRole } = require('../middleware/auth');
+const { verifyToken, requireRole, requirePermission, logAudit } = require('../middleware/auth');
 const {
   ROLES,
+  DEPARTMENTS,
+  PERMISSIONS,
+  EMPLOYEE_STATUSES,
   ORDER_CHANNELS,
   ORDER_TYPES,
   ORDER_STATUSES,
@@ -23,27 +27,12 @@ const {
 } = require('../config/constants');
 const { uploadProductImage } = require('../middleware/upload');
 
-// Enforce Owner or Manager access for Admin APIs
+// Enforce authenticated staff session
 router.use(verifyToken);
-router.use(requireRole(ROLES.OWNER, ROLES.MANAGER));
-
-// Helper: Log Admin Action
-async function logAudit(userId, action, entityType, entityId, details, req) {
-  try {
-    const db = getDb();
-    const id = `aud_${Date.now()}_${crypto.randomBytes(3).toString('hex')}`;
-    const ip = req ? (req.headers['x-forwarded-for'] || req.socket.remoteAddress) : null;
-    await db.run(`
-      INSERT INTO admin_audit_logs (id, user_id, action, entity_type, entity_id, details_json, ip_address)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-    `, [id, userId, action, entityType, entityId, JSON.stringify(details || {}), ip]);
-  } catch (err) {
-    console.error('[Audit Log Error]', err);
-  }
-}
+router.use(requireRole(ROLES.OWNER, ROLES.MANAGER, ROLES.TAILOR, ROLES.DELIVERY));
 
 // 1. Dashboard Overview Metrics
-router.get('/dashboard', async (req, res, next) => {
+router.get('/dashboard', requirePermission(PERMISSIONS.ORDERS_VIEW, PERMISSIONS.REPORTS_VIEW), async (req, res, next) => {
   try {
     const db = getDb();
 
@@ -82,15 +71,18 @@ router.get('/dashboard', async (req, res, next) => {
       LIMIT 8
     `);
 
+    const canViewFinancials = req.user.role === ROLES.OWNER ||
+      (req.user.permissions && (req.user.permissions.includes(PERMISSIONS.PAYMENTS_VIEW) || req.user.permissions.includes('*')));
+
     res.json({
       success: true,
       data: {
-        financials: {
+        financials: canViewFinancials ? {
           total_revenue: revenueResult.total_revenue || 0,
           online_revenue: revenueResult.online_revenue || 0,
           offline_revenue: revenueResult.offline_revenue || 0,
           total_orders: revenueResult.total_orders || 0
-        },
+        } : null,
         stitching_queue_count: stitchingQueue.pending_stitching || 0,
         pending_deliveries_count: deliveryQueue.pending_deliveries || 0,
         inventory_alerts: inventoryAlerts,
@@ -103,7 +95,7 @@ router.get('/dashboard', async (req, res, next) => {
 });
 
 // 2. POS Offline Store Billing (Beawar Flagship Terminal)
-router.post('/pos/order', async (req, res, next) => {
+router.post('/pos/order', requirePermission('pos.bill'), async (req, res, next) => {
   try {
     const {
       sku_or_id,
@@ -212,7 +204,12 @@ router.post('/pos/order', async (req, res, next) => {
       `Store POS Walk-in Sale (${orderNumber})`
     ]);
 
-    await logAudit(req.user.id, 'POS_BILLING', 'ORDER', orderId, { orderNumber, sku: product.sku, totalAmount, payment_method }, req);
+    await logAudit(req, {
+      action: 'POS_BILLING',
+      entityType: 'ORDER',
+      entityId: orderId,
+      newValue: { orderNumber, sku: product.sku, totalAmount, payment_method }
+    });
 
     res.status(201).json({
       success: true,
@@ -247,7 +244,7 @@ router.get('/products', async (req, res, next) => {
   }
 });
 
-router.post('/products', uploadProductImage.single('photo'), async (req, res, next) => {
+router.post('/products', requirePermission('products.create'), uploadProductImage.single('photo'), async (req, res, next) => {
   try {
     const {
       title, sku, category_id, description, fabric,
@@ -286,7 +283,7 @@ router.post('/products', uploadProductImage.single('photo'), async (req, res, ne
       is_featured ? 1 : 0, imagePath
     ]);
 
-    await logAudit(req.user.id, 'CREATE_PRODUCT', 'PRODUCT', id, { sku, title }, req);
+    await logAudit(req, { action: 'CREATE_PRODUCT', entityType: 'PRODUCT', entityId: id, newValue: { sku, title } });
 
     res.status(201).json({ success: true, message: 'Product created successfully', data: { id, sku, title } });
   } catch (err) {
@@ -295,7 +292,7 @@ router.post('/products', uploadProductImage.single('photo'), async (req, res, ne
 });
 
 // 4. Category Management (Toggle Active vs Coming Soon - Section 52)
-router.put('/categories/:id/status', async (req, res, next) => {
+router.put('/categories/:id/status', requirePermission('settings.edit', 'products.edit'), async (req, res, next) => {
   try {
     const { id } = req.params;
     const { is_active, badge_text } = req.body;
@@ -307,7 +304,7 @@ router.put('/categories/:id/status', async (req, res, next) => {
       WHERE id = ?
     `, [is_active ? 1 : 0, badge_text || (is_active ? 'Active' : 'Coming Soon'), id]);
 
-    await logAudit(req.user.id, 'UPDATE_CATEGORY_STATUS', 'CATEGORY', id, { is_active, badge_text }, req);
+    await logAudit(req, { action: 'UPDATE_CATEGORY_STATUS', entityType: 'CATEGORY', entityId: id, newValue: { is_active, badge_text } });
 
     res.json({ success: true, message: 'Category status updated successfully' });
   } catch (err) {
@@ -316,7 +313,7 @@ router.put('/categories/:id/status', async (req, res, next) => {
 });
 
 // 5. Review Moderation (Rule 10 & 22)
-router.get('/reviews/pending', async (req, res, next) => {
+router.get('/reviews/pending', requirePermission('reviews.view', 'reviews.moderate'), async (req, res, next) => {
   try {
     const db = getDb();
     const reviews = await db.all(`
@@ -332,7 +329,7 @@ router.get('/reviews/pending', async (req, res, next) => {
   }
 });
 
-router.put('/reviews/:id/moderate', async (req, res, next) => {
+router.put('/reviews/:id/moderate', requirePermission('reviews.moderate'), async (req, res, next) => {
   try {
     const { id } = req.params;
     const { action } = req.body; // 'approve' or 'reject'
@@ -344,7 +341,7 @@ router.put('/reviews/:id/moderate', async (req, res, next) => {
       await db.run('DELETE FROM reviews WHERE id = ?', [id]);
     }
 
-    await logAudit(req.user.id, 'MODERATE_REVIEW', 'REVIEW', id, { action }, req);
+    await logAudit(req, { action: 'MODERATE_REVIEW', entityType: 'REVIEW', entityId: id, details: { action } });
     res.json({ success: true, message: `Review ${action === 'approve' ? 'approved' : 'rejected'}` });
   } catch (err) {
     next(err);
@@ -352,7 +349,7 @@ router.put('/reviews/:id/moderate', async (req, res, next) => {
 });
 
 // 6. Integration Health Status (Section 118)
-router.get('/integrations/status', (req, res) => {
+router.get('/integrations/status', requirePermission('settings.view'), (req, res) => {
   const razorpayConnected = Boolean(
     process.env.RAZORPAY_KEY_ID &&
     process.env.RAZORPAY_KEY_SECRET &&
@@ -392,7 +389,7 @@ router.get('/integrations/status', (req, res) => {
 });
 
 // 7. Audit Logs
-router.get('/audit-logs', async (req, res, next) => {
+router.get('/audit-logs', requirePermission('audit.view'), async (req, res, next) => {
   try {
     const db = getDb();
     const logs = await db.all(`
@@ -403,6 +400,591 @@ router.get('/audit-logs', async (req, res, next) => {
       LIMIT 100
     `);
     res.json({ success: true, data: logs });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// ==========================================
+// 8. MANAGER MANAGEMENT (Owner Only - §2, §3, §27)
+// ==========================================
+
+// List all Managers
+router.get('/managers', async (req, res, next) => {
+  try {
+    if (req.user.role !== ROLES.OWNER) {
+      return res.status(403).json({ success: false, error: 'Forbidden: Only the ABHA Owner can manage managers.' });
+    }
+    const db = getDb();
+    const managers = await db.all(`
+      SELECT 
+        e.id as employee_id,
+        e.user_id,
+        e.employee_code,
+        e.name,
+        e.mobile,
+        e.email,
+        e.department_code,
+        e.role_code,
+        e.status,
+        e.permissions_override_json,
+        e.joining_date,
+        e.authorized_by_name,
+        e.authorized_at,
+        u.is_active
+      FROM employees e
+      JOIN users u ON u.id = e.user_id
+      WHERE e.role_code LIKE '%MANAGER%' OR u.role = 'MANAGER'
+      ORDER BY e.created_at ASC
+    `);
+
+    const result = managers.map(m => {
+      let perms = [];
+      if (m.permissions_override_json) {
+        try { perms = JSON.parse(m.permissions_override_json); } catch {}
+      }
+      return { ...m, permissions: perms };
+    });
+
+    res.json({ success: true, count: result.length, data: result });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Create Manager (Owner Only)
+router.post('/managers', async (req, res, next) => {
+  try {
+    if (req.user.role !== ROLES.OWNER) {
+      return res.status(403).json({ success: false, error: 'Forbidden: Only the ABHA Owner can create managers.' });
+    }
+
+    const { name, mobile, phone, email, password, department_code, department, role_code, role, assigned_area, permissions = [] } = req.body;
+    const finalPhone = (mobile || phone || '').trim();
+    const finalDept = (department_code || department || '').trim().toUpperCase();
+    const finalRole = role_code || role || `${finalDept}_MANAGER`;
+    const finalArea = assigned_area || req.body.area || 'Beawar';
+
+    if (!name || !finalPhone || !finalDept || !password) {
+      return res.status(400).json({ success: false, error: 'Name, mobile, password, and department are required.' });
+    }
+
+    const db = getDb();
+    const existing = await db.get('SELECT id FROM users WHERE phone = ? OR (email = ? AND email IS NOT NULL)', [finalPhone, (email || '').trim().toLowerCase()]);
+    if (existing) {
+      return res.status(409).json({ success: false, error: 'A user with this mobile number or email already exists.' });
+    }
+
+    const userId = `usr_mgr_${Date.now()}`;
+    const employeeId = `emp_mgr_${Date.now()}`;
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
+    const employeeCode = `ABHA-M-${Date.now().toString().slice(-4)}`;
+
+    await db.run(`
+      INSERT INTO users (id, name, phone, email, password_hash, role, is_active)
+      VALUES (?, ?, ?, ?, ?, 'MANAGER', 1)
+    `, [userId, name.trim(), finalPhone, email ? email.trim().toLowerCase() : null, hash]);
+
+    await db.run(`
+      INSERT INTO employees (
+        id, user_id, employee_code, name, mobile, email, department_code, role_code,
+        assigned_area, status, permissions_override_json, authorized_by_user_id, authorized_by_name,
+        authorized_at, is_active
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', ?, ?, ?, CURRENT_TIMESTAMP, 1)
+    `, [
+      employeeId, userId, employeeCode, name.trim(), finalPhone,
+      email ? email.trim().toLowerCase() : null, finalDept,
+      finalRole, finalArea, JSON.stringify(permissions), req.user.id, req.user.name || 'ABHA Owner'
+    ]);
+
+    await logAudit(req, {
+      action: 'CREATE_MANAGER',
+      entityType: 'MANAGER',
+      entityId: employeeId,
+      newValue: { name, department: finalDept, permissions },
+      details: `Owner created manager ${name} (${employeeCode}) with ${permissions.length} permissions.`
+    });
+
+    res.status(201).json({
+      success: true,
+      message: `Manager ${name} created successfully.`,
+      data: { id: employeeId, employee_id: employeeId, user_id: userId, employee_code: employeeCode, permissions }
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Update Manager Permissions (Owner Only - §13, §23)
+router.put('/managers/:id/permissions', async (req, res, next) => {
+  try {
+    if (req.user.role !== ROLES.OWNER) {
+      return res.status(403).json({ success: false, error: 'Forbidden: Only the ABHA Owner can modify manager permissions.' });
+    }
+
+    const { id } = req.params;
+    const { permissions = [] } = req.body;
+    const db = getDb();
+
+    const emp = await db.get('SELECT * FROM employees WHERE id = ? OR user_id = ?', [id, id]);
+    if (!emp) {
+      return res.status(404).json({ success: false, error: 'Manager employee record not found.' });
+    }
+
+    const prevPerms = emp.permissions_override_json ? JSON.parse(emp.permissions_override_json) : [];
+
+    await db.run(`
+      UPDATE employees
+      SET permissions_override_json = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `, [JSON.stringify(permissions), emp.id]);
+
+    await logAudit(req, {
+      action: 'UPDATE_MANAGER_PERMISSIONS',
+      entityType: 'MANAGER',
+      entityId: emp.id,
+      previousValue: prevPerms,
+      newValue: permissions,
+      details: `Owner updated permissions for manager ${emp.name} (${emp.employee_code}).`
+    });
+
+    res.json({
+      success: true,
+      message: `Permissions updated for manager ${emp.name}.`,
+      data: { employee_id: emp.id, permissions }
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Update Manager Status (Owner Only - Suspend / Reactivate / Revoke - §25, §31)
+router.put('/managers/:id/status', async (req, res, next) => {
+  try {
+    if (req.user.role !== ROLES.OWNER) {
+      return res.status(403).json({ success: false, error: 'Forbidden: Only the ABHA Owner can change manager status.' });
+    }
+
+    const { id } = req.params;
+    const { status, notes } = req.body; // 'ACTIVE', 'SUSPENDED', 'REVOKED', 'INACTIVE'
+    const db = getDb();
+
+    const emp = await db.get('SELECT * FROM employees WHERE id = ? OR user_id = ?', [id, id]);
+    if (!emp) {
+      return res.status(404).json({ success: false, error: 'Manager record not found.' });
+    }
+
+    const prevStatus = emp.status;
+    const isUserActive = (status === 'ACTIVE') ? 1 : 0;
+
+    await db.run(`
+      UPDATE employees
+      SET status = ?, is_active = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `, [status, isUserActive, emp.id]);
+
+    await db.run(`
+      UPDATE users
+      SET is_active = ?
+      WHERE id = ?
+    `, [isUserActive, emp.user_id]);
+
+    await logAudit(req, {
+      action: 'UPDATE_MANAGER_STATUS',
+      entityType: 'MANAGER',
+      entityId: emp.id,
+      previousValue: prevStatus,
+      newValue: status,
+      details: `Manager ${emp.name} status changed from ${prevStatus} to ${status}. Notes: ${notes || 'None'}`
+    });
+
+    res.json({
+      success: true,
+      message: `Manager ${emp.name} status updated to ${status}.`,
+      data: { employee_id: emp.id, status }
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// ==========================================
+// 9. EMPLOYEE MANAGEMENT & AUTHORIZATION (§6, §15, §16, §17, §26)
+// ==========================================
+
+// List Employees (Owner sees all; Managers see their department only)
+router.get('/employees', async (req, res, next) => {
+  try {
+    const db = getDb();
+    let query = `
+      SELECT 
+        e.*,
+        u.is_active as user_active,
+        u.role as user_role
+      FROM employees e
+      JOIN users u ON u.id = e.user_id
+    `;
+    const params = [];
+
+    if (req.user.role !== ROLES.OWNER) {
+      // Non-owner: Must have employees.view or delivery.view or tailoring.view
+      const userPerms = req.user.permissions || [];
+      const canView = userPerms.includes('employees.view') || 
+                      userPerms.includes('delivery.view') || 
+                      userPerms.includes('tailoring.view');
+      if (!canView) {
+        return res.status(403).json({ success: false, error: 'Forbidden: Lacks permission to view employees.' });
+      }
+      query += ` WHERE e.department_code = ?`;
+      params.push(req.user.department || '');
+    }
+
+    query += ` ORDER BY e.created_at DESC`;
+    const employees = await db.all(query, params);
+
+    const result = employees.map(emp => {
+      let perms = [];
+      if (emp.permissions_override_json) {
+        try { perms = JSON.parse(emp.permissions_override_json); } catch {}
+      }
+      return { ...emp, permissions: perms };
+    });
+
+    res.json({ success: true, count: result.length, data: result });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Create Department Employee (§6, §15)
+router.post('/employees', async (req, res, next) => {
+  try {
+    const db = getDb();
+    const {
+      name,
+      mobile,
+      email,
+      password = 'AbhaStaff2026!',
+      department_code,
+      role_code,
+      role,
+      role_title,
+      assigned_area,
+      emergency_contact,
+      status = 'PENDING',
+      permissions = []
+    } = req.body;
+
+    const finalPhone = (mobile || req.body.phone || '').trim();
+    const dept = (department_code || req.body.department || '').trim().toUpperCase();
+    const finalRole = role_code || role || role_title || `${dept}_STAFF`;
+
+    if (!name || !finalPhone || !dept) {
+      return res.status(400).json({ success: false, error: 'Name, mobile, and department are required.' });
+    }
+
+    // Check manager delegation: Managers cannot create employees outside their department
+    if (req.user.role !== ROLES.OWNER) {
+      if (req.user.department !== dept) {
+        return res.status(403).json({
+          success: false,
+          error: `Forbidden: As a ${req.user.department} manager, you cannot create employees in the ${dept} department.`
+        });
+      }
+      // Check create permission
+      const userPerms = req.user.permissions || [];
+      const canCreate = userPerms.includes('employees.create') ||
+        (dept === 'STORE' && (userPerms.includes('pos.access') || userPerms.includes('employees.view'))) ||
+        (dept === 'DELIVERY' && userPerms.includes('delivery.create_employee')) ||
+        (dept === 'TAILORING' && userPerms.includes('tailoring.assign'));
+      if (!canCreate) {
+        return res.status(403).json({ success: false, error: 'Forbidden: Missing permission to create employees.' });
+      }
+    }
+
+    const existing = await db.get('SELECT id FROM users WHERE phone = ?', [finalPhone]);
+    if (existing) {
+      return res.status(409).json({ success: false, error: 'An employee with this mobile phone already exists.' });
+    }
+
+    const userId = `usr_emp_${Date.now()}`;
+    const employeeId = `emp_${Date.now()}`;
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
+    
+    // Determine system role
+    let baseRole = 'EMPLOYEE';
+    if (dept === 'DELIVERY') baseRole = ROLES.DELIVERY;
+    if (dept === 'TAILORING') baseRole = ROLES.TAILOR;
+    if (dept === 'STORE') baseRole = ROLES.MANAGER;
+
+    const prefix = dept === 'DELIVERY' ? 'ABHA-D' : dept === 'TAILORING' ? 'ABHA-T' : 'ABHA-E';
+    const employeeCode = `${prefix}-${Date.now().toString().slice(-4)}`;
+
+    // Initial status: PENDING unless caller has authorization permission
+    let initialStatus = 'PENDING';
+    const userPerms = req.user.permissions || [];
+    const canAuthorize = req.user.role === ROLES.OWNER ||
+      userPerms.includes('employees.authorize') ||
+      (dept === 'DELIVERY' && userPerms.includes('delivery.employee.authorize')) ||
+      (dept === 'TAILORING' && userPerms.includes('tailoring.employee.authorize'));
+
+    if (canAuthorize && status === 'ACTIVE') {
+      initialStatus = 'ACTIVE';
+    }
+
+    await db.run(`
+      INSERT INTO users (id, name, phone, email, password_hash, role, is_active)
+      VALUES (?, ?, ?, ?, ?, ?, 1)
+    `, [userId, name.trim(), finalPhone, email ? email.trim().toLowerCase() : null, hash, baseRole]);
+
+    await db.run(`
+      INSERT INTO employees (
+        id, user_id, employee_code, name, mobile, email, department_code, role_code,
+        status, assigned_area, emergency_contact, joining_date, permissions_override_json,
+        authorized_by_user_id, authorized_by_name, authorized_at, is_active
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, 1)
+    `, [
+      employeeId, userId, employeeCode, name.trim(), finalPhone,
+      email ? email.trim().toLowerCase() : null, dept, finalRole,
+      initialStatus, assigned_area || 'Beawar', emergency_contact || null,
+      JSON.stringify(permissions),
+      initialStatus === 'ACTIVE' ? req.user.id : null,
+      initialStatus === 'ACTIVE' ? (req.user.name || req.user.role) : null,
+      initialStatus === 'ACTIVE' ? new Date().toISOString() : null
+    ]);
+
+    await logAudit(req, {
+      action: 'CREATE_EMPLOYEE',
+      entityType: 'EMPLOYEE',
+      entityId: employeeId,
+      newValue: { name, department: dept, status: initialStatus },
+      details: `${req.user.name || req.user.role} created employee ${name} (${employeeCode}) with status ${initialStatus}.`
+    });
+
+    res.status(201).json({
+      success: true,
+      message: `Employee ${name} registered (${initialStatus}).`,
+      data: {
+        id: employeeId,
+        employee_id: employeeId,
+        user_id: userId,
+        employee_code: employeeCode,
+        email: email ? email.trim().toLowerCase() : `${employeeCode.toLowerCase()}@abha.in`,
+        status: initialStatus,
+        requires_authorization: initialStatus === 'PENDING'
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Authorize Employee (§6, §16, §17)
+router.put('/employees/:id/authorize', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const db = getDb();
+
+    const emp = await db.get('SELECT * FROM employees WHERE id = ? OR user_id = ?', [id, id]);
+    if (!emp) {
+      return res.status(404).json({ success: false, error: 'Employee record not found.' });
+    }
+
+    // Check authorization permission
+    if (req.user.role !== ROLES.OWNER) {
+      if (req.user.department !== emp.department_code) {
+        return res.status(403).json({
+          success: false,
+          error: `Forbidden: Cannot authorize employee outside your department (${emp.department_code}).`
+        });
+      }
+
+      const userPerms = req.user.permissions || [];
+      const hasAuthPerm = userPerms.includes('employees.authorize') ||
+        (emp.department_code === 'DELIVERY' && userPerms.includes('delivery.employee.authorize')) ||
+        (emp.department_code === 'TAILORING' && userPerms.includes('tailoring.employee.authorize'));
+
+      if (!hasAuthPerm) {
+        return res.status(403).json({
+          success: false,
+          error: `Forbidden: Missing required authorization permission ('${emp.department_code.toLowerCase()}.employee.authorize').`
+        });
+      }
+    }
+
+    const prevStatus = emp.status;
+
+    await db.run(`
+      UPDATE employees
+      SET status = 'ACTIVE',
+          authorized_by_user_id = ?,
+          authorized_by_name = ?,
+          authorized_at = CURRENT_TIMESTAMP,
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `, [req.user.id, req.user.name || req.user.role, emp.id]);
+
+    // Record in employee_authorizations audit
+    const authId = `eauth_${Date.now()}`;
+    await db.run(`
+      INSERT INTO employee_authorizations (
+        id, employee_id, requested_by_user_id, action, previous_status, new_status,
+        authorized_by_user_id, authorized_by_name, notes
+      ) VALUES (?, ?, ?, 'AUTHORIZE', ?, 'ACTIVE', ?, ?, ?)
+    `, [
+      authId, emp.id, req.user.id, prevStatus, req.user.id,
+      req.user.name || req.user.role, req.body.notes || 'Authorized for duty'
+    ]);
+
+    await logAudit(req, {
+      action: 'AUTHORIZE_EMPLOYEE',
+      entityType: 'EMPLOYEE',
+      entityId: emp.id,
+      previousValue: prevStatus,
+      newValue: 'ACTIVE',
+      details: `${req.user.name || req.user.role} authorized employee ${emp.name} (${emp.employee_code}).`
+    });
+
+    res.json({
+      success: true,
+      message: `Employee ${emp.name} is now ACTIVE and authorized.`,
+      data: { employee_id: emp.id, status: 'ACTIVE', authorized_by: req.user.name || req.user.role }
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Update Employee Status (Suspend / Reactivate / Revoke / Inactive - §31)
+router.put('/employees/:id/status', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { status, notes } = req.body; // 'ACTIVE', 'SUSPENDED', 'REVOKED', 'INACTIVE'
+    const db = getDb();
+
+    const emp = await db.get('SELECT * FROM employees WHERE id = ? OR user_id = ?', [id, id]);
+    if (!emp) {
+      return res.status(404).json({ success: false, error: 'Employee record not found.' });
+    }
+
+    if (req.user.role !== ROLES.OWNER) {
+      if (req.user.department !== emp.department_code) {
+        return res.status(403).json({
+          success: false,
+          error: `Forbidden: Cannot modify employee outside your department (${emp.department_code}).`
+        });
+      }
+      const userPerms = req.user.permissions || [];
+      const canManage = userPerms.includes('employees.suspend') ||
+        (emp.department_code === 'DELIVERY' && userPerms.includes('delivery.suspend_employee')) ||
+        userPerms.includes('employees.edit');
+      if (!canManage) {
+        return res.status(403).json({ success: false, error: 'Forbidden: Missing permission to alter employee status.' });
+      }
+    }
+
+    const prevStatus = emp.status;
+    const isUserActive = status === 'ACTIVE' ? 1 : 0;
+
+    await db.run(`
+      UPDATE employees
+      SET status = ?, is_active = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `, [status, isUserActive, emp.id]);
+
+    await db.run(`
+      UPDATE users
+      SET is_active = ?
+      WHERE id = ?
+    `, [isUserActive, emp.user_id]);
+
+    // Record in employee_authorizations history
+    const authId = `eauth_${Date.now()}`;
+    await db.run(`
+      INSERT INTO employee_authorizations (
+        id, employee_id, requested_by_user_id, action, previous_status, new_status,
+        authorized_by_user_id, authorized_by_name, notes
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [
+      authId, emp.id, req.user.id, status === 'SUSPENDED' ? 'SUSPEND' : status === 'REVOKED' ? 'REVOKE' : 'REACTIVATE',
+      prevStatus, status, req.user.id, req.user.name || req.user.role, notes || ''
+    ]);
+
+    await logAudit(req, {
+      action: 'UPDATE_EMPLOYEE_STATUS',
+      entityType: 'EMPLOYEE',
+      entityId: emp.id,
+      previousValue: prevStatus,
+      newValue: status,
+      details: `${req.user.name || req.user.role} changed status of ${emp.name} (${emp.employee_code}) to ${status}.`
+    });
+
+    res.json({
+      success: true,
+      message: `Employee ${emp.name} status updated to ${status}.`,
+      data: { employee_id: emp.id, status }
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// ==========================================
+// 10. SYSTEM PERMISSIONS, DEPARTMENTS & ROLES (§4, §12, §13)
+// ==========================================
+
+router.get('/permissions', async (req, res, next) => {
+  try {
+    const db = getDb();
+    const rows = await db.all('SELECT * FROM permissions ORDER BY module ASC, action ASC');
+    res.json({ success: true, count: rows.length, data: rows });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/departments', async (req, res, next) => {
+  try {
+    const db = getDb();
+    const rows = await db.all('SELECT * FROM departments ORDER BY name ASC');
+    res.json({ success: true, count: rows.length, data: rows });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post('/departments', async (req, res, next) => {
+  try {
+    if (req.user.role !== ROLES.OWNER) {
+      return res.status(403).json({ success: false, error: 'Forbidden: Only the ABHA Owner can create departments.' });
+    }
+    const { name, code, description } = req.body;
+    if (!name || !code) {
+      return res.status(400).json({ success: false, error: 'Department name and code are required.' });
+    }
+    const db = getDb();
+    const cleanCode = code.trim().toUpperCase().replace(/[^A-Z0-9_]/g, '');
+    const id = `dept_${cleanCode.toLowerCase()}`;
+    await db.run('INSERT INTO departments (id, name, code, description, is_active) VALUES (?, ?, ?, ?, 1)', [id, name.trim(), cleanCode, description || '']);
+    await logAudit(req, {
+      action: 'CREATE_DEPARTMENT',
+      entityType: 'DEPARTMENT',
+      entityId: id,
+      newValue: { name, code: cleanCode }
+    });
+    res.status(201).json({ success: true, message: `Department ${name} created.`, data: { id, code: cleanCode, name } });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/roles', async (req, res, next) => {
+  try {
+    const db = getDb();
+    const rows = await db.all('SELECT * FROM roles ORDER BY name ASC');
+    res.json({ success: true, count: rows.length, data: rows });
   } catch (err) {
     next(err);
   }
