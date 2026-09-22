@@ -37,8 +37,7 @@
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="js/abha-store.js?v=20260918_4"></script>
-  <script src="js/abha-style-ai.js?v=20260918_4"></script>
+  <script src="js/abha-store.js?v=20260922_1"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -469,14 +468,11 @@
         </div>
 
         <!-- Desktop Navigation Links -->
-        <nav class="hidden lg:flex items-center space-x-6 text-sm font-medium text-charcoal-900" aria-label="Primary Navigation">
+        <nav class="hidden lg:flex items-center space-x-8 text-sm font-medium text-charcoal-900" aria-label="Primary Navigation">
           <a href="#" class="text-maroon-800 border-b border-maroon-800 pb-0.5" data-i18n="nav_home">Home</a>
           <a href="#categories" class="hover:text-maroon-800 transition-colors" data-i18n="nav_shop">Shop</a>
-          <a href="#newArrivals" class="hover:text-maroon-800 transition-colors" data-i18n="nav_new_arrivals">New Arrivals</a>
+          <a href="#categories" class="hover:text-maroon-800 transition-colors" data-i18n="nav_categories">Categories</a>
           <a href="#featured" class="hover:text-maroon-800 transition-colors" data-i18n="nav_collections">Collections</a>
-          <button type="button" onclick="openStyleAiFromHero()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-maroon-900 to-charcoal-950 text-gold-300 hover:text-white border border-gold-400/60 shadow-xs text-xs font-bold transition hover:scale-105">
-            <span class="text-gold-400 animate-pulse">✨</span> Style AI (360° Try-On)
-          </button>
           <a href="#about" class="hover:text-maroon-800 transition-colors" data-i18n="nav_about">About</a>
         </nav>
 
@@ -487,11 +483,6 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
           </button>
 
-
-          <!-- Quick Style AI Try-On Pill Button -->
-          <button type="button" onclick="openStyleAiFromHero()" class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gold-400/20 hover:bg-gold-400/30 text-maroon-950 border border-gold-500/50 text-xs font-bold transition shadow-2xs" title="Open 360° Virtual Fitting Room">
-            <span class="text-gold-600">✨</span> Try-On AI
-          </button>
 
           <!-- Account Trigger (§30) -->
           <button type="button" onclick="openAccountDrawer()" class="p-2 hover:text-maroon-800 transition-colors hidden md:block" aria-label="Customer account and saved measurements">
@@ -511,15 +502,6 @@
 
     <!-- Mobile Drawer Menu -->
     <div id="mobileMenu" class="hidden lg:hidden border-t border-ivory-200 bg-ivory-50 px-4 pt-4 pb-6 space-y-3">
-      <!-- High-visibility Style AI banner in mobile menu -->
-      <button type="button" onclick="toggleMobileMenu(); openStyleAiFromHero();" class="w-full flex items-center justify-between p-3.5 rounded-xl bg-gradient-to-r from-maroon-950 via-maroon-900 to-charcoal-950 text-gold-300 border border-gold-400/50 shadow-md font-bold text-sm text-left">
-        <span class="flex items-center gap-2">
-          <span class="w-7 h-7 rounded-full bg-gold-400 text-maroon-950 flex items-center justify-center text-xs font-black">✨</span>
-          <span>ABHA Style AI (360° Try-On)</span>
-        </span>
-        <span class="text-[10px] uppercase tracking-wider bg-gold-400 text-maroon-950 px-2 py-0.5 rounded font-black">TRY NOW</span>
-      </button>
-
       <a href="#" onclick="toggleMobileMenu()" class="block text-base font-medium text-maroon-900 py-1" data-i18n="nav_home">Home</a>
       <a href="#categories" onclick="toggleMobileMenu()" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1" data-i18n="nav_shop">Shop Categories</a>
       <a href="#newArrivals" onclick="toggleMobileMenu()" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1" data-i18n="nav_new_arrivals">New Arrivals</a>
@@ -566,8 +548,8 @@
           <a href="#newArrivals" class="px-4 py-2 bg-gold-500 hover:bg-gold-400 text-charcoal-950 text-xs font-bold rounded-lg shadow-sm text-center">
             Explore Loom
           </a>
-          <button type="button" onclick="openStyleAiFromHero()" class="px-3.5 py-2 bg-gradient-to-r from-gold-500 to-gold-400 text-charcoal-950 text-xs font-bold rounded-lg text-center flex items-center gap-1.5 shadow-sm">
-            <span>✨</span> Style AI (360° Try-On)
+          <button type="button" onclick="openMeasurementStudioFromHero()" class="px-3.5 py-2 border border-ivory-200/50 text-ivory-50 text-xs font-semibold rounded-lg text-center">
+            Custom Tailor Studio
           </button>
         </div>
       </div>
@@ -642,8 +624,9 @@
             <a href="#newArrivals" class="w-full sm:w-auto px-8 py-3.5 bg-maroon-800 hover:bg-maroon-700 text-ivory-50 text-sm font-semibold rounded shadow-sm hover:shadow transition-all text-center tracking-wide" data-i18n="hero_shop_now">
               Shop Now
             </a>
-            <button type="button" onclick="openStyleAiFromHero()" class="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-gold-500 to-gold-400 hover:from-gold-400 hover:to-gold-300 text-maroon-950 border border-gold-400 text-sm font-bold rounded shadow-md hover:shadow-lg transition-all text-center flex items-center justify-center gap-2">
-              <span class="text-base">✨</span> Try with ABHA Style AI (360° Try-On)
+            <button type="button" onclick="openMeasurementStudioFromHero()" class="w-full sm:w-auto px-8 py-3.5 bg-ivory-50 hover:bg-ivory-100 text-maroon-900 border border-maroon-800/40 text-sm font-semibold rounded transition-all text-center flex items-center justify-center gap-2" data-i18n="hero_get_stitched">
+              <svg class="w-4 h-4 text-maroon-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.121 14.121L19 19m-7-7l7-7m-7 7l-2.879 2.879a3 3 0 11-4.242-4.242L12 12z"/></svg>
+              Get It Stitched
             </button>
           </div>
 
@@ -686,9 +669,9 @@
                     <span class="text-[10px] uppercase font-bold tracking-wider text-maroon-800">Bespoke Fitting Studio</span>
                     <p class="text-xs font-semibold text-charcoal-950">Pure Cotton Leheriya Salwar Suit</p>
                   </div>
-                  <button type="button" onclick="openStyleAiFromHero()" class="inline-flex items-center px-2.5 py-1 rounded text-[11px] font-bold bg-maroon-900 text-gold-300 border border-gold-400/40 shadow-xs hover:scale-105 transition">
-                    ✨ 360° Virtual Try-On
-                  </button>
+                  <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-gold-100 text-gold-600 border border-gold-500/20">
+                    Stitching Available
+                  </span>
                 </div>
                 <div class="mt-2 text-[11px] text-slateText-600 flex items-center gap-3">
                   <span>✓ 100% Pure Cotton (Top 2.5m, Bottom 2.5m, Dupatta 2.5m)</span>
@@ -771,45 +754,6 @@
         </div>
       </div>
 
-    </div>
-  </section>
-
-  <!-- ========================================================================= -->
-  <!-- 7B. ABHA STYLE AI — TRY BEFORE YOU STITCH SPOTLIGHT BANNER (§Entry Points) -->
-  <!-- ========================================================================= -->
-  <section class="py-12 bg-gradient-to-r from-maroon-950 via-maroon-900 to-charcoal-950 text-ivory-50 border-b border-gold-500/30 relative overflow-hidden" aria-label="ABHA Style AI Virtual Try-On">
-    <div class="absolute -right-20 -top-20 w-80 h-80 rounded-full bg-gold-500/10 blur-3xl pointer-events-none"></div>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-        
-        <div class="lg:col-span-8 space-y-3 text-center sm:text-left">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-400/15 border border-gold-400/40 text-gold-300 text-xs font-bold uppercase tracking-wider">
-            <span>✨</span> ABHA Style AI Virtual Fitting Room
-          </div>
-          <h2 class="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-ivory-50">
-            Try Before You Stitch
-          </h2>
-          <p class="text-xs sm:text-sm text-ivory-100/80 max-w-2xl leading-relaxed">
-            See your selected ABHA dress material as a custom-stitched outfit on your personalized 360° virtual avatar before placing your order. Customize neckline, Stand Patti, sleeves, and pockets in real time.
-          </p>
-          <div class="flex flex-wrap items-center justify-center sm:justify-start gap-4 pt-2 text-xs text-gold-300/90 font-medium">
-            <span class="flex items-center gap-1">✓ 360° Interactive View</span>
-            <span class="flex items-center gap-1">✓ Exact Fabric &amp; Print Preserved</span>
-            <span class="flex items-center gap-1">✓ Real Tailor Specification</span>
-          </div>
-        </div>
-
-        <div class="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col justify-center gap-3">
-          <button type="button" onclick="openStyleAiFromHero()" class="px-8 py-4 bg-gradient-to-r from-gold-500 to-gold-400 hover:from-gold-400 hover:to-gold-300 text-maroon-950 text-xs font-bold uppercase tracking-wider rounded-xl shadow-lg transition-transform hover:scale-105 flex items-center justify-center gap-2">
-            <span>TRY WITH ABHA STYLE AI</span>
-            <span>&rarr;</span>
-          </button>
-          <button type="button" onclick="document.getElementById('newArrivals').scrollIntoView({behavior:'smooth'})" class="px-6 py-3 bg-white/10 hover:bg-white/20 text-ivory-100 border border-white/20 text-xs font-semibold uppercase tracking-wider rounded-xl transition text-center">
-            Browse Authentic Fabrics
-          </button>
-        </div>
-
-      </div>
     </div>
   </section>
 
@@ -1079,9 +1023,6 @@
   </section>
 
   <!-- ========================================================================= -->
-  
-
-
   <!-- 8. MADE TO YOUR MEASUREMENTS (§26) -->
   <!-- ========================================================================= -->
   <section id="measurements" class="py-20 bg-ivory-50 border-b border-ivory-200" aria-label="Made to Your Measurements">
@@ -1465,9 +1406,9 @@
                 title="ABHA Flagship Store Google Maps Location">
               </iframe>
               <!-- Direct Map Launch Pill -->
-              <div class="absolute bottom-3 left-3 right-3 sm:right-auto bg-charcoal-950/90 backdrop-blur-md text-ivory-50 px-3.5 py-2 rounded-lg border border-gold-400/40 shadow-xl flex items-center justify-between sm:justify-start gap-3 text-xs">
+              <div class="absolute bottom-3 left-3 right-3 bg-charcoal-950/85 backdrop-blur-sm text-ivory-50 p-2.5 rounded-lg flex items-center justify-between text-xs border border-gold-400/40 shadow-lg">
                 <div class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
                   <span class="font-semibold text-ivory-50">ABHA Flagship Store</span>
                 </div>
                 <a href="https://maps.app.goo.gl/7LgvjMtZ2vYo3rvF8" target="_blank" rel="noopener noreferrer" class="font-bold text-gold-400 hover:text-gold-300 underline underline-offset-2 flex items-center gap-1 transition-colors">
@@ -1762,17 +1703,6 @@
   <!-- ========================================================================= -->
   <!-- FLOATING WHATSAPP BUTTON (§32) -->
   <!-- ========================================================================= -->
-  <!-- Floating ABHA Style AI Trigger -->
-  <aside aria-label="ABHA Style AI 360 Try-On Assistant" class="fixed bottom-20 left-4 sm:bottom-6 sm:left-6 z-40">
-    <button type="button" onclick="openStyleAiFromHero()" class="flex items-center gap-2.5 px-4 py-3 rounded-full bg-gradient-to-r from-maroon-950 via-maroon-900 to-charcoal-950 text-ivory-50 shadow-2xl hover:shadow-2xl transition-luxury border-2 border-gold-400/80 hover:scale-105 group" aria-label="Open ABHA Style AI 360 Virtual Try-On">
-      <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gold-400 text-maroon-950 flex items-center justify-center text-xs sm:text-sm font-black shadow animate-pulse">✨</span>
-      <div class="text-left">
-        <span class="block text-[9px] uppercase tracking-wider text-gold-300 font-extrabold leading-none">Virtual Try-On</span>
-        <span class="block text-xs font-serif font-bold text-white leading-tight">ABHA Style AI 360°</span>
-      </div>
-    </button>
-  </aside>
-
   <aside aria-label="Quick WhatsApp assistance" class="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40">
     <button type="button" onclick="triggerWhatsAppChat('Floating Action')" class="flex items-center gap-2 px-4 py-3 rounded-full bg-green-700 hover:bg-green-600 text-ivory-50 shadow-lg hover:shadow-xl transition-luxury border border-green-600 text-xs font-bold" aria-label="Chat on WhatsApp with ABHA Tailoring Support">
       <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.553 1.764.815 2.79.815 3.182 0 5.77-2.587 5.77-5.766.001-3.183-2.585-5.8-5.769-5.8zm3.374 8.243c-.147.418-.844.793-1.189.845-.345.053-.787.069-1.272-.088-.309-.1-.707-.234-1.223-.462-2.158-.956-3.565-3.176-3.673-3.322-.108-.147-.872-1.163-.872-2.218 0-1.055.553-1.574.75-1.785.197-.212.43-.265.574-.265.144 0 .287.002.412.008.132.007.309-.05.483.368.177.424.606 1.482.659 1.589.053.107.089.232.018.375-.072.143-.108.232-.215.358-.108.125-.227.28-.324.375-.108.107-.221.223-.095.439.126.216.559.923 1.2 1.494.825.736 1.521.964 1.737 1.071.216.107.342.089.469-.054.126-.143.538-.625.681-.839.144-.214.287-.179.484-.107.197.072 1.254.591 1.469.699.215.107.359.161.412.25.054.089.054.518-.093.936z"/></svg>
@@ -1833,14 +1763,11 @@
           <div class="flex-1">
             <div class="flex items-center justify-between">
               <span class="font-serif text-base font-bold text-maroon-950">2. Stitched to My Measurements</span>
-              <span class="text-xs font-bold text-maroon-800">+ ₹650 / ₹750 Stitching</span>
+              <span class="text-xs font-bold text-maroon-800">+ ₹750 Stitching</span>
             </div>
             <p class="text-xs text-slateText-600 mt-1 leading-relaxed">
-              Customize neckline, sleeves, Stand Patti, and proportions in our 360° virtual fitting room.
+              Enter your measurements, select your neck and sleeve preferences, and have master tailors finish your outfit.
             </p>
-            <div class="mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 bg-gold-400/20 text-maroon-950 rounded text-[11px] font-bold border border-gold-400/40">
-              <span>✨ Preview with ABHA Style AI (360° Try-On)</span>
-            </div>
           </div>
         </button>
 
@@ -2504,634 +2431,6 @@
   </div>
 
   <!-- ========================================================================= -->
-  
-  <!-- ========================================================================= -->
-  <!-- MODAL: ABHA STYLE AI — COMPLETE AI VIRTUAL TAILOR & 360° VIRTUAL FITTING ROOM -->
-  <!-- ========================================================================= -->
-  <div id="styleAiModal" class="fixed inset-0 z-50 bg-charcoal-950/85 backdrop-blur-md hidden flex items-center justify-center p-0 sm:p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="styleAiTitle">
-    <div class="bg-[#FAF7F2] w-full max-w-5xl h-full sm:h-auto sm:max-h-[92vh] sm:rounded-2xl border border-gold-500/30 shadow-2xl flex flex-col overflow-hidden relative">
-      
-      <!-- Top Bar / Header -->
-      <div class="px-5 py-3.5 bg-maroon-950 text-ivory-50 border-b border-gold-500/30 flex items-center justify-between flex-shrink-0">
-        <div class="flex items-center gap-2.5">
-          <div class="w-7 h-7 rounded-full bg-gold-500/20 border border-gold-400/40 flex items-center justify-center text-xs">
-            ✨
-          </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <h2 id="styleAiTitle" class="font-serif text-base font-bold tracking-wider text-ivory-50 uppercase">ABHA STYLE AI</h2>
-              <span class="text-[9px] bg-gold-400/20 text-gold-300 font-bold px-1.5 py-0.5 rounded border border-gold-400/30 uppercase tracking-wide">360° Virtual Tailor</span>
-            </div>
-            <p class="text-[10px] text-ivory-100/70" id="styleAiSubtitle">Transforming Authentic Handloom Fabric into Bespoke Fits</p>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-3">
-          <!-- Step Indicator -->
-          <div class="hidden sm:flex items-center gap-1.5 text-[11px] text-ivory-100/80">
-            <span id="stepIndicator1" class="font-bold text-gold-400">1. Avatar</span> &rarr;
-            <span id="stepIndicator2" class="text-ivory-100/60">2. Fit</span> &rarr;
-            <span id="stepIndicator3" class="text-ivory-100/60">3. 360° Studio</span> &rarr;
-            <span id="stepIndicator4" class="text-ivory-100/60">4. Spec</span>
-          </div>
-
-          <button type="button" onclick="closeStyleAiModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-ivory-100 flex items-center justify-center transition" aria-label="Close ABHA Style AI">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Loading State Overlay -->
-      <div id="styleAiLoadingOverlay" class="absolute inset-0 bg-[#FAF7F2]/95 backdrop-blur-sm z-30 hidden flex flex-col items-center justify-center p-6 text-center">
-        <div class="w-16 h-16 rounded-full border-4 border-maroon-800/20 border-t-maroon-800 animate-spin mb-4"></div>
-        <h3 class="font-serif text-lg font-bold text-maroon-950">ABHA STYLE AI</h3>
-        <p class="text-xs text-slateText-600 mt-1 font-medium">Creating your virtual fitting experience...</p>
-        <div class="mt-4 max-w-xs w-full space-y-2 text-left text-xs bg-ivory-50 p-4 rounded-lg border border-ivory-300 shadow-sm">
-          <div id="loadingStage1" class="flex items-center gap-2 text-charcoal-900 font-semibold">
-            <span class="w-2 h-2 rounded-full bg-green-500 animate-ping"></span> 1. Preparing your avatar...
-          </div>
-          <div id="loadingStage2" class="flex items-center gap-2 text-slateText-500">
-            <span class="w-2 h-2 rounded-full bg-gray-300"></span> 2. Reading your measurements...
-          </div>
-          <div id="loadingStage3" class="flex items-center gap-2 text-slateText-500">
-            <span class="w-2 h-2 rounded-full bg-gray-300"></span> 3. Preparing the selected fabric...
-          </div>
-          <div id="loadingStage4" class="flex items-center gap-2 text-slateText-500">
-            <span class="w-2 h-2 rounded-full bg-gray-300"></span> 4. Creating the garment...
-          </div>
-          <div id="loadingStage5" class="flex items-center gap-2 text-slateText-500">
-            <span class="w-2 h-2 rounded-full bg-gray-300"></span> 5. Applying your stitching preferences...
-          </div>
-          <div id="loadingStage6" class="flex items-center gap-2 text-slateText-500">
-            <span class="w-2 h-2 rounded-full bg-gray-300"></span> 6. Preparing your virtual preview...
-          </div>
-        </div>
-      </div>
-
-      <!-- Modal Body (Stages 1, 2, 3, 4) -->
-      <div class="flex-1 overflow-y-auto">
-        
-        <!-- ================= STAGE 1: AVATAR & PHOTO UPLOAD WITH PRIVACY CONSENT ================= -->
-        <div id="styleAiStage1" class="p-6 sm:p-8 max-w-2xl mx-auto space-y-6">
-          <div class="text-center space-y-2">
-            <span class="text-xs font-bold uppercase tracking-luxury text-maroon-800">Private Fitting Profile</span>
-            <h3 class="font-serif text-2xl font-bold text-maroon-950">Create Your Virtual Avatar</h3>
-            <p class="text-xs text-slateText-600 max-w-md mx-auto">
-              Upload one full-body photo to preview ABHA dress materials transformed into custom-stitched outfits on your personal avatar.
-            </p>
-          </div>
-
-          <!-- Photo Guidance Box -->
-          <div class="bg-ivory-100/90 rounded-xl p-4 sm:p-5 border border-ivory-300 space-y-3">
-            <div class="flex items-center gap-2 text-xs font-bold text-maroon-950">
-              <span class="w-5 h-5 rounded-full bg-maroon-800 text-ivory-50 flex items-center justify-center text-[11px]">✓</span>
-              <span>Recommended Photo Guidance for Best Results:</span>
-            </div>
-            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slateText-700">
-              <li class="flex items-start gap-2"><span>•</span> Full body visible, standing upright</li>
-              <li class="flex items-start gap-2"><span>•</span> Face clearly visible and front-facing</li>
-              <li class="flex items-start gap-2"><span>•</span> Simple, reasonably fitted clothing</li>
-              <li class="flex items-start gap-2"><span>•</span> Good room lighting, plain background</li>
-            </ul>
-          </div>
-
-          <!-- Upload Dropzone -->
-          <div class="border-2 border-dashed border-maroon-800/30 hover:border-maroon-800 rounded-xl p-6 text-center bg-ivory-50 transition cursor-pointer" onclick="document.getElementById('styleAiPhotoInput').click()">
-            <input type="file" id="styleAiPhotoInput" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="handleStyleAiPhotoUpload(event)" />
-            
-            <div id="photoUploadPlaceholder" class="space-y-2">
-              <div class="w-12 h-12 rounded-full bg-maroon-800/10 text-maroon-800 flex items-center justify-center mx-auto text-xl">
-                📷
-              </div>
-              <p class="text-xs font-bold text-charcoal-950">Click to Select or Drag Your Full-Body Photo</p>
-              <p class="text-[11px] text-slateText-500">Supports JPG, PNG, WEBP (Max 15MB)</p>
-            </div>
-
-            <!-- Uploaded Preview -->
-            <div id="photoUploadPreviewWrap" class="hidden flex flex-col items-center gap-3">
-              <img id="photoUploadPreview" src="" alt="Uploaded photo" class="h-44 w-auto rounded-lg object-contain border border-ivory-300 shadow-md" />
-              <button type="button" onclick="event.stopPropagation(); removeStyleAiPhoto();" class="text-xs text-red-700 hover:underline font-semibold">Remove / Replace Photo</button>
-            </div>
-          </div>
-
-          <!-- Mandatory Privacy & Consent Section (§2 Privacy & Consent) -->
-          <div class="bg-gold-50/70 border border-gold-500/40 rounded-xl p-4 sm:p-5 space-y-3">
-            <div class="flex items-center gap-2 text-xs font-bold text-maroon-950">
-              <span class="text-gold-600">🔒</span>
-              <span>Your Privacy Matters</span>
-            </div>
-            <p class="text-[11px] text-slateText-700 leading-relaxed">
-              Your photograph is stored exclusively in your private browser session/account. It is used solely to generate your private virtual fitting silhouette and is <strong>never</strong> publicly displayed on product reviews, social feeds, or shared with other customers.
-            </p>
-            <label class="flex items-start gap-3 cursor-pointer pt-1">
-              <input type="checkbox" id="styleAiConsentCheckbox" onchange="toggleConsentButton()" class="mt-0.5 w-4 h-4 rounded text-maroon-800 focus:ring-maroon-800" />
-              <span class="text-xs font-semibold text-charcoal-950">
-                I agree to use my uploaded photo for creating my private ABHA Style AI virtual fitting profile.
-              </span>
-            </label>
-          </div>
-
-          <!-- Actions -->
-          <div class="flex flex-col sm:flex-row items-center gap-3 pt-2">
-            <button type="button" id="btnContinueWithPhoto" onclick="proceedToMeasurements(true)" disabled class="w-full sm:w-2/3 py-3.5 bg-maroon-800 hover:bg-maroon-700 disabled:opacity-50 disabled:cursor-not-allowed text-ivory-50 text-xs font-bold uppercase tracking-wider rounded-lg transition shadow-md">
-              Create Avatar &amp; Continue &rarr;
-            </button>
-            <button type="button" onclick="proceedToMeasurements(false)" class="w-full sm:w-1/3 py-3.5 bg-ivory-100 hover:bg-ivory-200 text-maroon-950 border border-maroon-800/30 text-xs font-semibold rounded-lg transition">
-              Use Model Avatar (Skip Photo)
-            </button>
-          </div>
-        </div>
-
-        <!-- ================= STAGE 2: ANATOMICAL MEASUREMENTS FORM ================= -->
-        <div id="styleAiStage2" class="p-6 sm:p-8 max-w-3xl mx-auto space-y-6 hidden">
-          <div class="flex items-center justify-between border-b border-ivory-200 pb-3">
-            <div>
-              <span class="text-xs font-bold uppercase tracking-luxury text-maroon-800">Step 2: Proportions</span>
-              <h3 class="font-serif text-xl font-bold text-maroon-950">Your Body Measurements</h3>
-              <p class="text-xs text-slateText-600">The AI uses these numbers to proportionally adapt your virtual garment.</p>
-            </div>
-            <!-- Unit Selector -->
-            <div class="flex items-center bg-ivory-200 p-0.5 rounded-lg text-xs font-bold">
-              <button type="button" id="unitInchesBtn" onclick="setStyleAiUnit('inches')" class="px-3 py-1 bg-maroon-800 text-ivory-50 rounded shadow-xs">Inches (in)</button>
-              <button type="button" id="unitCmBtn" onclick="setStyleAiUnit('cm')" class="px-3 py-1 text-slateText-700 hover:text-charcoal-950">Centimeters (cm)</button>
-            </div>
-          </div>
-
-          <form id="styleAiMeasurementsForm" onsubmit="handleMeasurementsSubmit(event)" class="space-y-6">
-            <!-- Upper Body -->
-            <div class="space-y-3">
-              <h4 class="text-xs font-bold uppercase tracking-wider text-charcoal-950 flex items-center gap-2">
-                <span>1. Upper Body &amp; Kurta</span>
-                <span class="text-[10px] text-maroon-800 bg-maroon-800/10 px-2 py-0.5 rounded">Core Fit</span>
-              </h4>
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                <div>
-                  <label for="saiBust" class="block text-[11px] font-semibold text-slateText-700 mb-1">Bust / Chest *</label>
-                  <input type="number" step="0.5" id="saiBust" required class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs font-semibold text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
-                </div>
-                <div>
-                  <label for="saiWaist" class="block text-[11px] font-semibold text-slateText-700 mb-1">Waist *</label>
-                  <input type="number" step="0.5" id="saiWaist" required class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs font-semibold text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
-                </div>
-                <div>
-                  <label for="saiHip" class="block text-[11px] font-semibold text-slateText-700 mb-1">Hip *</label>
-                  <input type="number" step="0.5" id="saiHip" required class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs font-semibold text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
-                </div>
-                <div>
-                  <label for="saiShoulder" class="block text-[11px] font-semibold text-slateText-700 mb-1">Shoulder *</label>
-                  <input type="number" step="0.5" id="saiShoulder" required class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs font-semibold text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
-                </div>
-                <div>
-                  <label for="saiKurtaLength" class="block text-[11px] font-semibold text-slateText-700 mb-1">Kurta Length *</label>
-                  <input type="number" step="0.5" id="saiKurtaLength" required class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs font-semibold text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
-                </div>
-                <div>
-                  <label for="saiSleeveLength" class="block text-[11px] font-semibold text-slateText-700 mb-1">Sleeve Length *</label>
-                  <input type="number" step="0.5" id="saiSleeveLength" required class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs font-semibold text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
-                </div>
-                <div>
-                  <label for="saiSideSlit" class="block text-[11px] font-semibold text-slateText-700 mb-1">Side Slit Height</label>
-                  <input type="number" step="0.5" id="saiSideSlit" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs font-semibold text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
-                </div>
-                <div>
-                  <label for="saiFitting" class="block text-[11px] font-semibold text-slateText-700 mb-1">Desired Allowance</label>
-                  <select id="saiFitting" class="w-full px-2.5 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs font-semibold text-charcoal-950">
-                    <option value="Regular">Regular (Standard)</option>
-                    <option value="Comfortable">Comfortable</option>
-                    <option value="Loose">Loose Casual</option>
-                    <option value="Fitted">Tailored Fitted</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <!-- Bottom Wear -->
-            <div class="space-y-3 pt-3 border-t border-ivory-200">
-              <h4 class="text-xs font-bold uppercase tracking-wider text-charcoal-950 flex items-center gap-2">
-                <span>2. Bottom Wear</span>
-                <span class="text-[10px] text-gold-600 bg-gold-400/20 px-2 py-0.5 rounded">Tailored Match</span>
-              </h4>
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-                <div>
-                  <label for="saiBottomType" class="block text-[11px] font-semibold text-slateText-700 mb-1">Bottom Style *</label>
-                  <select id="saiBottomType" onchange="updateBottomMeasurementFields(this.value)" class="w-full px-2.5 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs font-semibold text-charcoal-950">
-                    <option value="Straight Pants">Straight Cigarette Pants</option>
-                    <option value="Salwar">Traditional Pleated Salwar</option>
-                    <option value="Palazzo">Flared Wide Palazzo</option>
-                    <option value="Churidar">Churidar</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="saiBottomLength" class="block text-[11px] font-semibold text-slateText-700 mb-1">Bottom Length *</label>
-                  <input type="number" step="0.5" id="saiBottomLength" required class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs font-semibold text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
-                </div>
-                <div>
-                  <label for="saiBottomWaist" class="block text-[11px] font-semibold text-slateText-700 mb-1">Bottom Waist</label>
-                  <input type="number" step="0.5" id="saiBottomWaist" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs font-semibold text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
-                </div>
-                <div>
-                  <label for="saiBottomOpening" class="block text-[11px] font-semibold text-slateText-700 mb-1" id="saiBottomOpeningLabel">Ankle Opening / Mori</label>
-                  <input type="number" step="0.5" id="saiBottomOpening" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs font-semibold text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
-                </div>
-              </div>
-            </div>
-
-            <!-- Disclaimer Notice -->
-            <div class="p-3 bg-ivory-100 rounded-lg border border-ivory-200 text-[11px] text-slateText-600 flex items-center gap-2">
-              <span>ℹ️</span>
-              <span><strong>Note:</strong> Preview is generated using your measurements. Actual garment drape and final fit may vary slightly.</span>
-            </div>
-
-            <div class="flex items-center justify-between pt-2">
-              <button type="button" onclick="switchStyleAiStage(1)" class="px-5 py-2.5 bg-ivory-100 hover:bg-ivory-200 text-charcoal-950 text-xs font-bold rounded">
-                &larr; Back to Photo
-              </button>
-              <button type="submit" class="px-8 py-3 bg-maroon-800 hover:bg-maroon-700 text-ivory-50 text-xs font-bold uppercase tracking-wider rounded-lg shadow-md">
-                Launch 360° Virtual Fitting Room &rarr;
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <!-- ================= STAGE 3: INTERACTIVE 360° VIRTUAL FITTING ROOM ================= -->
-        <div id="styleAiStage3" class="h-full flex flex-col lg:flex-row overflow-hidden hidden">
-          
-          <!-- Left / Center: Interactive Try-On Canvas Viewport -->
-          <div class="w-full lg:w-7/12 h-[380px] sm:h-[460px] lg:h-full bg-gradient-to-b from-ivory-100 to-ivory-200 relative flex flex-col items-center justify-center select-none border-b lg:border-b-0 lg:border-r border-ivory-300 overflow-hidden">
-            
-            <!-- Top Mode Switcher Bar -->
-            <div class="absolute top-3 left-3 right-3 flex items-center justify-between z-20 pointer-events-auto">
-              <div class="inline-flex p-1 bg-charcoal-950/85 backdrop-blur-md rounded-xl border border-gold-400/40 shadow-md gap-1">
-                <button type="button" id="btnMode360" onclick="setStyleAiMode('3d_avatar')" class="px-3 py-1.5 text-[11px] font-bold rounded-lg bg-gold-400 text-maroon-950 shadow-xs flex items-center gap-1 transition">
-                  <span>👗</span> 3D Avatar (360°)
-                </button>
-                <button type="button" id="btnModeRealistic" onclick="setStyleAiMode('realistic')" class="px-3 py-1.5 text-[11px] font-bold rounded-lg text-ivory-100 hover:text-white hover:bg-white/10 flex items-center gap-1 transition">
-                  <span>✨</span> Realistic Try-On
-                </button>
-              </div>
-
-              <!-- Toggle HD Studio Model vs Customer Photo -->
-              <button type="button" id="btnToggleHdModel" onclick="toggleStyleAiHdModel()" class="px-3 py-1.5 bg-gradient-to-r from-maroon-950 to-charcoal-950 text-gold-300 hover:text-white text-[10px] sm:text-[11px] font-bold rounded-xl border border-gold-400/50 shadow-md flex items-center gap-1.5 transition hover:scale-105">
-                <span id="hdModelIcon">📸</span>
-                <span id="hdModelLabel">View HD Studio Model</span>
-              </button>
-            </div>
-
-            <!-- Interactive Canvas -->
-            <canvas id="styleAiCanvas" width="600" height="720" class="w-full h-full max-h-[640px] object-contain"></canvas>
-
-            <!-- 360 Compass & Drag Instruction Overlay (Active for 3D avatar) -->
-            <div id="seamCompassOverlay" class="absolute top-16 left-3 bg-charcoal-950/85 backdrop-blur-xs text-ivory-50 text-[10px] sm:text-[11px] font-semibold px-2.5 py-1 rounded-full border border-gold-400/30 flex items-center gap-1.5 shadow-sm">
-              <span class="text-gold-400">🔄</span>
-              <span>Drag to Rotate 360°</span>
-              <span class="text-gold-300 font-mono" id="angleDisplay">0°</span>
-            </div>
-
-            <!-- Angle Selector Pills & Camera Zoom -->
-            <div id="seamAnglePills" class="absolute bottom-3 left-3 right-3 sm:left-auto sm:right-3 flex items-center justify-center gap-1 bg-charcoal-950/85 backdrop-blur-xs p-1 rounded-lg border border-gold-400/30 shadow-md">
-              <button type="button" onclick="setFittingRoomAngle(0)" class="px-2.5 py-1 text-[10px] font-bold rounded bg-gold-400 text-maroon-950 transition" id="angBtn0">Front 0°</button>
-              <button type="button" onclick="setFittingRoomAngle(45)" class="px-2.5 py-1 text-[10px] font-bold rounded text-ivory-50 hover:bg-maroon-800 transition" id="angBtn45">45°</button>
-              <button type="button" onclick="setFittingRoomAngle(90)" class="px-2.5 py-1 text-[10px] font-bold rounded text-ivory-50 hover:bg-maroon-800 transition" id="angBtn90">Side 90°</button>
-              <button type="button" onclick="setFittingRoomAngle(180)" class="px-2.5 py-1 text-[10px] font-bold rounded text-ivory-50 hover:bg-maroon-800 transition" id="angBtn180">Back 180°</button>
-              <div class="h-4 w-px bg-white/20 mx-1"></div>
-              <button type="button" onclick="zoomFittingRoom(0.1)" class="px-1.5 py-1 text-[11px] text-ivory-50 hover:text-gold-400 font-bold" title="Zoom In">+</button>
-              <button type="button" onclick="zoomFittingRoom(-0.1)" class="px-1.5 py-1 text-[11px] text-ivory-50 hover:text-gold-400 font-bold" title="Zoom Out">-</button>
-              <button type="button" onclick="resetFittingRoomView()" class="px-1.5 py-1 text-[11px] text-ivory-50 hover:text-gold-400 font-bold" title="Reset View">⟲</button>
-            </div>
-
-            <!-- Subtle Legal Disclaimer Pill -->
-            <div class="absolute bottom-3 left-3 hidden sm:block bg-ivory-50/90 backdrop-blur-xs text-slateText-600 text-[9px] px-2 py-0.5 rounded border border-ivory-300">
-              Virtual preview — authentic handloom textures &amp; bespoke tailoring proportions.
-            </div>
-          </div>
-
-          <!-- Right: Tailoring & Customization Controls Panel -->
-          <div class="w-full lg:w-5/12 h-full flex flex-col bg-ivory-50 overflow-y-auto">
-            
-            <!-- Fabric & Product Card Summary -->
-            <div class="p-4 border-b border-ivory-200 bg-ivory-100/70 flex items-center justify-between gap-3">
-              <div class="flex items-center gap-3">
-                <img id="fitRoomProdImg" src="" alt="" class="w-12 h-16 object-cover rounded border border-ivory-300 shadow-xs" />
-                <div>
-                  <span class="text-[9px] font-bold uppercase tracking-wider text-maroon-800" id="fitRoomProdCategory">Authentic Fabric</span>
-                  <h4 class="font-serif text-xs sm:text-sm font-bold text-charcoal-950 line-clamp-1" id="fitRoomProdTitle">Dress Material</h4>
-                  <p class="text-xs font-extrabold text-maroon-900 mt-0.5" id="fitRoomProdPrice">₹1,650 + ₹650 Stitching</p>
-                </div>
-              </div>
-
-              <!-- Switch Variant Button -->
-              <button type="button" onclick="toggleVariantPicker()" class="px-2.5 py-1.5 bg-ivory-50 hover:bg-ivory-200 border border-ivory-300 rounded text-[10px] font-bold text-maroon-950 transition">
-                Change Fabric
-              </button>
-            </div>
-
-            <!-- Fabric Variant Selector Drawer (Collapsible) -->
-            <div id="variantPickerDrawer" class="hidden p-3 bg-ivory-100 border-b border-ivory-200 grid grid-cols-5 gap-2">
-              <!-- Rendered via JS from authentic ABHA catalogue -->
-            </div>
-
-            <!-- Customization Controls Accordion / Form -->
-            <div class="p-4 sm:p-5 space-y-4 flex-1">
-
-              <!-- AI Fabric Decomposition (Upper, Bottom, Dupatta Identified) -->
-              <div class="p-3.5 bg-gradient-to-br from-gold-50/80 to-ivory-100 border border-gold-400/40 rounded-xl space-y-2 shadow-2xs">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-1.5">
-                    <span class="w-5 h-5 rounded-full bg-maroon-900 text-gold-300 flex items-center justify-center text-xs font-bold">🧵</span>
-                    <div>
-                      <h4 class="text-xs font-bold text-maroon-950">AI Fabric Decomposition</h4>
-                      <p class="text-[9px] text-slateText-600">3-Piece Unstitched Material Identified</p>
-                    </div>
-                  </div>
-                  <span class="text-[9px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 px-2 py-0.5 rounded-full flex items-center gap-1">
-                    <span>✓</span> AI Verified
-                  </span>
-                </div>
-
-                <!-- 3 Segment Cards Grid -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1" id="fabricDecompositionContainer">
-                  <!-- Rendered dynamically by populateFabricDecomposition() -->
-                </div>
-              </div>
-
-              <!-- 3D Body Avatar Calibration & Measurement Presets (§3D Avatar Morphing) -->
-              <div class="p-3.5 bg-gradient-to-br from-ivory-100 to-ivory-200 border border-maroon-800/20 rounded-xl space-y-3 shadow-2xs">
-                <div class="flex items-center justify-between">
-                  <div class="flex items-center gap-1.5">
-                    <span class="w-5 h-5 rounded-full bg-gold-500 text-charcoal-950 flex items-center justify-center text-xs font-bold">👗</span>
-                    <div>
-                      <h4 class="text-xs font-bold text-charcoal-950">3D Body Avatar &amp; Measurements</h4>
-                      <p class="text-[9px] text-slateText-600">Dynamic 360° Real-time Fitting Morph</p>
-                    </div>
-                  </div>
-                  <button type="button" onclick="toggleMeasurementLinesUI()" id="btnToggleMeasurementLines" class="text-[9px] font-bold bg-gold-400/20 hover:bg-gold-400/30 text-maroon-950 border border-gold-500/40 px-2 py-0.5 rounded-full flex items-center gap-1 transition" title="Toggle gold measurement calibration lines">
-                    <span>📐</span> <span id="measurementLinesLabel">Hide Lines</span>
-                  </button>
-                </div>
-
-                <!-- 3 Body Preset Quick Pills -->
-                <div class="space-y-1">
-                  <span class="text-[9px] font-bold uppercase tracking-wider text-slateText-600 block">Quick Body Presets:</span>
-                  <div class="grid grid-cols-3 gap-1.5">
-                    <button type="button" id="btnPresetSlim" onclick="setBodyPresetUI('slim')" class="btn-preset-opt py-1.5 px-1 text-[10px] font-bold rounded border text-center transition bg-ivory-50 border-ivory-300 hover:border-maroon-800 text-charcoal-900">
-                      👗 Slim Fit<br><span class="text-[8px] font-normal text-slateText-500">32-26-34</span>
-                    </button>
-                    <button type="button" id="btnPresetRegular" onclick="setBodyPresetUI('regular')" class="btn-preset-opt py-1.5 px-1 text-[10px] font-bold rounded border text-center transition bg-maroon-800 text-ivory-50 border-maroon-800 shadow-xs">
-                      👗 Regular<br><span class="text-[8px] font-normal text-gold-200">36-30-38</span>
-                    </button>
-                    <button type="button" id="btnPresetCurvy" onclick="setBodyPresetUI('curvy')" class="btn-preset-opt py-1.5 px-1 text-[10px] font-bold rounded border text-center transition bg-ivory-50 border-ivory-300 hover:border-maroon-800 text-charcoal-900">
-                      👗 Curvy Plus<br><span class="text-[8px] font-normal text-slateText-500">42-36-46</span>
-                    </button>
-                  </div>
-                </div>
-
-                <!-- Live Measurement Sliders (Bust, Waist, Hip) -->
-                <div class="space-y-2 pt-1 border-t border-ivory-300/80 text-xs">
-                  <!-- Bust Slider -->
-                  <div>
-                    <div class="flex items-center justify-between text-[11px] mb-1">
-                      <span class="font-semibold text-charcoal-900">Bust Circumference</span>
-                      <span class="font-mono font-bold text-maroon-800" id="bustValDisplay">36.0 in</span>
-                    </div>
-                    <input type="range" id="sliderBust" min="30" max="48" step="0.5" value="36" oninput="handleMeasurementSliderChange('bust', this.value)" class="w-full accent-maroon-800 h-1.5 bg-ivory-300 rounded cursor-pointer" />
-                  </div>
-
-                  <!-- Waist Slider -->
-                  <div>
-                    <div class="flex items-center justify-between text-[11px] mb-1">
-                      <span class="font-semibold text-charcoal-900">Waist Circumference</span>
-                      <span class="font-mono font-bold text-maroon-800" id="waistValDisplay">30.0 in</span>
-                    </div>
-                    <input type="range" id="sliderWaist" min="24" max="44" step="0.5" value="30" oninput="handleMeasurementSliderChange('waist', this.value)" class="w-full accent-maroon-800 h-1.5 bg-ivory-300 rounded cursor-pointer" />
-                  </div>
-
-                  <!-- Hip Slider -->
-                  <div>
-                    <div class="flex items-center justify-between text-[11px] mb-1">
-                      <span class="font-semibold text-charcoal-900">Hip Circumference</span>
-                      <span class="font-mono font-bold text-maroon-800" id="hipValDisplay">38.0 in</span>
-                    </div>
-                    <input type="range" id="sliderHip" min="32" max="52" step="0.5" value="38" oninput="handleMeasurementSliderChange('hip', this.value)" class="w-full accent-maroon-800 h-1.5 bg-ivory-300 rounded cursor-pointer" />
-                  </div>
-                </div>
-              </div>
-              
-              <!-- AI Stylist Recommendation Chip -->
-              <div id="aiSuggestionBox" class="p-3 bg-gold-50 border border-gold-400/40 rounded-xl space-y-1.5">
-                <div class="flex items-center justify-between text-[11px]">
-                  <span class="font-bold text-maroon-950 flex items-center gap-1.5">
-                    <span>✨</span> <span id="aiSuggestionTitle">Atelier Recommendation</span>
-                  </span>
-                </div>
-                <p class="text-[11px] text-slateText-700 leading-snug" id="aiSuggestionMessage">
-                  A structured Stand Patti collar enhances this high-threadwork neckline.
-                </p>
-                <div class="flex items-center gap-2 pt-1" id="aiSuggestionActions">
-                  <button type="button" id="btnApplySuggestion" class="px-3 py-1 bg-maroon-800 hover:bg-maroon-700 text-ivory-50 text-[10px] font-bold rounded">
-                    Preview Suggestion
-                  </button>
-                  <button type="button" onclick="dismissSuggestion()" class="px-2.5 py-1 text-[10px] text-slateText-600 hover:text-charcoal-950 font-semibold">
-                    Keep My Design
-                  </button>
-                </div>
-              </div>
-
-              <!-- Hinglish / Hindi Natural Language Query Bar -->
-              <div class="space-y-1">
-                <div class="flex items-center gap-1.5">
-                  <input type="text" id="hinglishQueryInput" placeholder="e.g., Mujhe stand patti chahiye ya 3/4 sleeves..." class="flex-1 px-3 py-1.5 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" onkeydown="if(event.key==='Enter'){event.preventDefault(); applyHinglishCommand();}" />
-                  <button type="button" onclick="applyHinglishCommand()" class="px-3 py-1.5 bg-charcoal-900 hover:bg-charcoal-800 text-ivory-50 text-xs font-bold rounded">Apply</button>
-                </div>
-                <p class="text-[9px] text-slateText-500">Supports English, Hindi, and Hinglish styling instructions.</p>
-              </div>
-
-              <!-- 1. Kurta Silhouette -->
-              <div class="space-y-1.5">
-                <label class="block text-xs font-bold text-charcoal-950">Kurta Silhouette &amp; Flare</label>
-                <div class="grid grid-cols-3 gap-2">
-                  <button type="button" onclick="updateStyleOption('kurtaSilhouette', 'Straight')" class="btn-custom-opt py-2 px-2 text-xs font-semibold rounded border text-center" data-group="kurtaSilhouette" data-val="Straight">Straight Cut</button>
-                  <button type="button" onclick="updateStyleOption('kurtaSilhouette', 'A-line')" class="btn-custom-opt py-2 px-2 text-xs font-semibold rounded border text-center" data-group="kurtaSilhouette" data-val="A-line">A-Line Drape</button>
-                  <button type="button" onclick="updateStyleOption('kurtaSilhouette', 'Anarkali')" class="btn-custom-opt py-2 px-2 text-xs font-semibold rounded border text-center" data-group="kurtaSilhouette" data-val="Anarkali">Anarkali Flare</button>
-                </div>
-              </div>
-
-              <!-- 2. Neckline Design -->
-              <div class="space-y-1.5">
-                <label class="block text-xs font-bold text-charcoal-950">Neckline Design</label>
-                <div class="grid grid-cols-4 gap-1.5">
-                  <button type="button" onclick="updateStyleOption('neckDesign', 'Round')" class="btn-custom-opt py-1.5 px-1 text-[11px] font-semibold rounded border text-center" data-group="neckDesign" data-val="Round">Round</button>
-                  <button type="button" onclick="updateStyleOption('neckDesign', 'V-neck')" class="btn-custom-opt py-1.5 px-1 text-[11px] font-semibold rounded border text-center" data-group="neckDesign" data-val="V-neck">V-Neck</button>
-                  <button type="button" onclick="updateStyleOption('neckDesign', 'Square')" class="btn-custom-opt py-1.5 px-1 text-[11px] font-semibold rounded border text-center" data-group="neckDesign" data-val="Square">Square</button>
-                  <button type="button" onclick="updateStyleOption('neckDesign', 'Boat')" class="btn-custom-opt py-1.5 px-1 text-[11px] font-semibold rounded border text-center" data-group="neckDesign" data-val="Boat">Boat Neck</button>
-                </div>
-              </div>
-
-              <!-- 3. Stand Patti Visual Selector (§Stand Patti System) -->
-              <div class="p-3 bg-ivory-100 rounded-xl border border-ivory-300 space-y-2.5">
-                <div class="flex items-center justify-between">
-                  <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" id="chkStandPatti" onchange="toggleStandPatti(this.checked)" class="w-4 h-4 rounded text-maroon-800 focus:ring-maroon-800" />
-                    <span class="text-xs font-bold text-charcoal-950">Add Stand Patti (Mandarin Collar)</span>
-                  </label>
-                  <span class="text-[10px] font-bold text-gold-600 bg-gold-400/20 px-2 py-0.5 rounded">Atelier Finish</span>
-                </div>
-
-                <!-- Stand Patti Visual Cards (Accordion) -->
-                <div id="standPattiPickerSection" class="hidden space-y-2 pt-2 border-t border-ivory-300">
-                  <span class="text-[10px] font-bold uppercase tracking-wider text-slateText-600">Choose Stand Patti Style:</span>
-                  <div class="grid grid-cols-2 gap-2" id="standPattiGrid">
-                    <!-- Rendered via JS with SP-01 to SP-04 visual preview cards -->
-                  </div>
-                </div>
-              </div>
-
-              <!-- 4. Sleeves -->
-              <div class="space-y-1.5">
-                <label class="block text-xs font-bold text-charcoal-950">Sleeves Style</label>
-                <div class="grid grid-cols-4 gap-1.5">
-                  <button type="button" onclick="updateStyleOption('sleeveLength', 'Sleeveless')" class="btn-custom-opt py-1.5 px-1 text-[11px] font-semibold rounded border text-center" data-group="sleeveLength" data-val="Sleeveless">Sleeveless</button>
-                  <button type="button" onclick="updateStyleOption('sleeveLength', 'Short')" class="btn-custom-opt py-1.5 px-1 text-[11px] font-semibold rounded border text-center" data-group="sleeveLength" data-val="Short">Short</button>
-                  <button type="button" onclick="updateStyleOption('sleeveLength', '3/4')" class="btn-custom-opt py-1.5 px-1 text-[11px] font-semibold rounded border text-center" data-group="sleeveLength" data-val="3/4">3/4th (Std)</button>
-                  <button type="button" onclick="updateStyleOption('sleeveLength', 'Full')" class="btn-custom-opt py-1.5 px-1 text-[11px] font-semibold rounded border text-center" data-group="sleeveLength" data-val="Full">Full Length</button>
-                </div>
-              </div>
-
-              <!-- 5. Pockets & Bottom -->
-              <div class="grid grid-cols-2 gap-3 text-xs">
-                <div>
-                  <label for="selPockets" class="block font-semibold text-slateText-700 mb-1">Side Pockets</label>
-                  <select id="selPockets" onchange="updateStyleOption('pockets', this.value)" class="w-full px-2.5 py-1.5 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950">
-                    <option value="No pocket">No Pocket</option>
-                    <option value="One side pocket">1 Side Pocket</option>
-                    <option value="Two side pockets">2 Side Pockets</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="selFitBottom" class="block font-semibold text-slateText-700 mb-1">Bottom Cut</label>
-                  <select id="selFitBottom" onchange="updateStyleOption('bottomType', this.value)" class="w-full px-2.5 py-1.5 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950">
-                    <option value="Straight Pants">Straight Pants</option>
-                    <option value="Salwar">Traditional Salwar</option>
-                    <option value="Palazzo">Flared Palazzo</option>
-                    <option value="Churidar">Churidar</option>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Undo & Reset Bar -->
-              <div class="flex items-center justify-between pt-2 border-t border-ivory-200 text-xs">
-                <button type="button" onclick="undoFittingRoomChange()" class="text-slateText-600 hover:text-maroon-800 flex items-center gap-1 font-semibold">
-                  <span>↩️</span> Undo Last Change
-                </button>
-                <button type="button" onclick="resetFittingRoomDesign()" class="text-slateText-600 hover:text-red-700 flex items-center gap-1 font-semibold">
-                  <span>🔄</span> Reset Design
-                </button>
-              </div>
-            </div>
-
-            <!-- Sticky Bottom Action Footer -->
-            <div class="p-3 sm:p-4 bg-ivory-100 border-t border-ivory-300 flex items-center gap-2 flex-shrink-0">
-              <button type="button" onclick="saveActiveDesignToProfile()" class="w-1/3 py-3 bg-ivory-50 hover:bg-ivory-200 text-maroon-950 border border-maroon-800/40 text-xs font-bold uppercase tracking-wider rounded-lg transition text-center shadow-xs flex items-center justify-center gap-1">
-                <span>💾</span> <span>Save</span>
-              </button>
-              <button type="button" onclick="proceedToDesignReview()" class="w-2/3 py-3 bg-maroon-800 hover:bg-maroon-700 text-ivory-50 text-xs font-bold uppercase tracking-wider rounded-lg transition text-center shadow-md flex items-center justify-center gap-1.5">
-                <span>Confirm &amp; Stitch</span> <span>&rarr;</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- ================= STAGE 4: DESIGN CONFIRMATION & TAILORING SPECIFICATION ================= -->
-        <div id="styleAiStage4" class="p-6 sm:p-8 max-w-3xl mx-auto space-y-6 hidden">
-          <div class="text-center space-y-1">
-            <span class="text-xs font-bold uppercase tracking-luxury text-maroon-800">Final Design Review</span>
-            <h3 class="font-serif text-2xl font-bold text-maroon-950">Your Structured Tailoring Specification</h3>
-            <p class="text-xs text-slateText-600">Review your customized outfit details before proceeding to payment.</p>
-          </div>
-
-          <!-- Specification Summary Card -->
-          <div class="bg-ivory-100 rounded-xl p-5 border border-ivory-300 space-y-4 shadow-sm">
-            <div class="flex items-center justify-between border-b border-ivory-200 pb-3">
-              <div>
-                <span class="text-[10px] font-mono font-bold text-maroon-800 bg-maroon-800/10 px-2 py-0.5 rounded" id="specDesignId">ABHA-DESIGN-XXXXXX</span>
-                <h4 class="font-serif text-base font-bold text-charcoal-950 mt-1" id="specProductTitle">Product Name</h4>
-                <p class="text-xs text-slateText-600" id="specProductFabric">Fabric Details</p>
-              </div>
-              <div class="text-right">
-                <span class="text-xs text-slateText-500 block">Total Amount</span>
-                <span class="font-serif text-lg font-bold text-maroon-950" id="specTotalAmount">₹2,300</span>
-              </div>
-            </div>
-
-            <!-- Specs Grid -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
-              <div class="p-2.5 bg-ivory-50 rounded border border-ivory-200">
-                <span class="text-slateText-500 block text-[10px] uppercase">Silhouette</span>
-                <span class="font-bold text-charcoal-950" id="specSilhouette">Straight Cut</span>
-              </div>
-              <div class="p-2.5 bg-ivory-50 rounded border border-ivory-200">
-                <span class="text-slateText-500 block text-[10px] uppercase">Neckline</span>
-                <span class="font-bold text-charcoal-950" id="specNeckline">Round Neck</span>
-              </div>
-              <div class="p-2.5 bg-ivory-50 rounded border border-ivory-200">
-                <span class="text-slateText-500 block text-[10px] uppercase">Stand Patti</span>
-                <span class="font-bold text-maroon-900" id="specStandPatti">None</span>
-              </div>
-              <div class="p-2.5 bg-ivory-50 rounded border border-ivory-200">
-                <span class="text-slateText-500 block text-[10px] uppercase">Sleeves</span>
-                <span class="font-bold text-charcoal-950" id="specSleeves">3/4th Sleeves</span>
-              </div>
-              <div class="p-2.5 bg-ivory-50 rounded border border-ivory-200">
-                <span class="text-slateText-500 block text-[10px] uppercase">Side Pockets</span>
-                <span class="font-bold text-charcoal-950" id="specPockets">1 Side Pocket</span>
-              </div>
-              <div class="p-2.5 bg-ivory-50 rounded border border-ivory-200">
-                <span class="text-slateText-500 block text-[10px] uppercase">Bottom Style</span>
-                <span class="font-bold text-charcoal-950" id="specBottom">Straight Pants</span>
-              </div>
-            </div>
-
-            <!-- Customer Anatomical Measurements -->
-            <div class="p-3 bg-ivory-50 rounded border border-ivory-200 space-y-1.5 text-xs">
-              <span class="font-bold text-[10px] uppercase tracking-wider text-slateText-600 block">Customer Anatomical Measurements (Inches):</span>
-              <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 text-center text-[11px]" id="specMeasurementsGrid">
-                <!-- Injected via JS -->
-              </div>
-            </div>
-
-            <!-- Printable Spec Code / Job Ticket Preview (Collapsible) -->
-            <details class="text-xs">
-              <summary class="text-maroon-800 font-semibold cursor-pointer hover:underline">View Raw Atelier Specification Ticket</summary>
-              <pre class="mt-2 p-3 bg-charcoal-950 text-gold-300 rounded font-mono text-[10px] leading-relaxed overflow-x-auto" id="rawSpecPre">
-              </pre>
-            </details>
-          </div>
-
-          <!-- Mandatory Verification Checkbox -->
-          <div class="p-4 bg-gold-50/70 border border-gold-500/30 rounded-xl space-y-2">
-            <label class="flex items-start gap-3 cursor-pointer">
-              <input type="checkbox" id="specReviewCheckbox" onchange="toggleSpecConfirmButton()" class="mt-0.5 w-4 h-4 rounded text-maroon-800 focus:ring-maroon-800" />
-              <span class="text-xs font-semibold text-charcoal-950">
-                I have reviewed my measurements and stitching specifications. I confirm ABHA master tailors will cut and stitch this fabric to these exact proportions.
-              </span>
-            </label>
-          </div>
-
-          <!-- Action Buttons -->
-          <div class="flex items-center justify-between pt-2">
-            <button type="button" onclick="switchStyleAiStage(3)" class="px-5 py-2.5 bg-ivory-100 hover:bg-ivory-200 text-charcoal-950 text-xs font-bold rounded">
-              &larr; Back to 360° Studio
-            </button>
-            <button type="button" id="btnConfirmAndCheckout" onclick="completeDesignAndOpenCheckout()" disabled class="px-8 py-3.5 bg-maroon-800 hover:bg-maroon-700 disabled:opacity-50 disabled:cursor-not-allowed text-ivory-50 text-xs font-bold uppercase tracking-wider rounded-lg shadow-md">
-              Confirm &amp; Continue to Payment &rarr;
-            </button>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-  </div>
-
   <!-- MODAL 9: QUICK VIEW PRODUCT DETAIL MODAL (§11) -->
   <!-- ========================================================================= -->
   <div id="quickViewModal" class="fixed inset-0 z-50 bg-charcoal-950/75 backdrop-blur-sm hidden flex items-center justify-center p-2 sm:p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="qvTitle">
@@ -3200,18 +2499,13 @@
           </div>
 
           <!-- Quick Actions -->
-          <div class="space-y-2 pt-2 border-t border-ivory-200">
-            <button type="button" id="qvStyleAiBtn" onclick="openStyleAiFromCurrentQuickView()" class="w-full py-2.5 bg-gold-400/20 hover:bg-gold-400/30 text-maroon-950 font-bold rounded border border-gold-500/50 text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-xs">
-              <span>✨</span> Try Before You Stitch (360° AI Try-On)
+          <div class="grid grid-cols-2 gap-2 pt-2 border-t border-ivory-200">
+            <button type="button" id="qvBuyUnstitchedBtn" class="py-3 bg-ivory-100 hover:bg-ivory-200 text-charcoal-950 font-bold rounded border border-ivory-300 text-xs uppercase tracking-wider text-center transition-colors">
+              Buy Unstitched
             </button>
-            <div class="grid grid-cols-2 gap-2">
-              <button type="button" id="qvBuyUnstitchedBtn" class="py-2.5 bg-ivory-100 hover:bg-ivory-200 text-charcoal-950 font-bold rounded border border-ivory-300 text-xs uppercase tracking-wider text-center transition-colors">
-                Buy Unstitched
-              </button>
-              <button type="button" id="qvCustomizeBtn" class="py-2.5 bg-maroon-800 hover:bg-maroon-700 text-ivory-50 font-bold rounded text-xs uppercase tracking-wider text-center transition-colors shadow-sm">
-                Get Stitched
-              </button>
-            </div>
+            <button type="button" id="qvCustomizeBtn" class="py-3 bg-maroon-800 hover:bg-maroon-700 text-ivory-50 font-bold rounded text-xs uppercase tracking-wider text-center transition-colors shadow-sm">
+              Get Stitched
+            </button>
           </div>
         </div>
       </div>
@@ -3364,46 +2658,6 @@
           </form>
         </div>
 
-        
-        <!-- ABHA Style AI Profile & Saved Designs -->
-        <div class="space-y-3 pt-3 border-t border-ivory-200">
-          <div class="flex items-center justify-between">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-charcoal-950 flex items-center gap-1.5">
-              <span>✨</span> ABHA Style AI Virtual Profile
-            </h3>
-            <span class="text-[10px] text-green-800 font-bold bg-green-50 px-2 py-0.5 rounded border border-green-200">Private Profile</span>
-          </div>
-
-          <!-- Avatar Card -->
-          <div class="p-3 bg-ivory-100 rounded-lg border border-ivory-200 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div id="drawerAvatarThumb" class="w-12 h-14 rounded bg-ivory-200 border border-ivory-300 overflow-hidden flex items-center justify-center text-xs text-slateText-500">
-                👤
-              </div>
-              <div>
-                <p class="text-xs font-bold text-charcoal-950" id="drawerAvatarStatus">Standard Model Avatar</p>
-                <p class="text-[10px] text-slateText-600">Privacy protected • Never publicly visible</p>
-              </div>
-            </div>
-            <button type="button" onclick="openStyleAiFromHero()" class="px-2.5 py-1.5 bg-maroon-800 hover:bg-maroon-700 text-ivory-50 text-[10px] font-bold rounded">
-              Launch Fitting Room
-            </button>
-          </div>
-
-          <!-- Saved Designs Gallery -->
-          <div class="space-y-2 pt-1">
-            <div class="flex items-center justify-between">
-              <span class="text-[11px] font-bold text-slateText-700">Saved Custom Outfits:</span>
-              <span class="text-[10px] text-maroon-800 font-bold" id="savedDesignsCount">0 Saved</span>
-            </div>
-            <div id="savedDesignsDrawerList" class="space-y-2 max-h-48 overflow-y-auto">
-              <div class="text-[11px] text-slateText-500 italic p-3 text-center bg-ivory-50 rounded border border-ivory-200">
-                No saved designs yet. Open ABHA Style AI on any suit to preview and save your custom outfits!
-              </div>
-            </div>
-          </div>
-        </div>
-
         <!-- Saved Addresses -->
         <div class="space-y-2 pt-2 border-t border-ivory-200 text-xs">
           <h3 class="text-xs font-bold uppercase tracking-wider text-charcoal-950">Default Delivery Address</h3>
@@ -3427,875 +2681,6 @@
   <!-- JAVASCRIPT: DATA & INTERACTION LOGIC -->
   <!-- ========================================================================= -->
   <script>
-    
-    // =========================================================================
-    // ABHA STYLE AI — FRONTEND CONTROLLER & WORKFLOW LOGIC
-    // =========================================================================
-    let styleAiEngine = null;
-    let styleAiState = {
-      activeProduct: null,
-      garmentConfig: null,
-      measurements: null,
-      currentStage: 1,
-      hasPhotoConsent: false,
-      photoDataUrl: null
-    };
-
-    function initStyleAiState() {
-      if (typeof AbhaStyleAI === 'undefined') return;
-      const profile = AbhaStyleAI.CustomerProfileService.getProfile();
-      styleAiState.hasPhotoConsent = profile.hasConsent;
-      styleAiState.photoDataUrl = profile.photoDataUrl;
-      styleAiState.measurements = { ...profile.measurements };
-      styleAiState.garmentConfig = { ...AbhaStyleAI.DEFAULT_GARMENT_CONFIG };
-
-      // Update account drawer display
-      updateAccountDrawerStyleAi();
-    }
-
-    function updateAccountDrawerStyleAi() {
-      if (typeof AbhaStyleAI === 'undefined') return;
-      const profile = AbhaStyleAI.CustomerProfileService.getProfile();
-      const thumb = document.getElementById('drawerAvatarThumb');
-      const status = document.getElementById('drawerAvatarStatus');
-      if (thumb && status) {
-        if (profile.photoDataUrl) {
-          thumb.innerHTML = `<img src="${profile.photoDataUrl}" class="w-full h-full object-cover">`;
-          status.textContent = 'Custom Personal Avatar Active';
-        } else {
-          thumb.innerHTML = '👤';
-          status.textContent = 'Standard Model Avatar';
-        }
-      }
-
-      // Render saved designs
-      const list = document.getElementById('savedDesignsDrawerList');
-      const countEl = document.getElementById('savedDesignsCount');
-      if (list && countEl) {
-        const designs = AbhaStyleAI.SavedDesignsService.getDesigns();
-        countEl.textContent = `${designs.length} Saved`;
-        if (designs.length === 0) {
-          list.innerHTML = '<div class="text-[11px] text-slateText-500 italic p-3 text-center bg-ivory-50 rounded border border-ivory-200">No saved designs yet. Customize any suit in ABHA Style AI to save!</div>';
-        } else {
-          list.innerHTML = designs.map(d => `
-            <div class="p-2.5 bg-ivory-50 rounded-lg border border-ivory-200 flex items-center justify-between gap-2">
-              <div class="flex items-center gap-2">
-                <img src="${d.product.image}" class="w-9 h-12 object-cover rounded border border-ivory-300">
-                <div>
-                  <span class="font-mono text-[9px] font-bold text-maroon-800">${d.id}</span>
-                  <h5 class="text-xs font-bold text-charcoal-950 line-clamp-1">${d.product.name}</h5>
-                  <p class="text-[10px] text-slateText-600">${d.garmentConfig.neckDesign} • ${d.garmentConfig.sleeveLength} • ${d.garmentConfig.bottomType}</p>
-                </div>
-              </div>
-              <div class="flex flex-col gap-1">
-                <button type="button" onclick="loadSavedDesignToFittingRoom('${d.id}')" class="px-2 py-1 bg-maroon-800 text-ivory-50 text-[10px] font-bold rounded">
-                  Open 360°
-                </button>
-                <button type="button" onclick="deleteSavedDesign('${d.id}')" class="text-[9px] text-red-700 hover:underline">
-                  Delete
-                </button>
-              </div>
-            </div>
-          `).join('');
-        }
-      }
-    }
-
-    function openStyleAiStudio(product) {
-      if (!product && PRODUCTS.length > 0) product = PRODUCTS[0];
-      styleAiState.activeProduct = product;
-      if (!styleAiState.garmentConfig && typeof AbhaStyleAI !== 'undefined') {
-        styleAiState.garmentConfig = { ...AbhaStyleAI.DEFAULT_GARMENT_CONFIG };
-      }
-
-      // Check if customer already has photo / avatar
-      const profile = AbhaStyleAI.CustomerProfileService.getProfile();
-      styleAiState.photoDataUrl = profile.photoDataUrl;
-      styleAiState.hasPhotoConsent = profile.hasConsent;
-
-      const modal = document.getElementById('styleAiModal');
-      if (modal) {
-        modal.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-
-        // Pre-populate measurements
-        populateMeasurementsForm(profile.measurements || AbhaStyleAI.DEFAULT_MEASUREMENTS);
-
-        // Pre-populate Stand Patti styles
-        populateStandPattiOptions();
-
-        // If customer already has photo & consent, jump straight to 360 Fitting Room
-        if (profile.photoDataUrl && profile.hasConsent) {
-          switchStyleAiStage(3);
-          initFittingRoomEngine();
-        } else {
-          switchStyleAiStage(1);
-        }
-      }
-    }
-
-    function closeStyleAiModal() {
-      const modal = document.getElementById('styleAiModal');
-      if (modal) {
-        modal.classList.add('hidden');
-        document.body.style.overflow = '';
-      }
-    }
-
-    function openStyleAiFromHero() {
-      const prod = PRODUCTS && PRODUCTS.length > 0 ? PRODUCTS[0] : null;
-      openStyleAiStudio(prod);
-    }
-
-    function openStyleAiFromProduct(productId, event) {
-      if (event) event.stopPropagation();
-      const prod = PRODUCTS.find(p => p.id === productId);
-      if (prod) openStyleAiStudio(prod);
-    }
-
-    function openStyleAiFromCurrentQuickView() {
-      closeQuickViewModal();
-      if (state.activeProduct) {
-        openStyleAiStudio(state.activeProduct);
-      } else if (PRODUCTS.length > 0) {
-        openStyleAiStudio(PRODUCTS[0]);
-      }
-    }
-
-    function handleStyleAiPhotoUpload(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      if (!file.type.startsWith('image/')) {
-        alert('Please upload a valid image file (JPG, PNG, or WEBP).');
-        return;
-      }
-      if (file.size > 15 * 1024 * 1024) {
-        alert('File size exceeds 15MB. Please upload an image under 15MB.');
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = function (evt) {
-        const dataUrl = evt.target.result;
-        styleAiState.photoDataUrl = dataUrl;
-
-        document.getElementById('photoUploadPlaceholder').classList.add('hidden');
-        const previewWrap = document.getElementById('photoUploadPreviewWrap');
-        const previewImg = document.getElementById('photoUploadPreview');
-        previewWrap.classList.remove('hidden');
-        previewImg.src = dataUrl;
-
-        toggleConsentButton();
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function removeStyleAiPhoto() {
-      styleAiState.photoDataUrl = null;
-      document.getElementById('styleAiPhotoInput').value = '';
-      document.getElementById('photoUploadPreviewWrap').classList.add('hidden');
-      document.getElementById('photoUploadPlaceholder').classList.remove('hidden');
-      if (typeof AbhaStyleAI !== 'undefined') {
-        AbhaStyleAI.CustomerProfileService.removePhoto();
-      }
-      toggleConsentButton();
-      updateAccountDrawerStyleAi();
-    }
-
-    function toggleConsentButton() {
-      const chk = document.getElementById('styleAiConsentCheckbox');
-      const btn = document.getElementById('btnContinueWithPhoto');
-      const hasPhoto = !!styleAiState.photoDataUrl;
-      const isConsented = chk && chk.checked;
-      styleAiState.hasPhotoConsent = isConsented;
-
-      if (btn) {
-        btn.disabled = !(hasPhoto && isConsented);
-      }
-    }
-
-    function proceedToMeasurements(hasPhoto) {
-      if (hasPhoto) {
-        if (!styleAiState.hasPhotoConsent) {
-          alert('Please agree to the private virtual fitting profile consent to proceed with your photo.');
-          return;
-        }
-        AbhaStyleAI.CustomerProfileService.setConsent(true);
-        AbhaStyleAI.CustomerProfileService.savePhoto(styleAiState.photoDataUrl);
-        updateAccountDrawerStyleAi();
-      }
-      switchStyleAiStage(2);
-    }
-
-    function switchStyleAiStage(stage) {
-      styleAiState.currentStage = stage;
-      for (let s = 1; s <= 4; s++) {
-        const el = document.getElementById(`styleAiStage${s}`);
-        const ind = document.getElementById(`stepIndicator${s}`);
-        if (el) {
-          if (s === stage) el.classList.remove('hidden');
-          else el.classList.add('hidden');
-        }
-        if (ind) {
-          if (s === stage) ind.className = 'font-bold text-gold-400';
-          else ind.className = 'text-ivory-100/60';
-        }
-      }
-
-      if (stage === 3) {
-        initFittingRoomEngine();
-      }
-    }
-
-    function setStyleAiUnit(unit) {
-      const inBtn = document.getElementById('unitInchesBtn');
-      const cmBtn = document.getElementById('unitCmBtn');
-      if (unit === 'cm') {
-        cmBtn.className = 'px-3 py-1 bg-maroon-800 text-ivory-50 rounded shadow-xs';
-        inBtn.className = 'px-3 py-1 text-slateText-700 hover:text-charcoal-950';
-      } else {
-        inBtn.className = 'px-3 py-1 bg-maroon-800 text-ivory-50 rounded shadow-xs';
-        cmBtn.className = 'px-3 py-1 text-slateText-700 hover:text-charcoal-950';
-      }
-    }
-
-    function populateMeasurementsForm(m) {
-      document.getElementById('saiBust').value = m.bust || 36;
-      document.getElementById('saiWaist').value = m.waist || 32;
-      document.getElementById('saiHip').value = m.hip || 38;
-      document.getElementById('saiShoulder').value = m.shoulder || 14.5;
-      document.getElementById('saiKurtaLength').value = m.kurtaLength || 42;
-      document.getElementById('saiSleeveLength').value = m.sleeveLength || 17;
-      document.getElementById('saiSideSlit').value = m.sideSlitHeight || 19;
-      document.getElementById('saiFitting').value = m.fittingAllowance || 'Regular';
-
-      document.getElementById('saiBottomType').value = m.bottomType || 'Straight Pants';
-      document.getElementById('saiBottomLength').value = m.bottomLength || 38;
-      document.getElementById('saiBottomWaist').value = m.bottomWaist || m.waist || 32;
-      document.getElementById('saiBottomOpening').value = m.bottomOpening || 13;
-    }
-
-    function handleMeasurementsSubmit(e) {
-      e.preventDefault();
-      const m = {
-        unit: 'inches',
-        bust: parseFloat(document.getElementById('saiBust').value) || 36,
-        waist: parseFloat(document.getElementById('saiWaist').value) || 32,
-        hip: parseFloat(document.getElementById('saiHip').value) || 38,
-        shoulder: parseFloat(document.getElementById('saiShoulder').value) || 14.5,
-        kurtaLength: parseFloat(document.getElementById('saiKurtaLength').value) || 42,
-        sleeveLength: parseFloat(document.getElementById('saiSleeveLength').value) || 17,
-        sideSlitHeight: parseFloat(document.getElementById('saiSideSlit').value) || 19,
-        fittingAllowance: document.getElementById('saiFitting').value || 'Regular',
-        bottomType: document.getElementById('saiBottomType').value || 'Straight Pants',
-        bottomLength: parseFloat(document.getElementById('saiBottomLength').value) || 38,
-        bottomWaist: parseFloat(document.getElementById('saiBottomWaist').value) || 32,
-        bottomOpening: parseFloat(document.getElementById('saiBottomOpening').value) || 13
-      };
-
-      styleAiState.measurements = m;
-      AbhaStyleAI.CustomerProfileService.saveMeasurements(m);
-
-      // Play stepped loading screen
-      showStyleAiLoading(() => {
-        switchStyleAiStage(3);
-      });
-    }
-
-    function showStyleAiLoading(callback) {
-      const overlay = document.getElementById('styleAiLoadingOverlay');
-      if (!overlay) {
-        callback();
-        return;
-      }
-      overlay.classList.remove('hidden');
-
-      const stages = [1, 2, 3, 4, 5, 6];
-      let idx = 0;
-
-      function next() {
-        if (idx < stages.length) {
-          const prev = document.getElementById(`loadingStage${stages[idx - 1]}`);
-          if (prev) {
-            prev.className = 'flex items-center gap-2 text-green-800 font-semibold';
-            prev.querySelector('span').className = 'w-2 h-2 rounded-full bg-green-600';
-          }
-          const curr = document.getElementById(`loadingStage${stages[idx]}`);
-          if (curr) {
-            curr.className = 'flex items-center gap-2 text-charcoal-950 font-bold';
-            curr.querySelector('span').className = 'w-2 h-2 rounded-full bg-maroon-800 animate-pulse';
-          }
-          idx++;
-          setTimeout(next, 200);
-        } else {
-          setTimeout(() => {
-            overlay.classList.add('hidden');
-            callback();
-          }, 300);
-        }
-      }
-
-      next();
-    }
-
-    function setStyleAiMode(mode) {
-      if (!styleAiEngine) return;
-      styleAiEngine.setViewMode(mode);
-
-      const btnR = document.getElementById('btnModeRealistic');
-      const btn3D = document.getElementById('btnMode360');
-      const compass = document.getElementById('seamCompassOverlay');
-      const angPills = document.getElementById('seamAnglePills');
-
-      if (mode === 'realistic') {
-        if (btnR) btnR.className = 'px-3 py-1.5 text-[11px] font-bold rounded-lg bg-gold-400 text-maroon-950 shadow-xs flex items-center gap-1 transition';
-        if (btn3D) btn3D.className = 'px-3 py-1.5 text-[11px] font-bold rounded-lg text-ivory-100 hover:text-white hover:bg-white/10 flex items-center gap-1 transition';
-        if (compass) compass.classList.add('hidden');
-        if (angPills) angPills.classList.add('hidden');
-      } else {
-        if (btnR) btnR.className = 'px-3 py-1.5 text-[11px] font-bold rounded-lg text-ivory-100 hover:text-white hover:bg-white/10 flex items-center gap-1 transition';
-        if (btn3D) btn3D.className = 'px-3 py-1.5 text-[11px] font-bold rounded-lg bg-gold-400 text-maroon-950 shadow-xs flex items-center gap-1 transition';
-        if (compass) compass.classList.remove('hidden');
-        if (angPills) angPills.classList.remove('hidden');
-      }
-    }
-
-    function toggleStyleAiHdModel() {
-      if (!styleAiEngine) return;
-      const isHd = styleAiEngine.toggleHdModel();
-      const lbl = document.getElementById('hdModelLabel');
-      const ico = document.getElementById('hdModelIcon');
-      if (isHd) {
-        if (lbl) lbl.textContent = styleAiState.photoDataUrl ? 'Show My Photo Fit' : 'HD Studio Model Active';
-        if (ico) ico.textContent = '👤';
-      } else {
-        if (lbl) lbl.textContent = 'View HD Studio Model';
-        if (ico) ico.textContent = '📸';
-      }
-    }
-
-    function setBodyPresetUI(preset) {
-      if (!styleAiEngine) return;
-      const m = styleAiEngine.setBodyPreset(preset);
-      if (!styleAiState.measurements) styleAiState.measurements = {};
-      Object.assign(styleAiState.measurements, m);
-
-      // Update slider inputs and labels
-      const sBust = document.getElementById('sliderBust');
-      const sWaist = document.getElementById('sliderWaist');
-      const sHip = document.getElementById('sliderHip');
-      const dBust = document.getElementById('bustValDisplay');
-      const dWaist = document.getElementById('waistValDisplay');
-      const dHip = document.getElementById('hipValDisplay');
-
-      if (sBust && m.bust) { sBust.value = m.bust; if (dBust) dBust.textContent = `${Number(m.bust).toFixed(1)} in`; }
-      if (sWaist && m.waist) { sWaist.value = m.waist; if (dWaist) dWaist.textContent = `${Number(m.waist).toFixed(1)} in`; }
-      if (sHip && m.hip) { sHip.value = m.hip; if (dHip) dHip.textContent = `${Number(m.hip).toFixed(1)} in`; }
-
-      // Update preset buttons styling
-      const btnSlim = document.getElementById('btnPresetSlim');
-      const btnRegular = document.getElementById('btnPresetRegular');
-      const btnCurvy = document.getElementById('btnPresetCurvy');
-
-      [btnSlim, btnRegular, btnCurvy].forEach(b => {
-        if (b) b.className = 'btn-preset-opt py-1.5 px-1 text-[10px] font-bold rounded border text-center transition bg-ivory-50 border-ivory-300 hover:border-maroon-800 text-charcoal-900';
-      });
-
-      if (preset === 'slim' && btnSlim) {
-        btnSlim.className = 'btn-preset-opt py-1.5 px-1 text-[10px] font-bold rounded border text-center transition bg-maroon-800 text-ivory-50 border-maroon-800 shadow-xs';
-      } else if ((preset === 'curvy' || preset === 'plus') && btnCurvy) {
-        btnCurvy.className = 'btn-preset-opt py-1.5 px-1 text-[10px] font-bold rounded border text-center transition bg-maroon-800 text-ivory-50 border-maroon-800 shadow-xs';
-      } else if (btnRegular) {
-        btnRegular.className = 'btn-preset-opt py-1.5 px-1 text-[10px] font-bold rounded border text-center transition bg-maroon-800 text-ivory-50 border-maroon-800 shadow-xs';
-      }
-
-      showToast(`👗 Applied ${preset === 'slim' ? 'Slim Fit' : preset === 'curvy' ? 'Curvy Plus' : 'Regular Medium'} body proportions!`);
-    }
-
-    function handleMeasurementSliderChange(key, val) {
-      if (!styleAiEngine) return;
-      const num = parseFloat(val);
-      const disp = document.getElementById(`${key}ValDisplay`);
-      if (disp) disp.textContent = `${num.toFixed(1)} in`;
-
-      if (!styleAiState.measurements) styleAiState.measurements = {};
-      styleAiState.measurements[key] = num;
-
-      styleAiEngine.updateMeasurements({ [key]: num });
-
-      // Reset preset active pill highlights since custom measurement entered
-      const btnSlim = document.getElementById('btnPresetSlim');
-      const btnRegular = document.getElementById('btnPresetRegular');
-      const btnCurvy = document.getElementById('btnPresetCurvy');
-      [btnSlim, btnRegular, btnCurvy].forEach(b => {
-        if (b) b.className = 'btn-preset-opt py-1.5 px-1 text-[10px] font-bold rounded border text-center transition bg-ivory-50 border-ivory-300 hover:border-maroon-800 text-charcoal-900';
-      });
-    }
-
-    function toggleMeasurementLinesUI() {
-      if (!styleAiEngine) return;
-      const isShowing = styleAiEngine.toggleMeasurementLines();
-      const lbl = document.getElementById('measurementLinesLabel');
-      if (lbl) lbl.textContent = isShowing ? 'Hide Lines' : 'Show Lines';
-    }
-
-    function updateAnglePillsUI(angle) {
-      const ang = (angle % 360 + 360) % 360;
-      const pills = [
-        { id: 'angBtn0', min: 337.5, max: 22.5, wrap: true },
-        { id: 'angBtn45', min: 22.5, max: 67.5 },
-        { id: 'angBtn90', min: 67.5, max: 135 },
-        { id: 'angBtn180', min: 135, max: 225 }
-      ];
-
-      pills.forEach(p => {
-        const btn = document.getElementById(p.id);
-        if (!btn) return;
-        let isActive = false;
-        if (p.wrap) {
-          isActive = ang >= p.min || ang < p.max;
-        } else {
-          isActive = ang >= p.min && ang < p.max;
-        }
-
-        if (isActive) {
-          btn.className = 'px-2.5 py-1 text-[10px] font-bold rounded bg-gold-400 text-maroon-950 transition';
-        } else {
-          btn.className = 'px-2.5 py-1 text-[10px] font-bold rounded text-ivory-50 hover:bg-maroon-800 transition';
-        }
-      });
-    }
-
-    function populateFabricDecomposition(product) {
-      const container = document.getElementById('fabricDecompositionContainer');
-      if (!container || typeof AbhaStyleAI === 'undefined' || !AbhaStyleAI.FabricDecompositionService) return;
-
-      const decomp = AbhaStyleAI.FabricDecompositionService.getBreakdown(product);
-      if (!decomp) return;
-
-      container.innerHTML = `
-        <!-- Upper Fabric -->
-        <div class="p-2 bg-white rounded-lg border border-gold-400/30 shadow-2xs space-y-1">
-          <div class="flex items-center justify-between">
-            <span class="text-[9px] font-bold uppercase tracking-wider text-maroon-800">Upper (Kurta)</span>
-            <span class="text-[9px] font-extrabold text-charcoal-900 bg-gold-100 px-1.5 py-0.5 rounded">${decomp.upper.length}</span>
-          </div>
-          <p class="text-[10px] font-bold text-gray-900 line-clamp-1">${decomp.upper.title}</p>
-          <p class="text-[9px] text-gray-600 line-clamp-2">${decomp.upper.pattern} • ${decomp.upper.neckDetail}</p>
-          <div class="pt-0.5 text-[8px] font-semibold text-emerald-700">✓ ${decomp.upper.recommendedSilhouette}</div>
-        </div>
-
-        <!-- Bottom Fabric -->
-        <div class="p-2 bg-white rounded-lg border border-gold-400/30 shadow-2xs space-y-1">
-          <div class="flex items-center justify-between">
-            <span class="text-[9px] font-bold uppercase tracking-wider text-maroon-800">Bottom (Pants)</span>
-            <span class="text-[9px] font-extrabold text-charcoal-900 bg-gold-100 px-1.5 py-0.5 rounded">${decomp.bottom.length}</span>
-          </div>
-          <p class="text-[10px] font-bold text-gray-900 line-clamp-1">${decomp.bottom.title}</p>
-          <p class="text-[9px] text-gray-600 line-clamp-2">${decomp.bottom.material} • ${decomp.bottom.color}</p>
-          <div class="pt-0.5 text-[8px] font-semibold text-emerald-700">✓ ${decomp.bottom.recommendedCut}</div>
-        </div>
-
-        <!-- Dupatta -->
-        <div class="p-2 bg-white rounded-lg border border-gold-400/30 shadow-2xs space-y-1">
-          <div class="flex items-center justify-between">
-            <span class="text-[9px] font-bold uppercase tracking-wider text-maroon-800">Dupatta</span>
-            <span class="text-[9px] font-extrabold text-charcoal-900 bg-gold-100 px-1.5 py-0.5 rounded">${decomp.dupatta.length}</span>
-          </div>
-          <p class="text-[10px] font-bold text-gray-900 line-clamp-1">${decomp.dupatta.title}</p>
-          <p class="text-[9px] text-gray-600 line-clamp-2">${decomp.dupatta.material} • ${decomp.dupatta.pattern}</p>
-          <div class="pt-0.5 text-[8px] font-semibold text-emerald-700">✓ ${decomp.dupatta.drape}</div>
-        </div>
-      `;
-    }
-
-    function initFittingRoomEngine() {
-      const canvas = document.getElementById('styleAiCanvas');
-      if (!canvas) return;
-
-      if (!styleAiEngine) {
-        styleAiEngine = new AbhaStyleAI.VisualFittingEngine(canvas, {
-          onAngleChange: (ang) => {
-            const disp = document.getElementById('angleDisplay');
-            if (disp) disp.textContent = `${ang}°`;
-            updateAnglePillsUI(ang);
-          }
-        });
-      }
-
-      const prod = styleAiState.activeProduct || PRODUCTS[0];
-      const cfg = styleAiState.garmentConfig || AbhaStyleAI.DEFAULT_GARMENT_CONFIG;
-      const m = styleAiState.measurements || AbhaStyleAI.DEFAULT_MEASUREMENTS;
-      const photo = styleAiState.photoDataUrl;
-
-      // Update product card
-      document.getElementById('fitRoomProdImg').src = prod.image || prod.primary_image;
-      document.getElementById('fitRoomProdTitle').textContent = prod.name || prod.title;
-      document.getElementById('fitRoomProdCategory').textContent = prod.category || 'Authentic Handloom';
-      document.getElementById('fitRoomProdPrice').textContent = `₹${(prod.price || prod.base_price).toLocaleString('en-IN')} + ₹${prod.stitchingFee || 650} Stitching`;
-
-      // Populate AI Fabric Decomposition Cards
-      populateFabricDecomposition(prod);
-
-      // Load data into engine
-      styleAiEngine.loadData({
-        product: prod,
-        garmentConfig: cfg,
-        measurements: m,
-        photoUrl: photo
-      });
-
-      // Default to 3D Avatar mode
-      setStyleAiMode('3d_avatar');
-
-      // Sync slider UI with initial measurements
-      if (m) {
-        const sBust = document.getElementById('sliderBust');
-        const sWaist = document.getElementById('sliderWaist');
-        const sHip = document.getElementById('sliderHip');
-        const dBust = document.getElementById('bustValDisplay');
-        const dWaist = document.getElementById('waistValDisplay');
-        const dHip = document.getElementById('hipValDisplay');
-        if (sBust && m.bust) { sBust.value = m.bust; if (dBust) dBust.textContent = `${Number(m.bust).toFixed(1)} in`; }
-        if (sWaist && m.waist) { sWaist.value = m.waist; if (dWaist) dWaist.textContent = `${Number(m.waist).toFixed(1)} in`; }
-        if (sHip && m.hip) { sHip.value = m.hip; if (dHip) dHip.textContent = `${Number(m.hip).toFixed(1)} in`; }
-      }
-
-      // Update HD Model toggle button label
-      const hdLbl = document.getElementById('hdModelLabel');
-      if (hdLbl) {
-        hdLbl.textContent = photo ? 'View HD Studio Model' : 'HD Studio Model Active';
-      }
-
-      // Update UI button active states
-      syncCustomControlsUI();
-      updateAISuggestion();
-    }
-
-    function setFittingRoomAngle(angle) {
-      if (styleAiEngine) {
-        styleAiEngine.setAngle(angle);
-        updateAnglePillsUI(angle);
-      }
-    }
-
-    function zoomFittingRoom(delta) {
-      if (styleAiEngine) styleAiEngine.zoom(delta);
-    }
-
-    function resetFittingRoomView() {
-      if (styleAiEngine) {
-        styleAiEngine.resetView();
-        updateAnglePillsUI(0);
-      }
-    }
-
-    function updateStyleOption(group, val) {
-      if (!styleAiEngine) return;
-      styleAiState.garmentConfig[group] = val;
-      styleAiEngine.updateConfig({ [group]: val });
-      syncCustomControlsUI();
-      updateAISuggestion();
-    }
-
-    function toggleStandPatti(enabled) {
-      if (!styleAiEngine) return;
-      styleAiState.garmentConfig.standPatti = enabled;
-      const section = document.getElementById('standPattiPickerSection');
-      if (section) {
-        if (enabled) section.classList.remove('hidden');
-        else section.classList.add('hidden');
-      }
-      styleAiEngine.updateConfig({ standPatti: enabled });
-      syncCustomControlsUI();
-      updateAISuggestion();
-    }
-
-    function selectStandPattiStyle(styleId) {
-      if (!styleAiEngine) return;
-      styleAiState.garmentConfig.standPattiStyle = styleId;
-      styleAiEngine.updateConfig({ standPatti: true, standPattiStyle: styleId });
-      syncCustomControlsUI();
-    }
-
-    function populateStandPattiOptions() {
-      const grid = document.getElementById('standPattiGrid');
-      if (!grid || typeof AbhaStyleAI === 'undefined') return;
-
-      grid.innerHTML = AbhaStyleAI.STAND_PATTI_STYLES.map(sp => `
-        <div class="p-2.5 bg-ivory-50 rounded-lg border border-ivory-300 hover:border-maroon-800 cursor-pointer transition sp-card ${styleAiState.garmentConfig?.standPattiStyle === sp.id ? 'border-maroon-800 bg-maroon-900/5 ring-1 ring-maroon-800' : ''}" onclick="selectStandPattiStyle('${sp.id}')">
-          <div class="flex items-center justify-between">
-            <span class="font-mono text-[10px] font-bold text-maroon-800">${sp.id}</span>
-            <span class="text-[9px] text-slateText-500 font-semibold">${sp.height}</span>
-          </div>
-          <p class="text-xs font-bold text-charcoal-950 mt-1">${sp.name}</p>
-          <p class="text-[10px] text-slateText-600 line-clamp-2 mt-0.5">${sp.description}</p>
-        </div>
-      `).join('');
-    }
-
-    function syncCustomControlsUI() {
-      const cfg = styleAiState.garmentConfig;
-      if (!cfg) return;
-
-      document.querySelectorAll('.btn-custom-opt').forEach(btn => {
-        const grp = btn.dataset.group;
-        const val = btn.dataset.val;
-        if (cfg[grp] === val) {
-          btn.className = 'btn-custom-opt py-1.5 px-1 text-[11px] font-bold rounded border text-center bg-maroon-800 text-ivory-50 border-maroon-800 shadow-xs';
-        } else {
-          btn.className = 'btn-custom-opt py-1.5 px-1 text-[11px] font-semibold rounded border text-center bg-ivory-100 text-charcoal-950 border-ivory-300 hover:bg-ivory-200';
-        }
-      });
-
-      const chk = document.getElementById('chkStandPatti');
-      if (chk) chk.checked = !!cfg.standPatti;
-
-      const selPockets = document.getElementById('selPockets');
-      if (selPockets) selPockets.value = cfg.pockets || 'No pocket';
-
-      const selBottom = document.getElementById('selFitBottom');
-      if (selBottom) selBottom.value = cfg.bottomType || 'Straight Pants';
-
-      populateStandPattiOptions();
-    }
-
-    function updateAISuggestion() {
-      if (typeof AbhaStyleAI === 'undefined' || !styleAiState.activeProduct) return;
-      const sug = AbhaStyleAI.AISuggestionEngine.getSuggestion({
-        product: styleAiState.activeProduct,
-        garmentConfig: styleAiState.garmentConfig,
-        measurements: styleAiState.measurements
-      });
-
-      const box = document.getElementById('aiSuggestionBox');
-      const title = document.getElementById('aiSuggestionTitle');
-      const msg = document.getElementById('aiSuggestionMessage');
-      const actions = document.getElementById('aiSuggestionActions');
-      const btn = document.getElementById('btnApplySuggestion');
-
-      if (!sug || !sug.actionText) {
-        if (box) box.style.display = 'none';
-        return;
-      }
-
-      if (box) box.style.display = 'block';
-      if (title) title.textContent = sug.title;
-      if (msg) msg.textContent = sug.message;
-      if (btn) {
-        btn.textContent = sug.actionText;
-        btn.onclick = () => {
-          if (sug.applyChanges) {
-            Object.assign(styleAiState.garmentConfig, sug.applyChanges);
-            if (styleAiEngine) styleAiEngine.updateConfig(sug.applyChanges);
-            syncCustomControlsUI();
-            dismissSuggestion();
-          }
-        };
-      }
-    }
-
-    function dismissSuggestion() {
-      const box = document.getElementById('aiSuggestionBox');
-      if (box) box.style.display = 'none';
-    }
-
-    function applyHinglishCommand() {
-      const inp = document.getElementById('hinglishQueryInput');
-      if (!inp || !inp.value.trim()) return;
-      const text = inp.value.trim();
-      const parsed = AbhaStyleAI.AISuggestionEngine.parseHinglishQuery(text);
-
-      if (parsed) {
-        Object.assign(styleAiState.garmentConfig, parsed);
-        if (styleAiEngine) styleAiEngine.updateConfig(parsed);
-        syncCustomControlsUI();
-        inp.value = '';
-        showToast('✨ Applied customization from instruction!');
-      } else {
-        showToast('Instruction noted. Try: "stand patti", "3/4 sleeves", or "A-line kurta".');
-      }
-    }
-
-    function undoFittingRoomChange() {
-      if (styleAiEngine) {
-        const ok = styleAiEngine.undo();
-        if (ok) {
-          styleAiState.garmentConfig = { ...styleAiEngine.garmentConfig };
-          syncCustomControlsUI();
-          showToast('Undid last customization change.');
-        } else {
-          showToast('No more changes to undo.');
-        }
-      }
-    }
-
-    function resetFittingRoomDesign() {
-      if (confirm('Reset all custom styling back to original standard configuration?')) {
-        if (styleAiEngine) {
-          styleAiEngine.resetConfig();
-          styleAiState.garmentConfig = { ...styleAiEngine.garmentConfig };
-          syncCustomControlsUI();
-          showToast('Design reset to default standard cut.');
-        }
-      }
-    }
-
-    function toggleVariantPicker() {
-      const drawer = document.getElementById('variantPickerDrawer');
-      if (!drawer) return;
-      if (drawer.classList.contains('hidden')) {
-        drawer.classList.remove('hidden');
-        drawer.innerHTML = PRODUCTS.map(p => `
-          <div class="cursor-pointer rounded border ${styleAiState.activeProduct?.id === p.id ? 'border-maroon-800 ring-2 ring-maroon-800' : 'border-ivory-300'} overflow-hidden aspect-[3/4] group" onclick="selectVariantFabric('${p.id}')">
-            <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition" title="${p.name}">
-          </div>
-        `).join('');
-      } else {
-        drawer.classList.add('hidden');
-      }
-    }
-
-    function selectVariantFabric(productId) {
-      const prod = PRODUCTS.find(p => p.id === productId);
-      if (prod) {
-        styleAiState.activeProduct = prod;
-        initFittingRoomEngine();
-        toggleVariantPicker();
-        showToast(`Switched fabric to ${prod.name}`);
-      }
-    }
-
-    function saveActiveDesignToProfile() {
-      if (typeof AbhaStyleAI === 'undefined' || !styleAiState.activeProduct) return;
-      const thumbnail = styleAiEngine && styleAiEngine.canvas ? styleAiEngine.canvas.toDataURL('image/jpeg', 0.8) : null;
-      const saved = AbhaStyleAI.SavedDesignsService.saveDesign({
-        product: styleAiState.activeProduct,
-        garmentConfig: styleAiState.garmentConfig,
-        measurements: styleAiState.measurements,
-        previewThumbnail: thumbnail
-      });
-
-      showToast(`Saved outfit design ${saved.id} to your private profile!`);
-      updateAccountDrawerStyleAi();
-    }
-
-    function loadSavedDesignToFittingRoom(designId) {
-      closeAccountDrawer();
-      const designs = AbhaStyleAI.SavedDesignsService.getDesigns();
-      const d = designs.find(x => x.id === designId);
-      if (!d) return;
-
-      styleAiState.activeProduct = PRODUCTS.find(p => p.id === d.product.id) || d.product;
-      styleAiState.garmentConfig = { ...d.garmentConfig };
-      styleAiState.measurements = { ...d.measurements };
-
-      openStyleAiStudio(styleAiState.activeProduct);
-      switchStyleAiStage(3);
-      initFittingRoomEngine();
-    }
-
-    function deleteSavedDesign(designId) {
-      if (confirm('Remove this saved design from your private profile?')) {
-        AbhaStyleAI.SavedDesignsService.deleteDesign(designId);
-        updateAccountDrawerStyleAi();
-        showToast('Saved design removed.');
-      }
-    }
-
-    function proceedToDesignReview() {
-      if (typeof AbhaStyleAI === 'undefined') return;
-      const prod = styleAiState.activeProduct;
-      const cfg = styleAiState.garmentConfig;
-      const m = styleAiState.measurements;
-
-      const spec = AbhaStyleAI.TailoringSpecEngine.generateSpecification({
-        product: prod,
-        garmentConfig: cfg,
-        measurements: m,
-        customer: { name: 'Verified Patron' }
-      });
-
-      styleAiState.currentSpec = spec;
-
-      // Populate Stage 4
-      document.getElementById('specDesignId').textContent = spec.designId;
-      document.getElementById('specProductTitle').textContent = prod.name;
-      document.getElementById('specProductFabric').textContent = `${prod.color} | ${prod.fabric}`;
-      const basePrice = prod.price || prod.base_price;
-      const stitchFee = prod.stitchingFee || 650;
-      document.getElementById('specTotalAmount').textContent = `₹${(basePrice + stitchFee).toLocaleString('en-IN')}`;
-
-      document.getElementById('specSilhouette').textContent = `${cfg.kurtaSilhouette} Cut (${cfg.kurtaFitting})`;
-      document.getElementById('specNeckline').textContent = `${cfg.neckDesign} (${cfg.neckDepth})`;
-      document.getElementById('specStandPatti').textContent = cfg.standPatti ? `YES [${cfg.standPattiStyle}]` : 'None';
-      document.getElementById('specSleeves').textContent = `${cfg.sleeveLength} (${cfg.sleeveStyle})`;
-      document.getElementById('specPockets').textContent = cfg.pockets;
-      document.getElementById('specBottom').textContent = `${cfg.bottomType} (${cfg.bottomFitting})`;
-
-      // Populate measurements table
-      const grid = document.getElementById('specMeasurementsGrid');
-      if (grid) {
-        grid.innerHTML = `
-          <div class="p-1.5 bg-ivory-100 rounded border border-ivory-200"><strong>Bust:</strong> ${m.bust}"</div>
-          <div class="p-1.5 bg-ivory-100 rounded border border-ivory-200"><strong>Waist:</strong> ${m.waist}"</div>
-          <div class="p-1.5 bg-ivory-100 rounded border border-ivory-200"><strong>Hip:</strong> ${m.hip}"</div>
-          <div class="p-1.5 bg-ivory-100 rounded border border-ivory-200"><strong>Shoulder:</strong> ${m.shoulder}"</div>
-          <div class="p-1.5 bg-ivory-100 rounded border border-ivory-200"><strong>Length:</strong> ${m.kurtaLength}"</div>
-          <div class="p-1.5 bg-ivory-100 rounded border border-ivory-200"><strong>Bottom:</strong> ${m.bottomLength}"</div>
-        `;
-      }
-
-      // Raw printable ticket
-      const raw = AbhaStyleAI.TailoringSpecEngine.formatPrintableTicket(spec);
-      document.getElementById('rawSpecPre').textContent = raw;
-
-      // Reset confirmation checkbox
-      const chk = document.getElementById('specReviewCheckbox');
-      if (chk) chk.checked = false;
-      toggleSpecConfirmButton();
-
-      switchStyleAiStage(4);
-    }
-
-    function toggleSpecConfirmButton() {
-      const chk = document.getElementById('specReviewCheckbox');
-      const btn = document.getElementById('btnConfirmAndCheckout');
-      if (btn) btn.disabled = !(chk && chk.checked);
-    }
-
-    function completeDesignAndOpenCheckout() {
-      const prod = styleAiState.activeProduct;
-      const cfg = styleAiState.garmentConfig;
-      const m = styleAiState.measurements;
-      const spec = styleAiState.currentSpec;
-      const thumbnail = styleAiEngine && styleAiEngine.canvas ? styleAiEngine.canvas.toDataURL('image/jpeg', 0.8) : null;
-
-      // Close Style AI Modal
-      closeStyleAiModal();
-
-      // Add to bag with full tailored specification
-      addToCartDirect({
-        product: prod,
-        isStitched: true,
-        stitchingFee: prod.stitchingFee || 650,
-        measurements: m,
-        designId: spec.designId,
-        tailoringSpecification: spec,
-        avatarPreview: thumbnail,
-        customNotes: `[Style AI ${spec.designId}] ${cfg.kurtaSilhouette} | ${cfg.neckDesign} | Stand Patti: ${cfg.standPatti ? cfg.standPattiStyle : 'No'} | Sleeves: ${cfg.sleeveLength}`
-      });
-
-      showToast(`Added custom stitched ${prod.name} (${spec.designId}) to your bag.`);
-      openCheckoutModal();
-    }
-
-    // Auto-initialize Style AI state when DOM loads
-    window.addEventListener('DOMContentLoaded', () => {
-      initStyleAiState();
-    });
-
     // -------------------------------------------------------------
     // -------------------------------------------------------------
     // 1. PRODUCT CATALOGUE DATA (§50) — SALWAR SUIT DRESS MATERIALS ONLY
@@ -4303,8 +2688,6 @@
     let PRODUCTS = [
       {
         id: 'prod-01',
-        tryonImage: 'images/tryon/rani-pink-leheriya-tryon.jpg',
-        fabricBreakdown: {"tryonImage":"images/tryon/rani-pink-leheriya-tryon.jpg","upper":{"title":"Kurta / Kameez Fabric","length":"2.5 Meters","material":"100% Pure Breathable Cotton","pattern":"Rajasthani Leheriya Diagonal Waves","color":"Rani Pink & Crisp White","neckDetail":"Intricate Gota Patti & Thread Yoke Placket","recommendedSilhouette":"Straight Cut or A-Line Flare"},"bottom":{"title":"Bottom Fabric (Pants / Salwar)","length":"2.5 Meters","material":"100% Breathable Cotton","pattern":"Matching Fine Leheriya Coordinate","color":"Coordinated Rani Pink","recommendedCut":"Straight Cigarette Pants or Classic Salwar"},"dupatta":{"title":"Dupatta","length":"2.5 Meters","material":"Soft Pure Cotton Voile","pattern":"Matching Leheriya with Gota Kiran Lace Border","drape":"One-Shoulder Atelier Drape"}},
         sku: 'ABHA-SLW-001',
         name: 'Rani Pink Leheriya Pure Cotton Salwar Suit',
         category: 'Pure Cotton Salwar Suits',
@@ -4325,8 +2708,6 @@
       },
       {
         id: 'prod-02',
-        tryonImage: 'images/tryon/mustard-bandhani-tryon.jpg',
-        fabricBreakdown: {"tryonImage":"images/tryon/mustard-bandhani-tryon.jpg","upper":{"title":"Kurta / Kameez Fabric","length":"2.5 Meters","material":"Handloom Cotton-Silk","pattern":"Traditional Hand-Tied Bandhani Dots","color":"Haldi Mustard with Rani Pink Accents","neckDetail":"Handcrafted Pleated Placket with Hanging Pearls & Potli","recommendedSilhouette":"Straight Cut or Princess Line"},"bottom":{"title":"Bottom Fabric (Pants / Salwar)","length":"2.5 Meters","material":"Handloom Cotton-Silk Blend","pattern":"Solid Rich Mustard Weave","color":"Haldi Mustard","recommendedCut":"Tapered Trousers or Patiala Salwar"},"dupatta":{"title":"Dupatta","length":"2.5 Meters","material":"Authentic Hand-Tied Bandhej Silk","pattern":"Two-Tone Mustard & Rani Pink with Colorful Tassels","drape":"Full Royal Wrap or Single Shoulder Drape"}},
         sku: 'ABHA-SLW-002',
         name: 'Mustard Heritage Bandhani Salwar Suit Material',
         category: 'Bandhani & Leheriya Suits',
@@ -4347,8 +2728,6 @@
       },
       {
         id: 'prod-03',
-        tryonImage: 'images/tryon/magenta-chanderi-tryon.jpg',
-        fabricBreakdown: {"tryonImage":"images/tryon/magenta-chanderi-tryon.jpg","upper":{"title":"Kurta / Kameez Fabric","length":"2.5 Meters","material":"Pure Chanderi Silk","pattern":"Tree-of-Life Fine Silver Zari & Sequin Threadwork","color":"Deep Magenta Wine","neckDetail":"Royal Embroidered Yoke & Stand Patti Collar Frame","recommendedSilhouette":"Straight Cut or Subtle A-Line"},"bottom":{"title":"Bottom Fabric (Pants / Salwar)","length":"2.5 Meters","material":"Pure Cotton-Silk Coordinate","pattern":"Rich Deep Solid Wine with Subtle Sheen","color":"Matching Magenta Wine","recommendedCut":"Churidar or Narrow Cigarette Pants"},"dupatta":{"title":"Dupatta","length":"2.5 Meters","material":"Pure Chanderi Silk Weave","pattern":"Zari Weave Border with Micro Motif Bootis","drape":"Graceful Side Fall or Pleated Fold"}},
         sku: 'ABHA-SLW-003',
         name: 'Magenta Festive Chanderi Silk Salwar Suit Material',
         category: 'Chanderi Silk Salwar Suits',
@@ -4369,8 +2748,6 @@
       },
       {
         id: 'prod-04',
-        tryonImage: 'images/tryon/cream-lime-tryon.jpg',
-        fabricBreakdown: {"tryonImage":"images/tryon/cream-lime-tryon.jpg","upper":{"title":"Kurta / Kameez Fabric","length":"2.5 Meters","material":"Pure Slub Handloom Cotton","pattern":"Artisanal Mirror-Work Lace Placket with Potli Accents","color":"Natural Ivory Cream","neckDetail":"Gleaming Mirror-Work Placket & Collar Inlay","recommendedSilhouette":"Straight Cut with High Side Slits"},"bottom":{"title":"Bottom Fabric (Pants / Salwar)","length":"2.5 Meters","material":"Slub Handloom Cotton","pattern":"Plain Natural Cream Weave","color":"Ivory Cream","recommendedCut":"Straight Cropped Pants with Mirror Hem"},"dupatta":{"title":"Dupatta","length":"2.5 Meters","material":"Lightweight Floral Printed Voile","pattern":"Vibrant Lime Green with Floral Motifs & Mirror Lace","drape":"Fluid Diagonal Drape"}},
         sku: 'ABHA-SLW-004',
         name: 'Cream Handloom Cotton Mirror-Work Salwar Suit',
         category: 'Mirror-Work Cotton Suits',
@@ -4391,8 +2768,6 @@
       },
       {
         id: 'prod-05',
-        tryonImage: 'images/tryon/teal-mandala-tryon.jpg',
-        fabricBreakdown: {"tryonImage":"images/tryon/teal-mandala-tryon.jpg","upper":{"title":"Kurta / Kameez Fabric","length":"2.5 Meters","material":"100% Fine Combed Cotton","pattern":"Rajasthani Mandala Motif Traditional Block Print","color":"Peacock Teal with Warm Ochre Accents","neckDetail":"Mandala Geometric Yoke with Contrast Piping","recommendedSilhouette":"Straight Longline Kurta"},"bottom":{"title":"Bottom Fabric (Pants / Salwar)","length":"2.5 Meters","material":"Fine Combed Cotton","pattern":"Solid Deep Peacock Teal","color":"Peacock Teal","recommendedCut":"Straight Cigarette Trousers"},"dupatta":{"title":"Dupatta","length":"2.5 Meters","material":"Pure Breathable Cotton Malmal","pattern":"All-Over Mandala Artwork Border & Pallu","drape":"Classic Dual-Shoulder or Loose Arm Wrap"}},
         sku: 'ABHA-SLW-005',
         name: 'Teal Mandala Motif Pure Cotton Salwar Suit',
         category: 'Designer Printed Salwar Suits',
@@ -4595,11 +2970,6 @@
               ${categoryBadge}
             </span>
 
-            <!-- 360 AI Try-On Pill on Image -->
-            <button type="button" onclick="openStyleAiFromProduct('${prod.id}', event)" class="absolute top-2 right-11 bg-maroon-950/90 hover:bg-maroon-900 backdrop-blur-xs text-gold-300 text-[9px] font-bold px-2 py-0.5 rounded-full shadow-xs border border-gold-400/40 transition hover:scale-105" title="Click to Try On in 360°">
-              ✨ 360° AI
-            </button>
-
             <!-- Wishlist Heart Button -->
             <button type="button" onclick="toggleWishlist('${prod.id}', event)" class="absolute top-2 right-2 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 border border-[#EBE3D7] flex items-center justify-center text-gray-500 hover:text-red-500 shadow-xs transition" aria-label="Save to wishlist">
               <svg class="w-4 h-4 ${isWishlisted ? 'fill-red-500 text-red-500' : 'fill-none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
@@ -4644,24 +3014,19 @@
               </div>
             </div>
 
-            <!-- Dual CTAs + Style AI Try-On -->
-            <div class="mt-3 pt-2 border-t border-[#EBE3D7]/70 space-y-1.5">
+            <!-- Dual CTAs for ABHA Royal Boutique USP -->
+            <div class="mt-3 pt-2 border-t border-[#EBE3D7]/70 grid grid-cols-2 gap-1.5">
               ${prod.isSoldOut ? `
                 <div class="col-span-2 px-2 py-1.5 bg-red-50 text-red-700 text-[10px] sm:text-xs font-bold rounded text-center border border-red-200">
                   Sold Out
                 </div>
               ` : `
-                <button type="button" onclick="openStyleAiFromProduct('${prod.id}', event)" class="w-full py-2 px-2.5 bg-gradient-to-r from-maroon-950 via-maroon-900 to-charcoal-950 hover:from-maroon-900 hover:to-charcoal-900 text-gold-300 rounded-lg text-[10px] sm:text-xs font-bold border border-gold-400/60 flex items-center justify-center gap-1.5 transition shadow-xs">
-                  <span class="text-gold-400">✨</span> Try with ABHA Style AI (360°)
+                <button type="button" onclick="initiatePurchase('${prod.id}', 'unstitched')" class="py-1.5 px-1 rounded text-[10px] sm:text-xs font-bold border border-maroon-900/40 text-maroon-950 hover:bg-maroon-900/5 text-center transition">
+                  Buy Fabric
                 </button>
-                <div class="grid grid-cols-2 gap-1.5">
-                  <button type="button" onclick="initiatePurchase('${prod.id}', 'unstitched')" class="py-1.5 px-1 rounded text-[10px] sm:text-xs font-bold border border-maroon-900/40 text-maroon-950 hover:bg-maroon-900/5 text-center transition">
-                    Buy Fabric
-                  </button>
-                  <button type="button" onclick="initiatePurchase('${prod.id}', 'stitched')" class="py-1.5 px-1 rounded text-[10px] sm:text-xs font-bold bg-maroon-900 hover:bg-maroon-950 text-gold-300 hover:text-white text-center transition shadow-xs">
-                    Stitch +₹${prod.stitchingFee}
-                  </button>
-                </div>
+                <button type="button" onclick="initiatePurchase('${prod.id}', 'stitched')" class="py-1.5 px-1 rounded text-[10px] sm:text-xs font-bold bg-maroon-900 hover:bg-maroon-950 text-gold-300 hover:text-white text-center transition shadow-xs">
+                  Stitch +₹${prod.stitchingFee}
+                </button>
               `}
             </div>
 
@@ -4838,13 +3203,13 @@
         showToast(`Added ${state.activeProduct.name} (Unstitched) to bag.`);
         openCartDrawer();
       } else {
-        // Stitched flow: launch ABHA Style AI Virtual Tailor & 360 Fitting Room
-        openStyleAiStudio(state.activeProduct);
+        // Stitched flow (§17): open custom measurement studio
+        openMeasurementStudioModal(state.activeProduct);
       }
     }
 
     function openMeasurementStudioFromHero() {
-      openStyleAiStudio(PRODUCTS[0]);
+      openMeasurementStudioModal(PRODUCTS[0]);
     }
 
     function openMeasurementStudioModal(product) {
@@ -5069,9 +3434,6 @@
         isStitched: cartItem.isStitched,
         stitchingFee: cartItem.stitchingFee,
         measurements: cartItem.measurements,
-        designId: cartItem.designId || null,
-        tailoringSpecification: cartItem.tailoringSpecification || null,
-        avatarPreview: cartItem.avatarPreview || null,
         customNotes: cartItem.customNotes,
         quantity: 1
       });
@@ -5300,13 +3662,11 @@
         let stitching_config = null;
         if (isStitched) {
           stitching_config = {
-            neck_design: cartItem.tailoringSpecification?.stitchingDetails?.kurta?.neckDesign || cartItem.measurements?.neck || 'Classic Round Neck',
-            sleeve_style: cartItem.tailoringSpecification?.stitchingDetails?.kurta?.sleeves?.style || cartItem.measurements?.sleeve || '3/4th Sleeves',
-            bottom_style: cartItem.tailoringSpecification?.stitchingDetails?.bottom?.style || cartItem.measurements?.bottom || 'Traditional Salwar',
-            kurta_design: cartItem.tailoringSpecification?.stitchingDetails?.kurta?.silhouette || cartItem.measurements?.kurta || 'Straight Cut Kurta',
-            stand_patti: cartItem.tailoringSpecification?.stitchingDetails?.kurta?.standPatti || null,
-            pockets: cartItem.tailoringSpecification?.stitchingDetails?.kurta?.pockets || 'No pocket',
-            additional_requirements: cartItem.customNotes || '',
+            neck_design: cartItem.measurements?.neck || 'Classic Round Neck',
+            sleeve_style: cartItem.measurements?.sleeve || cartItem.measurements?.sleeveStyle || '3/4th Sleeves',
+            bottom_style: cartItem.measurements?.bottom || cartItem.measurements?.bottomStyle || 'Traditional Salwar',
+            kurta_design: cartItem.measurements?.kurta || cartItem.measurements?.fit || 'Straight Cut Kurta',
+            additional_requirements: cartItem.measurements?.notes || cartItem.measurements?.customNotes || '',
             reference_images: cartItem.measurements?.reference_images || []
           };
         }
@@ -5316,9 +3676,6 @@
           quantity: cartItem.quantity || 1,
           order_type: isStitched ? 'STITCHED' : 'UNSTITCHED',
           stitching_config,
-          design_id: cartItem.designId || null,
-          tailoring_specification: cartItem.tailoringSpecification || null,
-          avatar_preview: cartItem.avatarPreview || null,
           shipping: {
             name: name.trim(),
             phone: phone.trim(),
@@ -6465,9 +4822,9 @@
     </a>
 
     <!-- Custom Studio Cutout Button -->
-    <button type="button" onclick="openStyleAiFromHero()" class="flex flex-col items-center text-maroon-950 text-[10px] font-bold focus:outline-none group" aria-label="ABHA Style AI Virtual Try-On">
-      <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-maroon-950 to-maroon-800 text-gold-400 flex items-center justify-center text-base shadow-md -mt-4 border-2 border-gold-400 group-hover:scale-110 transition-transform">✨</div>
-      <span class="mt-0.5 font-extrabold text-maroon-950">Style AI</span>
+    <button type="button" onclick="openMeasurementStudioFromHero()" class="flex flex-col items-center text-maroon-950 text-[10px] font-bold focus:outline-none group" aria-label="Tailor Studio">
+      <div class="w-9 h-9 rounded-full bg-maroon-900 text-gold-400 flex items-center justify-center text-base shadow-md -mt-3.5 border border-gold-500/40 group-hover:scale-105 transition-transform">✂</div>
+      <span class="mt-0.5">Studio</span>
     </button>
 
     <!-- Wishlist / Saved -->

@@ -11,8 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="js/abha-store.js"></script>
-  <script src="js/abha-style-ai.js"></script>
+  <script src="js/abha-store.js?v=20260922_1"></script>
   <style>
     :root {
       --maroon: #5c1324;
@@ -959,9 +958,6 @@
       <button class="nav-item" onclick="switchTab('pos')">
         <span>🏷️</span> Offline POS Billing
       </button>
-            <button class="nav-item" onclick="switchTab('styleai')">
-        <span>✨</span> Style AI Controls
-      </button>
       <button class="nav-item" onclick="switchTab('tailor')">
         <span>✂️</span> Tailor Pipeline <span id="tailorBadge" class="badge">0</span>
       </button>
@@ -1104,85 +1100,6 @@
 
             <button id="posSubmitBtn" class="btn btn-primary" style="justify-content: center; padding: 0.85rem;" onclick="submitPosBill()" disabled>Complete Sale & Sync Stock</button>
             <div id="posFeedback" style="font-size: 0.8rem; text-align: center;"></div>
-          </div>
-        </div>
-      </section>
-
-      
-      <!-- 2B. ABHA STYLE AI CONTROLS (§Admin Controls) -->
-      <section id="section-styleai" class="page-section">
-        <div class="section-header">
-          <div>
-            <h1 class="section-title">ABHA Style AI &amp; Virtual Try-On Management</h1>
-            <p class="section-desc">Atelier virtual fitting engine settings, product eligibility &amp; saved patron designs</p>
-          </div>
-          <button class="btn btn-primary btn-sm" onclick="saveStyleAiSettings()">Save Settings</button>
-        </div>
-
-        <div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-bottom: 1.5rem;">
-          <div class="kpi-card">
-            <span class="kpi-label">Virtual Try-On Engine</span>
-            <div class="kpi-val" style="color: var(--gold); font-size: 1.25rem;">Active</div>
-            <span class="kpi-sub">HTML5 360° Canvas Engine</span>
-          </div>
-          <div class="kpi-card">
-            <span class="kpi-label">Eligible Products</span>
-            <div id="kpiAiEligible" class="kpi-val" style="color: var(--maroon); font-size: 1.25rem;">5 / 5</div>
-            <span class="kpi-sub">All Salwar Suit Materials</span>
-          </div>
-          <div class="kpi-card">
-            <span class="kpi-label">Stand Patti Presets</span>
-            <div class="kpi-val" style="font-size: 1.25rem;">4 Styles</div>
-            <span class="kpi-sub">SP-01 to SP-04 Verified</span>
-          </div>
-        </div>
-
-        <!-- Master AI Configuration Panel -->
-        <div class="panel-card" style="margin-bottom: 1.5rem;">
-          <div class="panel-header">
-            <h2 class="panel-title">System Features &amp; Tailoring Rules</h2>
-          </div>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; font-size: 0.85rem;">
-            <div style="background: var(--cream); padding: 1rem; border-radius: 6px; border: 1px solid var(--gray-200);">
-              <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; cursor: pointer;">
-                <input type="checkbox" id="admAiEnabled" checked>
-                <span>Enable ABHA Style AI Storefront-wide</span>
-              </label>
-              <p style="font-size: 0.75rem; color: var(--gray-500); margin-top: 0.25rem;">
-                When active, customers can preview dress materials on personalized 360° avatars before placing stitching orders.
-              </p>
-            </div>
-
-            <div style="background: var(--cream); padding: 1rem; border-radius: 6px; border: 1px solid var(--gray-200);">
-              <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; cursor: pointer;">
-                <input type="checkbox" id="admAiHinglish" checked>
-                <span>Natural Language / Hinglish Parser</span>
-              </label>
-              <p style="font-size: 0.75rem; color: var(--gray-500); margin-top: 0.25rem;">
-                Understands queries like "Mujhe stand patti chahiye" and "3/4 sleeves kar do".
-              </p>
-            </div>
-
-            <div style="background: var(--cream); padding: 1rem; border-radius: 6px; border: 1px solid var(--gray-200);">
-              <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 600; cursor: pointer;">
-                <input type="checkbox" id="admAiStandPatti" checked>
-                <span>Stand Patti Preset Selector Active</span>
-              </label>
-              <p style="font-size: 0.75rem; color: var(--gray-500); margin-top: 0.25rem;">
-                Enables SP-01 Mandarin, SP-02 Notch, SP-03 Angrakha, SP-04 Zari piping.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Saved Customer Designs Library -->
-        <div class="panel-card">
-          <div class="panel-header">
-            <h2 class="panel-title">Saved Customer Designs Library</h2>
-            <button class="btn btn-outline btn-sm" onclick="loadAdminSavedDesigns()">Refresh Designs</button>
-          </div>
-          <div id="adminSavedDesignsContainer" style="font-size: 0.85rem;">
-            <div style="color: var(--gray-500); text-align: center; padding: 2rem;">Loading saved patron designs...</div>
           </div>
         </div>
       </section>
@@ -2245,107 +2162,6 @@
           submitBtn.textContent = originalText;
         }
       }
-    }
-
-    
-    // ABHA Style AI Admin Handlers & Job Ticket Printing
-    async function printTailoringTicket(orderNumber) {
-      try {
-        const res = await apiRequest('/api/tailor/queue');
-        const item = res.data.find(x => x.order_number === orderNumber);
-        if (!item) {
-          alert('Order not found in tailoring queue.');
-          return;
-        }
-
-        let rawTicket = '';
-        if (typeof AbhaStyleAI !== 'undefined' && item.tailoring_specification) {
-          rawTicket = AbhaStyleAI.TailoringSpecEngine.formatPrintableTicket(item.tailoring_specification);
-        } else {
-          rawTicket = `
-================================================================
-           ABHA ATELIER BESPOKE TAILORING JOB TICKET            
-            11, Ganesha Tower, Arya Samaj, Beawar              
-================================================================
-ORDER NUMBER  : ${item.order_number}
-DESIGN ID     : ${item.design_id || 'IN-STORE-STITCH'}
-PRODUCT       : ${item.product_title} (${item.product_sku})
-CUSTOMER      : ${item.customer_name} (${item.customer_phone || ''})
-----------------------------------------------------------------
-SPECIFICATIONS:
-- Kurta Silhouette : ${item.kurta_design}
-- Neckline         : ${item.neck_design}
-- Sleeves          : ${item.sleeve_style}
-- Stand Patti      : ${item.stand_patti && item.stand_patti.required ? JSON.stringify(item.stand_patti) : 'None'}
-- Pockets          : ${item.pockets || 'No pocket'}
-- Bottom Cut       : ${item.bottom_style}
-----------------------------------------------------------------
-MEASUREMENTS:
-${JSON.stringify(item.measurements, null, 2)}
-================================================================`.trim();
-        }
-
-        const printWindow = window.open('', '_blank', 'width=750,height=750');
-        printWindow.document.write(`
-          <html>
-          <head>
-            <title>ABHA Tailoring Job Ticket - ${item.order_number}</title>
-            <style>
-              body { font-family: monospace; padding: 20px; font-size: 13px; line-height: 1.4; color: #000; }
-              pre { white-space: pre-wrap; font-size: 12px; }
-              @media print {
-                button { display: none; }
-              }
-            </style>
-          </head>
-          <body>
-            <button onclick="window.print()" style="margin-bottom: 15px; padding: 8px 16px; font-weight: bold; background: #5c1324; color: #fff; border: none; border-radius: 4px; cursor: pointer;">
-              🖨️ Print This Ticket
-            </button>
-            <pre>${rawTicket}</pre>
-          </body>
-          </html>
-        `);
-        printWindow.document.close();
-      } catch (err) {
-        alert('Failed to generate print ticket: ' + err.message);
-      }
-    }
-
-    function loadAdminSavedDesigns() {
-      const container = document.getElementById('adminSavedDesignsContainer');
-      if (!container) return;
-
-      if (typeof AbhaStyleAI === 'undefined') {
-        container.innerHTML = '<div style="color: var(--gray-500); padding: 1rem;">AbhaStyleAI engine not initialized.</div>';
-        return;
-      }
-
-      const designs = AbhaStyleAI.SavedDesignsService.getDesigns();
-      if (designs.length === 0) {
-        container.innerHTML = '<div style="color: var(--gray-500); padding: 1.5rem; text-align: center;">No customer saved designs currently in browser profile.</div>';
-        return;
-      }
-
-      container.innerHTML = `
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
-          ${designs.map(d => `
-            <div style="background: var(--cream); border: 1px solid var(--gray-300); border-radius: 6px; padding: 1rem; display: flex; gap: 0.75rem;">
-              <img src="${d.product.image}" style="width: 60px; height: 80px; object-fit: cover; border-radius: 4px; border: 1px solid var(--gray-300);">
-              <div style="flex: 1; font-size: 0.75rem;">
-                <span class="badge" style="background: #fef3c7; color: #92400e; font-family: monospace;">${d.id}</span>
-                <div style="font-weight: 700; color: var(--charcoal); margin-top: 0.25rem;">${d.product.name}</div>
-                <div style="color: var(--gray-600); margin-top: 0.15rem;">${d.garmentConfig.kurtaSilhouette} • ${d.garmentConfig.neckDesign} • ${d.garmentConfig.sleeveLength}</div>
-                <div style="color: var(--maroon); font-weight: 600; margin-top: 0.25rem;">Stand Patti: ${d.garmentConfig.standPatti ? d.garmentConfig.standPattiStyle : 'None'}</div>
-              </div>
-            </div>
-          `).join('')}
-        </div>
-      `;
-    }
-
-    function saveStyleAiSettings() {
-      alert('ABHA Style AI settings updated and active across storefront.');
     }
 
     // Auto-init on page load

@@ -27,12 +27,8 @@
     phones: ['9214837104', '9261516194'],
     whatsapp: '+91 9214837104',
     instagram: '@abha_tailor_and_creation',
-    pincode: '305901',
     maps_url: 'https://maps.app.goo.gl/7LgvjMtZ2vYo3rvF8',
-    coordinates: {
-      latitude: 26.1010065,
-      longitude: 74.3155576
-    },
+    pincode: '305901',
     is_active: true
   };
 
@@ -40,8 +36,6 @@
   const INITIAL_PRODUCTS = [
     {
       id: 'prod-01',
-      tryonImage: 'images/tryon/rani-pink-leheriya-tryon.jpg',
-      fabricBreakdown: {"tryonImage":"images/tryon/rani-pink-leheriya-tryon.jpg","upper":{"title":"Kurta / Kameez Fabric","length":"2.5 Meters","material":"100% Pure Breathable Cotton","pattern":"Rajasthani Leheriya Diagonal Waves","color":"Rani Pink & Crisp White","neckDetail":"Intricate Gota Patti & Thread Yoke Placket","recommendedSilhouette":"Straight Cut or A-Line Flare"},"bottom":{"title":"Bottom Fabric (Pants / Salwar)","length":"2.5 Meters","material":"100% Breathable Cotton","pattern":"Matching Fine Leheriya Coordinate","color":"Coordinated Rani Pink","recommendedCut":"Straight Cigarette Pants or Classic Salwar"},"dupatta":{"title":"Dupatta","length":"2.5 Meters","material":"Soft Pure Cotton Voile","pattern":"Matching Leheriya with Gota Kiran Lace Border","drape":"One-Shoulder Atelier Drape"}},
       title: 'Rani Pink Leheriya Pure Cotton Salwar Suit',
       name: 'Rani Pink Leheriya Pure Cotton Salwar Suit',
       sku: 'ABHA-SS-001',
@@ -75,8 +69,6 @@
     },
     {
       id: 'prod-02',
-      tryonImage: 'images/tryon/mustard-bandhani-tryon.jpg',
-      fabricBreakdown: {"tryonImage":"images/tryon/mustard-bandhani-tryon.jpg","upper":{"title":"Kurta / Kameez Fabric","length":"2.5 Meters","material":"Handloom Cotton-Silk","pattern":"Traditional Hand-Tied Bandhani Dots","color":"Haldi Mustard with Rani Pink Accents","neckDetail":"Handcrafted Pleated Placket with Hanging Pearls & Potli","recommendedSilhouette":"Straight Cut or Princess Line"},"bottom":{"title":"Bottom Fabric (Pants / Salwar)","length":"2.5 Meters","material":"Handloom Cotton-Silk Blend","pattern":"Solid Rich Mustard Weave","color":"Haldi Mustard","recommendedCut":"Tapered Trousers or Patiala Salwar"},"dupatta":{"title":"Dupatta","length":"2.5 Meters","material":"Authentic Hand-Tied Bandhej Silk","pattern":"Two-Tone Mustard & Rani Pink with Colorful Tassels","drape":"Full Royal Wrap or Single Shoulder Drape"}},
       title: 'Mustard Heritage Bandhani Salwar Suit Material',
       name: 'Mustard Heritage Bandhani Salwar Suit Material',
       sku: 'ABHA-SS-002',
@@ -110,8 +102,6 @@
     },
     {
       id: 'prod-03',
-      tryonImage: 'images/tryon/magenta-chanderi-tryon.jpg',
-      fabricBreakdown: {"tryonImage":"images/tryon/magenta-chanderi-tryon.jpg","upper":{"title":"Kurta / Kameez Fabric","length":"2.5 Meters","material":"Pure Chanderi Silk","pattern":"Tree-of-Life Fine Silver Zari & Sequin Threadwork","color":"Deep Magenta Wine","neckDetail":"Royal Embroidered Yoke & Stand Patti Collar Frame","recommendedSilhouette":"Straight Cut or Subtle A-Line"},"bottom":{"title":"Bottom Fabric (Pants / Salwar)","length":"2.5 Meters","material":"Pure Cotton-Silk Coordinate","pattern":"Rich Deep Solid Wine with Subtle Sheen","color":"Matching Magenta Wine","recommendedCut":"Churidar or Narrow Cigarette Pants"},"dupatta":{"title":"Dupatta","length":"2.5 Meters","material":"Pure Chanderi Silk Weave","pattern":"Zari Weave Border with Micro Motif Bootis","drape":"Graceful Side Fall or Pleated Fold"}},
       title: 'Magenta Festive Chanderi Silk Salwar Suit Material',
       name: 'Magenta Festive Chanderi Silk Salwar Suit Material',
       sku: 'ABHA-SS-003',
@@ -145,8 +135,6 @@
     },
     {
       id: 'prod-04',
-      tryonImage: 'images/tryon/cream-lime-tryon.jpg',
-      fabricBreakdown: {"tryonImage":"images/tryon/cream-lime-tryon.jpg","upper":{"title":"Kurta / Kameez Fabric","length":"2.5 Meters","material":"Pure Slub Handloom Cotton","pattern":"Artisanal Mirror-Work Lace Placket with Potli Accents","color":"Natural Ivory Cream","neckDetail":"Gleaming Mirror-Work Placket & Collar Inlay","recommendedSilhouette":"Straight Cut with High Side Slits"},"bottom":{"title":"Bottom Fabric (Pants / Salwar)","length":"2.5 Meters","material":"Slub Handloom Cotton","pattern":"Plain Natural Cream Weave","color":"Ivory Cream","recommendedCut":"Straight Cropped Pants with Mirror Hem"},"dupatta":{"title":"Dupatta","length":"2.5 Meters","material":"Lightweight Floral Printed Voile","pattern":"Vibrant Lime Green with Floral Motifs & Mirror Lace","drape":"Fluid Diagonal Drape"}},
       title: 'Cream Handloom Cotton Mirror-Work Salwar Suit',
       name: 'Cream Handloom Cotton Mirror-Work Salwar Suit',
       sku: 'ABHA-SS-004',
@@ -180,8 +168,6 @@
     },
     {
       id: 'prod-05',
-      tryonImage: 'images/tryon/teal-mandala-tryon.jpg',
-      fabricBreakdown: {"tryonImage":"images/tryon/teal-mandala-tryon.jpg","upper":{"title":"Kurta / Kameez Fabric","length":"2.5 Meters","material":"100% Fine Combed Cotton","pattern":"Rajasthani Mandala Motif Traditional Block Print","color":"Peacock Teal with Warm Ochre Accents","neckDetail":"Mandala Geometric Yoke with Contrast Piping","recommendedSilhouette":"Straight Longline Kurta"},"bottom":{"title":"Bottom Fabric (Pants / Salwar)","length":"2.5 Meters","material":"Fine Combed Cotton","pattern":"Solid Deep Peacock Teal","color":"Peacock Teal","recommendedCut":"Straight Cigarette Trousers"},"dupatta":{"title":"Dupatta","length":"2.5 Meters","material":"Pure Breathable Cotton Malmal","pattern":"All-Over Mandala Artwork Border & Pallu","drape":"Classic Dual-Shoulder or Loose Arm Wrap"}},
       title: 'Teal Mandala Motif Pure Cotton Salwar Suit',
       name: 'Teal Mandala Motif Pure Cotton Salwar Suit',
       sku: 'ABHA-SS-005',
@@ -431,9 +417,6 @@
       productId,
       orderType = 'UNSTITCHED', // 'UNSTITCHED' or 'STITCHED'
       stitchingConfig = null,
-      designId = null,
-      tailoringSpecification = null,
-      avatarPreview = null,
       customer = {},
       shipping = {},
       deliveryType = 'PAN_INDIA_COURIER'
@@ -497,9 +480,6 @@
         stitching_id: 'stitch-' + Date.now(),
         stitching_status: orderType === 'STITCHED' ? 'PENDING' : null,
         stitching_config: orderType === 'STITCHED' ? stitchingConfig : null,
-        design_id: designId || (stitchingConfig && stitchingConfig.designId) || null,
-        tailoring_specification: tailoringSpecification || (stitchingConfig && stitchingConfig.tailoringSpecification) || null,
-        avatar_preview_ref: avatarPreview || (stitchingConfig && stitchingConfig.avatarPreview) || null,
         cancellation_allowed: true, // Forbidden after stitching begins (§36)
         alteration_window_days: orderType === 'STITCHED' ? 10 : 0, // §37
         created_at: new Date().toISOString()
@@ -824,28 +804,10 @@
           productId: body.product_id,
           orderType: body.order_type,
           stitchingConfig: body.stitching_config,
-          designId: body.design_id || body.stitching_config?.designId,
-          tailoringSpecification: body.tailoring_specification || body.stitching_config?.tailoringSpecification,
-          avatarPreview: body.avatar_preview || body.stitching_config?.avatarPreview,
           shipping: body.shipping,
           customer: body.shipping
         });
         return { success: true, data: { order_id: order.id, order_number: order.order_number, total_amount: order.total_amount } };
-      }
-
-      // ABHA Style AI Virtual Try-on & Saved Designs API
-      if (pathname === '/api/style-ai/save-design' && method === 'POST') {
-        if (typeof window !== 'undefined' && window.AbhaStyleAI) {
-          const saved = window.AbhaStyleAI.SavedDesignsService.saveDesign(body);
-          return { success: true, data: saved };
-        }
-        return { success: true, data: { id: 'ABHA-DESIGN-' + Date.now() } };
-      }
-      if (pathname === '/api/style-ai/designs' && method === 'GET') {
-        if (typeof window !== 'undefined' && window.AbhaStyleAI) {
-          return { success: true, data: window.AbhaStyleAI.SavedDesignsService.getDesigns() };
-        }
-        return { success: true, data: [] };
       }
       if (pathname === '/api/payments/verify' && method === 'POST') {
         const order = this.confirmPayment(body.order_id, body);
@@ -925,18 +887,11 @@
           product_title: o.product_title,
           product_sku: o.product_sku,
           stitching_status: o.stitching_status || 'PENDING',
-          design_id: o.design_id || o.stitching_config?.designId || 'ABHA-DESIGN-LEGACY',
-          tailoring_specification: o.tailoring_specification || o.stitching_config?.tailoringSpecification || null,
-          avatar_preview: o.avatar_preview_ref || o.stitching_config?.avatarPreview || null,
-          neck_design: o.tailoring_specification?.stitchingDetails?.kurta?.neckDesign || o.stitching_config?.neck || 'Classic Round',
-          sleeve_style: o.tailoring_specification?.stitchingDetails?.kurta?.sleeves?.style || o.stitching_config?.sleeve || '3/4th Sleeves',
-          stand_patti: o.tailoring_specification?.stitchingDetails?.kurta?.standPatti || (o.stitching_config?.standPatti ? { required: true, styleId: o.stitching_config.standPattiStyle || 'SP-01' } : { required: false }),
-          pockets: o.tailoring_specification?.stitchingDetails?.kurta?.pockets || o.stitching_config?.pockets || 'No pocket',
-          bottom_style: o.tailoring_specification?.stitchingDetails?.bottom?.style || o.stitching_config?.bottom || 'Traditional Salwar',
-          kurta_design: o.tailoring_specification?.stitchingDetails?.kurta?.silhouette || o.stitching_config?.kurta || 'Straight Cut',
-          measurements: o.tailoring_specification?.anatomicalMeasurements || o.stitching_config?.measurements || null,
+          neck_design: o.stitching_config?.neck || 'Classic Round',
+          sleeve_style: o.stitching_config?.sleeve || '3/4th Sleeves',
+          bottom_style: o.stitching_config?.bottom || 'Traditional Salwar',
+          kurta_design: o.stitching_config?.kurta || 'Straight Cut',
           customer_name: o.customer_name || o.shipping_name,
-          customer_phone: o.customer_phone || o.shipping_phone,
           additional_requirements: o.stitching_config?.notes || '',
           reference_images: (o.stitching_config?.reference_images || []).map((img, i) => ({
             vault_storage_key: `ref_${o.order_number}_${i}`,

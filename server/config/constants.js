@@ -146,12 +146,5 @@ module.exports = {
       { id: 'high_low', label: 'High-Low Hem Kurta', description: 'Contemporary front-short back-long hem' },
       { id: 'custom', label: 'Custom Kurta Design', description: 'Custom pattern discussed via call/notes' }
     ]
-  },
-
-  STYLE_AI: {
-    ENABLED: true,
-    STAND_PATTI_PRESETS: ['SP-01', 'SP-02', 'SP-03', 'SP-04'],
-    SUPPORTED_GARMENTS: ['Salwar Suit', 'Kurta', 'Saree', 'Lehenga'],
-    DEFAULT_STITCHING_FEE: 650
   }
 };
