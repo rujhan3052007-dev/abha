@@ -62,8 +62,6 @@
       is_new_arrival: true,
       is_featured: true,
       isBestSeller: true,
-      rating: 5.0,
-      reviewsCount: 48,
       description: '100% pure breathable cotton 3-piece salwar suit dress material in vibrant rani pink. Features delicate neck embellishment, matching striped bottom fabric, and pure cotton dupatta. Ample 2.5m lengths for custom tailoring.',
       wash_care: 'Gentle Hand Wash in Cold Water / Dry in Shade'
     },
@@ -95,8 +93,6 @@
       is_new_arrival: true,
       is_featured: true,
       isBestSeller: true,
-      rating: 4.9,
-      reviewsCount: 39,
       description: 'Timeless mustard yellow salwar suit dress material featuring handcrafted pleated placket with delicate thread embroidery, hanging pearls, and authentic traditional Bandhani tie-dye dupatta with colorful tassels.',
       wash_care: 'Dry Clean Recommended'
     },
@@ -128,8 +124,6 @@
       is_new_arrival: true,
       is_featured: true,
       isBestSeller: true,
-      rating: 5.0,
-      reviewsCount: 42,
       description: 'Festive Chanderi silk unstitched salwar suit material with rich tree-of-life neckline thread embroidery, subtle diagonal woven texture, matching patterned bottom, and coordinates for celebration occasions.',
       wash_care: 'Dry Clean Only'
     },
@@ -161,8 +155,6 @@
       is_new_arrival: true,
       is_featured: false,
       isBestSeller: false,
-      rating: 4.8,
-      reviewsCount: 27,
       description: 'Natural ivory cream handloom cotton kurta fabric adorned with artisanal mirror-work lace placket and potli buttons. Comes with vibrant lime green floral print dupatta and matching bottom fabric.',
       wash_care: 'Hand Wash Separately in Cold Water'
     },
@@ -194,8 +186,6 @@
       is_new_arrival: true,
       is_featured: false,
       isBestSeller: false,
-      rating: 4.9,
-      reviewsCount: 31,
       description: 'Contemporary deep teal cotton suit piece featuring intricate mandala yoke detailing, coordinating printed bottom fabric, and lightweight printed cotton dupatta. Ideal for daily elegance.',
       wash_care: 'Gentle Machine Wash or Hand Wash'
     }
@@ -241,7 +231,9 @@
   function setTable(name, data) {
     try {
       localStorage.setItem(STORAGE_PREFIX + name, JSON.stringify(data));
-      window.dispatchEvent(new CustomEvent('abha-store-update', { detail: { table: name } }));
+      if (typeof window !== 'undefined' && typeof CustomEvent !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('abha-store-update', { detail: { table: name } }));
+      }
     } catch (e) {
       console.warn('AbhaStore write error:', e);
     }
@@ -249,8 +241,19 @@
 
   // Initialize store defaults if not present
   function ensureSeeded() {
-    if (!localStorage.getItem(STORAGE_PREFIX + 'products')) {
+    const existingProds = getTable('products', null);
+    if (!existingProds) {
       setTable('products', INITIAL_PRODUCTS);
+    } else {
+      let cleaned = false;
+      existingProds.forEach(p => {
+        if ('rating' in p || 'reviewsCount' in p) {
+          delete p.rating;
+          delete p.reviewsCount;
+          cleaned = true;
+        }
+      });
+      if (cleaned) setTable('products', existingProds);
     }
     if (!localStorage.getItem(STORAGE_PREFIX + 'categories')) {
       setTable('categories', INITIAL_CATEGORIES);
