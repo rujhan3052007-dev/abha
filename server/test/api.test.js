@@ -93,7 +93,7 @@ async function runTests() {
     assert(stitchOptions.body.measurement_studio_status === 'Coming Soon', 'Measurement studio clearly marked Coming Soon');
 
     // 5. Authentication & RBAC
-    const ownerLogin = await request('POST', '/api/auth/login', { identifier: 'admin@abha.in', password: 'Abha104' });
+    const ownerLogin = await request('POST', '/api/auth/login', { identifier: 'rujhan3052007@gmail.com', password: 'Abha104' });
     assert(ownerLogin.status === 200 && ownerLogin.body.user && ownerLogin.body.user.role === 'OWNER', 'Owner login successful with JWT');
     const ownerToken = ownerLogin.body.token;
 

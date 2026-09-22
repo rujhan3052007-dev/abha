@@ -37,7 +37,7 @@
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="js/abha-store.js?v=20260922_1"></script>
+  <script src="js/abha-store.js?v=20260923_1"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -3719,8 +3719,8 @@
       const err = document.getElementById('ownerPinError');
       const val = (input?.value || '').trim();
 
-      // Accepted Owner/Staff Passcodes: Abha104, 2026, 9214, AbhaAdmin2026!, abha, admin
-      const validPins = ['Abha104', '2026', '9214', 'AbhaAdmin2026!', 'abha', 'admin'];
+      // Accepted Owner/Staff Passcodes: rujhan3052007@gmail.com, Abha104, 2026, 9214, AbhaAdmin2026!, abha, admin
+      const validPins = ['rujhan3052007@gmail.com', 'Abha104', '2026', '9214', 'AbhaAdmin2026!', 'abha', 'admin'];
       if (validPins.includes(val) || validPins.includes(val.toLowerCase())) {
         sessionStorage.setItem('abha_staff_authorized', 'true');
         closeOwnerAccessModal();

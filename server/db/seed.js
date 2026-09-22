@@ -67,9 +67,9 @@ async function seed() {
   const usersToSeed = [
     {
       id: 'usr_owner_01',
-      name: 'ABHA Management',
+      name: 'Rujhan (ABHA Owner)',
       phone: BRAND.PHONE_PRIMARY,
-      email: 'admin@abha.in',
+      email: 'rujhan3052007@gmail.com',
       password: 'Abha104',
       role: ROLES.OWNER
     },
