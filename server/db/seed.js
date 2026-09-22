@@ -70,7 +70,7 @@ async function seed() {
       name: 'ABHA Management',
       phone: BRAND.PHONE_PRIMARY,
       email: 'admin@abha.in',
-      password: 'AbhaAdmin2026!',
+      password: 'Abha104',
       role: ROLES.OWNER
     },
     {

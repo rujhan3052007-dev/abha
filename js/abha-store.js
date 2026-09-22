@@ -202,7 +202,7 @@
 
   // Operational staff accounts (§48)
   const INITIAL_USERS = [
-    { id: 'u-owner-01', email: 'admin@abha.in', phone: '9214837104', name: 'Owner (ABHA)', role: 'OWNER', password: 'AbhaAdmin2026!' },
+    { id: 'u-owner-01', email: 'admin@abha.in', phone: '9214837104', name: 'Owner (ABHA)', role: 'OWNER', password: 'Abha104' },
     { id: 'u-mgr-01', email: 'manager@abha.in', phone: '9261516194', name: 'Store Manager (Beawar)', role: 'MANAGER', password: 'AbhaManager2026!' },
     { id: 'u-tailor-01', email: 'master.tailor@abha.in', phone: '9829000001', name: 'Master Tailor (ABHA Atelier)', role: 'TAILOR', password: 'AbhaTailor2026!' },
     { id: 'u-del-01', email: 'delivery@abha.in', phone: '9829000002', name: 'Beawar Local Delivery Staff', role: 'DELIVERY', password: 'AbhaDelivery2026!' }

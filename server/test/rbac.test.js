@@ -82,7 +82,7 @@ async function runRbacTests() {
     // 1. Authenticate Owner
     const ownerLogin = await makeRequest('POST', '/api/auth/login', {
       identifier: 'admin@abha.in',
-      password: 'AbhaAdmin2026!'
+      password: 'Abha104'
     });
     assert(ownerLogin.statusCode === 200, 'Owner logs in successfully');
     assert(ownerLogin.data.user.role === 'OWNER', 'User role is OWNER');

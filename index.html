@@ -3719,8 +3719,8 @@
       const err = document.getElementById('ownerPinError');
       const val = (input?.value || '').trim();
 
-      // Accepted Owner/Staff Passcodes: 2026, 9214, AbhaAdmin2026!, abha, admin
-      const validPins = ['2026', '9214', 'AbhaAdmin2026!', 'abha', 'admin'];
+      // Accepted Owner/Staff Passcodes: Abha104, 2026, 9214, AbhaAdmin2026!, abha, admin
+      const validPins = ['Abha104', '2026', '9214', 'AbhaAdmin2026!', 'abha', 'admin'];
       if (validPins.includes(val) || validPins.includes(val.toLowerCase())) {
         sessionStorage.setItem('abha_staff_authorized', 'true');
         closeOwnerAccessModal();
