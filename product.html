@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Authentic Dress Material Details — ABHA Beawar</title>
+  <meta name="description" content="View product specifications, pure fabric details, dimensions, and custom stitching options for this handcrafted salwar suit.">
+  <meta name="theme-color" content="#4A101D">
+  <link rel="icon" type="image/svg+xml" href="images/logo/abha-favicon.svg">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ivory: { 50: '#FAF7F2', 100: '#F5EFEB', 200: '#EAE4D9', 300: '#DFD7CA' },
+            maroon: { 700: '#85253B', 800: '#6B1D2F', 900: '#4A101D', 950: '#340B14' },
+            gold: { 100: '#FBF5E8', 400: '#D4AF37', 500: '#C59B27', 600: '#996515', 900: '#462E08' },
+            charcoal: { 900: '#2A2521', 950: '#181513' }
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-ivory-50 text-charcoal-950 font-sans min-h-screen flex flex-col antialiased selection:bg-maroon-800 selection:text-ivory-50 pb-24 lg:pb-0">
+
+  <!-- Shared Global Header -->
+  <div id="abhaGlobalHeader"></div>
+
+  <!-- Breadcrumbs Bar -->
+  <div class="bg-ivory-100/60 border-b border-ivory-200 py-3">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="flex items-center gap-2 text-xs text-slate-500">
+        <a href="index.html" class="hover:text-maroon-800">Home</a>
+        <span>/</span>
+        <a href="shop.html" class="hover:text-maroon-800">Shop Dress Materials</a>
+        <span>/</span>
+        <span id="breadcrumbTitle" class="text-maroon-900 font-semibold truncate">Dress Material Details</span>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Main Product Detail Section -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex-1 w-full">
+    
+    <div id="productDetailContainer" class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+      
+      <!-- LEFT COLUMN: Product Gallery (3:4 Ratio, No artificial filters) -->
+      <div class="lg:col-span-6 space-y-4">
+        
+        <!-- Main Large Photo View -->
+        <div class="relative aspect-[3/4] bg-white rounded-2xl border border-ivory-200 overflow-hidden shadow-sm">
+          <img id="mainProductPhoto" src="images/pink-leheriya-cotton-suit.jpg" alt="Salwar Suit Material" class="w-full h-full object-cover object-center cursor-zoom-in" onclick="openFullPhotoModal()" />
+          
+          <!-- Badges -->
+          <div class="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
+            <span id="badgeInventory" class="abha-badge-gold shadow-sm">1-of-1 Piece</span>
+            <span id="badgeNewArrival" class="bg-maroon-900 text-ivory-50 text-[10px] font-bold px-2 py-0.5 rounded shadow-sm uppercase tracking-wider">New Arrival</span>
+          </div>
+
+          <!-- Color Guarantee Pill -->
+          <div class="absolute bottom-3 right-3 bg-charcoal-950/75 backdrop-blur-sm text-ivory-50 text-[10px] px-2.5 py-1 rounded">
+            <span>✨ Authentic Natural Lighting • No Filters</span>
+          </div>
+        </div>
+
+        <!-- Thumbnail Selector Row -->
+        <div id="thumbRow" class="flex items-center gap-3 overflow-x-auto pb-2">
+          <!-- Populated by script -->
+        </div>
+
+        <!-- Trust Features Strip -->
+        <div class="grid grid-cols-3 gap-3 p-3.5 bg-white rounded-xl border border-ivory-200 text-center text-xs text-slate-700">
+          <div>
+            <span class="text-base block">🧵</span>
+            <span class="font-bold text-[11px] block mt-0.5">Ample 2.5m Cut</span>
+            <span class="text-[10px] text-slate-500">Top, Bottom, Dupatta</span>
+          </div>
+          <div class="border-x border-ivory-200">
+            <span class="text-base block">✂️</span>
+            <span class="font-bold text-[11px] block mt-0.5">Master Tailoring</span>
+            <span class="text-[10px] text-slate-500">Custom fit atelier</span>
+          </div>
+          <div>
+            <span class="text-base block">🟢</span>
+            <span class="font-bold text-[11px] block mt-0.5">Beawar Doorstep</span>
+            <span class="text-[10px] text-slate-500">Free local delivery</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: Specifications, Pricing & BUY NOW -->
+      <div class="lg:col-span-6 space-y-6">
+        
+        <div>
+          <div class="flex items-center gap-2 mb-1.5">
+            <span id="productCategoryBadge" class="text-[11px] font-bold uppercase tracking-wider text-gold-600">Salwar Suit Dress Materials</span>
+            <span class="text-slate-300">•</span>
+            <span id="productSkuBadge" class="text-xs text-slate-500 font-mono">SKU: ABHA-SS-001</span>
+          </div>
+          <h1 id="productTitle" class="font-serif text-2xl sm:text-3xl font-bold text-maroon-950 leading-tight">
+            Rani Pink Leheriya Pure Cotton Salwar Suit
+          </h1>
+          <p id="productStockNotice" class="text-xs font-semibold text-emerald-700 mt-2 flex items-center gap-1.5">
+            <span>🟢 In Stock</span> <span>— Exclusive single piece available</span>
+          </p>
+        </div>
+
+        <!-- Pricing Card -->
+        <div class="p-4 bg-white rounded-xl border border-ivory-200 shadow-sm space-y-3">
+          <div class="flex items-baseline gap-3">
+            <span id="productPriceDisplay" class="font-serif text-3xl font-bold text-maroon-950">₹1,650</span>
+            <span class="text-xs text-slate-500">for unstitched fabric package</span>
+          </div>
+
+          <!-- Stitching Price Callout -->
+          <div class="p-3 bg-ivory-50 rounded-lg border border-ivory-200 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <span class="text-xl">✂️</span>
+              <div>
+                <h4 class="text-xs font-bold text-charcoal-900">Custom Tailoring Available</h4>
+                <p class="text-[11px] text-slate-600">Master Tailor stitched to your precision measurements</p>
+              </div>
+            </div>
+            <span id="productStitchPriceNotice" class="text-xs font-bold text-maroon-800 bg-white border border-ivory-200 px-2 py-1 rounded shadow-2xs">
+              +₹650
+            </span>
+          </div>
+        </div>
+
+        <!-- Choice Explanation Box -->
+        <div class="p-3.5 bg-white rounded-xl border border-ivory-200 space-y-2 text-xs">
+          <h4 class="font-bold text-charcoal-900">Purchase Options Available:</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+            <div class="p-2.5 bg-ivory-50 rounded border border-ivory-200">
+              <span class="font-bold text-charcoal-950 block">1. Unstitched Material</span>
+              <span class="text-slate-600 mt-0.5 block">Delivered as woven fabric. Proceeds straight to checkout with zero measurement hassle.</span>
+            </div>
+            <div class="p-2.5 bg-ivory-50 rounded border border-ivory-200">
+              <span class="font-bold text-charcoal-950 block">2. Custom Stitched</span>
+              <span class="text-slate-600 mt-0.5 block">Enter measurements yourself, request master tailor assistance, or visit our Beawar store.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRIMARY BUY NOW ACTION (Rule: NO ADD TO CART BUTTON!) -->
+        <div class="pt-2">
+          <button type="button" id="btnProductBuyNow" onclick="handleDirectBuyNow()" class="w-full abha-btn-primary py-3.5 text-sm sm:text-base font-bold shadow-md hover:scale-101 transition-transform">
+            <span>BUY NOW</span>
+            <span>&rarr;</span>
+          </button>
+          <p class="text-[11px] text-slate-500 text-center mt-2">
+            Instant Direct Purchase • Secure Indian Payments • Safe Transactional Reservation
+          </p>
+        </div>
+
+        <!-- Product Specifications Accordion -->
+        <div class="space-y-3 pt-2 text-xs">
+          
+          <!-- Fabric & Dimensions -->
+          <div class="bg-white rounded-xl border border-ivory-200 p-4 space-y-2.5">
+            <h4 class="font-serif text-sm font-bold text-maroon-950 flex items-center gap-2">
+              <span>🧵</span> <span>Fabric Composition &amp; Lengths</span>
+            </h4>
+            <div class="grid grid-cols-2 gap-2 text-slate-700">
+              <div><span class="text-slate-500">Fabric:</span> <strong id="specFabric" class="text-charcoal-900">100% Pure Breathable Cotton</strong></div>
+              <div><span class="text-slate-500">Color:</span> <strong id="specColor" class="text-charcoal-900">Rani Pink with White</strong></div>
+              <div><span class="text-slate-500">Top Fabric:</span> <strong class="text-charcoal-900">2.50 Meters (Kurta)</strong></div>
+              <div><span class="text-slate-500">Bottom Fabric:</span> <strong class="text-charcoal-900">2.50 Meters (Salwar/Pant)</strong></div>
+              <div><span class="text-slate-500">Dupatta:</span> <strong class="text-charcoal-900">2.50 Meters Full Length</strong></div>
+              <div><span class="text-slate-500">Wash Care:</span> <strong id="specWashCare" class="text-charcoal-900">Gentle Hand Wash Cold</strong></div>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="bg-white rounded-xl border border-ivory-200 p-4 space-y-2">
+            <h4 class="font-serif text-sm font-bold text-maroon-950 flex items-center gap-2">
+              <span>📖</span> <span>Artisan Description</span>
+            </h4>
+            <p id="productDescription" class="text-slate-700 leading-relaxed text-xs">
+              100% pure breathable cotton 3-piece salwar suit dress material in vibrant rani pink. Features delicate neck embellishment, matching striped bottom fabric, and pure cotton dupatta.
+            </p>
+          </div>
+
+          <!-- Store & Tailoring Reassurance -->
+          <div class="bg-white rounded-xl border border-ivory-200 p-4 space-y-2">
+            <h4 class="font-serif text-sm font-bold text-maroon-950 flex items-center gap-2">
+              <span>📍</span> <span>Beawar Flagship Store &amp; Tailoring</span>
+            </h4>
+            <p class="text-slate-600 leading-relaxed">
+              Available online or in-store at <strong>11, Ganesha Tower, Beawar</strong>. You can opt to get in-person measurements at our atelier or have it delivered directly to your home.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Empty/Invalid Product State -->
+    <div id="productNotFoundState" style="display: none;" class="bg-white rounded-xl border border-ivory-200 p-12 text-center my-12">
+      <span class="text-4xl">🧵</span>
+      <h3 class="font-serif text-lg font-bold text-charcoal-950 mt-3">Product Not Found</h3>
+      <p class="text-xs text-slate-600 mt-1 max-w-sm mx-auto">
+        The requested dress material could not be found or has already been purchased.
+      </p>
+      <a href="shop.html" class="abha-btn-primary text-xs mt-4 py-2 px-4 inline-block">
+        Explore All Available Suits
+      </a>
+    </div>
+
+  </main>
+
+  <!-- MOBILE STICKY BUY NOW BOTTOM BAR -->
+  <div id="mobileStickyBar" class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 border-t border-ivory-200 p-3 shadow-lg backdrop-blur-sm flex items-center justify-between gap-3">
+    <div>
+      <span id="mobileStickyPrice" class="text-base font-bold text-maroon-950 block">₹1,650</span>
+      <span class="text-[10px] text-slate-500">Unstitched / Stitched</span>
+    </div>
+    <button type="button" onclick="handleDirectBuyNow()" class="abha-btn-primary text-xs py-2.5 px-6 shadow-sm flex-1 max-w-[200px]">
+      BUY NOW &rarr;
+    </button>
+  </div>
+
+  <!-- Shared Global Footer -->
+  <div id="abhaGlobalFooter"></div>
+
+  <!-- Scripts -->
+  <script src="js/abha-store.js?v=20260923_2"></script>
+  <script src="js/abha-ui.js?v=20260923_2"></script>
+  <script>
+    let currentProd = null;
+
+    function initProductPage() {
+      if (!window.AbhaStore) return;
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const prodId = urlParams.get('id') || 'prod-01';
+
+      const all = window.AbhaStore.getProducts(true);
+      currentProd = all.find(p => p.id === prodId || p.sku === prodId);
+
+      const container = document.getElementById('productDetailContainer');
+      const notFound = document.getElementById('productNotFoundState');
+      const stickyBar = document.getElementById('mobileStickyBar');
+
+      if (!currentProd) {
+        if (container) container.style.display = 'none';
+        if (notFound) notFound.style.display = 'block';
+        if (stickyBar) stickyBar.style.display = 'none';
+        return;
+      }
+
+      // Populate details
+      document.title = `${currentProd.title || currentProd.name} — ABHA Beawar`;
+      document.getElementById('breadcrumbTitle').textContent = currentProd.title || currentProd.name;
+      document.getElementById('productTitle').textContent = currentProd.title || currentProd.name;
+      document.getElementById('productSkuBadge').textContent = `SKU: ${currentProd.sku}`;
+      document.getElementById('productCategoryBadge').textContent = currentProd.category || 'Salwar Suit Dress Materials';
+
+      const basePrice = currentProd.price || currentProd.base_price;
+      const stitchFee = currentProd.stitchingPrice || currentProd.stitching_price || 650;
+      document.getElementById('productPriceDisplay').textContent = `₹${basePrice}`;
+      document.getElementById('mobileStickyPrice').textContent = `₹${basePrice}`;
+      document.getElementById('productStitchPriceNotice').textContent = `+₹${stitchFee}`;
+
+      document.getElementById('specFabric').textContent = currentProd.fabric;
+      document.getElementById('specColor').textContent = currentProd.color;
+      document.getElementById('specWashCare').textContent = currentProd.wash_care || 'Gentle Hand Wash Cold';
+      document.getElementById('productDescription').textContent = currentProd.description;
+
+      // Photo
+      const photoEl = document.getElementById('mainProductPhoto');
+      photoEl.src = currentProd.primary_image || currentProd.image;
+      photoEl.alt = currentProd.title || currentProd.name;
+
+      // Badges
+      const isSold = currentProd.is_sold_out || currentProd.stock_quantity <= 0;
+      const invBadge = document.getElementById('badgeInventory');
+      const stockNotice = document.getElementById('productStockNotice');
+      const buyBtn = document.getElementById('btnProductBuyNow');
+
+      if (isSold) {
+        invBadge.className = 'abha-badge-soldout shadow-sm';
+        invBadge.textContent = 'SOLD OUT';
+        stockNotice.className = 'text-xs font-semibold text-red-700 mt-2 flex items-center gap-1.5';
+        stockNotice.innerHTML = '<span>🔴 Sold Out</span> <span>— This handcrafted piece has already been purchased</span>';
+        buyBtn.disabled = true;
+        buyBtn.textContent = 'Sold Out';
+        buyBtn.className = 'w-full bg-slate-200 text-slate-500 py-3.5 text-sm font-bold rounded cursor-not-allowed';
+      } else {
+        invBadge.className = 'abha-badge-gold shadow-sm';
+        invBadge.textContent = currentProd.is_unique_item ? '1-of-1 Piece' : 'In Stock';
+      }
+
+      // Thumbnails
+      const thumbRow = document.getElementById('thumbRow');
+      const images = currentProd.images || [currentProd.primary_image || currentProd.image];
+      thumbRow.innerHTML = images.map((img, i) => `
+        <button type="button" onclick="selectPhoto('${img}')" class="w-16 h-20 rounded-lg overflow-hidden border-2 border-ivory-200 hover:border-maroon-800 transition-colors shrink-0">
+          <img src="${img}" alt="Thumbnail ${i+1}" class="w-full h-full object-cover" />
+        </button>
+      `).join('');
+    }
+
+    function selectPhoto(src) {
+      const photo = document.getElementById('mainProductPhoto');
+      if (photo) photo.src = src;
+    }
+
+    function handleDirectBuyNow() {
+      if (!currentProd || !window.AbhaUI) return;
+      window.AbhaUI.openBuyNow(currentProd.id);
+    }
+
+    document.addEventListener('DOMContentLoaded', initProductPage);
+  </script>
+</body>
+</html>

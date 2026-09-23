@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Shop Authentic Salwar Suit Dress Materials — ABHA Beawar</title>
+  <meta name="description" content="Explore handcrafted pure cotton, festive Chanderi silk, and heritage Bandhani salwar suit dress materials. Buy unstitched or custom stitched to your measurements.">
+  <meta name="theme-color" content="#4A101D">
+  <link rel="icon" type="image/svg+xml" href="images/logo/abha-favicon.svg">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ivory: { 50: '#FAF7F2', 100: '#F5EFEB', 200: '#EAE4D9', 300: '#DFD7CA' },
+            maroon: { 700: '#85253B', 800: '#6B1D2F', 900: '#4A101D', 950: '#340B14' },
+            gold: { 100: '#FBF5E8', 400: '#D4AF37', 500: '#C59B27', 600: '#996515', 900: '#462E08' },
+            charcoal: { 900: '#2A2521', 950: '#181513' }
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-ivory-50 text-charcoal-950 font-sans min-h-screen flex flex-col antialiased selection:bg-maroon-800 selection:text-ivory-50 pb-20 lg:pb-0">
+
+  <!-- Shared Global Header -->
+  <div id="abhaGlobalHeader"></div>
+
+  <!-- Breadcrumbs & Page Header -->
+  <section class="bg-ivory-100/70 border-b border-ivory-200 py-6 sm:py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="flex items-center gap-2 text-xs text-slate-500 mb-2">
+        <a href="index.html" class="hover:text-maroon-800">Home</a>
+        <span>/</span>
+        <span class="text-maroon-900 font-semibold">Shop Dress Materials</span>
+      </nav>
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <span class="abha-badge-gold text-[10px]">Authentic Handcrafted Textiles</span>
+          <h1 class="font-serif text-2xl sm:text-3xl font-bold text-maroon-950 mt-1">Salwar Suit Dress Materials</h1>
+          <p class="text-xs sm:text-sm text-slate-600 mt-1 max-w-xl">
+            Pure breathable cottons, Rajasthani Bandhani, and festive Chanderi silks. Available unstitched or custom stitched by our master atelier.
+          </p>
+        </div>
+        <div class="text-xs text-slate-600 shrink-0">
+          Showing <span id="productCountNum" class="font-bold text-maroon-900">5</span> authentic handcrafted pieces
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Shop Catalog Layout -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+    
+    <!-- Top Utility Filter & Search Bar -->
+    <div class="bg-white p-3.5 sm:p-4 rounded-xl border border-ivory-200 shadow-sm mb-6 flex flex-col md:flex-row items-center justify-between gap-3">
+      <!-- Search Input -->
+      <div class="relative w-full md:w-80">
+        <input type="text" id="shopSearchInput" oninput="applyFilters()" placeholder="Search fabric, color, pattern..." class="w-full bg-ivory-50 border border-ivory-200 rounded-lg px-3.5 py-2 pl-9 text-xs focus:outline-none focus:ring-1 focus:ring-maroon-800" />
+        <span class="absolute left-3 top-2.5 text-slate-400 text-xs">🔍</span>
+      </div>
+
+      <!-- Quick Sorting & Filter Toggle -->
+      <div class="flex items-center justify-between w-full md:w-auto gap-3">
+        <button type="button" onclick="toggleFilterDrawer()" class="lg:hidden abha-btn-outline text-xs py-2 px-3 flex items-center gap-1.5">
+          <span>⚙️</span>
+          <span>Filters</span>
+          <span id="activeFilterBadge" class="hidden w-2 h-2 rounded-full bg-maroon-800"></span>
+        </button>
+
+        <div class="flex items-center gap-2 text-xs ml-auto">
+          <label for="shopSortSelect" class="text-slate-600 font-medium shrink-0">Sort By:</label>
+          <select id="shopSortSelect" onchange="applyFilters()" class="bg-ivory-50 border border-ivory-200 rounded-lg px-3 py-2 text-xs text-charcoal-900 font-semibold focus:outline-none focus:ring-1 focus:ring-maroon-800 cursor-pointer">
+            <option value="featured">Featured / Recommended</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="newest">Newest Arrivals</option>
+            <option value="name">Name: A to Z</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2-Column Catalog (Sidebar Filters + Products Grid) -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
+      
+      <!-- DESKTOP LEFT SIDEBAR FILTERS -->
+      <aside id="shopSidebarFilter" class="hidden lg:block bg-white p-5 rounded-xl border border-ivory-200 shadow-sm space-y-6 text-xs sticky top-24">
+        
+        <div class="flex items-center justify-between pb-3 border-b border-ivory-200">
+          <h3 class="font-serif text-sm font-bold text-maroon-950 uppercase tracking-wider">Refine By</h3>
+          <button type="button" onclick="resetAllFilters()" class="text-[11px] text-maroon-800 hover:underline font-semibold">Reset All</button>
+        </div>
+
+        <!-- Category -->
+        <div>
+          <h4 class="font-bold text-charcoal-900 mb-2 uppercase text-[11px] tracking-wider text-gold-600">Category</h4>
+          <div class="space-y-1.5 text-slate-700">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="filterCategory" value="salwar" checked onchange="applyFilters()" class="rounded text-maroon-800 focus:ring-maroon-800" />
+              <span>Salwar Suit Materials (5)</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-not-allowed opacity-60">
+              <input type="checkbox" disabled class="rounded" />
+              <span>Sarees (Coming Soon)</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-not-allowed opacity-60">
+              <input type="checkbox" disabled class="rounded" />
+              <span>Men's Kurta (Coming Soon)</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Fabric Filter -->
+        <div>
+          <h4 class="font-bold text-charcoal-900 mb-2 uppercase text-[11px] tracking-wider text-gold-600">Fabric</h4>
+          <div class="space-y-1.5 text-slate-700">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="filterFabric" value="cotton" onchange="applyFilters()" class="rounded text-maroon-800 focus:ring-maroon-800" />
+              <span>Pure Cotton</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="filterFabric" value="chanderi" onchange="applyFilters()" class="rounded text-maroon-800 focus:ring-maroon-800" />
+              <span>Chanderi Silk</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="filterFabric" value="handloom" onchange="applyFilters()" class="rounded text-maroon-800 focus:ring-maroon-800" />
+              <span>Handloom Cotton</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Pattern / Technique -->
+        <div>
+          <h4 class="font-bold text-charcoal-900 mb-2 uppercase text-[11px] tracking-wider text-gold-600">Pattern &amp; Craft</h4>
+          <div class="space-y-1.5 text-slate-700">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="filterPattern" value="leheriya" onchange="applyFilters()" class="rounded text-maroon-800 focus:ring-maroon-800" />
+              <span>Rajasthani Leheriya</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="filterPattern" value="bandhani" onchange="applyFilters()" class="rounded text-maroon-800 focus:ring-maroon-800" />
+              <span>Heritage Bandhani</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="filterPattern" value="mirror" onchange="applyFilters()" class="rounded text-maroon-800 focus:ring-maroon-800" />
+              <span>Mirror-Work &amp; Lace</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="filterPattern" value="tree-of-life" onchange="applyFilters()" class="rounded text-maroon-800 focus:ring-maroon-800" />
+              <span>Tree-of-Life Embroidery</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="filterPattern" value="mandala" onchange="applyFilters()" class="rounded text-maroon-800 focus:ring-maroon-800" />
+              <span>Mandala Block Print</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Color Palette -->
+        <div>
+          <h4 class="font-bold text-charcoal-900 mb-2 uppercase text-[11px] tracking-wider text-gold-600">Color Palette</h4>
+          <div class="flex flex-wrap gap-1.5">
+            <button type="button" onclick="toggleColorFilter('Pink')" class="color-pill px-2.5 py-1 border border-ivory-200 rounded text-[11px] hover:border-maroon-800">Rani Pink</button>
+            <button type="button" onclick="toggleColorFilter('Mustard')" class="color-pill px-2.5 py-1 border border-ivory-200 rounded text-[11px] hover:border-maroon-800">Mustard</button>
+            <button type="button" onclick="toggleColorFilter('Magenta')" class="color-pill px-2.5 py-1 border border-ivory-200 rounded text-[11px] hover:border-maroon-800">Magenta Wine</button>
+            <button type="button" onclick="toggleColorFilter('Cream')" class="color-pill px-2.5 py-1 border border-ivory-200 rounded text-[11px] hover:border-maroon-800">Ivory Cream</button>
+            <button type="button" onclick="toggleColorFilter('Teal')" class="color-pill px-2.5 py-1 border border-ivory-200 rounded text-[11px] hover:border-maroon-800">Peacock Teal</button>
+          </div>
+        </div>
+
+        <!-- Tailoring Availability -->
+        <div>
+          <h4 class="font-bold text-charcoal-900 mb-2 uppercase text-[11px] tracking-wider text-gold-600">Options</h4>
+          <div class="space-y-1.5 text-slate-700">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="filterStitchedOnly" onchange="applyFilters()" class="rounded text-maroon-800 focus:ring-maroon-800" />
+              <span>Stitching Available</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="filterInStockOnly" checked onchange="applyFilters()" class="rounded text-maroon-800 focus:ring-maroon-800" />
+              <span>In Stock (Exclude Sold Out)</span>
+            </label>
+          </div>
+        </div>
+
+      </aside>
+
+      <!-- PRODUCTS GRID SECTION -->
+      <section class="lg:col-span-3">
+        <div id="shopProductsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+          <!-- Dynamically Rendered by loadShopProducts() -->
+        </div>
+
+        <!-- Empty State Container -->
+        <div id="shopEmptyState" style="display: none;" class="bg-white rounded-xl border border-ivory-200 p-12 text-center my-6">
+          <span class="text-4xl">🔍</span>
+          <h3 class="font-serif text-base font-bold text-charcoal-950 mt-3">No dress materials found</h3>
+          <p class="text-xs text-slate-600 mt-1 max-w-sm mx-auto">
+            We couldn't find any materials matching your selected filters. Try broadening your criteria or reset filters.
+          </p>
+          <button type="button" onclick="resetAllFilters()" class="abha-btn-primary text-xs mt-4 py-2 px-4">
+            Reset All Filters
+          </button>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Shared Global Footer -->
+  <div id="abhaGlobalFooter"></div>
+
+  <!-- Scripts -->
+  <script src="js/abha-store.js?v=20260923_2"></script>
+  <script src="js/abha-ui.js?v=20260923_2"></script>
+  <script>
+    let selectedColors = [];
+
+    function toggleColorFilter(color) {
+      const idx = selectedColors.indexOf(color);
+      if (idx >= 0) {
+        selectedColors.splice(idx, 1);
+      } else {
+        selectedColors.push(color);
+      }
+
+      // Update pill classes
+      document.querySelectorAll('.color-pill').forEach(btn => {
+        if (selectedColors.includes(btn.textContent.trim()) || (btn.textContent.includes(color) && selectedColors.includes(color))) {
+          btn.classList.add('bg-maroon-900', 'text-white', 'border-maroon-950');
+        } else {
+          btn.classList.remove('bg-maroon-900', 'text-white', 'border-maroon-950');
+        }
+      });
+
+      applyFilters();
+    }
+
+    function resetAllFilters() {
+      document.getElementById('shopSearchInput').value = '';
+      document.getElementById('shopSortSelect').value = 'featured';
+      document.querySelectorAll('input[type="checkbox"]').forEach(c => {
+        if (c.id === 'filterInStockOnly' || c.value === 'salwar') c.checked = true;
+        else c.checked = false;
+      });
+      selectedColors = [];
+      document.querySelectorAll('.color-pill').forEach(b => b.classList.remove('bg-maroon-900', 'text-white', 'border-maroon-950'));
+      applyFilters();
+    }
+
+    function toggleFilterDrawer() {
+      const sidebar = document.getElementById('shopSidebarFilter');
+      if (sidebar) sidebar.classList.toggle('hidden');
+    }
+
+    function applyFilters() {
+      if (!window.AbhaStore) return;
+      const all = window.AbhaStore.getProducts(true);
+
+      const q = (document.getElementById('shopSearchInput')?.value || '').trim().toLowerCase();
+      const sort = document.getElementById('shopSortSelect')?.value || 'featured';
+      const inStockOnly = document.getElementById('filterInStockOnly')?.checked;
+      const stitchedOnly = document.getElementById('filterStitchedOnly')?.checked;
+
+      const checkedFabrics = Array.from(document.querySelectorAll('input[name="filterFabric"]:checked')).map(c => c.value);
+      const checkedPatterns = Array.from(document.querySelectorAll('input[name="filterPattern"]:checked')).map(c => c.value);
+
+      let filtered = all.filter(p => {
+        // Stock check
+        if (inStockOnly && (p.is_sold_out || p.stock_quantity <= 0)) return false;
+        
+        // Stitching available
+        if (stitchedOnly && !p.stitchingAvailable) return false;
+
+        // Search text
+        if (q) {
+          const haystack = `${p.title || p.name} ${p.fabric} ${p.color} ${p.pattern} ${p.description}`.toLowerCase();
+          if (!haystack.includes(q)) return false;
+        }
+
+        // Fabric check
+        if (checkedFabrics.length > 0) {
+          const pFab = (p.fabric || '').toLowerCase();
+          const matchesFab = checkedFabrics.some(f => pFab.includes(f));
+          if (!matchesFab) return false;
+        }
+
+        // Pattern check
+        if (checkedPatterns.length > 0) {
+          const pPat = `${p.pattern} ${p.title} ${p.description}`.toLowerCase();
+          const matchesPat = checkedPatterns.some(pat => pPat.includes(pat));
+          if (!matchesPat) return false;
+        }
+
+        // Color check
+        if (selectedColors.length > 0) {
+          const pCol = `${p.color} ${p.title}`.toLowerCase();
+          const matchesCol = selectedColors.some(c => pCol.includes(c.toLowerCase()));
+          if (!matchesCol) return false;
+        }
+
+        return true;
+      });
+
+      // Sorting
+      if (sort === 'price-asc') {
+        filtered.sort((a, b) => (a.price || a.base_price) - (b.price || b.base_price));
+      } else if (sort === 'price-desc') {
+        filtered.sort((a, b) => (b.price || b.base_price) - (a.price || a.base_price));
+      } else if (sort === 'newest') {
+        filtered.sort((a, b) => (b.is_new_arrival ? 1 : 0) - (a.is_new_arrival ? 1 : 0));
+      } else if (sort === 'name') {
+        filtered.sort((a, b) => (a.title || a.name).localeCompare(b.title || b.name));
+      }
+
+      renderProducts(filtered);
+    }
+
+    function renderProducts(products) {
+      const grid = document.getElementById('shopProductsGrid');
+      const empty = document.getElementById('shopEmptyState');
+      const count = document.getElementById('productCountNum');
+      if (count) count.textContent = products.length;
+
+      if (!grid) return;
+
+      if (products.length === 0) {
+        grid.style.display = 'none';
+        empty.style.display = 'block';
+        return;
+      }
+
+      grid.style.display = 'grid';
+      empty.style.display = 'none';
+
+      grid.innerHTML = products.map(p => {
+        const isSold = p.is_sold_out || p.stock_quantity <= 0;
+        const basePrice = p.price || p.base_price;
+        const stitchFee = p.stitchingPrice || p.stitching_price || 650;
+
+        return `
+          <article class="bg-white rounded-xl border border-ivory-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col group">
+            
+            <!-- 3:4 Aspect Ratio Product Image (Rule: No artificial color altering filters) -->
+            <div class="relative aspect-[3/4] bg-ivory-100 overflow-hidden">
+              <a href="product.html?id=${p.id}" class="block w-full h-full">
+                <img src="${p.primary_image || p.image}" alt="${p.title || p.name}" loading="lazy" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" />
+              </a>
+
+              <!-- Badges -->
+              <div class="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10">
+                ${isSold 
+                  ? `<span class="abha-badge-soldout shadow-sm">SOLD OUT</span>`
+                  : p.is_unique_item 
+                    ? `<span class="abha-badge-gold shadow-sm">1-of-1 Piece</span>` 
+                    : ''}
+                ${p.is_new_arrival ? `<span class="bg-maroon-900 text-ivory-50 text-[9px] font-bold px-2 py-0.5 rounded shadow-sm uppercase tracking-wider">New Arrival</span>` : ''}
+              </div>
+
+              <!-- Tailoring available pill -->
+              <div class="absolute bottom-2.5 left-2.5 right-2.5">
+                <div class="bg-charcoal-950/80 backdrop-blur-sm text-ivory-50 text-[10px] px-2.5 py-1 rounded flex items-center justify-between">
+                  <span>✂️ Stitched available</span>
+                  <span class="text-gold-300 font-semibold">+₹${stitchFee}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card Content Details -->
+            <div class="p-4 flex-1 flex flex-col justify-between">
+              <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-gold-600 block mb-1">${p.category}</span>
+                <h3 class="font-serif text-sm font-bold text-charcoal-950 leading-snug group-hover:text-maroon-800 transition-colors">
+                  <a href="product.html?id=${p.id}">${p.title || p.name}</a>
+                </h3>
+                <p class="text-xs text-slate-500 line-clamp-1 mt-1">${p.fabric}</p>
+              </div>
+
+              <!-- Price & BUY NOW Action (Rule: NO ADD TO CART BUTTON!) -->
+              <div class="pt-3 mt-3 border-t border-ivory-200 flex items-center justify-between gap-2">
+                <div>
+                  <span class="text-sm sm:text-base font-bold text-maroon-950">₹${basePrice}</span>
+                  <span class="block text-[10px] text-slate-500">Unstitched fabric</span>
+                </div>
+
+                ${isSold ? `
+                  <button type="button" disabled class="bg-slate-200 text-slate-500 text-xs font-semibold py-2 px-3.5 rounded cursor-not-allowed">
+                    Sold Out
+                  </button>
+                ` : `
+                  <button type="button" onclick="AbhaUI.openBuyNow('${p.id}')" class="abha-btn-primary text-xs py-2 px-3.5 shadow-sm hover:scale-102 transition-transform">
+                    <span>BUY NOW</span>
+                  </button>
+                `}
+              </div>
+
+            </div>
+
+          </article>
+        `;
+      }).join('');
+    }
+
+    // Auto-load on page ready
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check for URL query params (e.g. ?fabric=cotton)
+      const urlParams = new URLSearchParams(window.location.search);
+      const fabricParam = urlParams.get('fabric');
+      if (fabricParam) {
+        const checkbox = document.querySelector(`input[name="filterFabric"][value="${fabricParam.toLowerCase()}"]`);
+        if (checkbox) checkbox.checked = true;
+      }
+      applyFilters();
+    });
+  </script>
+</body>
+</html>

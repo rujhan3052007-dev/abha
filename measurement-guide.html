@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Salwar Suit Measurement Guide — ABHA Beawar</title>
+  <meta name="description" content="Step-by-step visual and text guide on taking precision measurements for custom stitched salwar suits. Includes interactive Inches-to-CM converter.">
+  <meta name="theme-color" content="#4A101D">
+  <link rel="icon" type="image/svg+xml" href="images/logo/abha-favicon.svg">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ivory: { 50: '#FAF7F2', 100: '#F5EFEB', 200: '#EAE4D9', 300: '#DFD7CA' },
+            maroon: { 700: '#85253B', 800: '#6B1D2F', 900: '#4A101D', 950: '#340B14' },
+            gold: { 100: '#FBF5E8', 400: '#D4AF37', 500: '#C59B27', 600: '#996515', 900: '#462E08' },
+            charcoal: { 900: '#2A2521', 950: '#181513' }
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-ivory-50 text-charcoal-950 font-sans min-h-screen flex flex-col antialiased selection:bg-maroon-800 selection:text-ivory-50 pb-20 lg:pb-0">
+
+  <!-- Shared Global Header -->
+  <div id="abhaGlobalHeader"></div>
+
+  <!-- Header Banner -->
+  <section class="bg-ivory-100/70 border-b border-ivory-200 py-10 sm:py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-2xl">
+      <span class="abha-badge-gold text-[10px]">Precision Tailoring</span>
+      <h1 class="font-serif text-3xl sm:text-4xl font-bold text-maroon-950 mt-1">Salwar Suit Measurement Guide</h1>
+      <p class="text-xs sm:text-sm text-slate-600 mt-2">
+        Learn how to take accurate body measurements or measure your best-fitting salwar suit. Keep the measuring tape comfortable and not pulled too tight.
+      </p>
+    </div>
+  </section>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full space-y-12">
+    
+    <!-- Quick Unit Converter Tool -->
+    <div class="max-w-2xl mx-auto bg-white p-5 rounded-2xl border border-ivory-200 shadow-sm text-xs space-y-3">
+      <div class="flex items-center justify-between pb-2 border-b border-ivory-200">
+        <h3 class="font-serif text-sm font-bold text-maroon-950 flex items-center gap-1.5">
+          <span>🔄</span> <span>Interactive Measurement Unit Converter</span>
+        </h3>
+        <span class="text-[11px] text-slate-500">1 Inch = 2.54 CM</span>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Inches (in)</label>
+          <input type="number" id="inputInches" oninput="convertInchesToCm(this.value)" placeholder="e.g. 36" class="w-full bg-ivory-50 border border-ivory-200 rounded p-2 font-mono text-sm" />
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Centimeters (cm)</label>
+          <input type="number" id="inputCm" oninput="convertCmToInches(this.value)" placeholder="e.g. 91.4" class="w-full bg-ivory-50 border border-ivory-200 rounded p-2 font-mono text-sm" />
+        </div>
+      </div>
+    </div>
+
+    <!-- 8 Measurement Key Points Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-xs">
+      
+      <!-- 1. Kurta Length -->
+      <div class="bg-white p-5 rounded-xl border border-ivory-200 shadow-sm space-y-2">
+        <span class="w-6 h-6 rounded-full bg-maroon-900 text-ivory-50 font-bold flex items-center justify-center text-[11px]">1</span>
+        <h4 class="font-serif text-sm font-bold text-charcoal-950">Kurta Length</h4>
+        <p class="text-slate-600 leading-relaxed">
+          Place the tape at the highest point of the shoulder (near neck base) and measure straight down over the chest to your desired hemline (knee, calf, or ankle).
+        </p>
+        <span class="text-[11px] text-gold-600 font-semibold block">Standard: 40 – 44 Inches</span>
+      </div>
+
+      <!-- 2. Shoulder Width -->
+      <div class="bg-white p-5 rounded-xl border border-ivory-200 shadow-sm space-y-2">
+        <span class="w-6 h-6 rounded-full bg-maroon-900 text-ivory-50 font-bold flex items-center justify-center text-[11px]">2</span>
+        <h4 class="font-serif text-sm font-bold text-charcoal-950">Shoulder Width</h4>
+        <p class="text-slate-600 leading-relaxed">
+          Measure from the tip of one shoulder bone across the natural curve of your upper back to the tip of the other shoulder bone.
+        </p>
+        <span class="text-[11px] text-gold-600 font-semibold block">Standard: 13.5 – 15.5 Inches</span>
+      </div>
+
+      <!-- 3. Bust / Chest -->
+      <div class="bg-white p-5 rounded-xl border border-ivory-200 shadow-sm space-y-2">
+        <span class="w-6 h-6 rounded-full bg-maroon-900 text-ivory-50 font-bold flex items-center justify-center text-[11px]">3</span>
+        <h4 class="font-serif text-sm font-bold text-charcoal-950">Bust / Chest</h4>
+        <p class="text-slate-600 leading-relaxed">
+          Wrap the tape around the fullest part of your chest with your regular undergarments on. Ensure tape is level across your back.
+        </p>
+        <span class="text-[11px] text-gold-600 font-semibold block">Standard: 32 – 44 Inches</span>
+      </div>
+
+      <!-- 4. Waist -->
+      <div class="bg-white p-5 rounded-xl border border-ivory-200 shadow-sm space-y-2">
+        <span class="w-6 h-6 rounded-full bg-maroon-900 text-ivory-50 font-bold flex items-center justify-center text-[11px]">4</span>
+        <h4 class="font-serif text-sm font-bold text-charcoal-950">Waist</h4>
+        <p class="text-slate-600 leading-relaxed">
+          Measure around your natural waistline, typically about 1 inch above the navel or where your body naturally indents when bending sideways.
+        </p>
+        <span class="text-[11px] text-gold-600 font-semibold block">Standard: 28 – 40 Inches</span>
+      </div>
+
+      <!-- 5. Hips -->
+      <div class="bg-white p-5 rounded-xl border border-ivory-200 shadow-sm space-y-2">
+        <span class="w-6 h-6 rounded-full bg-maroon-900 text-ivory-50 font-bold flex items-center justify-center text-[11px]">5</span>
+        <h4 class="font-serif text-sm font-bold text-charcoal-950">Hips</h4>
+        <p class="text-slate-600 leading-relaxed">
+          Measure around the widest part of your hips and buttocks with feet together. Keep the measuring tape parallel to the floor.
+        </p>
+        <span class="text-[11px] text-gold-600 font-semibold block">Standard: 36 – 48 Inches</span>
+      </div>
+
+      <!-- 6. Sleeve Length -->
+      <div class="bg-white p-5 rounded-xl border border-ivory-200 shadow-sm space-y-2">
+        <span class="w-6 h-6 rounded-full bg-maroon-900 text-ivory-50 font-bold flex items-center justify-center text-[11px]">6</span>
+        <h4 class="font-serif text-sm font-bold text-charcoal-950">Sleeve Length</h4>
+        <p class="text-slate-600 leading-relaxed">
+          From the top tip of your shoulder down your arm to your desired sleeve length (e.g., 6" for short, 17" for 3/4th, 21" for full).
+        </p>
+        <span class="text-[11px] text-gold-600 font-semibold block">Most Popular: 17 Inches (3/4th)</span>
+      </div>
+
+      <!-- 7. Armhole -->
+      <div class="bg-white p-5 rounded-xl border border-ivory-200 shadow-sm space-y-2">
+        <span class="w-6 h-6 rounded-full bg-maroon-900 text-ivory-50 font-bold flex items-center justify-center text-[11px]">7</span>
+        <h4 class="font-serif text-sm font-bold text-charcoal-950">Armhole</h4>
+        <p class="text-slate-600 leading-relaxed">
+          Measure around your shoulder joint through the armpit with your arm relaxed at your side. Add 1 inch for comfortable arm movement.
+        </p>
+        <span class="text-[11px] text-gold-600 font-semibold block">Standard: 15 – 19 Inches</span>
+      </div>
+
+      <!-- 8. Bottom / Salwar Length -->
+      <div class="bg-white p-5 rounded-xl border border-ivory-200 shadow-sm space-y-2">
+        <span class="w-6 h-6 rounded-full bg-maroon-900 text-ivory-50 font-bold flex items-center justify-center text-[11px]">8</span>
+        <h4 class="font-serif text-sm font-bold text-charcoal-950">Bottom / Salwar Length</h4>
+        <p class="text-slate-600 leading-relaxed">
+          Measure from where you tie your salwar or pants waist down to the ankle bone or top of your shoes.
+        </p>
+        <span class="text-[11px] text-gold-600 font-semibold block">Standard: 37 – 40 Inches</span>
+      </div>
+
+    </div>
+
+    <!-- Call to action boxes -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto pt-4">
+      <div class="p-6 bg-white rounded-2xl border border-ivory-200 shadow-sm space-y-3 text-center">
+        <span class="text-3xl block">💾</span>
+        <h3 class="font-serif text-base font-bold text-charcoal-950">Save In Your Account</h3>
+        <p class="text-xs text-slate-600">Save a profile like "My Standard Fit" in your customer dashboard for 1-click checkout on all future suits.</p>
+        <a href="account.html" class="abha-btn-primary text-xs py-2 px-4 inline-block mt-2">Go to My Measurements &rarr;</a>
+      </div>
+
+      <div class="p-6 bg-white rounded-2xl border border-ivory-200 shadow-sm space-y-3 text-center">
+        <span class="text-3xl block">📞</span>
+        <h3 class="font-serif text-base font-bold text-charcoal-950">Prefer Master Tailor Help?</h3>
+        <p class="text-xs text-slate-600">Don't want to measure yourself? You can request tailor guidance at checkout or WhatsApp our atelier directly.</p>
+        <a href="https://wa.me/919214837104" target="_blank" rel="noopener noreferrer" class="abha-btn-outline text-xs py-2 px-4 inline-block mt-2">WhatsApp Tailor (+91 9214837104) &rarr;</a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Shared Global Footer -->
+  <div id="abhaGlobalFooter"></div>
+
+  <!-- Scripts -->
+  <script src="js/abha-store.js?v=20260923_2"></script>
+  <script src="js/abha-ui.js?v=20260923_2"></script>
+  <script>
+    function convertInchesToCm(val) {
+      const n = parseFloat(val);
+      const cmInput = document.getElementById('inputCm');
+      if (isNaN(n) || n <= 0) {
+        cmInput.value = '';
+      } else {
+        cmInput.value = (n * 2.54).toFixed(1);
+      }
+    }
+
+    function convertCmToInches(val) {
+      const n = parseFloat(val);
+      const inInput = document.getElementById('inputInches');
+      if (isNaN(n) || n <= 0) {
+        inInput.value = '';
+      } else {
+        inInput.value = (n / 2.54).toFixed(1);
+      }
+    }
+  </script>
+</body>
+</html>

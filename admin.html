@@ -1053,6 +1053,9 @@
       <button class="nav-item" id="navItemDeliveries" onclick="switchTab('deliveries')" data-perm="delivery.view">
         <span>🚚</span> Delivery & Logistics <span id="deliveryBadge" class="badge">0</span>
       </button>
+      <button class="nav-item" id="navItemStoreSettings" onclick="switchTab('storesettings')" data-perm="settings.view">
+        <span>🏪</span> Store &amp; Delivery Settings
+      </button>
 
       <div class="nav-header" id="navHeaderCatalog">Catalog & Business</div>
       <button class="nav-item" id="navItemProducts" onclick="switchTab('products')" data-perm="products.view">
@@ -1459,6 +1462,68 @@
               </thead>
               <tbody id="auditLogsTable">
                 <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+ 
+      <!-- 10. STORE & DELIVERY SETTINGS -->
+      <section id="section-storesettings" class="page-section">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">Store &amp; Local Delivery Configuration</h1>
+            <p class="section-desc">Manage Beawar (PIN 305901) delivery fee, free delivery threshold, and measurement assistance requests</p>
+          </div>
+        </div>
+
+        <!-- Beawar Local Delivery Card -->
+        <div class="panel-card" style="margin-bottom: 2rem;">
+          <div class="panel-header">
+            <h3 class="panel-title">🚚 Beawar (305901) Local Delivery Rules</h3>
+          </div>
+          <form id="deliverySettingsForm" onsubmit="saveAdminDeliverySettings(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; align-items: flex-end;">
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Standard Local Delivery Fee (₹)</label>
+              <input type="number" id="admDeliveryFee" class="form-input" min="0" value="0" required>
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Free Delivery Above Order Value (₹)</label>
+              <input type="number" id="admFreeThreshold" class="form-input" min="0" value="0" required>
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600; display: block; margin-bottom: 0.35rem;">Serviceable PIN Code</label>
+              <input type="text" id="admServicePin" class="form-input" value="305901" readonly style="background: var(--gray-100); color: var(--gray-700);">
+            </div>
+            <div>
+              <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.75rem;">Save Delivery Rules</button>
+            </div>
+          </form>
+          <div id="deliverySettingsNotice" style="margin-top: 0.75rem; font-size: 0.8rem; display: none;"></div>
+        </div>
+
+        <!-- Customer Measurement Assistance Requests -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <h3 class="panel-title">📏 Measurement Assistance Requests</h3>
+            <button class="btn btn-outline btn-sm" onclick="loadMeasurementAssistanceRequests()">Refresh</button>
+          </div>
+          <p style="font-size: 0.8rem; color: var(--gray-500); margin-bottom: 1rem;">Customers who requested master tailor call / WhatsApp assistance for taking their body measurements.</p>
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Request ID</th>
+                  <th>Customer Name</th>
+                  <th>Phone Number</th>
+                  <th>Preferred Time</th>
+                  <th>Suit / Notes</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="measurementAssistanceTable">
+                <tr><td colspan="7" style="text-align: center; color: var(--gray-500);">Loading requests...</td></tr>
               </tbody>
             </table>
           </div>
@@ -2311,7 +2376,7 @@
       // Update Section Nav Headers visibility
       const overviewVisible = isNavVisible('navItemDashboard');
       const govVisible = isNavVisible('navItemManagers') || isNavVisible('navItemEmployees');
-      const opsVisible = isNavVisible('navItemPos') || isNavVisible('navItemTailor') || isNavVisible('navItemDeliveries');
+      const opsVisible = isNavVisible('navItemPos') || isNavVisible('navItemTailor') || isNavVisible('navItemDeliveries') || isNavVisible('navItemStoreSettings');
       const catalogVisible = isNavVisible('navItemProducts') || isNavVisible('navItemCategories') || isNavVisible('navItemReviews');
       const systemVisible = isNavVisible('navItemIntegrations') || isNavVisible('navItemAudit');
 
@@ -2428,6 +2493,99 @@
       if (tabId === 'reviews') loadReviewsModeration();
       if (tabId === 'integrations') loadIntegrationsStatus();
       if (tabId === 'audit') loadAuditLogs();
+      if (tabId === 'storesettings') loadStoreSettingsAdmin();
+    }
+
+    async function loadStoreSettingsAdmin() {
+      try {
+        if (typeof AbhaStore !== 'undefined' && AbhaStore.getDeliverySettings) {
+          const settings = AbhaStore.getDeliverySettings();
+          document.getElementById('admDeliveryFee').value = settings.beawarDeliveryFee != null ? settings.beawarDeliveryFee : 0;
+          document.getElementById('admFreeThreshold').value = settings.beawarFreeThreshold != null ? settings.beawarFreeThreshold : 0;
+          document.getElementById('admServicePin').value = settings.beawarPincode || '305901';
+        }
+      } catch(err) {
+        console.warn('Error loading delivery settings:', err);
+      }
+      loadMeasurementAssistanceRequests();
+    }
+
+    function saveAdminDeliverySettings(e) {
+      e.preventDefault();
+      const fee = Number(document.getElementById('admDeliveryFee').value) || 0;
+      const thresh = Number(document.getElementById('admFreeThreshold').value) || 0;
+      const notice = document.getElementById('deliverySettingsNotice');
+
+      try {
+        if (typeof AbhaStore !== 'undefined' && AbhaStore.updateDeliverySettings) {
+          AbhaStore.updateDeliverySettings({
+            beawarDeliveryFee: fee,
+            beawarFreeThreshold: thresh
+          });
+        }
+        if (notice) {
+          notice.style.display = 'block';
+          notice.style.color = 'var(--green-text)';
+          notice.textContent = '✓ Delivery rules updated successfully across live store and checkout!';
+          setTimeout(() => { notice.style.display = 'none'; }, 4000);
+        }
+      } catch(err) {
+        if (notice) {
+          notice.style.display = 'block';
+          notice.style.color = 'var(--red-text)';
+          notice.textContent = 'Error updating delivery settings: ' + err.message;
+        }
+      }
+    }
+
+    async function loadMeasurementAssistanceRequests() {
+      const tbody = document.getElementById('measurementAssistanceTable');
+      if (!tbody) return;
+      try {
+        let reqs = [];
+        if (typeof AbhaStore !== 'undefined' && AbhaStore.getMeasurementAssistanceRequests) {
+          reqs = await AbhaStore.getMeasurementAssistanceRequests();
+        } else {
+          reqs = JSON.parse(localStorage.getItem('abha_assistance_requests') || '[]');
+        }
+
+        if (!reqs || reqs.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--gray-500); padding: 1.5rem;">No measurement assistance requests pending.</td></tr>`;
+          return;
+        }
+        tbody.innerHTML = reqs.map(r => `
+          <tr>
+            <td><strong>${r.id || 'REQ-' + (r.created_at ? new Date(r.created_at).getTime() : Date.now())}</strong></td>
+            <td><strong>${r.customer_name || r.name || 'Customer'}</strong></td>
+            <td><a href="tel:${r.phone}" style="color: var(--maroon); font-weight: 600;">${r.phone}</a></td>
+            <td>${r.preferred_time || 'Anytime'}</td>
+            <td>${r.product_title || r.suit_type || r.notes || 'Custom Suit Fit'}</td>
+            <td><span class="tag ${r.status === 'CONTACTED' ? 'tag-instock' : 'tag-pending'}">${r.status || 'PENDING'}</span></td>
+            <td>
+              <div style="display: flex; gap: 0.35rem;">
+                <a href="https://wa.me/91${(r.phone || '').replace(/[^0-9]/g, '')}?text=Namaste%20from%20ABHA!%20Regarding%20your%20measurement%20assistance%20request..." target="_blank" class="btn btn-outline btn-sm" style="color: #15803d; border-color: #15803d;">WhatsApp</a>
+                <button class="btn btn-outline btn-sm" onclick="markAssistanceContacted('${r.id}')">Mark Done</button>
+              </div>
+            </td>
+          </tr>
+        `).join('');
+      } catch(err) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--gray-500); padding: 1.5rem;">Error loading requests: ${err.message}</td></tr>`;
+      }
+    }
+
+    function markAssistanceContacted(reqId) {
+      try {
+        const list = JSON.parse(localStorage.getItem('abha_assistance_requests') || '[]');
+        const idx = list.findIndex(r => r.id === reqId);
+        if (idx !== -1) {
+          list[idx].status = 'CONTACTED';
+          localStorage.setItem('abha_assistance_requests', JSON.stringify(list));
+        }
+        loadMeasurementAssistanceRequests();
+      } catch(err) {
+        console.warn(err);
+      }
     }
 
     async function loadDashboard() {

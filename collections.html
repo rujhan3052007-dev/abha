@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Curated Collections — ABHA Beawar</title>
+  <meta name="description" content="Discover handpicked salwar suit collections: Pure Breathable Cotton, Heritage Bandhani & Leheriya, and Festive Chanderi Silk from Rajasthan.">
+  <meta name="theme-color" content="#4A101D">
+  <link rel="icon" type="image/svg+xml" href="images/logo/abha-favicon.svg">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ivory: { 50: '#FAF7F2', 100: '#F5EFEB', 200: '#EAE4D9', 300: '#DFD7CA' },
+            maroon: { 700: '#85253B', 800: '#6B1D2F', 900: '#4A101D', 950: '#340B14' },
+            gold: { 100: '#FBF5E8', 400: '#D4AF37', 500: '#C59B27', 600: '#996515', 900: '#462E08' },
+            charcoal: { 900: '#2A2521', 950: '#181513' }
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-ivory-50 text-charcoal-950 font-sans min-h-screen flex flex-col antialiased selection:bg-maroon-800 selection:text-ivory-50 pb-20 lg:pb-0">
+
+  <!-- Shared Global Header -->
+  <div id="abhaGlobalHeader"></div>
+
+  <!-- Breadcrumbs & Hero -->
+  <section class="bg-ivory-100/70 border-b border-ivory-200 py-8 sm:py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="flex items-center gap-2 text-xs text-slate-500 mb-2">
+        <a href="index.html" class="hover:text-maroon-800">Home</a>
+        <span>/</span>
+        <span class="text-maroon-900 font-semibold">Collections</span>
+      </nav>
+      <span class="abha-badge-gold text-[10px]">Curated Weaves</span>
+      <h1 class="font-serif text-3xl sm:text-4xl font-bold text-maroon-950 mt-1">Featured Textile Collections</h1>
+      <p class="text-xs sm:text-sm text-slate-600 mt-2 max-w-xl">
+        Explore thematic curations of authentic Indian salwar suit dress materials. Each collection is chosen for handloom craftsmanship, seasonal comfort, and bespoke styling potential.
+      </p>
+    </div>
+  </section>
+
+  <!-- Collections Cards Grid -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full space-y-12">
+    
+    <!-- 1. Pure Cotton Daily Wear Collection -->
+    <section class="bg-white rounded-2xl border border-ivory-200 p-6 sm:p-8 shadow-sm flex flex-col lg:flex-row items-center gap-8">
+      <div class="w-full lg:w-1/2 aspect-[4/3] rounded-xl overflow-hidden bg-ivory-100 border border-ivory-200 shrink-0">
+        <img src="images/pink-leheriya-cotton-suit.jpg" alt="Pure Cotton Collection" class="w-full h-full object-cover" />
+      </div>
+      <div class="w-full lg:w-1/2 space-y-4">
+        <span class="abha-badge-gold text-[10px]">Everyday Breathable Elegance</span>
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-maroon-950">Pure Cotton &amp; Daily Wear Suits</h2>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Crafted from 100% fine combed cotton threads with vibrant traditional Rajasthani Leheriya and mandala block motifs. Complete with 2.5m top, 2.5m bottom, and full 2.5m pure cotton dupatta.
+        </p>
+        <div class="flex items-center gap-4 text-xs font-semibold text-charcoal-900 pt-1">
+          <span>✓ 100% Cotton</span>
+          <span>✓ Gentle Wash Care</span>
+          <span>✓ Custom Fit Stitching Available</span>
+        </div>
+        <div class="pt-2 flex items-center gap-3">
+          <a href="shop.html?fabric=cotton" class="abha-btn-primary text-xs py-2.5 px-5">Explore Cotton Suits &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Heritage Bandhani & Leheriya Collection -->
+    <section class="bg-white rounded-2xl border border-ivory-200 p-6 sm:p-8 shadow-sm flex flex-col lg:flex-row-reverse items-center gap-8">
+      <div class="w-full lg:w-1/2 aspect-[4/3] rounded-xl overflow-hidden bg-ivory-100 border border-ivory-200 shrink-0">
+        <img src="images/mustard-bandhani-chanderi-suit.jpg" alt="Heritage Bandhani Collection" class="w-full h-full object-cover" />
+      </div>
+      <div class="w-full lg:w-1/2 space-y-4">
+        <span class="abha-badge-gold text-[10px]">Rajasthani Tie &amp; Dye Heritage</span>
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-maroon-950">Heritage Bandhani &amp; Leheriya</h2>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Honoring centuries of textile artisanry with authentic hand-tied Bandhani patterns and vibrant multi-colored leheriya diagonal bands. Highlighted with potli buttons, pearl accents, and pure Bandhej dupattas.
+        </p>
+        <div class="flex items-center gap-4 text-xs font-semibold text-charcoal-900 pt-1">
+          <span>✓ Authentic Bandhej</span>
+          <span>✓ Haldi &amp; Festive Tones</span>
+          <span>✓ Master Tailor Bespoke Fit</span>
+        </div>
+        <div class="pt-2 flex items-center gap-3">
+          <a href="shop.html?pattern=bandhani" class="abha-btn-primary text-xs py-2.5 px-5">View Bandhani Suits &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Festive Chanderi Silk Collection -->
+    <section class="bg-white rounded-2xl border border-ivory-200 p-6 sm:p-8 shadow-sm flex flex-col lg:flex-row items-center gap-8">
+      <div class="w-full lg:w-1/2 aspect-[4/3] rounded-xl overflow-hidden bg-ivory-100 border border-ivory-200 shrink-0">
+        <img src="images/magenta-chanderi-silk-suit.jpg" alt="Festive Chanderi Silk Collection" class="w-full h-full object-cover" />
+      </div>
+      <div class="w-full lg:w-1/2 space-y-4">
+        <span class="abha-badge-gold text-[10px]">Celebration &amp; Royal Grandeur</span>
+        <h2 class="font-serif text-2xl sm:text-3xl font-bold text-maroon-950">Festive Chanderi Silk Collection</h2>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Glistening pure Chanderi silk with delicate tree-of-life thread embroidery, subtle silver sequins, and rich magenta wine tones. Tailored for family celebrations, poojas, and evening gatherings.
+        </p>
+        <div class="flex items-center gap-4 text-xs font-semibold text-charcoal-900 pt-1">
+          <span>✓ Pure Chanderi Silk</span>
+          <span>✓ Fine Embroidery Placket</span>
+          <span>✓ Royal Wine Colorways</span>
+        </div>
+        <div class="pt-2 flex items-center gap-3">
+          <a href="shop.html?fabric=chanderi" class="abha-btn-primary text-xs py-2.5 px-5">Explore Chanderi Silk &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Shared Global Footer -->
+  <div id="abhaGlobalFooter"></div>
+
+  <!-- Scripts -->
+  <script src="js/abha-store.js?v=20260923_2"></script>
+  <script src="js/abha-ui.js?v=20260923_2"></script>
+</body>
+</html>

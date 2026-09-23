@@ -65,11 +65,15 @@ router.post('/buy-now', optionalAuth, async (req, res, next) => {
     }
 
     const isStitched = order_type === ORDER_TYPES.STITCHED;
-    if (isStitched && (!stitching_config || !stitching_config.neck_design || !stitching_config.sleeve_style || !stitching_config.bottom_style || !stitching_config.kurta_design)) {
-      return res.status(400).json({
-        success: false,
-        error: 'Custom stitching requires selecting Neck, Sleeve, Bottom, and Kurta design choices'
-      });
+    if (isStitched) {
+      if (!stitching_config) stitching_config = {};
+      const isAssistanceOrStore = (stitching_config.measurement_mode === 'ASSISTANCE' || stitching_config.measurement_mode === 'VISIT_STORE');
+      if (!isAssistanceOrStore && (!stitching_config.neck_design || !stitching_config.sleeve_style || !stitching_config.bottom_style || !stitching_config.kurta_design)) {
+        stitching_config.neck_design = stitching_config.neck_design || 'Round Neck with Slit';
+        stitching_config.sleeve_style = stitching_config.sleeve_style || '3/4th Regular Sleeves';
+        stitching_config.bottom_style = stitching_config.bottom_style || 'Straight Pants';
+        stitching_config.kurta_design = stitching_config.kurta_design || 'Straight Fit Standard';
+      }
     }
 
     const unitPrice = Number(product.base_price);

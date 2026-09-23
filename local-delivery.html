@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Local Home Delivery in Beawar — ABHA</title>
+  <meta name="description" content="Dedicated doorstep delivery service across Beawar city (PIN 305901) for unstitched and custom-tailored salwar suits.">
+  <meta name="theme-color" content="#4A101D">
+  <link rel="icon" type="image/svg+xml" href="images/logo/abha-favicon.svg">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ivory: { 50: '#FAF7F2', 100: '#F5EFEB', 200: '#EAE4D9', 300: '#DFD7CA' },
+            maroon: { 700: '#85253B', 800: '#6B1D2F', 900: '#4A101D', 950: '#340B14' },
+            gold: { 100: '#FBF5E8', 400: '#D4AF37', 500: '#C59B27', 600: '#996515', 900: '#462E08' },
+            charcoal: { 900: '#2A2521', 950: '#181513' }
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-ivory-50 text-charcoal-950 font-sans min-h-screen flex flex-col antialiased selection:bg-maroon-800 selection:text-ivory-50 pb-20 lg:pb-0">
+
+  <!-- Shared Global Header -->
+  <div id="abhaGlobalHeader"></div>
+
+  <section class="bg-ivory-100/70 border-b border-ivory-200 py-10 sm:py-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center max-w-2xl">
+      <span class="abha-badge-gold text-[10px]">Doorstep Service</span>
+      <h1 class="font-serif text-3xl sm:text-4xl font-bold text-maroon-950 mt-1">Local Delivery in Beawar</h1>
+      <p class="text-xs sm:text-sm text-slate-600 mt-2 leading-relaxed">
+        Personalized doorstep delivery directly from our flagship store in Beawar (PIN 305901). Hand-delivered by dedicated ABHA delivery staff.
+      </p>
+    </div>
+  </section>
+
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full space-y-10 text-xs">
+    
+    <!-- Coverage Card -->
+    <div class="bg-white p-6 sm:p-8 rounded-2xl border border-ivory-200 shadow-sm space-y-4">
+      <div class="flex items-center gap-3">
+        <span class="text-3xl">🟢</span>
+        <div>
+          <h2 class="font-serif text-lg font-bold text-maroon-950">Current Primary Local Zone: Beawar (305901)</h2>
+          <p class="text-slate-600">Local delivery is currently active exclusively within Beawar city limits.</p>
+        </div>
+      </div>
+      <p class="text-slate-700 leading-relaxed">
+        Whether you order unstitched dress materials or custom-tailored suits, our in-house staff hand-delivers your package securely to your home or office address in Beawar.
+      </p>
+      <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-800 text-[11px] font-semibold">
+        ✓ Local Beawar Doorstep Delivery: FREE (₹0) on all orders entering PIN 305901.
+      </div>
+    </div>
+
+    <!-- Feature Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      
+      <div class="bg-white p-5 rounded-xl border border-ivory-200 shadow-sm space-y-2">
+        <span class="text-2xl">🛵</span>
+        <h3 class="font-serif text-sm font-bold text-charcoal-950">In-House Staff</h3>
+        <p class="text-slate-600 leading-relaxed">
+          Delivered by verified ABHA boutique personnel who know Beawar's localities and streets intimately.
+        </p>
+      </div>
+
+      <div class="bg-white p-5 rounded-xl border border-ivory-200 shadow-sm space-y-2">
+        <span class="text-2xl">⏱️</span>
+        <h3 class="font-serif text-sm font-bold text-charcoal-950">Prompt Dispatch</h3>
+        <p class="text-slate-600 leading-relaxed">
+          Unstitched fabric orders are dispatched promptly from our store counter. Custom stitched orders are delivered immediately upon completion.
+        </p>
+      </div>
+
+      <div class="bg-white p-5 rounded-xl border border-ivory-200 shadow-sm space-y-2">
+        <span class="text-2xl">📦</span>
+        <h3 class="font-serif text-sm font-bold text-charcoal-950">Pan-India Courier</h3>
+        <p class="text-slate-600 leading-relaxed">
+          For all PIN codes outside Beawar (305901), orders are securely dispatched across India via express tracked couriers.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Admin Config Notice -->
+    <div class="p-4 bg-ivory-100 rounded-xl border border-ivory-200 text-slate-600 text-[11px] leading-relaxed">
+      <strong>Store Notice:</strong> Delivery fees, thresholds, and operational coverage areas are managed and updated dynamically from the ABHA admin dashboard. Additional cities and regional zones will be announced as boutique fleet capacity expands.
+    </div>
+
+    <div class="text-center pt-4">
+      <a href="shop.html" class="abha-btn-primary text-xs py-2.5 px-6">Browse Salwar Suit Materials &rarr;</a>
+    </div>
+
+  </main>
+
+  <!-- Shared Global Footer -->
+  <div id="abhaGlobalFooter"></div>
+
+  <!-- Scripts -->
+  <script src="js/abha-store.js?v=20260923_2"></script>
+  <script src="js/abha-ui.js?v=20260923_2"></script>
+</body>
+</html>
