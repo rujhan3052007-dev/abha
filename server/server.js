@@ -96,32 +96,6 @@ app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, '../admin.html'));
 });
 
-// Clean Multi-Page E-Commerce Route Mappings
-const multiPageRoutes = [
-  { route: '/shop', file: 'shop.html' },
-  { route: '/product', file: 'product.html' },
-  { route: '/product/:id', file: 'product.html' },
-  { route: '/collections', file: 'collections.html' },
-  { route: '/stitching', file: 'stitching.html' },
-  { route: '/measurement-guide', file: 'measurement-guide.html' },
-  { route: '/account', file: 'account.html' },
-  { route: '/track-order', file: 'track-order.html' },
-  { route: '/local-delivery', file: 'local-delivery.html' },
-  { route: '/store', file: 'store.html' },
-  { route: '/visit-store', file: 'store.html' },
-  { route: '/about', file: 'about.html' },
-  { route: '/contact', file: 'contact.html' },
-  { route: '/faq', file: 'faq.html' },
-  { route: '/policies', file: 'policies.html' },
-  { route: '/style-ai', file: 'style-ai.html' }
-];
-
-multiPageRoutes.forEach(r => {
-  app.get(r.route, (req, res) => {
-    res.sendFile(path.join(__dirname, '..', r.file));
-  });
-});
-
 // Central Error Handler
 app.use(errorHandler);
 

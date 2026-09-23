@@ -468,16 +468,12 @@
         </div>
 
         <!-- Desktop Navigation Links -->
-        <nav class="hidden lg:flex items-center space-x-7 text-sm font-medium text-charcoal-900" aria-label="Primary Navigation">
-          <a href="index.html" class="text-maroon-800 font-semibold border-b-2 border-maroon-800 pb-0.5" data-i18n="nav_home">Home</a>
-          <a href="shop.html" class="hover:text-maroon-800 transition-colors" data-i18n="nav_shop">Shop</a>
-          <a href="collections.html" class="hover:text-maroon-800 transition-colors" data-i18n="nav_collections">Collections</a>
-          <a href="stitching.html" class="hover:text-maroon-800 transition-colors" data-i18n="nav_stitching">Stitching</a>
-          <a href="style-ai.html" class="hover:text-maroon-800 transition-colors flex items-center gap-1.5" data-i18n="nav_style_ai">
-            <span>Style AI</span>
-            <span class="text-[9px] bg-gold-500/20 text-maroon-800 border border-gold-500/40 px-1.5 py-0.2 rounded-full font-bold uppercase tracking-wider">Soon</span>
-          </a>
-          <a href="store.html" class="hover:text-maroon-800 transition-colors" data-i18n="nav_store">Visit Store</a>
+        <nav class="hidden lg:flex items-center space-x-8 text-sm font-medium text-charcoal-900" aria-label="Primary Navigation">
+          <a href="#" class="text-maroon-800 border-b border-maroon-800 pb-0.5" data-i18n="nav_home">Home</a>
+          <a href="#categories" class="hover:text-maroon-800 transition-colors" data-i18n="nav_shop">Shop</a>
+          <a href="#categories" class="hover:text-maroon-800 transition-colors" data-i18n="nav_categories">Categories</a>
+          <a href="#featured" class="hover:text-maroon-800 transition-colors" data-i18n="nav_collections">Collections</a>
+          <a href="#about" class="hover:text-maroon-800 transition-colors" data-i18n="nav_about">About</a>
         </nav>
 
         <!-- Utility Actions (§9) -->
@@ -487,17 +483,17 @@
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
           </button>
 
-          <!-- Track Order Link -->
-          <a href="track-order.html" class="p-2 hover:text-maroon-800 transition-colors hidden sm:flex items-center gap-1.5 text-xs font-semibold" title="Track Your Order">
-            <svg class="w-5 h-5 text-maroon-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>
-            <span class="hidden md:inline">Track Order</span>
-          </a>
 
-          <!-- Customer Account & Saved Measurements -->
-          <a href="account.html" class="p-2 hover:text-maroon-800 transition-colors flex items-center gap-1 text-xs font-semibold" title="Customer Account & Saved Measurements" aria-label="Customer account and saved measurements">
-            <svg class="w-5 h-5 text-maroon-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-            <span class="hidden md:inline">My Account</span>
-          </a>
+          <!-- Account Trigger (§30) -->
+          <button type="button" onclick="openAccountDrawer()" class="p-2 hover:text-maroon-800 transition-colors hidden md:block" aria-label="Customer account and saved measurements">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+          </button>
+
+          <!-- Cart Drawer Trigger -->
+          <button type="button" onclick="openCartDrawer()" class="p-2 hover:text-maroon-800 transition-colors relative" aria-label="View shopping cart">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+            <span id="cartCountBadge" class="absolute top-1 right-1 w-4 h-4 bg-maroon-800 text-ivory-50 text-[10px] font-bold rounded-full flex items-center justify-center">0</span>
+          </button>
         </div>
 
 
@@ -505,61 +501,22 @@
     </div>
 
     <!-- Mobile Drawer Menu -->
-    <div id="mobileMenu" class="hidden lg:hidden border-t border-ivory-200 bg-ivory-50 px-4 pt-4 pb-6 space-y-2">
-      <a href="index.html" onclick="toggleMobileMenu()" class="block text-base font-semibold text-maroon-900 py-1" data-i18n="nav_home">Home</a>
-      <a href="shop.html" class="block text-sm font-medium text-charcoal-900 hover:text-maroon-800 py-1.5 border-b border-ivory-200/60 flex items-center justify-between">
-        <span>Shop All Dress Materials</span>
-        <span class="text-xs text-gold-500 font-bold">&rarr;</span>
-      </a>
-      <a href="collections.html" class="block text-sm font-medium text-charcoal-900 hover:text-maroon-800 py-1.5 border-b border-ivory-200/60 flex items-center justify-between">
-        <span>Curated Collections</span>
-        <span class="text-xs text-gold-500 font-bold">&rarr;</span>
-      </a>
-      <a href="stitching.html" class="block text-sm font-medium text-charcoal-900 hover:text-maroon-800 py-1.5 border-b border-ivory-200/60 flex items-center justify-between">
-        <span>Bespoke Stitching Studio</span>
-        <span class="text-xs text-gold-500 font-bold">&rarr;</span>
-      </a>
-      <a href="measurement-guide.html" class="block text-sm font-medium text-charcoal-900 hover:text-maroon-800 py-1.5 border-b border-ivory-200/60 flex items-center justify-between">
-        <span>Measurement Guide &amp; Converter</span>
-        <span class="text-xs text-gold-500 font-bold">&rarr;</span>
-      </a>
-      <a href="local-delivery.html" class="block text-sm font-medium text-charcoal-900 hover:text-maroon-800 py-1.5 border-b border-ivory-200/60 flex items-center justify-between">
-        <span>Beawar Local Delivery (PIN 305901)</span>
-        <span class="text-xs text-gold-500 font-bold">&rarr;</span>
-      </a>
-      <a href="store.html" class="block text-sm font-medium text-charcoal-900 hover:text-maroon-800 py-1.5 border-b border-ivory-200/60 flex items-center justify-between">
-        <span>Visit Flagship Store (Beawar)</span>
-        <span class="text-xs text-gold-500 font-bold">&rarr;</span>
-      </a>
-      <a href="track-order.html" class="block text-sm font-medium text-charcoal-900 hover:text-maroon-800 py-1.5 border-b border-ivory-200/60 flex items-center justify-between">
-        <span>Track Order Live</span>
-        <span class="text-xs text-gold-500 font-bold">&rarr;</span>
-      </a>
-      <a href="account.html" class="block text-sm font-medium text-charcoal-900 hover:text-maroon-800 py-1.5 border-b border-ivory-200/60 flex items-center justify-between">
-        <span>My Account &amp; Saved Measurements</span>
-        <span class="text-xs text-gold-500 font-bold">&rarr;</span>
-      </a>
-      <a href="style-ai.html" class="block text-sm font-medium text-charcoal-900 hover:text-maroon-800 py-1.5 border-b border-ivory-200/60 flex items-center justify-between">
-        <span>ABHA Style AI</span>
-        <span class="text-[9px] bg-gold-500/20 text-maroon-800 font-bold px-1.5 py-0.5 rounded-full uppercase">Coming Soon</span>
-      </a>
-      <a href="faq.html" class="block text-sm font-medium text-charcoal-900 hover:text-maroon-800 py-1.5 border-b border-ivory-200/60 flex items-center justify-between">
-        <span>Frequently Asked Questions</span>
-        <span class="text-xs text-gold-500 font-bold">&rarr;</span>
-      </a>
-      <a href="policies.html" class="block text-sm font-medium text-charcoal-900 hover:text-maroon-800 py-1.5 border-b border-ivory-200/60 flex items-center justify-between">
-        <span>Store Policies &amp; Alterations</span>
-        <span class="text-xs text-gold-500 font-bold">&rarr;</span>
-      </a>
-      <a href="about.html" class="block text-sm font-medium text-charcoal-900 hover:text-maroon-800 py-1.5 border-b border-ivory-200/60 flex items-center justify-between">
-        <span>Our Heritage &amp; Craft</span>
-        <span class="text-xs text-gold-500 font-bold">&rarr;</span>
-      </a>
-      <a href="contact.html" class="block text-sm font-medium text-charcoal-900 hover:text-maroon-800 py-1.5 flex items-center justify-between">
-        <span>Contact Us</span>
-        <span class="text-xs text-gold-500 font-bold">&rarr;</span>
-      </a>
-      <div class="pt-3 border-t border-ivory-200 space-y-2 text-xs text-slateText-600">
+    <div id="mobileMenu" class="hidden lg:hidden border-t border-ivory-200 bg-ivory-50 px-4 pt-4 pb-6 space-y-3">
+      <a href="#" onclick="toggleMobileMenu()" class="block text-base font-medium text-maroon-900 py-1" data-i18n="nav_home">Home</a>
+      <a href="#categories" onclick="toggleMobileMenu()" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1" data-i18n="nav_shop">Shop Categories</a>
+      <a href="#newArrivals" onclick="toggleMobileMenu()" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1" data-i18n="nav_new_arrivals">New Arrivals</a>
+      <a href="#featured" onclick="toggleMobileMenu()" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1" data-i18n="nav_collections">Collections</a>
+      <a href="javascript:void(0)" onclick="toggleMobileMenu(); openWishlistDrawer();" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1">Saved Wishlist (<span id="mobileWishlistCount">0</span>)</a>
+      <a href="javascript:void(0)" onclick="toggleMobileMenu(); openAccountDrawer();" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1">My Account &amp; Saved Measurements</a>
+      <a href="#difference" onclick="toggleMobileMenu()" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1" data-i18n="nav_difference">The ABHA Difference</a>
+      <a href="#measurements" onclick="toggleMobileMenu()" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1" data-i18n="nav_measurements">Made to Your Measurements</a>
+      <a href="#store" onclick="toggleMobileMenu()" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1" data-i18n="nav_store">Visit Physical Store</a>
+      <a href="#faq" onclick="toggleMobileMenu()" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1" data-i18n="nav_faq">Frequently Asked Questions</a>
+      <div class="pt-4 border-t border-ivory-200 space-y-2 text-xs text-slateText-600">
+        <div class="flex items-center justify-between">
+          <span>Need Tailoring Help?</span>
+          <button onclick="openTailorModal(); toggleMobileMenu();" class="text-maroon-800 font-semibold underline">Contact Master Tailor</button>
+        </div>
         <div class="flex items-center justify-between pt-1 text-[11px]">
           <a href="tel:+919214837104" class="text-maroon-900 font-bold flex items-center gap-1">📞 +91 9214837104</a>
           <a href="https://www.instagram.com/abha_tailor_and_creation/" target="_blank" rel="noopener noreferrer" class="text-maroon-800 font-bold flex items-center gap-1">📸 @abha_tailor_and_creation</a>
@@ -1901,13 +1858,13 @@
         <div class="space-y-3">
           <p class="font-bold uppercase tracking-wider text-ivory-50 text-xs">Dress Materials</p>
           <ul class="space-y-2 text-slate-400">
-            <li><a href="shop.html" class="hover:text-ivory-50 transition-colors">All Dress Materials</a></li>
-            <li><a href="collections.html" class="hover:text-ivory-50 transition-colors">Curated Collections</a></li>
-            <li><a href="shop.html?fabric=cotton" class="hover:text-ivory-50 transition-colors">Pure Cotton Suits</a></li>
-            <li><a href="shop.html?fabric=silk" class="hover:text-ivory-50 transition-colors">Chanderi Silk Edit</a></li>
-            <li><a href="shop.html?pattern=bandhani" class="hover:text-ivory-50 transition-colors">Bandhani &amp; Leheriya Suits</a></li>
-            <li><a href="stitching.html" class="hover:text-ivory-50 transition-colors">Bespoke Stitching Service</a></li>
-            <li><a href="style-ai.html" class="hover:text-gold-400 text-gold-400 font-semibold transition-colors">ABHA Style AI (Coming Soon)</a></li>
+            <li><a href="#newArrivals" class="hover:text-ivory-50 transition-colors">All Dress Materials</a></li>
+            <li><a href="#newArrivals" class="hover:text-ivory-50 transition-colors">New Fabric Arrivals</a></li>
+            <li><a href="#bestSellers" class="hover:text-ivory-50 transition-colors">Best Sellers</a></li>
+            <li><a href="#featured" class="hover:text-ivory-50 transition-colors">Chanderi Silk Edit</a></li>
+            <li><a href="#categories" class="hover:text-ivory-50 transition-colors">Pure Cotton Suits</a></li>
+            <li><a href="#categories" class="hover:text-ivory-50 transition-colors">Festive Salwar Suits</a></li>
+            <li><a href="#categories" class="hover:text-ivory-50 transition-colors">Bandhani & Leheriya Suits</a></li>
           </ul>
         </div>
 
@@ -1915,13 +1872,13 @@
         <div class="space-y-3">
           <p class="font-bold uppercase tracking-wider text-ivory-50 text-xs">Customer Support</p>
           <ul class="space-y-2 text-slate-400">
-            <li><a href="track-order.html" class="hover:text-ivory-50 transition-colors text-gold-400 font-semibold">Track Order Live →</a></li>
-            <li><a href="account.html" class="hover:text-ivory-50 transition-colors">My Saved Measurements</a></li>
-            <li><a href="measurement-guide.html" class="hover:text-ivory-50 transition-colors">Visual Measurement Guide</a></li>
-            <li><a href="local-delivery.html" class="hover:text-ivory-50 transition-colors">Beawar Local Delivery (305901)</a></li>
-            <li><a href="store.html" class="hover:text-ivory-50 transition-colors">Visit Beawar Store</a></li>
-            <li><a href="faq.html" class="hover:text-ivory-50 transition-colors">Frequently Asked Questions</a></li>
-            <li><a href="contact.html" class="hover:text-ivory-50 transition-colors">Contact Boutique Team</a></li>
+            <li><button onclick="openTailorModal()" class="hover:text-ivory-50 transition-colors text-left">Measurement Assistance</button></li>
+            <li><a href="#faq" class="hover:text-ivory-50 transition-colors">FAQ & Sizing Help</a></li>
+            <li><button onclick="openTrackingModal()" class="hover:text-ivory-50 transition-colors text-left text-gold-500 font-semibold">Track Order Live →</button></li>
+            <li><a href="https://www.instagram.com/abha_tailor_and_creation/" target="_blank" rel="noopener noreferrer" class="hover:text-gold-400 text-gold-400 font-semibold transition-colors flex items-center gap-1.5"><span>📸 Instagram: @abha_tailor_and_creation</span></a></li>
+            <li><button onclick="openPolicyModal('shipping')" class="hover:text-ivory-50 transition-colors text-left">Shipping Across India</button></li>
+            <li><button onclick="openPolicyModal('returns')" class="hover:text-ivory-50 transition-colors text-left">Returns & Alterations</button></li>
+            <li><a href="#store" class="hover:text-ivory-50 transition-colors">Visit Physical Store</a></li>
           </ul>
         </div>
 
@@ -1929,13 +1886,12 @@
         <div class="space-y-3">
           <p class="font-bold uppercase tracking-wider text-ivory-50 text-xs">Legal & Policies</p>
           <ul class="space-y-2 text-slate-400">
-            <li><a href="policies.html#shipping" class="hover:text-ivory-50 transition-colors">Shipping &amp; Local Delivery Policy</a></li>
-            <li><a href="policies.html#cancellation" class="hover:text-ivory-50 transition-colors">Order Cancellation Policy</a></li>
-            <li><a href="policies.html#alteration" class="hover:text-ivory-50 transition-colors">10-Day Alteration Window</a></li>
-            <li><a href="policies.html#inventory" class="hover:text-ivory-50 transition-colors">1-of-1 Inventory Policy</a></li>
-            <li><a href="policies.html#privacy" class="hover:text-ivory-50 transition-colors">Customer Privacy Policy</a></li>
-            <li><a href="policies.html#terms" class="hover:text-ivory-50 transition-colors">Terms of Service</a></li>
+            <li><button onclick="openPolicyModal('privacy')" class="hover:text-ivory-50 transition-colors text-left">Privacy Policy</button></li>
+            <li><button onclick="openPolicyModal('terms')" class="hover:text-ivory-50 transition-colors text-left">Terms & Conditions</button></li>
+            <li><button onclick="openPolicyModal('shipping')" class="hover:text-ivory-50 transition-colors text-left">Shipping Policy</button></li>
+            <li><button onclick="openPolicyModal('refund')" class="hover:text-ivory-50 transition-colors text-left">Return & Refund Policy</button></li>
             <li><button type="button" onclick="openOwnerAccessModal()" class="text-slate-500 hover:text-slate-300 transition-colors text-left text-xs cursor-pointer">Staff &amp; Boutique Login</button></li>
+            <li><span class="text-[11px] text-slate-500 block pt-1">Authentic Handloom Boutique • Beawar</span></li>
           </ul>
         </div>
 
@@ -3553,7 +3509,7 @@
             <div class="cursor-pointer" onclick="openQuickViewModal('${prod.id}')">
               <!-- Title -->
               <h3 class="font-serif text-xs sm:text-sm font-bold text-gray-900 line-clamp-1 leading-snug group-hover:text-maroon-900 transition-colors" title="${prod.name}">
-                <a href="product.html?id=${prod.id}" class="hover:underline">${prod.name}</a>
+                ${prod.name}
               </h3>
 
               <!-- Honest Price Block (No fake MRP strikethrough, no inflated discounts) -->
@@ -3566,12 +3522,6 @@
               <div class="mt-1.5 flex items-center justify-between text-[10px] sm:text-[11px] text-slateText-600">
                 <span class="truncate">${prod.fabric || '100% Pure Handloom'}</span>
                 <span class="font-semibold text-charcoal-900 shrink-0">1-of-1 Piece</span>
-              </div>
-              <div class="mt-1 flex items-center justify-between text-[10px]">
-                <a href="product.html?id=${prod.id}" class="text-maroon-800 hover:underline font-semibold inline-flex items-center gap-1">
-                  <span>View Details &amp; Specs</span>
-                  <span>&rarr;</span>
-                </a>
               </div>
             </div>
 
@@ -5911,34 +5861,40 @@
   <nav id="mobileBottomNav" class="mobile-bottom-nav fixed bottom-0 inset-x-0 z-50 bg-[#FAF8F5]/98 backdrop-blur-md border-t border-[#EBE3D7] shadow-lg hidden items-center justify-around py-1.5 px-4 text-charcoal-900" aria-label="Mobile Navigation">
     
     <!-- Home -->
-    <a href="index.html" class="flex flex-col items-center text-maroon-950 font-bold text-[10px] focus:outline-none" aria-label="Home">
+    <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" class="flex flex-col items-center text-maroon-950 font-bold text-[10px] focus:outline-none" aria-label="Home">
       <svg class="w-5 h-5 text-maroon-900" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
       <span class="mt-0.5" data-i18n="nav_home">Home</span>
     </a>
 
-    <!-- Shop All Fabrics -->
-    <a href="shop.html" class="flex flex-col items-center text-gray-500 hover:text-maroon-900 text-[10px] focus:outline-none" aria-label="Shop Fabrics">
+    <!-- Loom / Catalog -->
+    <a href="#newArrivals" onclick="setCatalogFilter('all')" class="flex flex-col items-center text-gray-500 hover:text-maroon-900 text-[10px] focus:outline-none" aria-label="Loom Catalog">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-      <span class="mt-0.5">Shop</span>
+      <span class="mt-0.5">Loom</span>
     </a>
 
-    <!-- Bespoke Stitching Studio Button -->
-    <a href="stitching.html" class="flex flex-col items-center text-maroon-950 text-[10px] font-bold focus:outline-none group" aria-label="Bespoke Stitching">
+    <!-- Custom Studio Cutout Button -->
+    <button type="button" onclick="openMeasurementStudioFromHero()" class="flex flex-col items-center text-maroon-950 text-[10px] font-bold focus:outline-none group" aria-label="Tailor Studio">
       <div class="w-9 h-9 rounded-full bg-maroon-900 text-gold-400 flex items-center justify-center text-base shadow-md -mt-3.5 border border-gold-500/40 group-hover:scale-105 transition-transform">✂</div>
-      <span class="mt-0.5">Stitching</span>
-    </a>
+      <span class="mt-0.5">Studio</span>
+    </button>
 
-    <!-- Track Order Live -->
-    <a href="track-order.html" class="flex flex-col items-center text-gray-500 hover:text-maroon-900 text-[10px] focus:outline-none" aria-label="Track Order">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/></svg>
-      <span class="mt-0.5">Track</span>
-    </a>
+    <!-- Wishlist / Saved -->
+    <button type="button" onclick="openWishlistDrawer()" class="flex flex-col items-center text-gray-500 hover:text-maroon-900 text-[10px] relative focus:outline-none" aria-label="Saved Wishlist">
+      <div class="relative">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+        <span id="mobileBottomWishlistBadge" class="absolute -top-1 -right-2 w-3.5 h-3.5 bg-terracotta-700 text-ivory-50 text-[9px] font-bold rounded-full hidden items-center justify-center">0</span>
+      </div>
+      <span class="mt-0.5">Saved</span>
+    </button>
 
-    <!-- Account & Measurements -->
-    <a href="account.html" class="flex flex-col items-center text-gray-500 hover:text-maroon-900 text-[10px] focus:outline-none" aria-label="Customer Account">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-      <span class="mt-0.5">Account</span>
-    </a>
+    <!-- Cart / Bag -->
+    <button type="button" onclick="openCartDrawer()" class="flex flex-col items-center text-gray-500 hover:text-maroon-900 text-[10px] relative focus:outline-none" aria-label="Shopping Bag">
+      <div class="relative">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+        <span id="mobileBottomCartBadge" class="absolute -top-1 -right-2 w-3.5 h-3.5 bg-maroon-800 text-ivory-50 text-[9px] font-bold rounded-full flex items-center justify-center">0</span>
+      </div>
+      <span class="mt-0.5">Bag</span>
+    </button>
 
   </nav>
 
