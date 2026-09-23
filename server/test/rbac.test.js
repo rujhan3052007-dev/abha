@@ -99,7 +99,7 @@ async function runRbacTests() {
     // 3. Authenticate Store Manager
     const mgrLogin = await makeRequest('POST', '/api/auth/login', {
       identifier: 'manager@abha.in',
-      password: 'AbhaManager2026!'
+      password: 'AbhaM'
     });
     assert(mgrLogin.statusCode === 200, 'Store Manager logs in successfully');
     assert(mgrLogin.data.user.role === 'MANAGER', 'User role is MANAGER');
@@ -129,7 +129,7 @@ async function runRbacTests() {
       mobile: `98290${Math.floor(10000 + Math.random() * 90000)}`,
       department: 'DELIVERY',
       assigned_area: 'Beawar South',
-      password: 'AbhaManager2026!'
+      password: 'AbhaM'
     }, ownerHeaders);
     assert(newMgrRes.statusCode === 201, 'Owner designates new Delivery Manager');
     const newMgrId = newMgrRes.data.data.id;
@@ -280,6 +280,15 @@ async function runRbacTests() {
     const db = getDb();
     const ownerUser = await db.get("SELECT * FROM users WHERE role = 'OWNER'");
     assert(ownerUser && ownerUser.is_active === 1, 'ABHA Owner is registered and immutable');
+
+    // 16. Owner Master Password Control: Change password of any role (Manager, Tailor, Delivery, Owner)
+    const changePassRes = await makeRequest('POST', '/api/auth/change-password', {
+      ownerKey: 'Abha104',
+      targetIdentifier: 'manager',
+      newPassword: 'AbhaM'
+    });
+    assert(changePassRes.statusCode === 200, 'Owner can change password of any role or staff member');
+    assert(changePassRes.data.success === true, 'Password update returned success confirmation');
 
   } catch (err) {
     console.error('Test execution error:', err);

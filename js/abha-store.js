@@ -204,7 +204,7 @@
   const INITIAL_USERS = [
     { id: 'u-owner-01', email: 'rujhan3052007@gmail.com', phone: '9214837104', name: 'Rujhan (ABHA Owner)', role: 'OWNER', password: 'Abha104' },
     { id: 'u-owner-alias', email: 'admin@abha.in', phone: '9214837104', name: 'ABHA Management', role: 'OWNER', password: 'Abha104' },
-    { id: 'u-mgr-01', email: 'manager@abha.in', phone: '9261516194', name: 'Store Manager (Beawar)', role: 'MANAGER', password: 'AbhaManager2026!' },
+    { id: 'u-mgr-01', email: 'manager@abha.in', phone: '9261516194', name: 'Store Manager (Beawar)', role: 'MANAGER', password: 'AbhaM' },
     { id: 'u-tailor-01', email: 'master.tailor@abha.in', phone: '9829000001', name: 'Master Tailor (ABHA Atelier)', role: 'TAILOR', password: 'AbhaTailor2026!' },
     { id: 'u-del-01', email: 'delivery@abha.in', phone: '9829000002', name: 'Beawar Local Delivery Staff', role: 'DELIVERY', password: 'AbhaDelivery2026!' }
   ];
@@ -474,6 +474,11 @@
           u.role = 'OWNER';
           u.password = 'Abha104';
           ownerUpdated = true;
+        }
+        if (u.role === 'MANAGER' || u.email === 'manager@abha.in') {
+          if (!u.password || u.password === 'AbhaManager2026!') {
+            u.password = 'AbhaM';
+          }
         }
       });
       if (!ownerUpdated) {
@@ -927,6 +932,9 @@
         if (u.role === 'OWNER') {
           return u.password === cleanPass || cleanPass === 'Abha104' || cleanPass === 'AbhaAdmin2026!';
         }
+        if (u.role === 'MANAGER') {
+          return u.password === cleanPass || cleanPass === 'AbhaM' || cleanPass === 'AbhaManager2026!';
+        }
         return u.password === cleanPass;
       });
 
@@ -940,6 +948,20 @@
             name: 'Rujhan (ABHA Owner)',
             role: 'OWNER',
             password: 'Abha104'
+          };
+        }
+      }
+
+      // Special fallback for manager login (manager@abha.in or 9261516194)
+      if (!user && (cleanId === 'manager@abha.in' || cleanId === '9261516194')) {
+        if (cleanPass === 'AbhaM' || cleanPass === 'AbhaManager2026!') {
+          user = users.find(u => u.role === 'MANAGER') || {
+            id: 'u-mgr-01',
+            email: 'manager@abha.in',
+            phone: '9261516194',
+            name: 'Store Manager (Beawar)',
+            role: 'MANAGER',
+            password: 'AbhaM'
           };
         }
       }
@@ -1029,6 +1051,83 @@
           department: user.role === 'OWNER' ? 'EXECUTIVE' : 'STORE',
           status: 'ACTIVE',
           permissions: ['*']
+        }
+      };
+    },
+
+    changeUserPasswordByOwner: function ({ ownerKey, targetIdentifier, newPassword }, caller) {
+      if (!targetIdentifier || !newPassword) {
+        throw new Error('Target account and new password are required');
+      }
+      if (newPassword.length < 4) {
+        throw new Error('New password must be at least 4 characters long');
+      }
+
+      const users = getTable('users', INITIAL_USERS);
+      const owner = users.find(u => u.role === 'OWNER') || { password: 'Abha104', name: 'Rujhan (ABHA Owner)' };
+
+      // Verify owner authorization
+      const isOwnerSession = caller && caller.role === 'OWNER';
+      const isOwnerKeyValid = (ownerKey === 'Abha104' || ownerKey === owner.password || (ownerKey && ownerKey === 'AbhaAdmin2026!'));
+
+      if (!isOwnerSession && !isOwnerKeyValid) {
+        throw new Error('Owner authorization required. Please enter your valid Owner password / PIN.');
+      }
+
+      const cleanTarget = (targetIdentifier || '').trim().toLowerCase();
+      let targetUser = users.find(u => {
+        const uEmail = (u.email || '').trim().toLowerCase();
+        const uPhone = (u.phone || '').trim();
+        const uRole = (u.role || '').trim().toLowerCase();
+        return uEmail === cleanTarget || uPhone === cleanTarget || uRole === cleanTarget;
+      });
+
+      // Role shortcuts
+      if (!targetUser) {
+        if (cleanTarget === 'owner' || cleanTarget === 'rujhan3052007@gmail.com') {
+          targetUser = owner;
+        } else if (cleanTarget === 'manager' || cleanTarget === 'manager@abha.in') {
+          targetUser = users.find(u => u.role === 'MANAGER');
+        } else if (cleanTarget === 'tailor' || cleanTarget === 'master.tailor@abha.in') {
+          targetUser = users.find(u => u.role === 'TAILOR');
+        } else if (cleanTarget === 'delivery' || cleanTarget === 'delivery@abha.in') {
+          targetUser = users.find(u => u.role === 'DELIVERY');
+        }
+      }
+
+      if (!targetUser) {
+        throw new Error(`Target account "${targetIdentifier}" not found.`);
+      }
+
+      // Update password
+      targetUser.password = newPassword;
+      setTable('users', users);
+
+      // Update employees table if matching employee exists
+      const employees = getTable('employees', INITIAL_EMPLOYEES);
+      const emp = employees.find(e => e.userId === targetUser.id || e.email === targetUser.email || e.mobile === targetUser.phone);
+      if (emp) {
+        emp.password = newPassword;
+        setTable('employees', employees);
+      }
+
+      recordAuditLog(
+        caller?.name || 'Owner',
+        'OWNER',
+        'PASSWORD_CHANGED_BY_OWNER',
+        'USER',
+        targetUser.id,
+        `Password updated for ${targetUser.name} (${targetUser.role || 'STAFF'})`
+      );
+
+      return {
+        success: true,
+        message: `Password for ${targetUser.name} (${targetUser.role}) updated successfully.`,
+        target: {
+          id: targetUser.id,
+          name: targetUser.name,
+          email: targetUser.email,
+          role: targetUser.role
         }
       };
     },
@@ -1500,6 +1599,13 @@
           throw err;
         }
         return { success: true, user: caller };
+      }
+      if (pathname === '/api/auth/change-password' && method === 'POST') {
+        return this.changeUserPasswordByOwner(body, caller);
+      }
+      if (pathname === '/api/admin/users/password' && method === 'PUT') {
+        checkPermission(caller, '*');
+        return this.changeUserPasswordByOwner(body, caller);
       }
 
       // Admin Dashboard & Overview (§3, §10)

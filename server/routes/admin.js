@@ -990,4 +990,66 @@ router.get('/roles', async (req, res, next) => {
   }
 });
 
+// 21. Owner Change Password (Authenticated Session)
+router.put('/users/password', requireRole(ROLES.OWNER), async (req, res, next) => {
+  try {
+    const { targetIdentifier, newPassword } = req.body;
+    if (!targetIdentifier || !newPassword) {
+      return res.status(400).json({ success: false, error: 'Target identifier and new password are required' });
+    }
+    if (newPassword.length < 4) {
+      return res.status(400).json({ success: false, error: 'Password must be at least 4 characters' });
+    }
+
+    const db = getDb();
+    const cleanTarget = targetIdentifier.trim().toLowerCase();
+    let targetUser = await db.get(`
+      SELECT * FROM users 
+      WHERE lower(email) = ? OR phone = ? OR lower(role) = ?
+    `, [cleanTarget, targetIdentifier.trim(), cleanTarget]);
+
+    if (!targetUser) {
+      if (cleanTarget === 'owner' || cleanTarget === 'rujhan3052007@gmail.com') {
+        targetUser = await db.get(`SELECT * FROM users WHERE role = 'OWNER' LIMIT 1`);
+      } else if (cleanTarget === 'manager' || cleanTarget === 'manager@abha.in') {
+        targetUser = await db.get(`SELECT * FROM users WHERE role = 'MANAGER' LIMIT 1`);
+      } else if (cleanTarget === 'tailor' || cleanTarget === 'master.tailor@abha.in') {
+        targetUser = await db.get(`SELECT * FROM users WHERE role = 'TAILOR' LIMIT 1`);
+      } else if (cleanTarget === 'delivery' || cleanTarget === 'delivery@abha.in') {
+        targetUser = await db.get(`SELECT * FROM users WHERE role = 'DELIVERY' LIMIT 1`);
+      }
+    }
+
+    if (!targetUser) {
+      return res.status(404).json({ success: false, error: `Account "${targetIdentifier}" not found` });
+    }
+
+    const newHash = bcrypt.hashSync(newPassword, 10);
+    await db.run('UPDATE users SET password_hash = ? WHERE id = ?', [newHash, targetUser.id]);
+
+    await logAudit(db, {
+      userId: req.user.id,
+      userName: req.user.name,
+      userRole: req.user.role,
+      action: 'PASSWORD_CHANGED_BY_OWNER',
+      entityType: 'USER',
+      entityId: targetUser.id,
+      details: { target_email: targetUser.email, target_role: targetUser.role, target_name: targetUser.name }
+    });
+
+    res.json({
+      success: true,
+      message: `Password for ${targetUser.name} (${targetUser.role}) updated successfully.`,
+      target: {
+        id: targetUser.id,
+        name: targetUser.name,
+        email: targetUser.email,
+        role: targetUser.role
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;

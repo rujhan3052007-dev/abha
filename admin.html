@@ -976,14 +976,10 @@
           <button type="submit" class="btn btn-primary" style="justify-content: center; padding: 0.75rem; font-size: 0.95rem; margin-top: 0.25rem;">Create Owner Account & Enter</button>
         </form>
 
-        <div style="margin-top: 0.85rem; padding: 0.65rem; background: var(--gray-100); border-radius: 6px; text-align: center;">
-          <p style="font-size: 0.72rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.4rem;">Demo / Quick Password Auto-Fill:</p>
-          <div style="display: flex; gap: 0.35rem; justify-content: center; flex-wrap: wrap;">
-            <button type="button" class="btn btn-outline" style="padding: 0.25rem 0.45rem; font-size: 0.72rem;" onclick="quickLogin('rujhan3052007@gmail.com', 'Abha104')">👑 Owner (Rujhan)</button>
-            <button type="button" class="btn btn-outline" style="padding: 0.25rem 0.45rem; font-size: 0.72rem;" onclick="quickLogin('manager@abha.in', 'AbhaManager2026!')">📋 Manager</button>
-            <button type="button" class="btn btn-outline" style="padding: 0.25rem 0.45rem; font-size: 0.72rem;" onclick="quickLogin('master.tailor@abha.in', 'AbhaTailor2026!')">✂️ Tailor</button>
-            <button type="button" class="btn btn-outline" style="padding: 0.25rem 0.45rem; font-size: 0.72rem;" onclick="quickLogin('delivery@abha.in', 'AbhaDelivery2026!')">🚚 Delivery</button>
-          </div>
+        <div style="margin-top: 1rem; text-align: center; border-top: 1px dashed var(--gray-300); padding-top: 0.75rem;">
+          <button type="button" onclick="openOwnerPasswordModal()" style="background: none; border: none; font-size: 0.8rem; font-weight: 700; color: var(--maroon); cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem;">
+            <span>🔑</span> <span>Owner Password Control: Change Any Password</span>
+          </button>
         </div>
 
       </div>
@@ -1009,6 +1005,7 @@
       </a>
     </div>
     <div class="topbar-user">
+      <button type="button" id="btnTopbarChangePassword" onclick="openOwnerPasswordModal()" style="display: none; background: var(--white); color: var(--maroon); border: 1px solid var(--maroon); border-radius: 6px; padding: 0.3rem 0.65rem; font-size: 0.8rem; font-weight: 700; cursor: pointer; align-items: center; gap: 0.35rem;" title="Owner Master Password Control">🔑 Passwords</button>
       <select id="roleSwitcherSelect" onchange="switchRoleOnTheFly(this.value)" style="background: var(--white); color: var(--charcoal); border: 1px solid var(--gray-300); border-radius: 6px; padding: 0.3rem 0.55rem; font-size: 0.8rem; font-weight: 600; cursor: pointer;">
         <option value="OWNER" style="color: #000;">Role: 👑 Owner (Full Access)</option>
         <option value="MANAGER" style="color: #000;">Role: 📋 Manager (Catalog & POS)</option>
@@ -1588,7 +1585,7 @@
             <button type="button" onclick="togglePasswordVisibility('mgrPassword', 'btnToggleMgrPass')" id="btnToggleMgrPass" style="background: none; border: none; font-size: 0.75rem; color: var(--maroon); cursor: pointer; font-weight: 600;">👁️ Show</button>
           </div>
           <div style="position: relative;">
-            <input type="password" id="mgrPassword" class="form-input" required placeholder="••••••••••••" minlength="6" value="AbhaManager2026!" style="padding-right: 2.2rem;">
+            <input type="password" id="mgrPassword" class="form-input" required placeholder="••••••••••••" minlength="4" value="AbhaM" style="padding-right: 2.2rem;">
             <button type="button" onclick="togglePasswordVisibility('mgrPassword', 'btnToggleMgrPass')" style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--gray-500); font-size: 0.9rem;" aria-label="Toggle password visibility">👁️</button>
           </div>
         </div>
@@ -1772,6 +1769,76 @@
         </div>
       </form>
     </div>
+  <!-- OWNER MASTER PASSWORD CONTROL MODAL -->
+  <div id="ownerPasswordModal" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 480px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+        <h3 class="panel-title" style="margin-bottom: 0;">👑 Owner Password Control</h3>
+        <button type="button" onclick="closeOwnerPasswordModal()" style="background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--gray-500); line-height: 1;">&times;</button>
+      </div>
+      <p style="font-size: 0.8rem; color: var(--gray-500); margin-bottom: 1rem;">
+        As the Boutique Owner, you can change and reset the access password for any staff member or role across ABHA at any time.
+      </p>
+
+      <form id="ownerPasswordForm" onsubmit="submitOwnerPasswordChange(event)" style="display: flex; flex-direction: column; gap: 0.85rem; text-align: left;">
+        <!-- Owner Verification (shown when not logged in as Owner) -->
+        <div id="pwdOwnerVerifySection">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700);">Owner Verification Password *</label>
+            <button type="button" onclick="togglePasswordVisibility('pwdOwnerKey', 'btnToggleOwnerKey')" id="btnToggleOwnerKey" style="background: none; border: none; font-size: 0.75rem; color: var(--maroon); cursor: pointer; font-weight: 600;">👁️ Show</button>
+          </div>
+          <div style="position: relative;">
+            <input type="password" id="pwdOwnerKey" class="form-input" placeholder="Enter Owner password (Abha104)" style="padding-right: 2.2rem;">
+            <button type="button" onclick="togglePasswordVisibility('pwdOwnerKey', 'btnToggleOwnerKey')" style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--gray-500); font-size: 0.9rem;" aria-label="Toggle password visibility">👁️</button>
+          </div>
+          <span style="font-size: 0.72rem; color: var(--gray-500);">Enter your master Owner password to authorize changes.</span>
+        </div>
+
+        <!-- Target Account Selection -->
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Select Account to Change Password *</label>
+          <select id="pwdTargetRole" class="form-input" onchange="handlePwdTargetChange(this.value)" required>
+            <option value="MANAGER">📋 Store Manager (manager@abha.in)</option>
+            <option value="OWNER">👑 Boutique Owner (rujhan3052007@gmail.com)</option>
+            <option value="TAILOR">✂️ Master Tailor (master.tailor@abha.in)</option>
+            <option value="DELIVERY">🚚 Delivery Staff (delivery@abha.in)</option>
+            <option value="CUSTOM">👤 Other Department Staff Member (By Email or Phone)</option>
+          </select>
+        </div>
+
+        <!-- Custom Identifier input (if custom chosen) -->
+        <div id="pwdCustomIdentifierSection" style="display: none;">
+          <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Staff Email or Mobile Phone *</label>
+          <input type="text" id="pwdCustomIdentifier" class="form-input" placeholder="e.g. staff@abha.in or 9829000000">
+        </div>
+
+        <!-- New Password Field -->
+        <div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700);">New Password *</label>
+            <button type="button" onclick="togglePasswordVisibility('pwdNewVal', 'btnToggleNewVal')" id="btnToggleNewVal" style="background: none; border: none; font-size: 0.75rem; color: var(--maroon); cursor: pointer; font-weight: 600;">👁️ Show</button>
+          </div>
+          <div style="position: relative;">
+            <input type="password" id="pwdNewVal" class="form-input" placeholder="Enter new password (min. 4 characters)" required minlength="4" style="padding-right: 2.2rem;">
+            <button type="button" onclick="togglePasswordVisibility('pwdNewVal', 'btnToggleNewVal')" style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--gray-500); font-size: 0.9rem;" aria-label="Toggle password visibility">👁️</button>
+          </div>
+        </div>
+
+        <!-- Confirm New Password Field -->
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Confirm New Password *</label>
+          <input type="password" id="pwdConfirmVal" class="form-input" placeholder="Re-enter new password" required minlength="4">
+        </div>
+
+        <div id="pwdModalError" style="color: var(--red-text); font-size: 0.8rem; display: none;"></div>
+        <div id="pwdModalSuccess" style="color: var(--green-text); font-size: 0.8rem; display: none; background: var(--green-bg); padding: 0.5rem; border-radius: 4px;"></div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem;">
+          <button type="button" class="btn btn-outline" onclick="closeOwnerPasswordModal()">Cancel</button>
+          <button type="submit" id="btnSubmitOwnerPassword" class="btn btn-primary">Update Password</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <script>
@@ -1806,11 +1873,157 @@
     const SESSIONS_KEY = 'abha_role_sessions';
     const ROLE_DEFAULTS = {
       OWNER: { identifier: 'rujhan3052007@gmail.com', password: 'Abha104', label: 'Boutique Owner' },
-      MANAGER: { identifier: 'manager@abha.in', password: 'AbhaManager2026!', label: 'Store Manager' },
+      MANAGER: { identifier: 'manager@abha.in', password: 'AbhaM', label: 'Store Manager' },
       TAILOR: { identifier: 'master.tailor@abha.in', password: 'AbhaTailor2026!', label: 'Master Tailor' },
       DELIVERY: { identifier: 'delivery@abha.in', password: 'AbhaDelivery2026!', label: 'Delivery Staff' }
     };
     let selectedRoleTarget = 'OWNER';
+
+    function openOwnerPasswordModal(preselectedRoleOrIdentifier) {
+      const modal = document.getElementById('ownerPasswordModal');
+      if (!modal) return;
+      const err = document.getElementById('pwdModalError');
+      const succ = document.getElementById('pwdModalSuccess');
+      if (err) err.style.display = 'none';
+      if (succ) succ.style.display = 'none';
+      const form = document.getElementById('ownerPasswordForm');
+      if (form) form.reset();
+
+      const verifySec = document.getElementById('pwdOwnerVerifySection');
+      const ownerKeyInput = document.getElementById('pwdOwnerKey');
+      if (currentUser && currentUser.role === 'OWNER') {
+        if (verifySec) verifySec.style.display = 'none';
+        if (ownerKeyInput) ownerKeyInput.required = false;
+      } else {
+        if (verifySec) verifySec.style.display = 'block';
+        if (ownerKeyInput) ownerKeyInput.required = true;
+      }
+
+      const select = document.getElementById('pwdTargetRole');
+      if (preselectedRoleOrIdentifier) {
+        if (['OWNER', 'MANAGER', 'TAILOR', 'DELIVERY'].includes(preselectedRoleOrIdentifier)) {
+          if (select) select.value = preselectedRoleOrIdentifier;
+          handlePwdTargetChange(preselectedRoleOrIdentifier);
+        } else {
+          if (select) select.value = 'CUSTOM';
+          handlePwdTargetChange('CUSTOM');
+          const customInput = document.getElementById('pwdCustomIdentifier');
+          if (customInput) customInput.value = preselectedRoleOrIdentifier;
+        }
+      } else {
+        if (select) select.value = 'MANAGER';
+        handlePwdTargetChange('MANAGER');
+      }
+      modal.classList.add('open');
+    }
+
+    function closeOwnerPasswordModal() {
+      const modal = document.getElementById('ownerPasswordModal');
+      if (modal) modal.classList.remove('open');
+      const pwdInput = document.getElementById('pwdNewVal');
+      if (pwdInput && pwdInput.type === 'text') togglePasswordVisibility('pwdNewVal', 'btnToggleNewVal');
+      const ownerKeyInput = document.getElementById('pwdOwnerKey');
+      if (ownerKeyInput && ownerKeyInput.type === 'text') togglePasswordVisibility('pwdOwnerKey', 'btnToggleOwnerKey');
+    }
+
+    function handlePwdTargetChange(val) {
+      const customSec = document.getElementById('pwdCustomIdentifierSection');
+      const customInput = document.getElementById('pwdCustomIdentifier');
+      if (val === 'CUSTOM') {
+        if (customSec) customSec.style.display = 'block';
+        if (customInput) customInput.required = true;
+      } else {
+        if (customSec) customSec.style.display = 'none';
+        if (customInput) customInput.required = false;
+      }
+    }
+
+    async function submitOwnerPasswordChange(e) {
+      e.preventDefault();
+      const errBox = document.getElementById('pwdModalError');
+      const succBox = document.getElementById('pwdModalSuccess');
+      if (errBox) errBox.style.display = 'none';
+      if (succBox) succBox.style.display = 'none';
+
+      const targetRole = document.getElementById('pwdTargetRole').value;
+      let targetIdentifier = targetRole;
+      if (targetRole === 'CUSTOM') {
+        targetIdentifier = (document.getElementById('pwdCustomIdentifier')?.value || '').trim();
+        if (!targetIdentifier) {
+          if (errBox) {
+            errBox.textContent = 'Please enter staff email or phone.';
+            errBox.style.display = 'block';
+          }
+          return;
+        }
+      }
+
+      const newPassword = document.getElementById('pwdNewVal').value;
+      const confirmPassword = document.getElementById('pwdConfirmVal').value;
+      if (newPassword !== confirmPassword) {
+        if (errBox) {
+          errBox.textContent = 'Passwords do not match.';
+          errBox.style.display = 'block';
+        }
+        return;
+      }
+      if (newPassword.length < 4) {
+        if (errBox) {
+          errBox.textContent = 'Password must be at least 4 characters.';
+          errBox.style.display = 'block';
+        }
+        return;
+      }
+
+      const ownerKey = (document.getElementById('pwdOwnerKey')?.value || '').trim();
+      const btn = document.getElementById('btnSubmitOwnerPassword');
+      const origText = btn ? btn.textContent : 'Update Password';
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Updating...';
+      }
+
+      try {
+        let res;
+        if (currentUser && currentUser.role === 'OWNER' && authToken) {
+          res = await apiRequest('/api/admin/users/password', {
+            method: 'PUT',
+            body: JSON.stringify({ targetIdentifier, newPassword })
+          });
+        } else {
+          res = await apiRequest('/api/auth/change-password', {
+            method: 'POST',
+            body: JSON.stringify({ ownerKey, targetIdentifier, newPassword })
+          });
+        }
+
+        for (const r in ROLE_DEFAULTS) {
+          if (r === targetRole || ROLE_DEFAULTS[r].identifier.toLowerCase() === targetIdentifier.toLowerCase()) {
+            ROLE_DEFAULTS[r].password = newPassword;
+          }
+        }
+
+        if (succBox) {
+          succBox.textContent = res.message || 'Password updated successfully.';
+          succBox.style.display = 'block';
+        }
+
+        setTimeout(() => {
+          closeOwnerPasswordModal();
+          showDirectAccessToast(res.message || 'Password updated successfully');
+        }, 1500);
+      } catch (err) {
+        if (errBox) {
+          errBox.textContent = err.message;
+          errBox.style.display = 'block';
+        }
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = origText;
+        }
+      }
+    }
 
     function getRoleSessions() {
       try {
@@ -2065,6 +2278,10 @@
         : { role: userOrRole, permissions: [] };
 
       const isOwner = user.role === 'OWNER';
+      const btnTopbarPwd = document.getElementById('btnTopbarChangePassword');
+      if (btnTopbarPwd) {
+        btnTopbarPwd.style.display = isOwner ? 'inline-flex' : 'none';
+      }
       const allNavItems = document.querySelectorAll('.sidebar .nav-item');
       let firstVisibleTab = null;
 
@@ -2298,6 +2515,7 @@
               <td>${statusTag}</td>
               <td><span class="badge" style="font-size: 0.8rem; background: var(--maroon); color: white;">${permCount} Perms</span></td>
               <td style="white-space: nowrap; display: flex; gap: 0.35rem; align-items: center;">
+                <button class="btn btn-outline btn-sm" onclick="openOwnerPasswordModal('${(m.email || m.id).replace(/'/g, "\\'")}')" title="Change password for this manager">🔑 Pwd</button>
                 <button class="btn btn-primary btn-sm" onclick="openPermissionMatrixModal('${m.id}', '${m.name.replace(/'/g, "\\'")}')">Matrix</button>
                 ${statusToggleBtn}
                 ${revokeBtn}
@@ -2537,6 +2755,10 @@
             ? `${emp.authorized_by_name} (${emp.authorized_by_role || 'MANAGER'})`
             : (emp.status === 'PENDING' ? '<span style="color: var(--amber-text); font-style: italic;">Awaiting Review</span>' : 'System Initial');
 
+          const pwdBtn = (currentUser && currentUser.role === 'OWNER')
+            ? `<button class="btn btn-outline btn-sm" onclick="openOwnerPasswordModal('${(emp.email || emp.mobile || emp.id || '').replace(/'/g, "\\'")}')" title="Change password for this employee">🔑 Pwd</button>`
+            : '';
+
           return `
             <tr>
               <td><code>${emp.employee_code || '—'}</code></td>
@@ -2546,7 +2768,7 @@
               <td>${emp.assigned_area || 'Beawar'}</td>
               <td>${statusTag}</td>
               <td style="font-size: 0.8rem;">${authorizedByText}</td>
-              <td style="white-space: nowrap; display: flex; gap: 0.35rem; align-items: center;">${actions}</td>
+              <td style="white-space: nowrap; display: flex; gap: 0.35rem; align-items: center;">${pwdBtn}${actions}</td>
             </tr>
           `;
         }).join('');
