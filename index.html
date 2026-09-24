@@ -700,42 +700,27 @@
           <p class="text-sm text-slateText-600 mt-1">Authentic 3-piece unstitched salwar suit dress materials (Top, Bottom & Dupatta). Buy as pure woven fabric or get custom-tailored to your measurements.</p>
         </div>
 
-        <!-- Dress Material Filter Tabs (Swipeable on mobile, flex-wrap on desktop) -->
-        <div class="overflow-x-auto no-scrollbar flex items-center gap-1.5 pb-1 md:inline-flex md:flex-wrap p-1 bg-ivory-100 rounded border border-ivory-300" role="tablist" aria-label="Salwar suit dress material fabric categories">
-          <button type="button" onclick="filterCategoryTab('all')" id="tabAll" class="px-3.5 py-1.5 text-xs font-semibold rounded bg-maroon-800 text-ivory-50 shadow-sm transition-all whitespace-nowrap shrink-0" role="tab" aria-selected="true">
-            All Salwar Suits
-          </button>
-          <button type="button" onclick="filterCategoryTab('cotton')" id="tabCotton" class="px-3.5 py-1.5 text-xs font-semibold rounded text-charcoal-900 hover:text-maroon-800 transition-all whitespace-nowrap shrink-0" role="tab" aria-selected="false">
-            Pure Cotton Suits
-          </button>
-          <button type="button" onclick="filterCategoryTab('silk')" id="tabSilk" class="px-3.5 py-1.5 text-xs font-semibold rounded text-charcoal-900 hover:text-maroon-800 transition-all whitespace-nowrap shrink-0" role="tab" aria-selected="false">
-            Chanderi Silk Suits
-          </button>
-          <button type="button" onclick="filterCategoryTab('prints')" id="tabPrints" class="px-3.5 py-1.5 text-xs font-semibold rounded text-charcoal-900 hover:text-maroon-800 transition-all whitespace-nowrap shrink-0" role="tab" aria-selected="false">
-            Bandhani & Leheriya
-          </button>
-          <button type="button" onclick="filterCategoryTab('georgette')" id="tabGeorgette" class="px-3.5 py-1.5 text-xs font-semibold rounded text-charcoal-900 hover:text-maroon-800 transition-all whitespace-nowrap shrink-0" role="tab" aria-selected="false">
-            Festive Occasion Suits
-          </button>
+        <!-- Boutique Category Tabs (Desktop) -->
+        <div id="desktopCategoryTabsContainer" class="overflow-x-auto no-scrollbar flex items-center gap-1.5 pb-1 md:inline-flex md:flex-wrap p-1 bg-ivory-100 rounded border border-ivory-300" role="tablist" aria-label="Boutique categories">
+          <!-- Populated dynamically via renderDynamicCategoryNavigation() -->
         </div>
       </div>
 
       <!-- Categories Grid -->
-      <div id="categoryGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
-        <!-- Populated via JavaScript dynamically for scalability -->
+      <div id="categoryGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6">
+        <!-- Populated via JavaScript dynamically from Category Architecture -->
       </div>
 
     </div>
   </section>
 
   <!-- ========================================================================= -->
-  <!-- HORIZONTAL FABRIC FILTER PILLS (Mobile Only Option B)                     -->
+  <!-- HORIZONTAL BOUTIQUE CATEGORY PILLS (Mobile Only Option B)                 -->
   <!-- ========================================================================= -->
-  <section class="mobile-filter-pills px-3 py-2 hidden items-center gap-1.5 overflow-x-auto no-scrollbar bg-[#FAF8F5] border-b border-[#EBE3D7]/60" id="mobileFilterPillsSection" aria-label="Filter fabrics">
-    <button type="button" onclick="setCatalogFilter('all')" data-filter="all" class="mobile-filter-pill px-3.5 py-1.5 bg-maroon-900 text-gold-400 text-xs font-bold rounded-full shrink-0 shadow-xs">All Salwar Suits</button>
-    <button type="button" onclick="setCatalogFilter('cotton')" data-filter="cotton" class="mobile-filter-pill px-3.5 py-1.5 bg-white border border-[#EBE3D7] text-gray-800 text-xs font-semibold rounded-full shrink-0">Pure Cotton</button>
-    <button type="button" onclick="setCatalogFilter('prints')" data-filter="prints" class="mobile-filter-pill px-3.5 py-1.5 bg-white border border-[#EBE3D7] text-gray-800 text-xs font-semibold rounded-full shrink-0">Bandhani &amp; Leheriya</button>
-    <button type="button" onclick="setCatalogFilter('silk')" data-filter="silk" class="mobile-filter-pill px-3.5 py-1.5 bg-white border border-[#EBE3D7] text-gray-800 text-xs font-semibold rounded-full shrink-0">Chanderi Silk</button>
+  <section class="mobile-filter-pills px-3 py-2.5 hidden items-center gap-1.5 overflow-x-auto no-scrollbar bg-[#FAF8F5] border-b border-[#EBE3D7]/60" id="mobileFilterPillsSection" aria-label="Boutique categories">
+    <div id="mobileCategoryPillsContainer" class="flex items-center gap-1.5 shrink-0">
+      <!-- Populated dynamically via renderDynamicCategoryNavigation() -->
+    </div>
   </section>
 
   <!-- ========================================================================= -->
@@ -747,8 +732,8 @@
       <!-- Mobile Catalog Header (Option B) -->
       <div class="flex items-center justify-between mb-3 lg:hidden">
         <div>
-          <h2 class="font-serif text-base font-bold text-maroon-950">Curated Salwar Suits</h2>
-          <p class="text-[10px] text-gray-500">Handcrafted Dress Material Sets</p>
+          <h2 id="mobileCatalogTitle" class="font-serif text-base font-bold text-maroon-950">Curated Salwar Suits</h2>
+          <p id="mobileCatalogSubtitle" class="text-[10px] text-gray-500">Handcrafted Dress Material Sets</p>
         </div>
         <div class="flex items-center gap-1.5">
           <label for="mobileCatalogSortSelect" class="sr-only">Sort products</label>
@@ -765,8 +750,8 @@
       <div class="hidden lg:flex flex-col md:flex-row md:items-end justify-between mb-6 pb-3 md:mb-10 md:pb-4 border-b border-ivory-200 gap-4">
         <div>
           <span class="text-xs font-bold uppercase tracking-luxury text-maroon-800">Fresh from Loom & Studio</span>
-          <h2 class="font-serif text-2xl sm:text-3xl font-bold text-maroon-950 mt-1">New Arrivals</h2>
-          <p class="text-sm text-slateText-600 mt-1">Order as raw woven unstitched fabric or have our master tailors stitch to your fit.</p>
+          <h2 id="catalogTitle" class="font-serif text-2xl sm:text-3xl font-bold text-maroon-950 mt-1">New Arrivals</h2>
+          <p id="catalogSubtitle" class="text-sm text-slateText-600 mt-1">Order as raw woven unstitched fabric or have our master tailors stitch to your fit.</p>
         </div>
         <a href="#newArrivals" onclick="filterProductSection('all')" class="text-xs font-bold uppercase tracking-wide text-maroon-800 hover:text-maroon-700 flex items-center gap-1 group">
           View All New Arrivals
@@ -3332,6 +3317,7 @@
       uploadedReference: null,
       uploadedReferences: [],
       pendingCustomization: null,
+      selectedCategorySlug: 'salwar-suit-dress-materials',
       activeFilter: 'all',
       activeSort: 'featured',
       appliedCoupon: null,
@@ -3357,7 +3343,7 @@
     // 3. INITIALIZATION & RENDERING
     // -------------------------------------------------------------
     document.addEventListener('DOMContentLoaded', () => {
-      renderCategories('all');
+      renderDynamicCategoryNavigation();
       renderNewArrivals();
       renderBestSellers();
       renderShowcase();
@@ -3413,7 +3399,7 @@
               });
             }
           });
-          renderCategories('all');
+          renderDynamicCategoryNavigation();
           renderNewArrivals();
           renderBestSellers();
           renderShowcase();
@@ -3423,51 +3409,143 @@
       }
     }
 
-    // Reactive store update listener for instant 1-of-1 delisting (§11, §32)
+    // Reactive store update listener for instant 1-of-1 delisting & category changes (§11, §32)
     window.addEventListener('abha-store-update', () => {
+      renderDynamicCategoryNavigation();
       syncLiveProducts();
     });
 
-    // Render Categories
-    function renderCategories(filter = 'all') {
-      const container = document.getElementById('categoryGrid');
-      container.innerHTML = '';
-      
-      const filtered = filter === 'all' 
-        ? CATEGORIES 
-        : CATEGORIES.filter(c => c.type === filter);
-
-      filtered.forEach(cat => {
-        const div = document.createElement('div');
-        div.className = 'group cursor-pointer text-center';
-        div.onclick = () => filterProductSection(cat.name);
-        div.innerHTML = `
-          <div class="relative aspect-[3/4] rounded overflow-hidden border border-ivory-300 bg-ivory-200 mb-2">
-            <img src="${cat.img}" alt="${cat.name} collection at ABHA" class="w-full h-full object-cover group-hover:scale-105 transition-luxury" loading="lazy" />
-            <div class="absolute inset-0 bg-maroon-950/10 group-hover:bg-maroon-950/20 transition-colors"></div>
-          </div>
-          <h3 class="font-serif text-xs sm:text-sm font-bold text-charcoal-950 group-hover:text-maroon-800 transition-colors">${cat.name}</h3>
-          <p class="text-[11px] text-slateText-600">${cat.count}</p>
-        `;
-        container.appendChild(div);
-      });
+    // -------------------------------------------------------------
+    // Category Architecture & Storefront Navigation
+    // -------------------------------------------------------------
+    function getStoreCategories() {
+      if (window.AbhaStore && typeof window.AbhaStore.getCategories === 'function') {
+        const cats = window.AbhaStore.getCategories();
+        if (cats && cats.length > 0) return cats;
+      }
+      try {
+        const raw = localStorage.getItem('abha_db_categories');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch (e) {}
+      return [
+        { id: 'cat-salwar', name: 'Salwar Suits', slug: 'salwar-suit-dress-materials', gender: 'Women', is_active: 1, status: 'ACTIVE', badge_text: 'Active Collection', description: 'Authentic 3-piece unstitched salwar suit dress materials (Top, Bottom & Dupatta). Buy as pure fabric or custom-tailored to your measurements.', product_count: 5 },
+        { id: 'cat-sarees', name: 'Sarees', slug: 'sarees', gender: 'Women', is_active: 0, status: 'COMING_SOON', badge_text: 'Coming Soon', description: 'Handcrafted Kota Doria, Bandhani, and Chanderi sarees from Rajasthan heritage looms.', product_count: 0 },
+        { id: 'cat-poshak', name: 'Rajputi Poshak', slug: 'rajputi-poshak', gender: 'Women', is_active: 0, status: 'COMING_SOON', badge_text: 'Coming Soon', description: 'Traditional Royal Rajputana bridal and festive poshaks with authentic gota patti work.', product_count: 0 },
+        { id: 'cat-chaniya', name: 'Chaniya Choli', slug: 'chaniya-choli', gender: 'Women', is_active: 0, status: 'COMING_SOON', badge_text: 'Coming Soon', description: 'Artisan flared lehengas and chaniya cholis for Navratri, sangeet, and festive celebrations.', product_count: 0 },
+        { id: 'cat-mens', name: "Men's Collection", slug: 'mens-collection', gender: 'Men', is_active: 0, status: 'COMING_SOON', badge_text: 'Coming Soon', description: 'Bespoke Royal Kurta Pajama, Jodhpuris, and Nehru jackets tailored with artisanal fabrics.', product_count: 0 }
+      ];
     }
 
-    function filterCategoryTab(type) {
-      const tabs = ['all', 'cotton', 'silk', 'georgette', 'prints'];
-      tabs.forEach(t => {
-        const btn = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
-        if (btn) {
-          if (t === type) {
-            btn.className = 'px-3.5 py-1.5 text-xs font-semibold rounded bg-maroon-800 text-ivory-50 shadow-sm transition-all';
-            btn.setAttribute('aria-selected', 'true');
-          } else {
-            btn.className = 'px-3.5 py-1.5 text-xs font-semibold rounded text-charcoal-900 hover:text-maroon-800 transition-all';
-            btn.setAttribute('aria-selected', 'false');
-          }
-        }
-      });
-      renderCategories(type);
+    function getCategoryThumbnail(cat) {
+      if (cat.image || cat.img) return cat.image || cat.img;
+      const s = (cat.slug || '').toLowerCase();
+      const n = (cat.name || '').toLowerCase();
+      if (s.includes('salwar') || n.includes('salwar')) return 'images/pink-leheriya-cotton-suit.jpg';
+      if (s.includes('saree') || n.includes('saree')) return 'images/magenta-chanderi-silk-suit.jpg';
+      if (s.includes('poshak') || n.includes('poshak') || s.includes('rajputi') || n.includes('rajputi')) return 'images/mustard-bandhani-chanderi-suit.jpg';
+      if (s.includes('chaniya') || n.includes('chaniya') || s.includes('lehenga') || n.includes('lehenga')) return 'images/cream-lime-cotton-suit.jpg';
+      if (s.includes('men') || n.includes('men') || s.includes('kurta') || n.includes('kurta')) return 'images/teal-geometric-cotton-suit.jpg';
+      return 'images/pink-leheriya-cotton-suit.jpg';
+    }
+
+    function renderDynamicCategoryNavigation() {
+      const categories = getStoreCategories();
+      if (!categories || categories.length === 0) return;
+
+      if (!state.selectedCategorySlug) {
+        state.selectedCategorySlug = categories[0].slug;
+      }
+
+      // 1. Desktop Tabs
+      const tabsContainer = document.getElementById('desktopCategoryTabsContainer');
+      if (tabsContainer) {
+        tabsContainer.innerHTML = categories.map(cat => {
+          const isSel = cat.slug === state.selectedCategorySlug;
+          const isAct = Boolean(cat.is_active);
+          const badgeText = isAct ? (cat.product_count !== undefined ? `${cat.product_count}` : 'Live') : (cat.badge_text || 'Soon');
+          return `
+            <button type="button" onclick="selectBoutiqueCategory('${cat.slug}')" class="px-3.5 py-1.5 text-xs font-semibold rounded transition-all whitespace-nowrap shrink-0 flex items-center gap-1.5 ${isSel ? 'bg-maroon-800 text-ivory-50 shadow-sm' : 'text-charcoal-900 hover:text-maroon-800'}" role="tab" aria-selected="${isSel}">
+              <span>${cat.name}</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded-full font-bold uppercase ${isSel ? (isAct ? 'bg-white/20 text-ivory-100' : 'bg-gold-400 text-maroon-950') : (isAct ? 'bg-maroon-100 text-maroon-900' : 'bg-amber-100 text-amber-900')}">
+                ${badgeText}
+              </span>
+            </button>
+          `;
+        }).join('');
+      }
+
+      // 2. Mobile Pills
+      const mobilePillsContainer = document.getElementById('mobileCategoryPillsContainer');
+      if (mobilePillsContainer) {
+        mobilePillsContainer.innerHTML = categories.map(cat => {
+          const isSel = cat.slug === state.selectedCategorySlug;
+          const isAct = Boolean(cat.is_active);
+          const badgeText = isAct ? (cat.product_count !== undefined ? `${cat.product_count}` : 'Live') : (cat.badge_text || 'Soon');
+          return `
+            <button type="button" onclick="selectBoutiqueCategory('${cat.slug}')" class="mobile-filter-pill px-3.5 py-1.5 text-xs font-semibold rounded-full shrink-0 flex items-center gap-1.5 transition ${isSel ? 'bg-maroon-900 text-gold-400 font-bold shadow-xs border border-maroon-900' : 'bg-white border border-[#EBE3D7] text-gray-800 hover:border-maroon-900/40'}">
+              <span>${cat.name}</span>
+              <span class="text-[9px] px-1.5 py-0.5 rounded-full font-bold uppercase ${isSel ? (isAct ? 'bg-gold-400/20 text-gold-300' : 'bg-gold-400 text-maroon-950') : (isAct ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-900')}">
+                ${badgeText}
+              </span>
+            </button>
+          `;
+        }).join('');
+      }
+
+      // 3. Desktop Category Grid Cards
+      const gridContainer = document.getElementById('categoryGrid');
+      if (gridContainer) {
+        gridContainer.innerHTML = categories.map(cat => {
+          const isSel = cat.slug === state.selectedCategorySlug;
+          const isAct = Boolean(cat.is_active);
+          const badgeText = cat.badge_text || (isAct ? 'Active Collection' : 'Coming Soon');
+          return `
+            <div onclick="selectBoutiqueCategory('${cat.slug}')" class="group cursor-pointer text-center p-2 rounded-xl transition-all ${isSel ? 'bg-maroon-900/5 ring-2 ring-maroon-800' : 'hover:bg-ivory-100'}">
+              <div class="relative aspect-[3/4] rounded-lg overflow-hidden border ${isSel ? 'border-maroon-800 shadow-sm' : 'border-ivory-300'} bg-ivory-200 mb-2">
+                <img src="${getCategoryThumbnail(cat)}" alt="${cat.name} collection at ABHA" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+                <div class="absolute inset-0 bg-maroon-950/15 group-hover:bg-maroon-950/25 transition-colors"></div>
+                
+                <div class="absolute top-2 left-2">
+                  <span class="text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded shadow-xs ${isAct ? 'bg-emerald-800 text-white' : 'bg-charcoal-950/85 backdrop-blur-xs text-gold-400 border border-gold-400/30'}">
+                    ${badgeText}
+                  </span>
+                </div>
+
+                ${isAct ? `
+                  <div class="absolute bottom-2 right-2 bg-charcoal-950/80 backdrop-blur-xs text-ivory-100 text-[10px] font-semibold px-2 py-0.5 rounded">
+                    ${cat.product_count !== undefined ? cat.product_count : 5} In Stock
+                  </div>
+                ` : `
+                  <div class="absolute bottom-2 inset-x-2 text-center bg-charcoal-950/85 backdrop-blur-xs text-gold-300 text-[10px] font-bold py-1 rounded border border-gold-400/30">
+                    ✨ Atelier Preview
+                  </div>
+                `}
+              </div>
+              <h3 class="font-serif text-xs sm:text-sm font-bold ${isSel ? 'text-maroon-900 font-extrabold' : 'text-charcoal-950 group-hover:text-maroon-800'} transition-colors">${cat.name}</h3>
+              <p class="text-[11px] ${isAct ? 'text-slateText-600 font-medium' : 'text-amber-800 font-bold'}">${isAct ? 'Live Catalog & Tailoring' : '✨ Launching Soon'}</p>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    function selectBoutiqueCategory(slug) {
+      state.selectedCategorySlug = slug;
+      state.activeFilter = 'all';
+      renderDynamicCategoryNavigation();
+      renderNewArrivals();
+      const target = document.getElementById('newArrivals');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    // Backwards-compatibility alias
+    function renderCategories() {
+      renderDynamicCategoryNavigation();
     }
 
     // Product Card Template (Honest Indian Boutique UX)
@@ -3551,7 +3629,78 @@
       const grid = document.getElementById('newArrivalsGrid');
       if (!grid) return;
 
+      const categories = getStoreCategories();
+      let currentCat = categories.find(c => c.slug === state.selectedCategorySlug);
+      if (!currentCat) {
+        currentCat = categories.find(c => c.is_active) || categories[0] || { slug: 'salwar-suit-dress-materials', is_active: 1, name: 'Salwar Suit Dress Materials' };
+        state.selectedCategorySlug = currentCat.slug;
+      }
+
+      // Update section headers
+      const catTitle = document.getElementById('catalogTitle');
+      const catSub = document.getElementById('catalogSubtitle');
+      const mobTitle = document.getElementById('mobileCatalogTitle');
+      const mobSub = document.getElementById('mobileCatalogSubtitle');
+
+      if (currentCat.is_active) {
+        if (catTitle) catTitle.textContent = currentCat.name;
+        if (catSub) catSub.textContent = currentCat.description || 'Authentic unstitched salwar suit dress materials. Order as raw woven fabric or custom-tailored to your measurements.';
+        if (mobTitle) mobTitle.textContent = currentCat.name;
+        if (mobSub) mobSub.textContent = 'Handcrafted Dress Material Sets';
+      } else {
+        if (catTitle) catTitle.textContent = `${currentCat.name} (Coming Soon)`;
+        if (catSub) catSub.textContent = currentCat.description || 'Exclusive handcrafted collection currently being woven. Coming soon to ABHA atelier.';
+        if (mobTitle) mobTitle.textContent = `${currentCat.name} (Coming Soon)`;
+        if (mobSub) mobSub.textContent = 'Boutique Exclusive • Coming Soon';
+      }
+
+      const filterChips = document.getElementById('catalogFilterChips');
+
+      // If category is Coming Soon / Inactive
+      if (!currentCat.is_active) {
+        if (filterChips && filterChips.parentElement) {
+          filterChips.parentElement.classList.add('hidden');
+        }
+
+        grid.innerHTML = `
+          <div class="col-span-full py-12 px-4 sm:px-10 bg-ivory-50 rounded-2xl border-2 border-dashed border-maroon-900/30 text-center max-w-2xl mx-auto my-4 shadow-sm">
+            <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3.5 rounded-full bg-maroon-900/10 text-maroon-900 flex items-center justify-center text-2xl sm:text-3xl font-serif">
+              ✨
+            </div>
+            <span class="inline-block px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold tracking-widest uppercase bg-gold-400/20 text-maroon-900 border border-gold-400/40 mb-3">
+              ${currentCat.badge_text || 'Boutique Exclusive • Coming Soon'}
+            </span>
+            <h3 class="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-maroon-950 mb-2">
+              ${currentCat.name}
+            </h3>
+            <p class="text-xs sm:text-sm text-slateText-700 leading-relaxed max-w-lg mx-auto mb-6">
+              ${currentCat.description || 'Our handpicked artisanal weaves are currently being curated at our Beawar atelier. This collection will be launching soon with bespoke tailoring options.'}
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <a href="https://wa.me/919214837104?text=${encodeURIComponent('Namaste ABHA! I am interested in your upcoming ' + currentCat.name + ' collection. Please notify me when designs launch.')}" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-5 py-2.5 rounded-full bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold tracking-wide uppercase shadow-sm flex items-center justify-center gap-2 transition">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.696c1.029.575 1.774.877 2.806.877 3.18 0 5.767-2.587 5.767-5.766.001-3.18-2.585-5.76-5.767-5.76zm3.377 8.21c-.14.394-.809.757-1.121.785-.312.029-.68.146-2.222-.49-1.921-.793-3.125-2.774-3.218-2.899-.093-.125-.769-1.022-.769-1.949 0-.927.487-1.382.66-1.572.173-.19.377-.238.503-.238.125 0 .252.002.361.008.115.006.269-.044.42.321.156.377.534 1.302.581 1.398.047.096.078.208.016.333-.062.125-.094.203-.187.312-.093.109-.196.244-.28.328-.093.093-.19.195-.082.38.109.185.485.801 1.041 1.296.716.638 1.319.835 1.507.928.188.093.298.078.408-.047.11-.125.471-.548.597-.736.125-.188.251-.157.42-.094.17.063 1.077.507 1.262.6.185.093.309.14.354.218.045.078.045.452-.095.846z"/></svg>
+                Inquire via WhatsApp
+              </a>
+              <button type="button" onclick="selectBoutiqueCategory('salwar-suit-dress-materials')" class="w-full sm:w-auto px-5 py-2.5 rounded-full bg-maroon-900 hover:bg-maroon-950 text-gold-300 hover:text-white text-xs font-bold tracking-wide uppercase transition shadow-sm">
+                View Available Salwar Suits
+              </button>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      // Active category: show desktop catalog controls
+      if (filterChips && filterChips.parentElement) {
+        filterChips.parentElement.classList.remove('hidden');
+      }
+
       let items = [...PRODUCTS];
+
+      // If items have category info matching
+      if (currentCat.slug !== 'salwar-suit-dress-materials' && currentCat.id !== 'cat-salwar') {
+        items = items.filter(p => (p.category && p.category.toLowerCase().includes(currentCat.name.toLowerCase())));
+      }
 
       // Apply active filter
       if (state.activeFilter === 'cotton') {
@@ -3595,14 +3744,6 @@
           btn.className = 'catalog-chip px-3.5 py-1.5 text-xs font-semibold rounded-full bg-maroon-800 text-ivory-50 transition-all whitespace-nowrap';
         } else {
           btn.className = 'catalog-chip px-3.5 py-1.5 text-xs font-semibold rounded-full bg-ivory-200 text-charcoal-800 hover:bg-maroon-900/10 transition-all whitespace-nowrap';
-        }
-      });
-      // Update mobile Option B filter pills
-      document.querySelectorAll('.mobile-filter-pill').forEach(pill => {
-        if (pill.getAttribute('data-filter') === filter) {
-          pill.className = 'mobile-filter-pill px-3.5 py-1.5 bg-maroon-900 text-gold-400 text-xs font-bold rounded-full shrink-0 shadow-xs';
-        } else {
-          pill.className = 'mobile-filter-pill px-3.5 py-1.5 bg-white border border-[#EBE3D7] text-gray-800 text-xs font-semibold rounded-full shrink-0';
         }
       });
       renderNewArrivals();
@@ -3651,15 +3792,18 @@
 
     function filterProductSection(categoryName) {
       if (categoryName === 'all') {
-        renderNewArrivals();
+        selectBoutiqueCategory('salwar-suit-dress-materials');
       } else {
-        const grid = document.getElementById('newArrivalsGrid');
-        const matched = PRODUCTS.filter(p => p.category.toLowerCase().includes(categoryName.toLowerCase()));
-        if (matched.length > 0) {
-          grid.innerHTML = matched.map(p => createProductCard(p)).join('');
+        const categories = getStoreCategories();
+        const matched = categories.find(c => c.name.toLowerCase().includes(categoryName.toLowerCase()) || categoryName.toLowerCase().includes(c.name.toLowerCase()) || c.slug.toLowerCase().includes(categoryName.toLowerCase()));
+        if (matched) {
+          selectBoutiqueCategory(matched.slug);
+        } else {
+          renderNewArrivals();
+          const target = document.getElementById('newArrivals');
+          if (target) target.scrollIntoView({ behavior: 'smooth' });
         }
       }
-      document.getElementById('newArrivals').scrollIntoView({ behavior: 'smooth' });
     }
 
     // -------------------------------------------------------------

@@ -1359,11 +1359,14 @@
 
       <!-- 6. CATEGORIES & FUTURE -->
       <section id="section-categories" class="page-section">
-        <div class="section-header">
+        <div class="section-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
           <div>
             <h1 class="section-title">Category Architecture</h1>
-            <p class="section-desc">Salwar Suits active; Sarees, Rajputi Poshak, and Men's configured for future launch</p>
+            <p class="section-desc">Manage active boutique categories and future collections (Salwar Suits, Sarees, Rajputi Poshak, Men's)</p>
           </div>
+          <button type="button" class="btn btn-primary btn-sm" onclick="openAddCategoryModal()" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+            <span>+</span> <span>Add Category</span>
+          </button>
         </div>
 
         <div class="panel-card">
@@ -1373,9 +1376,10 @@
                 <tr>
                   <th>Category Name</th>
                   <th>Slug</th>
+                  <th>Department</th>
                   <th>Active Products</th>
                   <th>Current State</th>
-                  <th>Actions</th>
+                  <th style="text-align: right;">Actions</th>
                 </tr>
               </thead>
               <tbody id="categoriesAdminTable">
@@ -1840,6 +1844,62 @@
         <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem;">
           <button type="button" class="btn btn-outline" onclick="closeOwnerPasswordModal()">Cancel</button>
           <button type="submit" id="btnSubmitOwnerPassword" class="btn btn-primary">Update Password</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADD / EDIT CATEGORY MODAL -->
+  <div id="categoryModal" class="modal-backdrop" style="z-index: 1100;">
+    <div class="modal-card" style="max-width: 520px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+        <h3 class="panel-title" id="catModalTitle" style="margin-bottom: 0;">Add New Category</h3>
+        <button type="button" onclick="closeCategoryModal()" style="background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--gray-500); line-height: 1;">&times;</button>
+      </div>
+      <p style="font-size: 0.8rem; color: var(--gray-500); margin-bottom: 1rem;">
+        Configure categories visible across the ABHA online storefront and in-store catalog.
+      </p>
+      <form id="categoryForm" onsubmit="submitCategoryForm(event)" style="display: flex; flex-direction: column; gap: 0.85rem; text-align: left;">
+        <input type="hidden" id="catFormId">
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Category Name *</label>
+          <input type="text" id="catFormName" class="form-input" required placeholder="e.g. Sarees, Rajputi Poshak, Kurtis" onkeyup="handleCatNameInput(this.value)">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Category Slug *</label>
+            <input type="text" id="catFormSlug" class="form-input" required placeholder="e.g. sarees">
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Department / Gender *</label>
+            <select id="catFormGender" class="form-input">
+              <option value="Women">Women</option>
+              <option value="Men">Men</option>
+              <option value="Unisex">Unisex</option>
+            </select>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Initial State *</label>
+            <select id="catFormStatus" class="form-input" onchange="handleCatStatusChange(this.value)">
+              <option value="1">Active Collection</option>
+              <option value="0">Coming Soon (Inactive)</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Badge Text</label>
+            <input type="text" id="catFormBadge" class="form-input" placeholder="e.g. Active or Coming Soon">
+          </div>
+        </div>
+        <div>
+          <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Description / Notes</label>
+          <textarea id="catFormDesc" class="form-input" rows="2" placeholder="Brief note about weaves, fabrics, or upcoming launch details..."></textarea>
+        </div>
+        <div id="catFormError" style="color: var(--red-text); font-size: 0.8rem; display: none;"></div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem;">
+          <button type="button" class="btn btn-outline" onclick="closeCategoryModal()">Cancel</button>
+          <button type="submit" id="btnSaveCategory" class="btn btn-primary">Save Category</button>
         </div>
       </form>
     </div>
@@ -3308,24 +3368,141 @@
       } catch (e) { console.error(e); }
     }
 
+    let cachedCategories = [];
+
     async function loadCategoriesAdmin() {
       const tbody = document.getElementById('categoriesAdminTable');
       try {
         const res = await apiRequest('/api/categories');
-        tbody.innerHTML = res.data.map(c => `
+        cachedCategories = res.data || [];
+        tbody.innerHTML = cachedCategories.map(c => `
           <tr>
-            <td><strong>${c.name}</strong></td>
-            <td><code>${c.slug}</code></td>
-            <td>${c.product_count}</td>
-            <td><span class="tag ${c.is_active ? 'tag-instock' : 'tag-unique'}">${c.badge_text || (c.is_active ? 'Active' : 'Coming Soon')}</span></td>
             <td>
-              <button class="btn btn-outline btn-sm" onclick="toggleCategory('${c.id}', ${!c.is_active})">
-                ${c.is_active ? 'Set Coming Soon' : 'Activate Category'}
-              </button>
+              <strong>${c.name}</strong>
+              ${c.description ? `<br><span style="font-size: 0.75rem; color: var(--gray-500);">${c.description}</span>` : ''}
+            </td>
+            <td><code>${c.slug}</code></td>
+            <td><span class="tag tag-quantity">${c.gender || 'Women'}</span></td>
+            <td><strong>${c.product_count !== undefined ? c.product_count : 0}</strong></td>
+            <td><span class="tag ${c.is_active ? 'tag-instock' : 'tag-unique'}">${c.badge_text || (c.is_active ? 'Active' : 'Coming Soon')}</span></td>
+            <td style="text-align: right; white-space: nowrap;">
+              <div style="display: inline-flex; gap: 0.35rem; align-items: center; justify-content: flex-end;">
+                <button class="btn btn-outline btn-sm" onclick="toggleCategory('${c.id}', ${!c.is_active})" title="${c.is_active ? 'Switch to Coming Soon' : 'Activate for live catalog'}">
+                  ${c.is_active ? 'Set Coming Soon' : 'Activate Category'}
+                </button>
+                <button class="btn btn-outline btn-sm" onclick="openEditCategoryModal('${c.id}')" title="Edit Category Details">✏️ Edit</button>
+                ${(c.slug !== 'salwar-suit-dress-materials' && c.id !== 'cat-salwar' && c.id !== 'cat_salwar_suits') ? `
+                  <button class="btn btn-outline btn-sm" onclick="deleteCategoryAdmin('${c.id}', '${c.name.replace(/'/g, "\\'")}')" style="color: var(--red-text); border-color: var(--red-text);" title="Delete Category">🗑️</button>
+                ` : ''}
+              </div>
             </td>
           </tr>
         `).join('');
-      } catch (e) { console.error(e); }
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="6" style="color: var(--red-text);">${e.message}</td></tr>`;
+      }
+    }
+
+    function openAddCategoryModal() {
+      document.getElementById('categoryForm').reset();
+      document.getElementById('catFormId').value = '';
+      document.getElementById('catModalTitle').textContent = 'Add New Category';
+      document.getElementById('catFormStatus').value = '1';
+      document.getElementById('catFormBadge').value = 'Active Collection';
+      document.getElementById('catFormError').style.display = 'none';
+      document.getElementById('categoryModal').classList.add('open');
+    }
+
+    function openEditCategoryModal(id) {
+      const cat = cachedCategories.find(c => c.id === id);
+      if (!cat) return;
+      document.getElementById('categoryForm').reset();
+      document.getElementById('catFormId').value = cat.id;
+      document.getElementById('catModalTitle').textContent = 'Edit Category: ' + cat.name;
+      document.getElementById('catFormName').value = cat.name;
+      document.getElementById('catFormSlug').value = cat.slug;
+      document.getElementById('catFormGender').value = cat.gender || 'Women';
+      document.getElementById('catFormStatus').value = cat.is_active ? '1' : '0';
+      document.getElementById('catFormBadge').value = cat.badge_text || (cat.is_active ? 'Active' : 'Coming Soon');
+      document.getElementById('catFormDesc').value = cat.description || '';
+      document.getElementById('catFormError').style.display = 'none';
+      document.getElementById('categoryModal').classList.add('open');
+    }
+
+    function closeCategoryModal() {
+      document.getElementById('categoryModal').classList.remove('open');
+    }
+
+    function handleCatNameInput(val) {
+      const formId = document.getElementById('catFormId').value;
+      if (!formId) {
+        const slug = val.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        document.getElementById('catFormSlug').value = slug;
+      }
+    }
+
+    function handleCatStatusChange(val) {
+      const badgeInput = document.getElementById('catFormBadge');
+      if (val === '1') {
+        badgeInput.value = 'Active Collection';
+      } else {
+        badgeInput.value = 'Coming Soon';
+      }
+    }
+
+    async function submitCategoryForm(e) {
+      e.preventDefault();
+      const errBox = document.getElementById('catFormError');
+      errBox.style.display = 'none';
+
+      const catId = document.getElementById('catFormId').value;
+      const name = document.getElementById('catFormName').value.trim();
+      const slug = document.getElementById('catFormSlug').value.trim();
+      const gender = document.getElementById('catFormGender').value;
+      const is_active = document.getElementById('catFormStatus').value === '1';
+      const badge_text = document.getElementById('catFormBadge').value.trim() || (is_active ? 'Active' : 'Coming Soon');
+      const description = document.getElementById('catFormDesc').value.trim();
+
+      const btn = document.getElementById('btnSaveCategory');
+      const origText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+
+      try {
+        if (catId) {
+          await apiRequest(`/api/admin/categories/${catId}`, {
+            method: 'PUT',
+            body: JSON.stringify({ name, slug, gender, is_active, badge_text, description })
+          });
+        } else {
+          await apiRequest('/api/admin/categories', {
+            method: 'POST',
+            body: JSON.stringify({ name, slug, gender, is_active, badge_text, description })
+          });
+        }
+        closeCategoryModal();
+        showDirectAccessToast(catId ? 'Category updated successfully' : 'New category created successfully');
+        loadCategoriesAdmin();
+      } catch (err) {
+        errBox.textContent = err.message;
+        errBox.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = origText;
+      }
+    }
+
+    async function deleteCategoryAdmin(id, name) {
+      if (!confirm(`Are you sure you want to remove the category "${name}"?`)) return;
+      try {
+        await apiRequest(`/api/admin/categories/${id}`, {
+          method: 'DELETE'
+        });
+        showDirectAccessToast(`Category "${name}" removed`);
+        loadCategoriesAdmin();
+      } catch (err) {
+        alert(err.message);
+      }
     }
 
     async function toggleCategory(id, is_active) {
@@ -3334,6 +3511,7 @@
           method: 'PUT',
           body: JSON.stringify({ is_active, badge_text: is_active ? 'Active' : 'Coming Soon' })
         });
+        showDirectAccessToast(is_active ? 'Category activated' : 'Category set to Coming Soon');
         loadCategoriesAdmin();
       } catch (e) { alert(e.message); }
     }

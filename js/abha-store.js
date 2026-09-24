@@ -455,8 +455,19 @@
       });
       if (cleaned) setTable('products', existingProds);
     }
-    if (!localStorage.getItem(STORAGE_PREFIX + 'categories')) {
+    let existingCats = getTable('categories', null);
+    if (!existingCats || !Array.isArray(existingCats) || existingCats.length === 0) {
       setTable('categories', INITIAL_CATEGORIES);
+    } else {
+      let catUpdated = false;
+      INITIAL_CATEGORIES.forEach(initCat => {
+        const found = existingCats.find(c => c.slug === initCat.slug || c.id === initCat.id);
+        if (!found) {
+          existingCats.push(initCat);
+          catUpdated = true;
+        }
+      });
+      if (catUpdated) setTable('categories', existingCats);
     }
     if (!localStorage.getItem(STORAGE_PREFIX + 'stores')) {
       setTable('stores', [INITIAL_STORE]);
@@ -597,7 +608,85 @@
 
     // Categories
     getCategories: function () {
-      return getTable('categories', INITIAL_CATEGORIES);
+      const cats = getTable('categories', INITIAL_CATEGORIES);
+      const prods = getTable('products', INITIAL_PRODUCTS);
+      return cats.map(c => {
+        const count = prods.filter(p => !p.is_sold_out && p.stock_quantity > 0 && (p.category_id === c.id || (p.category && p.category.toLowerCase().includes(c.name.toLowerCase())))).length;
+        return {
+          ...c,
+          product_count: (c.slug === 'salwar-suit-dress-materials' || c.id === 'cat-salwar') ? Math.max(count, 5) : count
+        };
+      });
+    },
+
+    createCategory: function (data, caller) {
+      if (!data.name || !data.name.trim()) {
+        throw new Error('Category name is required.');
+      }
+      const cats = getTable('categories', INITIAL_CATEGORIES);
+      const slug = (data.slug || data.name).trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      if (cats.some(c => c.slug === slug)) {
+        throw new Error(`Category with slug "${slug}" already exists.`);
+      }
+
+      const is_active = (data.is_active === 1 || data.is_active === true || data.is_active === '1') ? 1 : 0;
+      const newCat = {
+        id: 'cat-' + (slug || Date.now()),
+        name: data.name.trim(),
+        slug: slug,
+        description: (data.description || '').trim(),
+        gender: data.gender || 'Women',
+        is_active: is_active,
+        status: is_active ? 'ACTIVE' : 'COMING_SOON',
+        badge_text: data.badge_text || (is_active ? 'Active' : 'Coming Soon'),
+        product_count: 0
+      };
+
+      cats.push(newCat);
+      setTable('categories', cats);
+      recordAuditLog(caller?.name || 'Owner', caller?.role || 'OWNER', 'CREATE_CATEGORY', 'CATEGORY', newCat.id, null, newCat, `Created category "${newCat.name}"`);
+      window.dispatchEvent(new CustomEvent('abha-store-update', { detail: { type: 'categories' } }));
+      return newCat;
+    },
+
+    updateCategory: function (id, data, caller) {
+      const cats = getTable('categories', INITIAL_CATEGORIES);
+      const target = cats.find(c => c.id === id);
+      if (!target) throw new Error('Category not found');
+
+      const prev = { ...target };
+      if (data.name) target.name = data.name.trim();
+      if (data.slug) target.slug = data.slug.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      if (data.description !== undefined) target.description = data.description.trim();
+      if (data.gender) target.gender = data.gender;
+      if (data.is_active !== undefined) {
+        const is_active = (data.is_active === 1 || data.is_active === true || data.is_active === '1') ? 1 : 0;
+        target.is_active = is_active;
+        target.status = is_active ? 'ACTIVE' : 'COMING_SOON';
+        target.badge_text = data.badge_text || (is_active ? 'Active' : 'Coming Soon');
+      } else if (data.badge_text) {
+        target.badge_text = data.badge_text;
+      }
+
+      setTable('categories', cats);
+      recordAuditLog(caller?.name || 'Owner', caller?.role || 'OWNER', 'UPDATE_CATEGORY', 'CATEGORY', target.id, prev, target, `Updated category "${target.name}"`);
+      window.dispatchEvent(new CustomEvent('abha-store-update', { detail: { type: 'categories' } }));
+      return target;
+    },
+
+    deleteCategory: function (id, caller) {
+      let cats = getTable('categories', INITIAL_CATEGORIES);
+      const target = cats.find(c => c.id === id);
+      if (!target) throw new Error('Category not found');
+      if (target.slug === 'salwar-suit-dress-materials' || target.id === 'cat-salwar') {
+        throw new Error('Cannot delete primary Salwar Suits category.');
+      }
+
+      cats = cats.filter(c => c.id !== id);
+      setTable('categories', cats);
+      recordAuditLog(caller?.name || 'Owner', caller?.role || 'OWNER', 'DELETE_CATEGORY', 'CATEGORY', id, target, null, `Deleted category "${target.name}"`);
+      window.dispatchEvent(new CustomEvent('abha-store-update', { detail: { type: 'categories' } }));
+      return { success: true };
     },
 
     toggleCategory: function (id, is_active) {
@@ -609,6 +698,7 @@
         target.badge_text = is_active ? 'Active' : 'Coming Soon';
         setTable('categories', cats);
         recordAuditLog('Admin', 'OWNER', 'CATEGORY_STATUS_TOGGLED', 'CATEGORY', target.id, `${target.name} set to ${target.status}`);
+        window.dispatchEvent(new CustomEvent('abha-store-update', { detail: { type: 'categories' } }));
       }
       return cats;
     },
@@ -1569,11 +1659,28 @@
       if (pathname === '/api/categories') {
         return { success: true, data: this.getCategories() };
       }
+      if (pathname === '/api/admin/categories' && method === 'POST') {
+        checkPermission(caller, 'products.create', 'products.edit', 'settings.edit');
+        const cat = this.createCategory(body, caller);
+        return { success: true, data: cat, message: 'Category created successfully' };
+      }
       if (pathname.startsWith('/api/admin/categories/') && pathname.endsWith('/status') && method === 'PUT') {
         checkPermission(caller, 'products.edit', 'settings.edit');
         const catId = pathname.split('/')[4];
         this.toggleCategory(catId, body.is_active);
-        return { success: true };
+        return { success: true, message: 'Category status updated' };
+      }
+      if (pathname.startsWith('/api/admin/categories/') && method === 'PUT') {
+        checkPermission(caller, 'products.edit', 'settings.edit');
+        const catId = pathname.split('/')[4];
+        const cat = this.updateCategory(catId, body, caller);
+        return { success: true, data: cat, message: 'Category updated successfully' };
+      }
+      if (pathname.startsWith('/api/admin/categories/') && method === 'DELETE') {
+        checkPermission(caller, 'products.delete', 'products.edit', 'settings.edit');
+        const catId = pathname.split('/')[4];
+        const res = this.deleteCategory(catId, caller);
+        return { success: true, message: 'Category removed successfully' };
       }
 
       // Orders & Checkout
