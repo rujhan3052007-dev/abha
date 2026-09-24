@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="js/abha-store.js?v=20260923_1"></script>
+  <script src="js/abha-store.js?v=20260924_1"></script>
   <style>
     :root {
       --maroon: #5c1324;
@@ -1544,6 +1544,8 @@
         </div>
       </form>
     </div>
+  </div>
+
   <!-- CREATE MANAGER MODAL (OWNER ONLY) -->
   <div id="createManagerModal" class="modal-backdrop">
     <div class="modal-card" style="max-width: 580px;">
@@ -1769,8 +1771,10 @@
         </div>
       </form>
     </div>
+  </div>
+
   <!-- OWNER MASTER PASSWORD CONTROL MODAL -->
-  <div id="ownerPasswordModal" class="modal-backdrop">
+  <div id="ownerPasswordModal" class="modal-backdrop" style="z-index: 1100;">
     <div class="modal-card" style="max-width: 480px;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
         <h3 class="panel-title" style="margin-bottom: 0;">👑 Owner Password Control</h3>
@@ -1901,9 +1905,19 @@
 
       const select = document.getElementById('pwdTargetRole');
       if (preselectedRoleOrIdentifier) {
-        if (['OWNER', 'MANAGER', 'TAILOR', 'DELIVERY'].includes(preselectedRoleOrIdentifier)) {
-          if (select) select.value = preselectedRoleOrIdentifier;
-          handlePwdTargetChange(preselectedRoleOrIdentifier);
+        const idLower = String(preselectedRoleOrIdentifier).trim().toLowerCase();
+        if (idLower === 'owner' || idLower === 'rujhan3052007@gmail.com') {
+          if (select) select.value = 'OWNER';
+          handlePwdTargetChange('OWNER');
+        } else if (idLower === 'manager' || idLower === 'manager@abha.in' || idLower === '9261516194') {
+          if (select) select.value = 'MANAGER';
+          handlePwdTargetChange('MANAGER');
+        } else if (idLower === 'tailor' || idLower === 'master.tailor@abha.in' || idLower === '9829000001') {
+          if (select) select.value = 'TAILOR';
+          handlePwdTargetChange('TAILOR');
+        } else if (idLower === 'delivery' || idLower === 'delivery@abha.in' || idLower === '9829000002') {
+          if (select) select.value = 'DELIVERY';
+          handlePwdTargetChange('DELIVERY');
         } else {
           if (select) select.value = 'CUSTOM';
           handlePwdTargetChange('CUSTOM');
@@ -1915,6 +1929,10 @@
         handlePwdTargetChange('MANAGER');
       }
       modal.classList.add('open');
+      setTimeout(() => {
+        const pwdNew = document.getElementById('pwdNewVal');
+        if (pwdNew) pwdNew.focus();
+      }, 100);
     }
 
     function closeOwnerPasswordModal() {
@@ -2499,6 +2517,8 @@
             ? `<button class="btn btn-outline btn-sm" onclick="toggleManagerStatus('${m.id}', 'ACTIVE')" style="color: var(--amber-text); border-color: var(--amber-text);">Suspend</button>`
             : m.status === 'SUSPENDED'
             ? `<button class="btn btn-outline btn-sm" onclick="toggleManagerStatus('${m.id}', 'SUSPENDED')" style="color: var(--green-text); border-color: var(--green-text);">Reactivate</button>`
+            : m.status === 'REVOKED'
+            ? `<button class="btn btn-outline btn-sm" onclick="toggleManagerStatus('${m.id}', 'REVOKED')" style="color: var(--green-text); border-color: var(--green-text);">Reactivate</button>`
             : '';
 
           const revokeBtn = m.status !== 'REVOKED'
@@ -2748,6 +2768,10 @@
             actions = `
               <button class="btn btn-outline btn-sm" onclick="updateEmployeeStatusAdmin('${emp.id}', 'ACTIVE')" style="color: var(--green-text); border-color: var(--green-text);">Reactivate</button>
               <button class="btn btn-outline btn-sm" onclick="updateEmployeeStatusAdmin('${emp.id}', 'REVOKED')" style="color: var(--red-text); border-color: var(--red-text);">Revoke</button>
+            `;
+          } else if (emp.status === 'REVOKED') {
+            actions = `
+              <button class="btn btn-outline btn-sm" onclick="updateEmployeeStatusAdmin('${emp.id}', 'ACTIVE')" style="color: var(--green-text); border-color: var(--green-text);">Reactivate</button>
             `;
           }
 

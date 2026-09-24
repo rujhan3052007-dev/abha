@@ -1220,6 +1220,14 @@
       emp.status = status;
       setTable('employees', employees);
 
+      const users = getTable('users', INITIAL_USERS);
+      const user = users.find(u => u.id === emp.userId || (emp.email && u.email === emp.email));
+      if (user) {
+        user.is_active = (status === 'ACTIVE') ? 1 : 0;
+        user.status = status;
+        setTable('users', users);
+      }
+
       recordAuditLog(caller?.name || 'Owner', 'OWNER', 'UPDATE_STATUS', 'EMPLOYEE', emp.id, prev, status, `Updated status to ${status} for ${emp.name}`);
       return emp;
     },
@@ -1315,6 +1323,14 @@
       const prev = emp.status;
       emp.status = status;
       setTable('employees', employees);
+
+      const users = getTable('users', INITIAL_USERS);
+      const user = users.find(u => u.id === emp.userId || (emp.email && u.email === emp.email));
+      if (user) {
+        user.is_active = (status === 'ACTIVE') ? 1 : 0;
+        user.status = status;
+        setTable('users', users);
+      }
 
       recordAuditLog(caller?.name || 'Manager', caller?.role || 'MANAGER', 'UPDATE_EMPLOYEE_STATUS', 'EMPLOYEE', emp.id, { status: prev }, { status }, `Updated status to ${status} for ${emp.name}`);
       return emp;
