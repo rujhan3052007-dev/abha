@@ -37,7 +37,7 @@
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="js/abha-store.js?v=20260925_3"></script>
+  <script src="js/abha-store.js?v=20260925_5"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -3409,24 +3409,27 @@
         }
       } catch (e) {}
       return [
-        { id: 'cat-salwar', name: 'Salwar Suits', slug: 'salwar-suit-dress-materials', gender: 'Women', is_active: 1, status: 'ACTIVE', badge_text: 'Active Collection', description: 'Authentic 3-piece unstitched salwar suit dress materials (Top, Bottom & Dupatta). Buy as pure fabric or custom-tailored to your measurements.', product_count: 5 },
-        { id: 'cat-sarees', name: 'Sarees', slug: 'sarees', gender: 'Women', is_active: 0, status: 'COMING_SOON', badge_text: 'Coming Soon', description: 'Handcrafted Kota Doria, Bandhani, and Chanderi sarees from Rajasthan heritage looms.', product_count: 0 },
-        { id: 'cat-poshak', name: 'Rajputi Poshak', slug: 'rajputi-poshak', gender: 'Women', is_active: 0, status: 'COMING_SOON', badge_text: 'Coming Soon', description: 'Traditional Royal Rajputana bridal and festive poshaks with authentic gota patti work.', product_count: 0 },
-        { id: 'cat-chaniya', name: 'Chaniya Choli', slug: 'chaniya-choli', gender: 'Women', is_active: 0, status: 'COMING_SOON', badge_text: 'Coming Soon', description: 'Artisan flared lehengas and chaniya cholis for Navratri, sangeet, and festive celebrations.', product_count: 0 },
-        { id: 'cat-mens', name: "Men's Collection", slug: 'mens-collection', gender: 'Men', is_active: 0, status: 'COMING_SOON', badge_text: 'Coming Soon', description: 'Bespoke Royal Kurta Pajama, Jodhpuris, and Nehru jackets tailored with artisanal fabrics.', product_count: 0 }
+        { id: 'cat-salwar', name: 'Salwar Suits', slug: 'salwar-suit-dress-materials', gender: 'Women', is_active: 1, status: 'ACTIVE', badge_text: 'Active Collection', description: 'Authentic 3-piece unstitched salwar suit dress materials (Top, Bottom & Dupatta). Buy as pure fabric or custom-tailored to your measurements.', product_count: 5, image: 'images/categories/cat-salwar.jpg' },
+        { id: 'cat-sarees', name: 'Sarees', slug: 'sarees', gender: 'Women', is_active: 0, status: 'COMING_SOON', badge_text: 'Coming Soon', description: 'Handcrafted Kota Doria, Bandhani, and Chanderi sarees from Rajasthan heritage looms.', product_count: 0, image: 'images/categories/cat-sarees.jpg' },
+        { id: 'cat-poshak', name: 'Rajputi Poshak', slug: 'rajputi-poshak', gender: 'Women', is_active: 0, status: 'COMING_SOON', badge_text: 'Coming Soon', description: 'Traditional Royal Rajputana bridal and festive poshaks with authentic gota patti work.', product_count: 0, image: 'images/categories/cat-poshak.jpg' },
+        { id: 'cat-chaniya', name: 'Chaniya Choli', slug: 'chaniya-choli', gender: 'Women', is_active: 0, status: 'COMING_SOON', badge_text: 'Coming Soon', description: 'Artisan flared lehengas and chaniya cholis for Navratri, sangeet, and festive celebrations.', product_count: 0, image: 'images/categories/cat-chaniya.jpg' },
+        { id: 'cat-mens', name: "Men's Collection", slug: 'mens-collection', gender: 'Men', is_active: 0, status: 'COMING_SOON', badge_text: 'Coming Soon', description: 'Bespoke Royal Kurta Pajama, Jodhpuris, and Nehru jackets tailored with artisanal fabrics.', product_count: 0, image: 'images/categories/cat-mens.jpg' }
       ];
     }
 
     function getCategoryThumbnail(cat) {
-      if (cat.image || cat.img) return cat.image || cat.img;
       const s = (cat.slug || '').toLowerCase();
       const n = (cat.name || '').toLowerCase();
-      if (s.includes('salwar') || n.includes('salwar')) return 'images/pink-leheriya-cotton-suit.jpg';
-      if (s.includes('saree') || n.includes('saree')) return 'images/magenta-chanderi-silk-suit.jpg';
-      if (s.includes('poshak') || n.includes('poshak') || s.includes('rajputi') || n.includes('rajputi')) return 'images/mustard-bandhani-chanderi-suit.jpg';
-      if (s.includes('chaniya') || n.includes('chaniya') || s.includes('lehenga') || n.includes('lehenga')) return 'images/cream-lime-cotton-suit.jpg';
-      if (s.includes('men') || n.includes('men') || s.includes('kurta') || n.includes('kurta')) return 'images/teal-geometric-cotton-suit.jpg';
-      return 'images/pink-leheriya-cotton-suit.jpg';
+      const img = (cat.image || cat.img || '').trim();
+      if (img && !img.includes('pink-leheriya') && !img.includes('magenta-chanderi') && !img.includes('mustard-bandhani') && !img.includes('cream-lime') && !img.includes('teal-geometric')) {
+        return img;
+      }
+      if (s.includes('saree') || n.includes('saree')) return 'images/categories/cat-sarees.jpg';
+      if (s.includes('poshak') || n.includes('poshak') || s.includes('rajputi') || n.includes('rajputi')) return 'images/categories/cat-poshak.jpg';
+      if (s.includes('chaniya') || n.includes('chaniya') || s.includes('lehenga') || n.includes('lehenga')) return 'images/categories/cat-chaniya.jpg';
+      if (s.includes('men') || n.includes('men') || s.includes('kurta') || n.includes('kurta')) return 'images/categories/cat-mens.jpg';
+      if (s.includes('salwar') || n.includes('salwar')) return 'images/categories/cat-salwar.jpg';
+      return 'images/categories/cat-salwar.jpg';
     }
 
     function renderDynamicCategoryNavigation() {
@@ -3636,11 +3639,15 @@
       if (!currentCat.is_active) {
 
         grid.innerHTML = `
-          <div class="col-span-full py-12 px-4 sm:px-10 bg-ivory-50 rounded-2xl border-2 border-dashed border-maroon-900/30 text-center max-w-2xl mx-auto my-4 shadow-sm">
-            <div class="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3.5 rounded-full bg-maroon-900/10 text-maroon-900 flex items-center justify-center text-2xl sm:text-3xl font-serif">
-              ✨
+          <div class="col-span-full py-10 px-4 sm:px-10 bg-ivory-50 rounded-2xl border-2 border-dashed border-maroon-900/30 text-center max-w-2xl mx-auto my-4 shadow-sm">
+            <div class="relative w-36 h-48 sm:w-44 sm:h-56 mx-auto mb-4 rounded-xl overflow-hidden shadow-md border-2 border-gold-400/40 bg-ivory-200">
+              <img src="${getCategoryThumbnail(currentCat)}" alt="${currentCat.name} catalog preview" class="w-full h-full object-cover">
+              <div class="absolute inset-0 bg-maroon-950/15"></div>
+              <span class="absolute bottom-2 inset-x-2 text-center text-[10px] font-bold uppercase tracking-wider bg-charcoal-950/85 text-gold-400 py-1 rounded backdrop-blur-xs border border-gold-400/30">
+                Editorial Preview
+              </span>
             </div>
-            <span class="inline-block px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold tracking-widest uppercase bg-gold-400/20 text-maroon-900 border border-gold-400/40 mb-3">
+            <span class="inline-block px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold tracking-widest uppercase bg-gold-400/20 text-maroon-900 border border-gold-400/40 mb-2">
               ${currentCat.badge_text || 'Boutique Exclusive • Coming Soon'}
             </span>
             <h3 class="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-maroon-950 mb-2">

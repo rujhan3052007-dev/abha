@@ -294,11 +294,15 @@ router.post('/products', requirePermission('products.create'), uploadProductImag
 // 4. Category Management (Create, Edit, Delete, Toggle Active vs Coming Soon - Section 52)
 router.post('/categories', requirePermission('settings.edit', 'products.edit'), async (req, res, next) => {
   try {
-    const { name, slug, description, is_active, badge_text, display_order } = req.body;
+    const { name, slug, description, image, is_active, badge_text, display_order } = req.body;
     if (!name || !name.trim()) {
       return res.status(400).json({ success: false, error: 'Category name is required' });
     }
     const db = getDb();
+    try {
+      await db.run('ALTER TABLE categories ADD COLUMN image TEXT');
+    } catch (e) {}
+
     const catSlug = (slug || name).trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
     const existing = await db.get('SELECT id FROM categories WHERE slug = ?', [catSlug]);
     if (existing) {
@@ -310,9 +314,9 @@ router.post('/categories', requirePermission('settings.edit', 'products.edit'), 
     const badge = badge_text || (activeVal ? 'Active Collection' : 'Coming Soon');
 
     await db.run(`
-      INSERT INTO categories (id, name, slug, description, is_active, badge_text, display_order)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-    `, [id, name.trim(), catSlug, (description || '').trim(), activeVal, badge, display_order || 99]);
+      INSERT INTO categories (id, name, slug, description, image, is_active, badge_text, display_order)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `, [id, name.trim(), catSlug, (description || '').trim(), (image || '').trim(), activeVal, badge, display_order || 99]);
 
     await logAudit(req, { action: 'CREATE_CATEGORY', entityType: 'CATEGORY', entityId: id, newValue: { name, slug: catSlug } });
     res.status(201).json({ success: true, message: 'Category created successfully', data: { id, name, slug: catSlug } });
@@ -324,8 +328,12 @@ router.post('/categories', requirePermission('settings.edit', 'products.edit'), 
 router.put('/categories/:id', requirePermission('settings.edit', 'products.edit'), async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { name, slug, description, is_active, badge_text, display_order } = req.body;
+    const { name, slug, description, image, is_active, badge_text, display_order } = req.body;
     const db = getDb();
+    try {
+      await db.run('ALTER TABLE categories ADD COLUMN image TEXT');
+    } catch (e) {}
+
     const existing = await db.get('SELECT * FROM categories WHERE id = ?', [id]);
     if (!existing) {
       return res.status(404).json({ success: false, error: 'Category not found' });
@@ -334,15 +342,16 @@ router.put('/categories/:id', requirePermission('settings.edit', 'products.edit'
     const newName = name !== undefined ? name.trim() : existing.name;
     const newSlug = slug !== undefined ? slug.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-') : existing.slug;
     const newDesc = description !== undefined ? description.trim() : existing.description;
+    const newImage = image !== undefined ? image.trim() : existing.image;
     const newActive = is_active !== undefined ? (is_active ? 1 : 0) : existing.is_active;
     const newBadge = badge_text !== undefined ? badge_text : (newActive ? 'Active Collection' : 'Coming Soon');
     const newOrder = display_order !== undefined ? display_order : existing.display_order;
 
     await db.run(`
       UPDATE categories
-      SET name = ?, slug = ?, description = ?, is_active = ?, badge_text = ?, display_order = ?
+      SET name = ?, slug = ?, description = ?, image = ?, is_active = ?, badge_text = ?, display_order = ?
       WHERE id = ?
-    `, [newName, newSlug, newDesc, newActive, newBadge, newOrder, id]);
+    `, [newName, newSlug, newDesc, newImage, newActive, newBadge, newOrder, id]);
 
     await logAudit(req, { action: 'UPDATE_CATEGORY', entityType: 'CATEGORY', entityId: id, newValue: { name: newName, slug: newSlug } });
     res.json({ success: true, message: 'Category updated successfully' });

@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="js/abha-store.js?v=20260924_1"></script>
+  <script src="js/abha-store.js?v=20260925_5"></script>
   <style>
     :root {
       --maroon: #5c1324;
@@ -1905,6 +1905,11 @@
           </div>
         </div>
         <div>
+          <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Cover / Model Image Path</label>
+          <input type="text" id="catFormImage" class="form-input" placeholder="e.g. images/categories/cat-sarees.jpg">
+          <span style="font-size: 0.72rem; color: var(--gray-500); display: block; margin-top: 0.2rem;">Relative path or URL of editorial model catalog image</span>
+        </div>
+        <div>
           <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Description / Notes</label>
           <textarea id="catFormDesc" class="form-input" rows="2" placeholder="Brief note about weaves, fabrics, or upcoming launch details..."></textarea>
         </div>
@@ -3432,11 +3437,24 @@
       try {
         const res = await apiRequest('/api/categories');
         cachedCategories = res.data || [];
-        tbody.innerHTML = cachedCategories.map(c => `
+        tbody.innerHTML = cachedCategories.map(c => {
+          const imgUrl = c.image || (
+            (c.slug || '').includes('saree') ? 'images/categories/cat-sarees.jpg' :
+            (c.slug || '').includes('poshak') || (c.slug || '').includes('rajputi') ? 'images/categories/cat-poshak.jpg' :
+            (c.slug || '').includes('chaniya') || (c.slug || '').includes('lehenga') ? 'images/categories/cat-chaniya.jpg' :
+            (c.slug || '').includes('men') || (c.slug || '').includes('kurta') ? 'images/categories/cat-mens.jpg' :
+            'images/categories/cat-salwar.jpg'
+          );
+          return `
           <tr>
             <td>
-              <strong>${c.name}</strong>
-              ${c.description ? `<br><span style="font-size: 0.75rem; color: var(--gray-500);">${c.description}</span>` : ''}
+              <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <img src="${imgUrl}" alt="${c.name}" style="width: 44px; height: 58px; object-fit: cover; border-radius: 6px; border: 1px solid var(--gray-200); box-shadow: var(--shadow-xs); flex-shrink: 0;" onerror="this.src='images/categories/cat-salwar.jpg'">
+                <div>
+                  <strong style="font-size: 0.9rem; color: var(--gray-900);">${c.name}</strong>
+                  ${c.description ? `<div style="font-size: 0.75rem; color: var(--gray-500); max-width: 320px; line-height: 1.35; margin-top: 0.15rem;">${c.description}</div>` : ''}
+                </div>
+              </div>
             </td>
             <td><code>${c.slug}</code></td>
             <td><span class="tag tag-quantity">${c.gender || 'Women'}</span></td>
@@ -3454,7 +3472,8 @@
               </div>
             </td>
           </tr>
-        `).join('');
+        `;
+        }).join('');
       } catch (e) {
         tbody.innerHTML = `<tr><td colspan="6" style="color: var(--red-text);">${e.message}</td></tr>`;
       }
@@ -3463,6 +3482,7 @@
     function openAddCategoryModal() {
       document.getElementById('categoryForm').reset();
       document.getElementById('catFormId').value = '';
+      document.getElementById('catFormImage').value = '';
       document.getElementById('catModalTitle').textContent = 'Add New Category';
       document.getElementById('catFormStatus').value = '1';
       document.getElementById('catFormBadge').value = 'Active Collection';
@@ -3479,6 +3499,7 @@
       document.getElementById('catFormName').value = cat.name;
       document.getElementById('catFormSlug').value = cat.slug;
       document.getElementById('catFormGender').value = cat.gender || 'Women';
+      document.getElementById('catFormImage').value = cat.image || '';
       document.getElementById('catFormStatus').value = cat.is_active ? '1' : '0';
       document.getElementById('catFormBadge').value = cat.badge_text || (cat.is_active ? 'Active' : 'Coming Soon');
       document.getElementById('catFormDesc').value = cat.description || '';
@@ -3516,6 +3537,7 @@
       const name = document.getElementById('catFormName').value.trim();
       const slug = document.getElementById('catFormSlug').value.trim();
       const gender = document.getElementById('catFormGender').value;
+      const image = document.getElementById('catFormImage').value.trim();
       const is_active = document.getElementById('catFormStatus').value === '1';
       const badge_text = document.getElementById('catFormBadge').value.trim() || (is_active ? 'Active' : 'Coming Soon');
       const description = document.getElementById('catFormDesc').value.trim();
@@ -3529,12 +3551,12 @@
         if (catId) {
           await apiRequest(`/api/admin/categories/${catId}`, {
             method: 'PUT',
-            body: JSON.stringify({ name, slug, gender, is_active, badge_text, description })
+            body: JSON.stringify({ name, slug, gender, is_active, badge_text, description, image })
           });
         } else {
           await apiRequest('/api/admin/categories', {
             method: 'POST',
-            body: JSON.stringify({ name, slug, gender, is_active, badge_text, description })
+            body: JSON.stringify({ name, slug, gender, is_active, badge_text, description, image })
           });
         }
         closeCategoryModal();

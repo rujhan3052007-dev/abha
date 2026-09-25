@@ -193,11 +193,11 @@
 
   // Categories architecture: Active vs Coming Soon (§2, §51)
   const INITIAL_CATEGORIES = [
-    { id: 'cat-salwar', name: 'Salwar Suit Dress Materials', slug: 'salwar-suit-dress-materials', gender: 'Women', product_count: 5, status: 'ACTIVE', is_active: 1, badge_text: 'Active' },
-    { id: 'cat-sarees', name: 'Sarees', slug: 'sarees', gender: 'Women', product_count: 0, status: 'COMING_SOON', is_active: 0, badge_text: 'Coming Soon' },
-    { id: 'cat-poshak', name: 'Rajputi Poshak', slug: 'rajputi-poshak', gender: 'Women', product_count: 0, status: 'COMING_SOON', is_active: 0, badge_text: 'Coming Soon' },
-    { id: 'cat-chaniya', name: 'Chaniya Choli', slug: 'chaniya-choli', gender: 'Women', product_count: 0, status: 'COMING_SOON', is_active: 0, badge_text: 'Coming Soon' },
-    { id: 'cat-mens', name: "Men's Collection", slug: 'mens-collection', gender: 'Men', product_count: 0, status: 'COMING_SOON', is_active: 0, badge_text: 'Coming Soon' }
+    { id: 'cat-salwar', name: 'Salwar Suit Dress Materials', slug: 'salwar-suit-dress-materials', gender: 'Women', product_count: 5, status: 'ACTIVE', is_active: 1, badge_text: 'Active', image: 'images/categories/cat-salwar.jpg', description: 'Authentic 3-piece unstitched salwar suit dress materials (Top, Bottom & Dupatta). Buy as pure fabric or custom-tailored to your measurements.' },
+    { id: 'cat-sarees', name: 'Sarees', slug: 'sarees', gender: 'Women', product_count: 0, status: 'COMING_SOON', is_active: 0, badge_text: 'Coming Soon', image: 'images/categories/cat-sarees.jpg', description: 'Handcrafted Kota Doria, Bandhani, and Chanderi sarees from Rajasthan heritage looms.' },
+    { id: 'cat-poshak', name: 'Rajputi Poshak', slug: 'rajputi-poshak', gender: 'Women', product_count: 0, status: 'COMING_SOON', is_active: 0, badge_text: 'Coming Soon', image: 'images/categories/cat-poshak.jpg', description: 'Traditional Royal Rajputana bridal and festive poshaks with authentic gota patti work.' },
+    { id: 'cat-chaniya', name: 'Chaniya Choli', slug: 'chaniya-choli', gender: 'Women', product_count: 0, status: 'COMING_SOON', is_active: 0, badge_text: 'Coming Soon', image: 'images/categories/cat-chaniya.jpg', description: 'Artisan flared lehengas and chaniya cholis for Navratri, sangeet, and festive celebrations.' },
+    { id: 'cat-mens', name: "Men's Collection", slug: 'mens-collection', gender: 'Men', product_count: 0, status: 'COMING_SOON', is_active: 0, badge_text: 'Coming Soon', image: 'images/categories/cat-mens.jpg', description: 'Bespoke Royal Kurta Pajama, Jodhpuris, and Nehru jackets tailored with artisanal fabrics.' }
   ];
 
   // Operational staff accounts (§48)
@@ -463,8 +463,17 @@
       INITIAL_CATEGORIES.forEach(initCat => {
         const found = existingCats.find(c => c.slug === initCat.slug || c.id === initCat.id);
         if (!found) {
-          existingCats.push(initCat);
+          existingCats.push({ ...initCat });
           catUpdated = true;
+        } else {
+          if (!found.image || found.image.includes('pink-leheriya') || found.image.includes('chanderi-suit') || found.image.includes('bandhani-chanderi') || found.image.includes('cream-lime') || found.image.includes('teal-geometric')) {
+            found.image = initCat.image;
+            catUpdated = true;
+          }
+          if (initCat.description && (!found.description || found.description.length < 10)) {
+            found.description = initCat.description;
+            catUpdated = true;
+          }
         }
       });
       if (catUpdated) setTable('categories', existingCats);
@@ -635,11 +644,18 @@
       }
 
       const is_active = (data.is_active === 1 || data.is_active === true || data.is_active === '1') ? 1 : 0;
+      let defaultImg = 'images/categories/cat-salwar.jpg';
+      if (slug.includes('saree')) defaultImg = 'images/categories/cat-sarees.jpg';
+      else if (slug.includes('poshak') || slug.includes('rajputi')) defaultImg = 'images/categories/cat-poshak.jpg';
+      else if (slug.includes('chaniya') || slug.includes('lehenga')) defaultImg = 'images/categories/cat-chaniya.jpg';
+      else if (slug.includes('men') || slug.includes('kurta')) defaultImg = 'images/categories/cat-mens.jpg';
+
       const newCat = {
         id: 'cat-' + (slug || Date.now()),
         name: data.name.trim(),
         slug: slug,
         description: (data.description || '').trim(),
+        image: (data.image || '').trim() || defaultImg,
         gender: data.gender || 'Women',
         is_active: is_active,
         status: is_active ? 'ACTIVE' : 'COMING_SOON',
@@ -663,6 +679,7 @@
       if (data.name) target.name = data.name.trim();
       if (data.slug) target.slug = data.slug.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
       if (data.description !== undefined) target.description = data.description.trim();
+      if (data.image !== undefined) target.image = data.image.trim();
       if (data.gender) target.gender = data.gender;
       if (data.is_active !== undefined) {
         const is_active = (data.is_active === 1 || data.is_active === true || data.is_active === '1') ? 1 : 0;
