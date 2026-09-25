@@ -37,7 +37,7 @@
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="js/abha-store.js?v=20260925_2"></script>
+  <script src="js/abha-store.js?v=20260925_3"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -759,28 +759,6 @@
         </a>
       </div>
 
-      <!-- Desktop Catalog Controls: Filter Chips & Sort (§11) -->
-      <div class="hidden lg:flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 bg-ivory-50 p-4 rounded-lg border border-ivory-200">
-        <!-- Filter Chips -->
-        <div class="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 scrollbar-none" id="catalogFilterChips">
-          <button type="button" onclick="setCatalogFilter('all')" data-filter="all" class="catalog-chip px-3.5 py-1.5 text-xs font-semibold rounded-full bg-maroon-800 text-ivory-50 transition-all whitespace-nowrap">All Suits</button>
-          <button type="button" onclick="setCatalogFilter('cotton')" data-filter="cotton" class="catalog-chip px-3.5 py-1.5 text-xs font-semibold rounded-full bg-ivory-200 text-charcoal-800 hover:bg-maroon-900/10 transition-all whitespace-nowrap">Pure Cotton</button>
-          <button type="button" onclick="setCatalogFilter('silk')" data-filter="silk" class="catalog-chip px-3.5 py-1.5 text-xs font-semibold rounded-full bg-ivory-200 text-charcoal-800 hover:bg-maroon-900/10 transition-all whitespace-nowrap">Chanderi Silk</button>
-          <button type="button" onclick="setCatalogFilter('prints')" data-filter="prints" class="catalog-chip px-3.5 py-1.5 text-xs font-semibold rounded-full bg-ivory-200 text-charcoal-800 hover:bg-maroon-900/10 transition-all whitespace-nowrap">Bandhani &amp; Leheriya</button>
-          <button type="button" onclick="setCatalogFilter('under2000')" data-filter="under2000" class="catalog-chip px-3.5 py-1.5 text-xs font-semibold rounded-full bg-ivory-200 text-charcoal-800 hover:bg-maroon-900/10 transition-all whitespace-nowrap">Under ₹2,000</button>
-          <button type="button" onclick="setCatalogFilter('above2000')" data-filter="above2000" class="catalog-chip px-3.5 py-1.5 text-xs font-semibold rounded-full bg-ivory-200 text-charcoal-800 hover:bg-maroon-900/10 transition-all whitespace-nowrap">₹2,000 &amp; Above</button>
-        </div>
-        <!-- Sort Control -->
-        <div class="flex items-center gap-2 self-end md:self-auto shrink-0">
-          <label for="catalogSortSelect" class="text-xs font-semibold text-slateText-700">Sort by:</label>
-          <select id="catalogSortSelect" onchange="handleCatalogSort(this.value)" class="text-xs font-semibold bg-ivory-100 border border-ivory-300 rounded px-3 py-1.5 text-charcoal-900 focus:outline-none focus:ring-1 focus:ring-maroon-800">
-            <option value="featured">Featured Curations</option>
-            <option value="price-asc">Price: Low to High</option>
-            <option value="price-desc">Price: High to Low</option>
-            <option value="rating">Top Customer Rated</option>
-          </select>
-        </div>
-      </div>
 
       <!-- Product Grid (Meesho-style 2-col on mobile, 4-col on desktop) -->
       <div id="newArrivalsGrid" class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 md:gap-5">
@@ -3654,13 +3632,8 @@
         if (mobSub) mobSub.textContent = 'Boutique Exclusive • Coming Soon';
       }
 
-      const filterChips = document.getElementById('catalogFilterChips');
-
       // If category is Coming Soon / Inactive
       if (!currentCat.is_active) {
-        if (filterChips && filterChips.parentElement) {
-          filterChips.parentElement.classList.add('hidden');
-        }
 
         grid.innerHTML = `
           <div class="col-span-full py-12 px-4 sm:px-10 bg-ivory-50 rounded-2xl border-2 border-dashed border-maroon-900/30 text-center max-w-2xl mx-auto my-4 shadow-sm">
@@ -3688,11 +3661,6 @@
           </div>
         `;
         return;
-      }
-
-      // Active category: show desktop catalog controls
-      if (filterChips && filterChips.parentElement) {
-        filterChips.parentElement.classList.remove('hidden');
       }
 
       let items = [...PRODUCTS];
