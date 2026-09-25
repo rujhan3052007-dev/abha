@@ -37,7 +37,7 @@
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="js/abha-store.js?v=20260924_1"></script>
+  <script src="js/abha-store.js?v=20260925_2"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -1926,16 +1926,15 @@
   <!-- ========================================================================= -->
   <!-- MODAL 1: PURCHASE DECISION MODAL (CUSTOMER-FIRST UNSTITCHED / STITCHED) -->
   <!-- ========================================================================= -->
-  <div id="decisionModal" class="fixed inset-0 z-50 bg-charcoal-950/75 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="decisionModalTitle">
+  <div id="decisionModal" onclick="if (event.target === this) closeDecisionModal()" class="fixed inset-0 z-50 bg-charcoal-950/75 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="decisionModalTitle">
     <div class="bg-ivory-50 rounded-xl max-w-lg w-full p-6 sm:p-8 border border-ivory-300 shadow-2xl relative my-8">
       
       <!-- Top Navigation Bar: Back & Close -->
-      <div class="flex items-center justify-between pb-3 mb-4 border-b border-ivory-200">
-        <button type="button" onclick="closeDecisionModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-charcoal-900 hover:text-maroon-900 bg-ivory-200/80 hover:bg-ivory-200 transition-colors" aria-label="Back to Product">
-          <svg class="w-4 h-4 text-maroon-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-          <span>← Back to Product</span>
+      <div class="flex items-center justify-between pb-2 mb-3 border-b border-ivory-200">
+        <button type="button" onclick="closeDecisionModal()" class="p-1 -ml-1 text-charcoal-700 hover:text-maroon-900 transition-colors rounded hover:bg-ivory-200/60 inline-flex items-center justify-center focus:outline-none" aria-label="Go back" title="Go back">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
         </button>
-        <button type="button" onclick="closeDecisionModal()" class="p-1.5 text-slateText-500 hover:text-charcoal-950 transition-colors rounded-lg hover:bg-ivory-200/60" aria-label="Close dialog">
+        <button type="button" onclick="closeDecisionModal()" class="p-1 -mr-1 text-slateText-400 hover:text-charcoal-900 transition-colors rounded hover:bg-ivory-200/60 inline-flex items-center justify-center focus:outline-none" aria-label="Close dialog" title="Close">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
@@ -2009,16 +2008,15 @@
   <!-- ========================================================================= -->
   <!-- MODAL 2: CUSTOMER-FIRST STITCHED EXPERIENCE MODAL -->
   <!-- ========================================================================= -->
-  <div id="stitchedModal" class="fixed inset-0 z-50 bg-charcoal-950/75 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="stitchedModalTitle">
+  <div id="stitchedModal" onclick="if (event.target === this) handleStitchedModalBack()" class="fixed inset-0 z-50 bg-charcoal-950/75 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="stitchedModalTitle">
     <div class="bg-ivory-50 rounded-xl max-w-2xl w-full p-6 sm:p-8 border border-ivory-300 shadow-2xl relative my-8">
       
       <!-- Top Navigation Bar: Back & Close Actions -->
-      <div class="flex items-center justify-between pb-3 mb-3 border-b border-ivory-200">
-        <button type="button" onclick="handleStitchedModalBack()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-charcoal-900 hover:text-maroon-900 bg-ivory-200/80 hover:bg-ivory-200 transition-colors shadow-2xs" aria-label="Go back">
-          <svg class="w-4 h-4 text-maroon-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-          <span id="smModalBackBtnLabel">← Back to Product</span>
+      <div class="flex items-center justify-between pb-2 mb-3 border-b border-ivory-200">
+        <button type="button" onclick="handleStitchedModalBack()" class="p-1 -ml-1 text-charcoal-700 hover:text-maroon-900 transition-colors rounded hover:bg-ivory-200/60 inline-flex items-center justify-center focus:outline-none" aria-label="Go back" title="Go back">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
         </button>
-        <button type="button" onclick="closeStitchedModal()" class="p-1.5 text-slateText-500 hover:text-charcoal-950 transition-colors rounded-lg hover:bg-ivory-200/60" aria-label="Close dialog">
+        <button type="button" onclick="closeStitchedModal()" class="p-1 -mr-1 text-slateText-400 hover:text-charcoal-900 transition-colors rounded hover:bg-ivory-200/60 inline-flex items-center justify-center focus:outline-none" aria-label="Close dialog" title="Close">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
@@ -2582,16 +2580,15 @@
   <!-- ========================================================================= -->
   <!-- MODAL 4: MULTI-STEP CHECKOUT (§23, 24, 25) -->
   <!-- ========================================================================= -->
-  <div id="checkoutModal" class="fixed inset-0 z-50 bg-charcoal-950/75 backdrop-blur-sm hidden flex items-center justify-center p-2 sm:p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="checkoutModalTitle">
+  <div id="checkoutModal" onclick="if (event.target === this) closeCheckoutModal()" class="fixed inset-0 z-50 bg-charcoal-950/75 backdrop-blur-sm hidden flex items-center justify-center p-2 sm:p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="checkoutModalTitle">
     <div class="bg-ivory-50 rounded-lg max-w-2xl w-full p-6 sm:p-8 border border-ivory-300 shadow-2xl my-8 relative">
       
       <!-- Top Navigation Bar: Back & Close Actions -->
-      <div class="flex items-center justify-between pb-3 mb-3 border-b border-ivory-200">
-        <button type="button" onclick="handleCheckoutBack()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-charcoal-900 hover:text-maroon-900 bg-ivory-200/80 hover:bg-ivory-200 transition-colors shadow-2xs" aria-label="Go back">
-          <svg class="w-4 h-4 text-maroon-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-          <span id="checkoutBackBtnLabel">← Back</span>
+      <div class="flex items-center justify-between pb-2 mb-3 border-b border-ivory-200">
+        <button type="button" onclick="handleCheckoutBack()" class="p-1 -ml-1 text-charcoal-700 hover:text-maroon-900 transition-colors rounded hover:bg-ivory-200/60 inline-flex items-center justify-center focus:outline-none" aria-label="Go back" title="Go back">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
         </button>
-        <button type="button" onclick="closeCheckoutModal()" class="p-1.5 text-slateText-500 hover:text-charcoal-950 transition-colors rounded-lg hover:bg-ivory-200/60" aria-label="Close checkout">
+        <button type="button" onclick="closeCheckoutModal()" class="p-1 -mr-1 text-slateText-400 hover:text-charcoal-900 transition-colors rounded hover:bg-ivory-200/60 inline-flex items-center justify-center focus:outline-none" aria-label="Close checkout" title="Close">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
@@ -2922,16 +2919,15 @@
   <!-- ========================================================================= -->
   <!-- MODAL 9: QUICK VIEW PRODUCT DETAIL MODAL (§11) -->
   <!-- ========================================================================= -->
-  <div id="quickViewModal" class="fixed inset-0 z-50 bg-charcoal-950/75 backdrop-blur-sm hidden flex items-center justify-center p-2 sm:p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="qvTitle">
-    <div class="bg-ivory-50 rounded-lg max-w-3xl w-full p-6 sm:p-8 border border-ivory-300 shadow-2xl my-8 relative">
+  <div id="quickViewModal" onclick="if (event.target === this) closeQuickViewModal()" class="fixed inset-0 z-50 bg-charcoal-950/75 backdrop-blur-sm hidden flex items-center justify-center p-2 sm:p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="qvTitle">
+    <div class="bg-ivory-50 rounded-lg max-w-3xl w-full p-4 sm:p-6 border border-ivory-300 shadow-2xl my-6 relative">
       
-      <!-- Top Navigation Bar: Back & Close Actions -->
-      <div class="flex items-center justify-between pb-3 mb-4 border-b border-ivory-200">
-        <button type="button" onclick="closeQuickViewModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-charcoal-900 hover:text-maroon-900 bg-ivory-200/80 hover:bg-ivory-200 transition-colors shadow-2xs" aria-label="Back to Catalog">
-          <svg class="w-4 h-4 text-maroon-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-          <span>← Back to Catalog</span>
+      <!-- Top Navigation Bar: Small Arrow to Go Back (Not highlighted) & Close -->
+      <div class="flex items-center justify-between pb-2 mb-3 border-b border-ivory-200">
+        <button type="button" onclick="closeQuickViewModal()" class="p-1 -ml-1 text-charcoal-700 hover:text-maroon-900 transition-colors rounded hover:bg-ivory-200/60 inline-flex items-center justify-center focus:outline-none" aria-label="Go back" title="Go back">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
         </button>
-        <button type="button" onclick="closeQuickViewModal()" class="p-1.5 text-slateText-500 hover:text-charcoal-950 transition-colors rounded-lg hover:bg-ivory-200/60" aria-label="Close product view">
+        <button type="button" onclick="closeQuickViewModal()" class="p-1 -mr-1 text-slateText-400 hover:text-charcoal-900 transition-colors rounded hover:bg-ivory-200/60 inline-flex items-center justify-center focus:outline-none" aria-label="Close product view" title="Close">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
@@ -2939,7 +2935,11 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
         <!-- Product Image Preview -->
         <div class="space-y-3">
-          <div class="aspect-[3/4] rounded-lg overflow-hidden border border-ivory-300 bg-ivory-200 shadow-inner">
+          <div class="aspect-[3/4] rounded-lg overflow-hidden border border-ivory-300 bg-ivory-200 shadow-inner relative group">
+            <!-- Small floating back arrow on image preview -->
+            <button type="button" onclick="closeQuickViewModal()" class="absolute top-2.5 left-2.5 w-8 h-8 rounded-full bg-white/85 hover:bg-white text-charcoal-700 hover:text-maroon-900 shadow-xs flex items-center justify-center transition-all z-10 focus:outline-none" aria-label="Go back" title="Go back">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            </button>
             <img id="qvImage" src="" alt="Product detail" class="w-full h-full object-cover" />
           </div>
           <div class="flex items-center justify-between text-[11px] text-slateText-600 px-1">
@@ -5309,11 +5309,21 @@
         }
       }
 
-      document.getElementById('quickViewModal').classList.remove('hidden');
+      const modal = document.getElementById('quickViewModal');
+      if (modal) {
+        modal.scrollTop = 0;
+        modal.classList.remove('hidden');
+      }
+      try {
+        history.pushState({ modalOpen: 'quickView' }, '', window.location.href);
+      } catch (e) {}
     }
 
     function closeQuickViewModal() {
-      document.getElementById('quickViewModal').classList.add('hidden');
+      const modal = document.getElementById('quickViewModal');
+      if (modal) {
+        modal.classList.add('hidden');
+      }
     }
 
     function checkPincodeDelivery() {
@@ -5974,6 +5984,44 @@
           e.preventDefault();
           openOwnerAccessModal();
         }
+      });
+
+      // Global Escape key listener: closes any active modal / goes back
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' || e.key === 'Esc') {
+          const qv = document.getElementById('quickViewModal');
+          if (qv && !qv.classList.contains('hidden')) { closeQuickViewModal(); return; }
+          const dm = document.getElementById('decisionModal');
+          if (dm && !dm.classList.contains('hidden')) { closeDecisionModal(); return; }
+          const sm = document.getElementById('stitchedModal');
+          if (sm && !sm.classList.contains('hidden')) { handleStitchedModalBack(); return; }
+          const chk = document.getElementById('checkoutModal');
+          if (chk && !chk.classList.contains('hidden')) { closeCheckoutModal(); return; }
+          const pol = document.getElementById('policyModal');
+          if (pol && !pol.classList.contains('hidden')) { closePolicyModal(); return; }
+          const ctc = document.getElementById('tailorModal');
+          if (ctc && !ctc.classList.contains('hidden')) { closeTailorModal(); return; }
+          const trk = document.getElementById('trackingModal');
+          if (trk && !trk.classList.contains('hidden')) { closeTrackingModal(); return; }
+          const cnf = document.getElementById('confirmationModal');
+          if (cnf && !cnf.classList.contains('hidden')) { closeConfirmationModal(); return; }
+          const sch = document.getElementById('searchModal');
+          if (sch && !sch.classList.contains('hidden')) { closeSearchModal(); return; }
+          const oa = document.getElementById('ownerAuthModal');
+          if (oa && !oa.classList.contains('hidden')) { closeOwnerAccessModal(); return; }
+        }
+      });
+
+      // Browser back button / swipe back gesture closes active modal
+      window.addEventListener('popstate', () => {
+        const qv = document.getElementById('quickViewModal');
+        if (qv && !qv.classList.contains('hidden')) { closeQuickViewModal(); return; }
+        const dm = document.getElementById('decisionModal');
+        if (dm && !dm.classList.contains('hidden')) { closeDecisionModal(); return; }
+        const sm = document.getElementById('stitchedModal');
+        if (sm && !sm.classList.contains('hidden')) { handleStitchedModalBack(); return; }
+        const chk = document.getElementById('checkoutModal');
+        if (chk && !chk.classList.contains('hidden')) { closeCheckoutModal(); return; }
       });
 
       // Double-click brand logo opens protected passcode prompt
