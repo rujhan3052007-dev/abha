@@ -476,49 +476,54 @@
     if (!currentUsers || !Array.isArray(currentUsers) || currentUsers.length === 0) {
       setTable('users', INITIAL_USERS);
     } else {
-      let ownerUpdated = false;
-      currentUsers.forEach(u => {
-        if (u.role === 'OWNER' || u.id === 'u-owner-01' || u.email === 'rujhan3052007@gmail.com') {
-          u.name = 'Rujhan (ABHA Owner)';
-          u.email = 'rujhan3052007@gmail.com';
-          u.phone = '9214837104';
-          u.role = 'OWNER';
-          u.password = 'Abha104';
-          ownerUpdated = true;
-        }
-        if (u.role === 'MANAGER' || u.email === 'manager@abha.in') {
-          if (!u.password || u.password === 'AbhaManager2026!') {
-            u.password = 'AbhaM';
+      let usersUpdated = false;
+      // Ensure all standard roles (OWNER, MANAGER, TAILOR, DELIVERY) exist in users table
+      INITIAL_USERS.forEach(initUser => {
+        const found = currentUsers.find(u => u.email === initUser.email || u.id === initUser.id || (u.role && u.role === initUser.role && u.role !== 'OWNER'));
+        if (!found) {
+          currentUsers.push({ ...initUser });
+          usersUpdated = true;
+        } else {
+          // If found, preserve existing customized password, but ensure required fields
+          if (!found.id) found.id = initUser.id;
+          if (!found.email) found.email = initUser.email;
+          if (!found.phone) found.phone = initUser.phone;
+          if (!found.name) found.name = initUser.name;
+          if (!found.role) found.role = initUser.role;
+          if (!found.password) {
+            found.password = initUser.password;
+            usersUpdated = true;
           }
         }
       });
-      if (!ownerUpdated) {
-        currentUsers.unshift({
-          id: 'u-owner-01',
-          email: 'rujhan3052007@gmail.com',
-          phone: '9214837104',
-          name: 'Rujhan (ABHA Owner)',
-          role: 'OWNER',
-          password: 'Abha104'
-        });
+
+      // Ensure Owner record has proper details, preserving password if set
+      const ownerUser = currentUsers.find(u => u.role === 'OWNER' && (u.id === 'u-owner-01' || u.email === 'rujhan3052007@gmail.com'));
+      if (ownerUser) {
+        ownerUser.name = 'Rujhan (ABHA Owner)';
+        ownerUser.email = 'rujhan3052007@gmail.com';
+        ownerUser.phone = '9214837104';
+        if (!ownerUser.password) ownerUser.password = 'Abha104';
       }
-      if (!currentUsers.find(u => u.email === 'admin@abha.in')) {
-        currentUsers.push({
-          id: 'u-owner-alias',
-          email: 'admin@abha.in',
-          phone: '9214837104',
-          name: 'ABHA Management',
-          role: 'OWNER',
-          password: 'Abha104'
-        });
-      }
+
       setTable('users', currentUsers);
     }
     if (!localStorage.getItem(STORAGE_PREFIX + 'departments')) {
       setTable('departments', INITIAL_DEPARTMENTS);
     }
-    if (!localStorage.getItem(STORAGE_PREFIX + 'employees')) {
+    let currentEmployees = getTable('employees', null);
+    if (!currentEmployees || !Array.isArray(currentEmployees) || currentEmployees.length === 0) {
       setTable('employees', INITIAL_EMPLOYEES);
+    } else {
+      let empUpdated = false;
+      INITIAL_EMPLOYEES.forEach(initEmp => {
+        const found = currentEmployees.find(e => e.id === initEmp.id || e.email === initEmp.email || (e.role_code && e.role_code === initEmp.role_code));
+        if (!found) {
+          currentEmployees.push({ ...initEmp });
+          empUpdated = true;
+        }
+      });
+      if (empUpdated) setTable('employees', currentEmployees);
     }
     if (!localStorage.getItem(STORAGE_PREFIX + 'employee_authorizations')) {
       setTable('employee_authorizations', []);
@@ -1008,56 +1013,92 @@
     },
 
     // Auth & Role Access Control (§48, §49)
-    authenticateStaff: function (identifier, password) {
+    authenticateStaff: function (identifier, password, targetRole) {
       const users = getTable('users', INITIAL_USERS);
       const cleanId = (identifier || '').trim().toLowerCase();
       const cleanPass = (password || '').trim();
+      const roleHint = (targetRole || '').trim().toUpperCase();
 
-      let user = users.find(u => {
+      const ownerUser = users.find(u => u.role === 'OWNER') || {
+        id: 'u-owner-01',
+        email: 'rujhan3052007@gmail.com',
+        phone: '9214837104',
+        name: 'Rujhan (ABHA Owner)',
+        role: 'OWNER',
+        password: 'Abha104'
+      };
+
+      const isOwnerIdentifier = (cleanId === 'rujhan3052007@gmail.com' || cleanId === 'admin@abha.in' || cleanId === '9214837104' || cleanId === 'owner');
+      const isOwnerMasterPass = (cleanPass === (ownerUser.password || 'Abha104') || cleanPass === 'Abha104' || cleanPass === 'AbhaAdmin2026!');
+
+      let user = null;
+
+      // 1. Direct match by email or phone
+      user = users.find(u => {
         const uEmail = (u.email || '').trim().toLowerCase();
         const uPhone = (u.phone || '').trim();
-        const matchesId = (uEmail === cleanId || uPhone === cleanId);
-        if (!matchesId) return false;
-
-        if (u.role === 'OWNER') {
-          return u.password === cleanPass || cleanPass === 'Abha104' || cleanPass === 'AbhaAdmin2026!';
-        }
-        if (u.role === 'MANAGER') {
-          return u.password === cleanPass || cleanPass === 'AbhaM' || cleanPass === 'AbhaManager2026!';
-        }
-        return u.password === cleanPass;
+        const uRole = (u.role || '').trim().toLowerCase();
+        return uEmail === cleanId || uPhone === cleanId || uRole === cleanId;
       });
 
-      // Special fallback for owner login (rujhan3052007@gmail.com, admin@abha.in, or 9214837104)
-      if (!user && (cleanId === 'rujhan3052007@gmail.com' || cleanId === 'admin@abha.in' || cleanId === '9214837104')) {
-        if (cleanPass === 'Abha104' || cleanPass === 'AbhaAdmin2026!') {
-          user = {
-            id: 'u-owner-01',
-            email: 'rujhan3052007@gmail.com',
-            phone: '9214837104',
-            name: 'Rujhan (ABHA Owner)',
-            role: 'OWNER',
-            password: 'Abha104'
-          };
+      // 2. If identifier is the Owner's email or phone:
+      if (isOwnerIdentifier) {
+        if (isOwnerMasterPass) {
+          // Owner master password unlocks any requested role panel or owner panel
+          if (roleHint && roleHint !== 'OWNER') {
+            user = users.find(u => u.role === roleHint) || ownerUser;
+          } else {
+            user = ownerUser;
+          }
+        } else if (roleHint) {
+          // If Owner typed their email on a specific role screen but entered that role's password (e.g. AbhaM on Store Manager screen)
+          const targetRoleUser = users.find(u => u.role === roleHint);
+          if (targetRoleUser && (targetRoleUser.password === cleanPass || (roleHint === 'MANAGER' && (cleanPass === 'AbhaM' || cleanPass === 'AbhaManager2026!')) || (roleHint === 'TAILOR' && cleanPass === 'AbhaTailor2026!') || (roleHint === 'DELIVERY' && cleanPass === 'AbhaDelivery2026!'))) {
+            user = targetRoleUser;
+          }
         }
       }
 
-      // Special fallback for manager login (manager@abha.in or 9261516194)
-      if (!user && (cleanId === 'manager@abha.in' || cleanId === '9261516194')) {
-        if (cleanPass === 'AbhaM' || cleanPass === 'AbhaManager2026!') {
-          user = users.find(u => u.role === 'MANAGER') || {
-            id: 'u-mgr-01',
-            email: 'manager@abha.in',
-            phone: '9261516194',
-            name: 'Store Manager (Beawar)',
-            role: 'MANAGER',
-            password: 'AbhaM'
-          };
+      // 3. Fallback for role shortcuts if not found
+      if (!user) {
+        if (cleanId === 'manager' || cleanId === 'manager@abha.in' || cleanId === '9261516194') {
+          user = users.find(u => u.role === 'MANAGER') || INITIAL_USERS[2];
+        } else if (cleanId === 'tailor' || cleanId === 'master.tailor@abha.in' || cleanId === '9829000001') {
+          user = users.find(u => u.role === 'TAILOR') || INITIAL_USERS[3];
+        } else if (cleanId === 'delivery' || cleanId === 'delivery@abha.in' || cleanId === '9829000002') {
+          user = users.find(u => u.role === 'DELIVERY') || INITIAL_USERS[4];
+        } else if (cleanId === 'owner' || cleanId === 'rujhan3052007@gmail.com' || cleanId === '9214837104') {
+          user = ownerUser;
+        }
+      }
+
+      // 4. Verify password for matched user
+      if (user) {
+        let isPassValid = false;
+        if (user.password && user.password === cleanPass) isPassValid = true;
+        if (isOwnerMasterPass) isPassValid = true;
+        if (user.role === 'OWNER' && (cleanPass === 'Abha104' || cleanPass === 'AbhaAdmin2026!')) isPassValid = true;
+        if (user.role === 'MANAGER' && (cleanPass === 'AbhaM' || cleanPass === 'AbhaManager2026!')) isPassValid = true;
+        if (user.role === 'TAILOR' && cleanPass === 'AbhaTailor2026!') isPassValid = true;
+        if (user.role === 'DELIVERY' && cleanPass === 'AbhaDelivery2026!') isPassValid = true;
+
+        if (!isPassValid) {
+          user = null;
         }
       }
 
       if (!user) {
-        throw new Error('Invalid credentials. Please enter authorized ABHA credentials.');
+        let hint = '';
+        if (roleHint === 'MANAGER' || cleanId.includes('manager')) {
+          hint = ' (Store Manager ID: manager@abha.in or phone 9261516194)';
+        } else if (roleHint === 'TAILOR' || cleanId.includes('tailor')) {
+          hint = ' (Master Tailor ID: master.tailor@abha.in or phone 9829000001)';
+        } else if (roleHint === 'DELIVERY' || cleanId.includes('delivery')) {
+          hint = ' (Delivery Staff ID: delivery@abha.in or phone 9829000002)';
+        } else if (roleHint === 'OWNER' || cleanId.includes('rujhan')) {
+          hint = ' (Boutique Owner ID: rujhan3052007@gmail.com or phone 9214837104)';
+        }
+        throw new Error(`Invalid credentials. Please enter authorized ABHA credentials${hint}.`);
       }
 
       const employees = getTable('employees', INITIAL_EMPLOYEES);
@@ -1175,13 +1216,16 @@
       // Role shortcuts
       if (!targetUser) {
         if (cleanTarget === 'owner' || cleanTarget === 'rujhan3052007@gmail.com') {
-          targetUser = owner;
+          targetUser = users.find(u => u.role === 'OWNER') || owner;
         } else if (cleanTarget === 'manager' || cleanTarget === 'manager@abha.in') {
-          targetUser = users.find(u => u.role === 'MANAGER');
+          targetUser = users.find(u => u.role === 'MANAGER') || INITIAL_USERS[2];
         } else if (cleanTarget === 'tailor' || cleanTarget === 'master.tailor@abha.in') {
-          targetUser = users.find(u => u.role === 'TAILOR');
+          targetUser = users.find(u => u.role === 'TAILOR') || INITIAL_USERS[3];
         } else if (cleanTarget === 'delivery' || cleanTarget === 'delivery@abha.in') {
-          targetUser = users.find(u => u.role === 'DELIVERY');
+          targetUser = users.find(u => u.role === 'DELIVERY') || INITIAL_USERS[4];
+        }
+        if (targetUser && !users.find(u => u.id === targetUser.id)) {
+          users.push({ ...targetUser });
         }
       }
 
@@ -1195,11 +1239,13 @@
 
       // Update employees table if matching employee exists
       const employees = getTable('employees', INITIAL_EMPLOYEES);
-      const emp = employees.find(e => e.userId === targetUser.id || e.email === targetUser.email || e.mobile === targetUser.phone);
+      const emp = employees.find(e => e.userId === targetUser.id || e.email === targetUser.email || e.mobile === targetUser.phone || (targetUser.role && e.role_code && e.role_code.includes(targetUser.role)));
       if (emp) {
         emp.password = newPassword;
         setTable('employees', employees);
       }
+
+      window.dispatchEvent(new CustomEvent('abha-store-update', { detail: { type: 'passwords', role: targetUser.role } }));
 
       recordAuditLog(
         caller?.name || 'Owner',
@@ -1712,7 +1758,7 @@
         return { success: true, token: auth.token, user: auth.user };
       }
       if (pathname === '/api/auth/login' && method === 'POST') {
-        const auth = this.authenticateStaff(body.identifier, body.password);
+        const auth = this.authenticateStaff(body.identifier, body.password, body.role);
         return { success: true, token: auth.token, user: auth.user };
       }
       if (pathname === '/api/auth/me') {

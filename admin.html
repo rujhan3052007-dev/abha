@@ -924,9 +924,21 @@
 
         <!-- Login Form -->
         <form id="adminLoginForm" onsubmit="handleAdminLogin(event)" style="display: flex; flex-direction: column; gap: 0.85rem; text-align: left;">
+          
+          <!-- Role Account Helper Banner -->
+          <div id="roleAccountBanner" style="background: var(--ivory-100); border: 1px solid var(--gray-300); border-radius: 8px; padding: 0.65rem 0.85rem; font-size: 0.8rem; line-height: 1.4;">
+            <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+              <span>Official Account: <strong id="roleAccountIdentifier">manager@abha.in</strong></span>
+              <button type="button" onclick="fillRoleIdentifier()" class="btn btn-outline btn-sm" style="padding: 0.2rem 0.6rem; font-size: 0.75rem; border-color: var(--maroon); color: var(--maroon);">Auto-fill ID</button>
+            </div>
+            <div id="roleOwnerTip" style="font-size: 0.72rem; color: var(--gray-500); margin-top: 0.35rem;">
+              👑 <strong>Owner Access:</strong> As Boutique Owner, you can also unlock this panel with your Owner email (<code>rujhan3052007@gmail.com</code>) &amp; Owner password.
+            </div>
+          </div>
+
           <div>
             <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Email or Phone</label>
-            <input type="text" id="loginIdentifier" class="form-input" placeholder="rujhan3052007@gmail.com / 9214837104" required>
+            <input type="text" id="loginIdentifier" class="form-input" autocomplete="off" placeholder="Email or Phone" required>
           </div>
           <div>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
@@ -934,7 +946,7 @@
               <button type="button" onclick="togglePasswordVisibility('loginPassword', 'btnToggleLoginPass')" id="btnToggleLoginPass" style="background: none; border: none; font-size: 0.75rem; color: var(--maroon); cursor: pointer; font-weight: 600;">👁️ Show Password</button>
             </div>
             <div style="position: relative;">
-              <input type="password" id="loginPassword" class="form-input" placeholder="••••••••••••" required style="padding-right: 2.2rem;">
+              <input type="password" id="loginPassword" class="form-input" autocomplete="current-password" placeholder="••••••••••••" required style="padding-right: 2.2rem;">
               <button type="button" onclick="togglePasswordVisibility('loginPassword', 'btnToggleLoginPass')" style="position: absolute; right: 0.5rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--gray-500); font-size: 0.9rem;" aria-label="Toggle password visibility">👁️</button>
             </div>
           </div>
@@ -1935,12 +1947,35 @@
     let selectedPosProduct = null;
 
     const SESSIONS_KEY = 'abha_role_sessions';
-    const ROLE_DEFAULTS = {
-      OWNER: { identifier: 'rujhan3052007@gmail.com', password: 'Abha104', label: 'Boutique Owner' },
-      MANAGER: { identifier: 'manager@abha.in', password: 'AbhaM', label: 'Store Manager' },
-      TAILOR: { identifier: 'master.tailor@abha.in', password: 'AbhaTailor2026!', label: 'Master Tailor' },
-      DELIVERY: { identifier: 'delivery@abha.in', password: 'AbhaDelivery2026!', label: 'Delivery Staff' }
-    };
+    function getRoleDefaults() {
+      try {
+        const stored = localStorage.getItem('abha_role_defaults');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          return {
+            OWNER: { identifier: 'rujhan3052007@gmail.com', password: parsed.OWNER?.password || 'Abha104', label: 'Boutique Owner' },
+            MANAGER: { identifier: 'manager@abha.in', password: parsed.MANAGER?.password || 'AbhaM', label: 'Store Manager' },
+            TAILOR: { identifier: 'master.tailor@abha.in', password: parsed.TAILOR?.password || 'AbhaTailor2026!', label: 'Master Tailor' },
+            DELIVERY: { identifier: 'delivery@abha.in', password: parsed.DELIVERY?.password || 'AbhaDelivery2026!', label: 'Delivery Staff' }
+          };
+        }
+      } catch (e) {}
+      return {
+        OWNER: { identifier: 'rujhan3052007@gmail.com', password: 'Abha104', label: 'Boutique Owner' },
+        MANAGER: { identifier: 'manager@abha.in', password: 'AbhaM', label: 'Store Manager' },
+        TAILOR: { identifier: 'master.tailor@abha.in', password: 'AbhaTailor2026!', label: 'Master Tailor' },
+        DELIVERY: { identifier: 'delivery@abha.in', password: 'AbhaDelivery2026!', label: 'Delivery Staff' }
+      };
+    }
+
+    let ROLE_DEFAULTS = getRoleDefaults();
+
+    function saveRoleDefaults() {
+      try {
+        localStorage.setItem('abha_role_defaults', JSON.stringify(ROLE_DEFAULTS));
+      } catch (e) {}
+    }
+
     let selectedRoleTarget = 'OWNER';
 
     function openOwnerPasswordModal(preselectedRoleOrIdentifier) {
@@ -2080,6 +2115,7 @@
             ROLE_DEFAULTS[r].password = newPassword;
           }
         }
+        saveRoleDefaults();
 
         if (succBox) {
           succBox.textContent = res.message || 'Password updated successfully.';
@@ -2198,16 +2234,33 @@
       updateRoleBadges();
     }
 
+    function fillRoleIdentifier() {
+      ROLE_DEFAULTS = getRoleDefaults();
+      const roleInfo = ROLE_DEFAULTS[selectedRoleTarget] || ROLE_DEFAULTS.OWNER;
+      const input = document.getElementById('loginIdentifier');
+      if (input) {
+        input.value = roleInfo.identifier;
+        input.focus();
+      }
+    }
+
     function showAuthFormForRole(role) {
       selectedRoleTarget = role;
       document.getElementById('roleSelectorView').style.display = 'none';
       document.getElementById('authFormView').style.display = 'block';
 
+      ROLE_DEFAULTS = getRoleDefaults();
       const roleInfo = ROLE_DEFAULTS[role] || ROLE_DEFAULTS.OWNER;
       document.getElementById('authFormTitle').textContent = `${roleInfo.label} Sign In`;
       const badge = document.getElementById('authFormRoleBadge');
       badge.textContent = roleInfo.label;
       badge.className = `role-badge role-${role.toLowerCase()}`;
+
+      // Update role helper banner
+      const bannerId = document.getElementById('roleAccountIdentifier');
+      if (bannerId) bannerId.textContent = roleInfo.identifier;
+      const ownerTip = document.getElementById('roleOwnerTip');
+      if (ownerTip) ownerTip.style.display = (role === 'OWNER' ? 'none' : 'block');
 
       // Registration tab is for Owner
       const tabReg = document.getElementById('tabBtnRegister');
@@ -2217,7 +2270,11 @@
       showAuthMode('login');
 
       // Pre-fill default identifier for selected role
-      document.getElementById('loginIdentifier').value = roleInfo.identifier;
+      const inputId = document.getElementById('loginIdentifier');
+      if (inputId) {
+        inputId.placeholder = `${roleInfo.identifier} or registered phone`;
+        inputId.value = roleInfo.identifier;
+      }
       document.getElementById('loginPassword').value = '';
       document.getElementById('loginPassword').focus();
       document.getElementById('authError').style.display = 'none';
@@ -2440,7 +2497,7 @@
       try {
         const res = await apiRequest('/api/auth/login', {
           method: 'POST',
-          body: JSON.stringify({ identifier, password })
+          body: JSON.stringify({ identifier, password, role: selectedRoleTarget })
         });
         authToken = res.token;
         currentUser = res.user;
