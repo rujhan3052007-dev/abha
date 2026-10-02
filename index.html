@@ -37,7 +37,7 @@
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="js/abha-store.js?v=20261002_fonts"></script>
+  <script src="js/abha-store.js?v=20261002_clean_details"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -2952,31 +2952,28 @@
             <p class="text-[11px] text-slateText-600 mt-0.5">+ ₹<span id="qvStitchFee">650</span> for bespoke tailoring fit</p>
           </div>
 
-          <!-- Description -->
-          <p id="qvDescription" class="text-xs text-slateText-700 leading-relaxed">
-            Description
-          </p>
-
-          <!-- Fabric Specs Table (Fabindia / Nykaa standard) -->
-          <div class="p-3 bg-ivory-100 rounded border border-ivory-200 text-xs space-y-2">
-            <h4 class="font-bold text-charcoal-950 uppercase tracking-wider text-[10px]">Fabric &amp; Cut Specifications</h4>
-            <div class="grid grid-cols-2 gap-x-3 gap-y-1.5 text-[11px]">
-              <div><span class="text-slateText-500">Top / Kurta:</span> <span class="font-semibold text-charcoal-900">2.5 Meters</span></div>
-              <div><span class="text-slateText-500">Bottom / Salwar:</span> <span class="font-semibold text-charcoal-900">2.5 Meters</span></div>
-              <div><span class="text-slateText-500">Dupatta Length:</span> <span class="font-semibold text-charcoal-900">2.5 Meters</span></div>
-              <div><span class="text-slateText-500">Wash Care:</span> <span class="font-semibold text-charcoal-900">Gentle Hand Wash</span></div>
-              <div class="col-span-2"><span class="text-slateText-500">Fabric Feel:</span> <span id="qvFabricDetail" class="font-semibold text-charcoal-900">100% Pure Slub Cotton</span></div>
+          <!-- Concise 5-Line Product Highlights -->
+          <div class="p-3.5 bg-ivory-100/90 rounded-lg border border-ivory-200 text-xs space-y-2 text-charcoal-900 leading-normal">
+            <div class="flex items-start gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-maroon-800 shrink-0 mt-1.5"></span>
+              <p><strong class="font-semibold text-charcoal-950">Fabric:</strong> <span id="qvFabricDetail">100% Fine Combed Cotton</span></p>
             </div>
-          </div>
-
-          <!-- Pincode Delivery Checker -->
-          <div class="p-3 bg-ivory-50 rounded border border-ivory-200 space-y-1.5">
-            <label for="qvPincodeInput" class="block text-[11px] font-semibold text-charcoal-950">Check Pan-India Delivery Timeline:</label>
-            <div class="flex items-center gap-2">
-              <input type="text" id="qvPincodeInput" maxlength="6" pattern="[0-9]{6}" placeholder="Enter 6-digit Pincode" class="flex-1 px-3 py-1.5 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
-              <button type="button" onclick="checkPincodeDelivery()" class="px-3 py-1.5 bg-charcoal-900 hover:bg-charcoal-800 text-ivory-50 text-xs font-semibold rounded">Check</button>
+            <div class="flex items-start gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-maroon-800 shrink-0 mt-1.5"></span>
+              <p><strong class="font-semibold text-charcoal-950">Set Includes:</strong> Top 2.5m, Bottom 2.5m, Dupatta 2.5m (3-Piece)</p>
             </div>
-            <div id="qvPincodeResult" class="text-[11px] hidden font-medium"></div>
+            <div class="flex items-start gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-maroon-800 shrink-0 mt-1.5"></span>
+              <p><strong class="font-semibold text-charcoal-950">Craft &amp; Style:</strong> <span id="qvDescription">Artisanal mandala motifs with pearl embroidered neck</span></p>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-maroon-800 shrink-0 mt-1.5"></span>
+              <p><strong class="font-semibold text-charcoal-950">Tailoring:</strong> Buy unstitched or custom-tailored to your measurements</p>
+            </div>
+            <div class="flex items-start gap-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-maroon-800 shrink-0 mt-1.5"></span>
+              <p><strong class="font-semibold text-charcoal-950">Care &amp; Delivery:</strong> Gentle Hand Wash • Free Doorstep Delivery Across India</p>
+            </div>
           </div>
 
           <!-- Quick Actions -->
@@ -5246,8 +5243,17 @@
       if (qvPrice) qvPrice.textContent = `₹${prod.price.toLocaleString('en-IN')}`;
       const qvStitch = document.getElementById('qvStitchFee');
       if (qvStitch) qvStitch.textContent = prod.stitchingFee;
+      const craftHighlights = {
+        'prod-01': 'Artisanal Rajasthani Leheriya print with delicate gota patti work',
+        'prod-02': 'Handcrafted Chanderi silk with golden zari bootis & tissue dupatta',
+        'prod-03': 'Traditional Bandhani tie-dye with golden zari handwork & border',
+        'prod-04': 'Artisanal mirror-work lace placket with vibrant floral dupatta',
+        'prod-05': 'Artistic mandala block print with pearl embroidered neck placket'
+      };
       const qvDesc = document.getElementById('qvDescription');
-      if (qvDesc) qvDesc.textContent = prod.description;
+      if (qvDesc) {
+        qvDesc.textContent = craftHighlights[prod.id] || (prod.description ? prod.description.split('.')[0] : 'Handcrafted authentic Rajasthani weave');
+      }
       const qvFab = document.getElementById('qvFabricDetail');
       if (qvFab) qvFab.textContent = prod.fabric;
 
