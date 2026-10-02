@@ -37,7 +37,7 @@
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="js/abha-store.js?v=20261003_email"></script>
+  <script src="js/abha-store.js?v=20261003_tailor_flow"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -1905,10 +1905,10 @@
   </footer>
 
   <!-- ========================================================================= -->
-  <!-- FLOATING WHATSAPP BUTTON (§32) -->
+  <!-- FLOATING TAILOR CHAT BUTTON (Available strictly during Stitched Product Ordering) -->
   <!-- ========================================================================= -->
-  <aside aria-label="Quick WhatsApp assistance" class="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40">
-    <button type="button" onclick="triggerWhatsAppChat('Floating Action')" class="flex items-center gap-2 px-4 py-3 rounded-full bg-green-700 hover:bg-green-600 text-ivory-50 shadow-lg hover:shadow-xl transition-luxury border border-green-600 text-xs font-bold" aria-label="Chat on WhatsApp with ABHA Tailoring Support">
+  <aside id="floatingTailorChatAside" aria-label="Quick WhatsApp tailor assistance" class="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-40 hidden">
+    <button type="button" onclick="triggerWhatsAppChat('Custom Stitching Assistance')" class="flex items-center gap-2 px-4 py-3 rounded-full bg-green-700 hover:bg-green-600 text-ivory-50 shadow-lg hover:shadow-xl transition-luxury border border-green-600 text-xs font-bold" aria-label="Chat on WhatsApp with ABHA Master Tailor">
       <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.7c.974.553 1.764.815 2.79.815 3.182 0 5.77-2.587 5.77-5.766.001-3.183-2.585-5.8-5.769-5.8zm3.374 8.243c-.147.418-.844.793-1.189.845-.345.053-.787.069-1.272-.088-.309-.1-.707-.234-1.223-.462-2.158-.956-3.565-3.176-3.673-3.322-.108-.147-.872-1.163-.872-2.218 0-1.055.553-1.574.75-1.785.197-.212.43-.265.574-.265.144 0 .287.002.412.008.132.007.309-.05.483.368.177.424.606 1.482.659 1.589.053.107.089.232.018.375-.072.143-.108.232-.215.358-.108.125-.227.28-.324.375-.108.107-.221.223-.095.439.126.216.559.923 1.2 1.494.825.736 1.521.964 1.737 1.071.216.107.342.089.469-.054.126-.143.538-.625.681-.839.144-.214.287-.179.484-.107.197.072 1.254.591 1.469.699.215.107.359.161.412.25.054.089.054.518-.093.936z"/></svg>
       <span class="hidden sm:inline">Chat with Tailor</span>
     </button>
@@ -2002,11 +2002,18 @@
   <div id="stitchedModal" onclick="if (event.target === this) handleStitchedModalBack()" class="fixed inset-0 z-50 bg-charcoal-950/75 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="stitchedModalTitle">
     <div class="bg-ivory-50 rounded-xl max-w-2xl w-full p-6 sm:p-8 border border-ivory-300 shadow-2xl relative my-8">
       
-      <!-- Top Navigation Bar: Back & Close Actions -->
-      <div class="flex items-center justify-between pb-2 mb-3 border-b border-ivory-200">
+      <!-- Top Navigation Bar: Back, Chat with Tailor & Close Actions -->
+      <div class="flex items-center justify-between pb-2 mb-3 border-b border-ivory-200 gap-2">
         <button type="button" onclick="handleStitchedModalBack()" class="p-1 -ml-1 text-charcoal-700 hover:text-maroon-900 transition-colors rounded hover:bg-ivory-200/60 inline-flex items-center justify-center focus:outline-none" aria-label="Go back" title="Go back">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
         </button>
+
+        <!-- Chat with Tailor (Available directly when ordering custom stitched products) -->
+        <button type="button" onclick="triggerWhatsAppChat('Custom Stitching - Atelier Tailor Consultation')" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-green-700 hover:bg-green-600 text-ivory-50 text-xs font-bold transition-all shadow-xs" title="Chat with Master Tailor on WhatsApp">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.299.144.347.491 1.2.534 1.288.043.087.072.188.014.303-.058.116-.087.188-.173.289l-.26.303c-.087.087-.178.181-.077.354.101.173.449.741.963 1.2.662.591 1.221.774 1.394.86.173.087.275.072.376-.043.101-.116.433-.506.549-.679.116-.173.231-.144.39-.087s1.011.477 1.184.564c.173.087.289.13.332.202.043.072.043.419-.101.824z"/></svg>
+          <span>Chat with Tailor</span>
+        </button>
+
         <button type="button" onclick="closeStitchedModal()" class="p-1 -mr-1 text-slateText-400 hover:text-charcoal-900 transition-colors rounded hover:bg-ivory-200/60 inline-flex items-center justify-center focus:outline-none" aria-label="Close dialog" title="Close">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
@@ -2081,8 +2088,9 @@
                   <button type="button" onclick="selectMeasurementMethod('whatsapp')" class="px-4 py-1.5 bg-maroon-800 hover:bg-maroon-700 text-ivory-50 text-xs font-bold uppercase tracking-wider rounded transition">
                     CONTINUE WITH ASSISTANCE →
                   </button>
-                  <button type="button" onclick="triggerWhatsAppChat('Measurement Help Request')" class="px-3 py-1.5 bg-green-700 hover:bg-green-600 text-ivory-50 text-xs font-bold rounded flex items-center gap-1">
-                    <span>💬</span> WhatsApp Now
+                  <button type="button" onclick="triggerWhatsAppChat('Measurement Help - Chat with Tailor')" class="px-3 py-1.5 bg-green-700 hover:bg-green-600 text-ivory-50 text-xs font-bold rounded flex items-center gap-1.5 shadow-2xs">
+                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.299.144.347.491 1.2.534 1.288.043.087.072.188.014.303-.058.116-.087.188-.173.289l-.26.303c-.087.087-.178.181-.077.354.101.173.449.741.963 1.2.662.591 1.221.774 1.394.86.173.087.275.072.376-.043.101-.116.433-.506.549-.679.116-.173.231-.144.39-.087s1.011.477 1.184.564c.173.087.289.13.332.202.043.072.043.419-.101.824z"/></svg>
+                    <span>Chat with Tailor</span>
                   </button>
                   <a href="tel:+919214837104" class="px-3 py-1.5 bg-ivory-200 hover:bg-ivory-300 text-charcoal-950 text-xs font-semibold rounded flex items-center gap-1">
                     <span>📞</span> Call ABHA
@@ -2384,6 +2392,13 @@
           <p class="text-[10px] text-slateText-500 italic">
             * Note: Reference photos guide the master tailor's work. Final construction depends on fabric pattern and feasibility.
           </p>
+          <div class="flex items-center justify-between pt-2 border-t border-ivory-200/80 text-xs">
+            <span class="text-slateText-600">Need master tailor advice on custom neck or sleeve patterns?</span>
+            <button type="button" onclick="triggerWhatsAppChat('Design Consultation - Chat with Tailor')" class="text-green-700 hover:text-green-800 font-bold inline-flex items-center gap-1.5 underline shrink-0">
+              <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.299.144.347.491 1.2.534 1.288.043.087.072.188.014.303-.058.116-.087.188-.173.289l-.26.303c-.087.087-.178.181-.077.354.101.173.449.741.963 1.2.662.591 1.221.774 1.394.86.173.087.275.072.376-.043.101-.116.433-.506.549-.679.116-.173.231-.144.39-.087s1.011.477 1.184.564c.173.087.289.13.332.202.043.072.043.419-.101.824z"/></svg>
+              <span>Chat with Tailor</span>
+            </button>
+          </div>
         </div>
 
         <!-- Additional Notes -->
@@ -2461,6 +2476,15 @@
             <li><strong>Quality Check:</strong> Stitched garment is measured against specifications and steam-pressed.</li>
             <li><strong>Doorstep Delivery:</strong> Dispatched safely with tracking updates sent directly to your phone.</li>
           </ol>
+        </div>
+
+        <!-- Chat with Tailor Pre-Checkout Option -->
+        <div class="flex items-center justify-between text-xs py-2.5 px-3 bg-green-50/80 border border-green-200 rounded-lg text-green-950">
+          <span class="text-slateText-700">Questions about your tailoring before checkout?</span>
+          <button type="button" onclick="triggerWhatsAppChat('Pre-Checkout - Chat with Tailor')" class="font-bold text-green-700 hover:text-green-800 inline-flex items-center gap-1.5 underline shrink-0">
+            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.299.144.347.491 1.2.534 1.288.043.087.072.188.014.303-.058.116-.087.188-.173.289l-.26.303c-.087.087-.178.181-.077.354.101.173.449.741.963 1.2.662.591 1.221.774 1.394.86.173.087.275.072.376-.043.101-.116.433-.506.549-.679.116-.173.231-.144.39-.087s1.011.477 1.184.564c.173.087.289.13.332.202.043.072.043.419-.101.824z"/></svg>
+            <span>Chat with Tailor</span>
+          </button>
         </div>
 
         <!-- Actions -->
@@ -2679,6 +2703,21 @@
           </div>
         </div>
 
+        <!-- Tailor Support Row (Strictly visible ONLY when customer is ordering stitched products) -->
+        <div id="checkoutTailorSupportRow" class="hidden p-3 bg-gradient-to-r from-ivory-100 to-green-50 rounded-lg border border-green-700/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
+          <div class="flex items-center gap-2.5">
+            <span class="text-xl">✂️</span>
+            <div>
+              <p class="font-bold text-charcoal-950">Custom Stitched Salwar Suit Order</p>
+              <p class="text-[11px] text-slateText-600">Have questions about your measurements, ease margins, or fit before payment?</p>
+            </div>
+          </div>
+          <button type="button" onclick="triggerWhatsAppChat('Checkout - Custom Stitching Assistance')" class="shrink-0 px-3.5 py-1.5 bg-green-700 hover:bg-green-600 text-ivory-50 text-xs font-bold rounded-full transition flex items-center justify-center gap-1.5 shadow-xs">
+            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.299.144.347.491 1.2.534 1.288.043.087.072.188.014.303-.058.116-.087.188-.173.289l-.26.303c-.087.087-.178.181-.077.354.101.173.449.741.963 1.2.662.591 1.221.774 1.394.86.173.087.275.072.376-.043.101-.116.433-.506.549-.679.116-.173.231-.144.39-.087s1.011.477 1.184.564c.173.087.289.13.332.202.043.072.043.419-.101.824z"/></svg>
+            <span>Chat with Tailor</span>
+          </button>
+        </div>
+
         <!-- Order Total Banner -->
         <div class="p-4 bg-maroon-900/5 rounded-lg border border-maroon-800/20 flex items-center justify-between">
           <div>
@@ -2748,7 +2787,12 @@
         <button type="button" onclick="const num = document.getElementById('confOrderNum').textContent; closeConfirmationModal(); openTrackingModal(num);" class="w-full py-3 bg-maroon-800 hover:bg-maroon-700 text-ivory-50 text-xs font-bold uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-2">
           <span>Track Order Live →</span>
         </button>
-        <button type="button" onclick="const orderNum = document.getElementById('confOrderNum').textContent; const text = encodeURIComponent(`Hi ABHA, I have placed order ${orderNum}. Please share my tailoring and delivery updates.`); window.open(`https://wa.me/919214837104?text=${text}`, '_blank');" class="w-full py-3 bg-green-700 hover:bg-green-600 text-ivory-50 text-xs font-bold uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-2">
+        <!-- Stitched Order Chat with Tailor Button (Strictly shown only when customer ordered a custom stitched suit) -->
+        <button type="button" id="confTailorChatBtn" onclick="const orderNum = document.getElementById('confOrderNum').textContent; const text = encodeURIComponent(`Hi Master Tailor at ABHA, I have placed custom stitched order ${orderNum}. I would like to review my tailoring and custom measurements with you.`); window.open(`https://wa.me/919214837104?text=${text}`, '_blank');" class="hidden w-full py-3 bg-green-700 hover:bg-green-600 text-ivory-50 text-xs font-bold uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-2 shadow-xs">
+          <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.299.144.347.491 1.2.534 1.288.043.087.072.188.014.303-.058.116-.087.188-.173.289l-.26.303c-.087.087-.178.181-.077.354.101.173.449.741.963 1.2.662.591 1.221.774 1.394.86.173.087.275.072.376-.043.101-.116.433-.506.549-.679.116-.173.231-.144.39-.087s1.011.477 1.184.564c.173.087.289.13.332.202.043.072.043.419-.101.824z"/></svg>
+          <span>Chat with Master Tailor About Fit</span>
+        </button>
+        <button type="button" id="confGeneralWhatsAppBtn" onclick="const orderNum = document.getElementById('confOrderNum').textContent; const text = encodeURIComponent(`Hi ABHA, I have placed order ${orderNum}. Please share my delivery updates.`); window.open(`https://wa.me/919214837104?text=${text}`, '_blank');" class="w-full py-3 bg-ivory-100 hover:bg-ivory-200 text-charcoal-900 border border-ivory-300 text-xs font-bold uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-2">
           <span>Receive Updates on WhatsApp</span>
         </button>
         <button type="button" onclick="closeConfirmationModal()" class="w-full py-3 bg-ivory-200 hover:bg-ivory-300 text-charcoal-900 text-xs font-bold uppercase tracking-wider rounded-lg transition-all">
@@ -4674,13 +4718,23 @@
         }
       }
 
-      // Update Back button label based on cart context
+      // Update Back button label and Tailor Assistance row based on cart context
+      const isStitchedOrder = Boolean(state.cart.length > 0 && state.cart[0].isStitched);
       const chkBackLabel = document.getElementById('checkoutBackBtnLabel');
       if (chkBackLabel) {
-        if (state.cart.length > 0 && state.cart[0].isStitched) {
+        if (isStitchedOrder) {
           chkBackLabel.textContent = '← Back to Order Summary';
         } else {
           chkBackLabel.textContent = '← Back to Shopping';
+        }
+      }
+
+      const tailorSupportRow = document.getElementById('checkoutTailorSupportRow');
+      if (tailorSupportRow) {
+        if (isStitchedOrder) {
+          tailorSupportRow.classList.remove('hidden');
+        } else {
+          tailorSupportRow.classList.add('hidden');
         }
       }
 
@@ -4843,6 +4897,19 @@
         document.getElementById('confTimeline').textContent = isStitched
           ? (isLocalBeawar ? 'Custom Stitched: Master Cutting & Tailoring (5-7 Days) + Local Beawar Doorstep Delivery' : 'Custom Stitched: Master Tailoring (7–9 Days Across India)')
           : (isLocalBeawar ? 'Unstitched Fabric: Dispatched Same Day via ABHA Beawar Store Delivery' : 'Unstitched Fabric: Dispatches in 24–48 Hours Across India');
+
+        // Configure tailor chat visibility (Only when customer ordered custom stitched products)
+        const confTailorBtn = document.getElementById('confTailorChatBtn');
+        const confGeneralBtn = document.getElementById('confGeneralWhatsAppBtn');
+        if (confTailorBtn) {
+          if (isStitched) {
+            confTailorBtn.classList.remove('hidden');
+            if (confGeneralBtn) confGeneralBtn.classList.add('hidden');
+          } else {
+            confTailorBtn.classList.add('hidden');
+            if (confGeneralBtn) confGeneralBtn.classList.remove('hidden');
+          }
+        }
 
         // Clear cart
         state.cart = [];
@@ -5390,7 +5457,10 @@
     }
 
     function triggerWhatsAppChat(context) {
-      const text = encodeURIComponent(`Hello ABHA, I would like assistance regarding dress materials and custom measurements (${context}).`);
+      const isTailor = (context || '').toLowerCase().includes('tailor') || (context || '').toLowerCase().includes('stitch') || (context || '').toLowerCase().includes('measure');
+      const text = isTailor
+        ? encodeURIComponent(`Hello Master Tailor at ABHA, I am ordering a custom stitched salwar suit and have a question regarding my measurements/stitching (${context}).`)
+        : encodeURIComponent(`Hello ABHA, I would like assistance regarding ${context}.`);
       window.open(`https://wa.me/919214837104?text=${text}`, '_blank');
     }
 
