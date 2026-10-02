@@ -1097,7 +1097,7 @@ router.put('/users/password', requireRole(ROLES.OWNER), async (req, res, next) =
     `, [cleanTarget, targetIdentifier.trim(), cleanTarget]);
 
     if (!targetUser) {
-      if (cleanTarget === 'owner' || cleanTarget === 'rujhan3052007@gmail.com') {
+      if (cleanTarget === 'owner' || cleanTarget === 'abhaindia104@gmail.com' || cleanTarget === 'rujhan3052007@gmail.com') {
         targetUser = await db.get(`SELECT * FROM users WHERE role = 'OWNER' LIMIT 1`);
       } else if (cleanTarget === 'manager' || cleanTarget === 'manager@abha.in') {
         targetUser = await db.get(`SELECT * FROM users WHERE role = 'MANAGER' LIMIT 1`);

@@ -11,7 +11,8 @@ module.exports = {
     PHONE_PRIMARY: '9214837104',
     PHONE_SECONDARY: '9261516194',
     WHATSAPP: '+91 9214837104',
-    SUPPORT_EMAIL: 'support@abha.in',
+    SUPPORT_EMAIL: 'abhaindia104@gmail.com',
+    EMAIL: 'abhaindia104@gmail.com',
     PRIMARY_STORE: {
       CODE: 'STORE-001',
       NAME: 'ABHA Beawar Flagship',

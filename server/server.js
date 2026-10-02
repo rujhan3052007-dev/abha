@@ -85,6 +85,7 @@ app.get('/api/health', (req, res) => {
       phone_primary: BRAND.PHONE_PRIMARY,
       phone_secondary: BRAND.PHONE_SECONDARY,
       whatsapp: BRAND.WHATSAPP,
+      email: BRAND.SUPPORT_EMAIL,
       instagram: BRAND.INSTAGRAM
     },
     version: '1.0.0-production'

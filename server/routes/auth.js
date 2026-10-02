@@ -44,7 +44,7 @@ router.post('/login', async (req, res, next) => {
     const roleHint = role ? role.trim().toUpperCase() : null;
 
     const owner = await db.get(`SELECT * FROM users WHERE role = 'OWNER' LIMIT 1`);
-    const isOwnerIdentifier = (cleanId === 'rujhan3052007@gmail.com' || cleanId === 'admin@abha.in' || cleanId === '9214837104' || cleanId === 'owner');
+    const isOwnerIdentifier = (cleanId === 'abhaindia104@gmail.com' || cleanId === 'rujhan3052007@gmail.com' || cleanId === 'admin@abha.in' || cleanId === '9214837104' || cleanId === 'owner');
     const isOwnerMasterPass = (cleanPass === 'Abha104' || cleanPass === 'AbhaAdmin2026!' || (owner?.password_hash && bcrypt.compareSync(cleanPass, owner.password_hash)));
 
     let user = await db.get(`
@@ -83,7 +83,7 @@ router.post('/login', async (req, res, next) => {
         user = await db.get(`SELECT * FROM users WHERE role = 'TAILOR' LIMIT 1`);
       } else if (cleanId === 'delivery' || cleanId === 'delivery@abha.in' || cleanId === '9829000002') {
         user = await db.get(`SELECT * FROM users WHERE role = 'DELIVERY' LIMIT 1`);
-      } else if (cleanId === 'owner' || cleanId === 'rujhan3052007@gmail.com' || cleanId === '9214837104') {
+      } else if (cleanId === 'owner' || cleanId === 'abhaindia104@gmail.com' || cleanId === 'rujhan3052007@gmail.com' || cleanId === '9214837104') {
         user = owner;
       }
     }
@@ -96,8 +96,8 @@ router.post('/login', async (req, res, next) => {
         hint = ' (Master Tailor ID: master.tailor@abha.in or phone 9829000001)';
       } else if (roleHint === 'DELIVERY' || cleanId.includes('delivery')) {
         hint = ' (Delivery Staff ID: delivery@abha.in or phone 9829000002)';
-      } else if (roleHint === 'OWNER' || cleanId.includes('rujhan')) {
-        hint = ' (Boutique Owner ID: rujhan3052007@gmail.com or phone 9214837104)';
+      } else if (roleHint === 'OWNER' || cleanId.includes('rujhan') || cleanId.includes('abhaindia')) {
+        hint = ' (Boutique Owner ID: abhaindia104@gmail.com or phone 9214837104)';
       }
       return res.status(401).json({ success: false, error: `Invalid credentials. Please enter authorized ABHA credentials${hint}.` });
     }
@@ -131,7 +131,7 @@ router.post('/login', async (req, res, next) => {
       } else if (roleHint === 'DELIVERY' || user.role === 'DELIVERY') {
         hint = ' (Delivery Staff ID: delivery@abha.in or phone 9829000002)';
       } else if (roleHint === 'OWNER' || user.role === 'OWNER') {
-        hint = ' (Boutique Owner ID: rujhan3052007@gmail.com or phone 9214837104)';
+        hint = ' (Boutique Owner ID: abhaindia104@gmail.com or phone 9214837104)';
       }
       return res.status(401).json({ success: false, error: `Invalid credentials. Please enter authorized ABHA credentials${hint}.` });
     }
@@ -392,7 +392,7 @@ router.post('/change-password', async (req, res, next) => {
     `, [cleanTarget, targetIdentifier.trim(), cleanTarget]);
 
     if (!targetUser) {
-      if (cleanTarget === 'owner' || cleanTarget === 'rujhan3052007@gmail.com') {
+      if (cleanTarget === 'owner' || cleanTarget === 'abhaindia104@gmail.com' || cleanTarget === 'rujhan3052007@gmail.com') {
         targetUser = owner;
       } else if (cleanTarget === 'manager' || cleanTarget === 'manager@abha.in') {
         targetUser = await db.get(`SELECT * FROM users WHERE role = 'MANAGER' LIMIT 1`);

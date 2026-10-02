@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="js/abha-store.js?v=20261002_fonts"></script>
+  <script src="js/abha-store.js?v=20261003_email"></script>
   <style>
     :root {
       --maroon: #5c1324;
@@ -935,7 +935,7 @@
               <button type="button" onclick="fillRoleIdentifier()" class="btn btn-outline btn-sm" style="padding: 0.2rem 0.6rem; font-size: 0.75rem; border-color: var(--maroon); color: var(--maroon);">Auto-fill ID</button>
             </div>
             <div id="roleOwnerTip" style="font-size: 0.72rem; color: var(--gray-500); margin-top: 0.35rem;">
-              👑 <strong>Owner Access:</strong> As Boutique Owner, you can also unlock this panel with your Owner email (<code>rujhan3052007@gmail.com</code>) &amp; Owner password.
+              👑 <strong>Owner Access:</strong> As Boutique Owner, you can also unlock this panel with your Owner email (<code>abhaindia104@gmail.com</code>) &amp; Owner password.
             </div>
           </div>
 
@@ -1822,7 +1822,7 @@
           <label style="font-size: 0.8rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.25rem; display: block;">Select Account to Change Password *</label>
           <select id="pwdTargetRole" class="form-input" onchange="handlePwdTargetChange(this.value)" required>
             <option value="MANAGER">📋 Store Manager (manager@abha.in)</option>
-            <option value="OWNER">👑 Boutique Owner (rujhan3052007@gmail.com)</option>
+            <option value="OWNER">👑 Boutique Owner (abhaindia104@gmail.com)</option>
             <option value="TAILOR">✂️ Master Tailor (master.tailor@abha.in)</option>
             <option value="DELIVERY">🚚 Delivery Staff (delivery@abha.in)</option>
             <option value="CUSTOM">👤 Other Department Staff Member (By Email or Phone)</option>
@@ -1961,7 +1961,7 @@
         if (stored) {
           const parsed = JSON.parse(stored);
           return {
-            OWNER: { identifier: 'rujhan3052007@gmail.com', password: parsed.OWNER?.password || 'Abha104', label: 'Boutique Owner' },
+            OWNER: { identifier: 'abhaindia104@gmail.com', password: parsed.OWNER?.password || 'Abha104', label: 'Boutique Owner' },
             MANAGER: { identifier: 'manager@abha.in', password: parsed.MANAGER?.password || 'AbhaM', label: 'Store Manager' },
             TAILOR: { identifier: 'master.tailor@abha.in', password: parsed.TAILOR?.password || 'AbhaTailor2026!', label: 'Master Tailor' },
             DELIVERY: { identifier: 'delivery@abha.in', password: parsed.DELIVERY?.password || 'AbhaDelivery2026!', label: 'Delivery Staff' }
@@ -1969,7 +1969,7 @@
         }
       } catch (e) {}
       return {
-        OWNER: { identifier: 'rujhan3052007@gmail.com', password: 'Abha104', label: 'Boutique Owner' },
+        OWNER: { identifier: 'abhaindia104@gmail.com', password: 'Abha104', label: 'Boutique Owner' },
         MANAGER: { identifier: 'manager@abha.in', password: 'AbhaM', label: 'Store Manager' },
         TAILOR: { identifier: 'master.tailor@abha.in', password: 'AbhaTailor2026!', label: 'Master Tailor' },
         DELIVERY: { identifier: 'delivery@abha.in', password: 'AbhaDelivery2026!', label: 'Delivery Staff' }
@@ -2009,7 +2009,7 @@
       const select = document.getElementById('pwdTargetRole');
       if (preselectedRoleOrIdentifier) {
         const idLower = String(preselectedRoleOrIdentifier).trim().toLowerCase();
-        if (idLower === 'owner' || idLower === 'rujhan3052007@gmail.com') {
+        if (idLower === 'owner' || idLower === 'abhaindia104@gmail.com' || idLower === 'rujhan3052007@gmail.com') {
           if (select) select.value = 'OWNER';
           handlePwdTargetChange('OWNER');
         } else if (idLower === 'manager' || idLower === 'manager@abha.in' || idLower === '9261516194') {

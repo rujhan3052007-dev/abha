@@ -26,6 +26,7 @@
     address: '11, Ganesha Tower, in front of D.A.V. College, Arya Samaj, Beawar, Rajasthan – 305901, India',
     phones: ['9214837104', '9261516194'],
     whatsapp: '+91 9214837104',
+    email: 'abhaindia104@gmail.com',
     instagram: '@abha_tailor_and_creation',
     maps_url: 'https://maps.app.goo.gl/7LgvjMtZ2vYo3rvF8',
     pincode: '305901',
@@ -202,7 +203,8 @@
 
   // Operational staff accounts (§48)
   const INITIAL_USERS = [
-    { id: 'u-owner-01', email: 'rujhan3052007@gmail.com', phone: '9214837104', name: 'Rujhan (ABHA Owner)', role: 'OWNER', password: 'Abha104' },
+    { id: 'u-owner-01', email: 'abhaindia104@gmail.com', phone: '9214837104', name: 'Rujhan (ABHA Owner)', role: 'OWNER', password: 'Abha104' },
+    { id: 'u-owner-legacy', email: 'rujhan3052007@gmail.com', phone: '9214837104', name: 'Rujhan (ABHA Owner)', role: 'OWNER', password: 'Abha104' },
     { id: 'u-owner-alias', email: 'admin@abha.in', phone: '9214837104', name: 'ABHA Management', role: 'OWNER', password: 'Abha104' },
     { id: 'u-mgr-01', email: 'manager@abha.in', phone: '9261516194', name: 'Store Manager (Beawar)', role: 'MANAGER', password: 'AbhaM' },
     { id: 'u-tailor-01', email: 'master.tailor@abha.in', phone: '9829000001', name: 'Master Tailor (ABHA Atelier)', role: 'TAILOR', password: 'AbhaTailor2026!' },
@@ -366,7 +368,7 @@
 
     let user = users.find(u => u.id === userId || (userRole && u.role === userRole));
     if (!user && userRole === 'OWNER') {
-      user = users.find(u => u.role === 'OWNER') || { id: 'u-owner-01', role: 'OWNER', name: 'Rujhan (ABHA Owner)', email: 'rujhan3052007@gmail.com', phone: '9214837104' };
+      user = users.find(u => u.role === 'OWNER') || { id: 'u-owner-01', role: 'OWNER', name: 'Rujhan (ABHA Owner)', email: 'abhaindia104@gmail.com', phone: '9214837104' };
     }
     if (!user) return null;
 
@@ -507,12 +509,24 @@
       });
 
       // Ensure Owner record has proper details, preserving password if set
-      const ownerUser = currentUsers.find(u => u.role === 'OWNER' && (u.id === 'u-owner-01' || u.email === 'rujhan3052007@gmail.com'));
+      const ownerUser = currentUsers.find(u => u.role === 'OWNER' && (u.id === 'u-owner-01' || u.email === 'rujhan3052007@gmail.com' || u.email === 'abhaindia104@gmail.com'));
       if (ownerUser) {
         ownerUser.name = 'Rujhan (ABHA Owner)';
-        ownerUser.email = 'rujhan3052007@gmail.com';
+        ownerUser.email = 'abhaindia104@gmail.com';
         ownerUser.phone = '9214837104';
         if (!ownerUser.password) ownerUser.password = 'Abha104';
+      }
+
+      // Ensure legacy alias exists for backward compatibility
+      if (!currentUsers.some(u => u.email === 'rujhan3052007@gmail.com')) {
+        currentUsers.push({
+          id: 'u-owner-legacy',
+          email: 'rujhan3052007@gmail.com',
+          phone: '9214837104',
+          name: 'Rujhan (ABHA Owner)',
+          role: 'OWNER',
+          password: ownerUser ? ownerUser.password : 'Abha104'
+        });
       }
 
       setTable('users', currentUsers);
@@ -1038,14 +1052,14 @@
 
       const ownerUser = users.find(u => u.role === 'OWNER') || {
         id: 'u-owner-01',
-        email: 'rujhan3052007@gmail.com',
+        email: 'abhaindia104@gmail.com',
         phone: '9214837104',
         name: 'Rujhan (ABHA Owner)',
         role: 'OWNER',
         password: 'Abha104'
       };
 
-      const isOwnerIdentifier = (cleanId === 'rujhan3052007@gmail.com' || cleanId === 'admin@abha.in' || cleanId === '9214837104' || cleanId === 'owner');
+      const isOwnerIdentifier = (cleanId === 'abhaindia104@gmail.com' || cleanId === 'rujhan3052007@gmail.com' || cleanId === 'admin@abha.in' || cleanId === '9214837104' || cleanId === 'owner');
       const isOwnerMasterPass = (cleanPass === (ownerUser.password || 'Abha104') || cleanPass === 'Abha104' || cleanPass === 'AbhaAdmin2026!');
 
       let user = null;
@@ -1084,7 +1098,7 @@
           user = users.find(u => u.role === 'TAILOR') || INITIAL_USERS[3];
         } else if (cleanId === 'delivery' || cleanId === 'delivery@abha.in' || cleanId === '9829000002') {
           user = users.find(u => u.role === 'DELIVERY') || INITIAL_USERS[4];
-        } else if (cleanId === 'owner' || cleanId === 'rujhan3052007@gmail.com' || cleanId === '9214837104') {
+        } else if (cleanId === 'owner' || cleanId === 'abhaindia104@gmail.com' || cleanId === 'rujhan3052007@gmail.com' || cleanId === '9214837104') {
           user = ownerUser;
         }
       }
@@ -1112,8 +1126,8 @@
           hint = ' (Master Tailor ID: master.tailor@abha.in or phone 9829000001)';
         } else if (roleHint === 'DELIVERY' || cleanId.includes('delivery')) {
           hint = ' (Delivery Staff ID: delivery@abha.in or phone 9829000002)';
-        } else if (roleHint === 'OWNER' || cleanId.includes('rujhan')) {
-          hint = ' (Boutique Owner ID: rujhan3052007@gmail.com or phone 9214837104)';
+        } else if (roleHint === 'OWNER' || cleanId.includes('rujhan') || cleanId.includes('abhaindia')) {
+          hint = ' (Boutique Owner ID: abhaindia104@gmail.com or phone 9214837104)';
         }
         throw new Error(`Invalid credentials. Please enter authorized ABHA credentials${hint}.`);
       }
@@ -1232,7 +1246,7 @@
 
       // Role shortcuts
       if (!targetUser) {
-        if (cleanTarget === 'owner' || cleanTarget === 'rujhan3052007@gmail.com') {
+        if (cleanTarget === 'owner' || cleanTarget === 'abhaindia104@gmail.com' || cleanTarget === 'rujhan3052007@gmail.com') {
           targetUser = users.find(u => u.role === 'OWNER') || owner;
         } else if (cleanTarget === 'manager' || cleanTarget === 'manager@abha.in') {
           targetUser = users.find(u => u.role === 'MANAGER') || INITIAL_USERS[2];

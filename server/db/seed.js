@@ -69,7 +69,7 @@ async function seed() {
       id: 'usr_owner_01',
       name: 'Rujhan (ABHA Owner)',
       phone: BRAND.PHONE_PRIMARY,
-      email: 'rujhan3052007@gmail.com',
+      email: 'abhaindia104@gmail.com',
       password: 'Abha104',
       role: ROLES.OWNER
     },
