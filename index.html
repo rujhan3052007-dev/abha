@@ -2285,9 +2285,23 @@
             <button type="button" onclick="closeQuickViewModal()" class="absolute top-2 left-2 w-7 h-7 rounded-full bg-white/85 hover:bg-white text-charcoal-700 hover:text-maroon-900 shadow-xs flex items-center justify-center transition-all z-10 focus:outline-none" aria-label="Go back" title="Go back">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
             </button>
-            <img id="qvImage" src="" alt="Product detail" class="w-full h-full object-cover" />
+            <span id="qvPhotoCounter" class="hidden absolute top-2 right-2 px-2 py-0.5 rounded-full bg-charcoal-950/70 text-white text-[9px] font-bold z-10 tracking-wide backdrop-blur-xs">1 / 1</span>
+            
+            <!-- Prev / Next Cycling Arrows -->
+            <button type="button" id="qvPrevPhotoBtn" onclick="cycleQvImage(-1)" class="hidden absolute left-1.5 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-white/80 hover:bg-white text-charcoal-800 hover:text-maroon-900 shadow-xs flex items-center justify-center transition-all z-10 focus:outline-none" aria-label="Previous photo">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <button type="button" id="qvNextPhotoBtn" onclick="cycleQvImage(1)" class="hidden absolute right-1.5 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-white/80 hover:bg-white text-charcoal-800 hover:text-maroon-900 shadow-xs flex items-center justify-center transition-all z-10 focus:outline-none" aria-label="Next photo">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>
+            </button>
+
+            <img id="qvImage" src="" alt="Product detail" class="w-full h-full object-cover transition-opacity duration-200" />
           </div>
-          <div class="flex items-center justify-between text-[10px] text-slateText-600 px-1 mt-1.5 w-full max-w-[240px] sm:max-w-[280px]">
+
+          <!-- Multi-Image Clickable Thumbnail Strip -->
+          <div id="qvThumbnailsStrip" class="hidden flex items-center justify-center gap-1.5 mt-2 w-full max-w-[240px] sm:max-w-[280px] overflow-x-auto no-scrollbar py-0.5"></div>
+
+          <div class="flex items-center justify-between text-[10px] text-slateText-600 px-1 mt-1 w-full max-w-[240px] sm:max-w-[280px]">
             <span class="flex items-center gap-1 text-emerald-800 font-semibold">✓ 100% Handloom</span>
             <span class="font-bold text-maroon-800">ABHA Beawar</span>
           </div>
@@ -4628,13 +4642,70 @@
       }
     }
 
+    let currentQvImages = [];
+    let currentQvImageIndex = 0;
+
+    function updateQvImageView() {
+      const qvImg = document.getElementById('qvImage');
+      const counter = document.getElementById('qvPhotoCounter');
+      const prevBtn = document.getElementById('qvPrevPhotoBtn');
+      const nextBtn = document.getElementById('qvNextPhotoBtn');
+      const thumbStrip = document.getElementById('qvThumbnailsStrip');
+
+      if (qvImg && currentQvImages.length > 0) {
+        qvImg.src = currentQvImages[currentQvImageIndex];
+      }
+
+      if (currentQvImages.length > 1) {
+        if (counter) {
+          counter.textContent = `${currentQvImageIndex + 1} / ${currentQvImages.length}`;
+          counter.classList.remove('hidden');
+        }
+        if (prevBtn) prevBtn.classList.remove('hidden');
+        if (nextBtn) nextBtn.classList.remove('hidden');
+        if (thumbStrip) {
+          thumbStrip.classList.remove('hidden');
+          thumbStrip.innerHTML = currentQvImages.map((src, i) => `
+            <button type="button" onclick="setQvImageIndex(${i})" class="shrink-0 w-8 h-10 sm:w-9 sm:h-11 rounded-lg overflow-hidden border-2 ${i === currentQvImageIndex ? 'border-maroon-900 ring-1 ring-maroon-900 shadow-xs scale-105' : 'border-ivory-300 opacity-60 hover:opacity-100'} transition-all focus:outline-none" aria-label="View photo ${i + 1}">
+              <img src="${src}" alt="Angle ${i + 1}" class="w-full h-full object-cover">
+            </button>
+          `).join('');
+        }
+      } else {
+        if (counter) counter.classList.add('hidden');
+        if (prevBtn) prevBtn.classList.add('hidden');
+        if (nextBtn) nextBtn.classList.add('hidden');
+        if (thumbStrip) {
+          thumbStrip.classList.add('hidden');
+          thumbStrip.innerHTML = '';
+        }
+      }
+    }
+
+    function setQvImageIndex(idx) {
+      if (idx >= 0 && idx < currentQvImages.length) {
+        currentQvImageIndex = idx;
+        updateQvImageView();
+      }
+    }
+
+    function cycleQvImage(direction) {
+      if (currentQvImages.length <= 1) return;
+      currentQvImageIndex = (currentQvImageIndex + direction + currentQvImages.length) % currentQvImages.length;
+      updateQvImageView();
+    }
+
     function openQuickViewModal(productId) {
       const prod = PRODUCTS.find(p => p.id === productId);
       if (!prod) return;
       state.activeProduct = prod;
 
-      const qvImg = document.getElementById('qvImage');
-      if (qvImg) qvImg.src = prod.image;
+      // Extract multiple images array if present
+      currentQvImages = Array.isArray(prod.images) && prod.images.length > 0 
+        ? prod.images.map(img => (typeof img === 'string' ? img : (img.image_url || img.url))) 
+        : [prod.image || prod.primary_image || 'images/pink-leheriya-cotton-suit.jpg'];
+      currentQvImageIndex = 0;
+      updateQvImageView();
       const qvCat = document.getElementById('qvCategory');
       if (qvCat) qvCat.textContent = prod.category;
       const qvTitle = document.getElementById('qvTitle');

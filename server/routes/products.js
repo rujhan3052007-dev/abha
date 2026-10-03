@@ -104,10 +104,30 @@ router.get('/', async (req, res, next) => {
     }
 
     const products = await db.all(sql, params);
+    
+    // Enrich each product with its full gallery of images
+    const allImages = await db.all(`
+      SELECT * FROM product_images ORDER BY is_primary DESC, display_order ASC, created_at ASC
+    `);
+    const imageMap = {};
+    allImages.forEach(img => {
+      if (!imageMap[img.product_id]) imageMap[img.product_id] = [];
+      imageMap[img.product_id].push(img);
+    });
+
+    const enrichedProducts = products.map(p => {
+      const pImages = imageMap[p.id] || [];
+      return {
+        ...p,
+        images: pImages.length > 0 ? pImages.map(img => img.image_url) : (p.primary_image ? [p.primary_image] : []),
+        image_objects: pImages
+      };
+    });
+
     res.json({
       success: true,
-      count: products.length,
-      data: products
+      count: enrichedProducts.length,
+      data: enrichedProducts
     });
   } catch (err) {
     next(err);

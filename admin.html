@@ -1354,14 +1354,16 @@
             <table class="data-table">
               <thead>
                 <tr>
-                  <th>Image</th>
+                  <th>Cover Photo</th>
                   <th>Product Title & SKU</th>
                   <th>Fabric</th>
                   <th>Base Price</th>
                   <th>Stitching Fee</th>
                   <th>Inventory Type</th>
                   <th>Stock</th>
+                  <th>Photos</th>
                   <th>Status</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody id="productsAdminTable">
@@ -1546,12 +1548,15 @@
           </div>
         </div>
         <div>
-          <label style="font-size: 0.8rem; font-weight: 600;">Garment Image</label>
-          <input type="file" id="npPhotoFile" class="form-input" accept="image/*" onchange="handleProductPhotoSelect(event)">
-          <div id="npPhotoPreview" style="display: none; margin-top: 0.5rem; align-items: center; gap: 0.5rem;">
-            <img id="npPhotoImg" src="" style="width: 55px; height: 70px; object-fit: cover; border-radius: 4px; border: 1px solid var(--gray-300);">
-            <span style="font-size: 0.75rem; color: var(--green);">Photo ready to publish</span>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+            <label style="font-size: 0.8rem; font-weight: 600;">Garment Images (Upload Multiple Photos)</label>
+            <span id="npPhotosCountBadge" style="font-size: 0.75rem; color: var(--maroon); font-weight: 700;">0 photos selected</span>
           </div>
+          <input type="file" id="npPhotoFile" class="form-input" accept="image/*" multiple onchange="handleProductPhotosSelect(event)">
+          <div id="npPhotosPreviewGrid" style="display: none; margin-top: 0.6rem; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 0.6rem; max-height: 180px; overflow-y: auto; padding: 0.5rem; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 6px;"></div>
+          <p style="font-size: 0.72rem; color: var(--gray-500); margin-top: 0.35rem;">
+            ✨ You can select multiple photos at once (full look, fabric zoom, dupatta, neck embroidery). Click any image to set it as Cover.
+          </p>
         </div>
         <div>
           <label style="font-size: 0.8rem; font-weight: 600;">Garment Description</label>
@@ -1562,6 +1567,48 @@
           <button type="submit" class="btn btn-primary">Save Product</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- MANAGE PRODUCT PHOTOS MODAL -->
+  <div id="managePhotosModal" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 680px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1px solid var(--gray-200); padding-bottom: 0.75rem;">
+        <div>
+          <h3 class="panel-title" id="managePhotosModalTitle" style="margin-bottom: 0.2rem;">Product Photography Gallery</h3>
+          <p id="managePhotosModalSubtitle" style="font-size: 0.82rem; color: var(--gray-500);">Upload and manage multiple high-resolution photos for this garment</p>
+        </div>
+        <button type="button" class="btn btn-outline btn-sm" onclick="closeManagePhotosModal()">&times;</button>
+      </div>
+
+      <!-- Current Photos Grid -->
+      <div style="margin-bottom: 1.25rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <span style="font-size: 0.82rem; font-weight: 700; color: var(--charcoal);">Current Photos:</span>
+          <span id="managePhotosCountText" style="font-size: 0.75rem; color: var(--gray-500);">Loading photos...</span>
+        </div>
+        <div id="managePhotosGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.75rem; max-height: 280px; overflow-y: auto; padding: 0.65rem; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px;">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+      <!-- Upload Additional Photos Form -->
+      <div style="background: var(--cream); border: 1px dashed var(--gold); border-radius: 8px; padding: 1rem;">
+        <label style="font-size: 0.82rem; font-weight: 700; color: var(--maroon); display: block; margin-bottom: 0.35rem;">
+          + Add More Photos to This Product
+        </label>
+        <input type="file" id="manageMorePhotosFile" class="form-input" accept="image/*" multiple onchange="handleManageMorePhotosSelect(event)">
+        <div id="manageMorePreview" style="display: none; margin-top: 0.5rem; gap: 0.5rem; flex-wrap: wrap;"></div>
+        <div style="display: flex; justify-content: flex-end; margin-top: 0.75rem;">
+          <button type="button" id="btnUploadMorePhotos" onclick="submitUploadMorePhotos()" class="btn btn-primary btn-sm" style="display: none;">
+            Upload Selected Photos
+          </button>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem; border-top: 1px solid var(--gray-200); padding-top: 0.75rem;">
+        <button type="button" class="btn btn-outline" onclick="closeManagePhotosModal()">Close</button>
+      </div>
     </div>
   </div>
 
@@ -3418,19 +3465,45 @@
       const tbody = document.getElementById('productsAdminTable');
       try {
         const res = await apiRequest('/api/admin/products');
-        tbody.innerHTML = res.data.map(p => `
-          <tr>
-            <td><img src="${p.primary_image}" style="width: 45px; height: 45px; object-fit: cover; border-radius: 4px;"></td>
-            <td><strong>${p.title}</strong><br><span style="font-size: 0.75rem; color: var(--gray-500);">${p.sku}</span></td>
-            <td>${p.fabric}</td>
-            <td><strong>₹${p.base_price}</strong></td>
-            <td>₹${p.stitching_price}</td>
-            <td><span class="tag ${p.inventory_type === 'UNIQUE_1OF1' ? 'tag-unique' : 'tag-quantity'}">${p.inventory_type}</span></td>
-            <td>${p.stock_quantity}</td>
-            <td>${p.is_sold_out ? '<span class="tag tag-soldout">Sold Out</span>' : '<span class="tag tag-instock">Active</span>'}</td>
-          </tr>
-        `).join('');
-      } catch (e) { console.error(e); }
+        const prods = res.data || [];
+        if (prods.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; color: var(--gray-500);">No products in catalog.</td></tr>`;
+          return;
+        }
+        tbody.innerHTML = prods.map(p => {
+          const photoCount = Array.isArray(p.images) ? p.images.length : (p.image_count || 1);
+          const escapedTitle = (p.title || 'Product').replace(/'/g, "\\'");
+          return `
+            <tr>
+              <td>
+                <div style="position: relative; display: inline-block;">
+                  <img src="${p.primary_image || 'images/pink-leheriya-cotton-suit.jpg'}" style="width: 48px; height: 58px; object-fit: cover; border-radius: 6px; border: 1px solid var(--gray-300); box-shadow: 0 1px 3px rgba(0,0,0,0.08);" onerror="this.src='images/pink-leheriya-cotton-suit.jpg'">
+                  ${photoCount > 1 ? `<span style="position: absolute; bottom: 2px; right: 2px; background: rgba(0,0,0,0.75); color: #fff; font-size: 0.65rem; font-weight: 700; padding: 1px 4px; border-radius: 4px;">+${photoCount - 1}</span>` : ''}
+                </div>
+              </td>
+              <td><strong>${p.title}</strong><br><span style="font-size: 0.75rem; color: var(--gray-500);">${p.sku}</span></td>
+              <td style="max-width: 160px; font-size: 0.8rem;">${p.fabric}</td>
+              <td><strong>₹${p.base_price}</strong></td>
+              <td>₹${p.stitching_price}</td>
+              <td><span class="tag ${p.inventory_type === 'UNIQUE_1OF1' ? 'tag-unique' : 'tag-quantity'}">${p.inventory_type}</span></td>
+              <td>${p.stock_quantity}</td>
+              <td>
+                <span class="tag tag-quantity" style="display: inline-flex; align-items: center; gap: 0.25rem;">
+                  📷 <strong>${photoCount}</strong> ${photoCount === 1 ? 'Photo' : 'Photos'}
+                </span>
+              </td>
+              <td>${p.is_sold_out ? '<span class="tag tag-soldout">Sold Out</span>' : '<span class="tag tag-instock">Active</span>'}</td>
+              <td style="white-space: nowrap;">
+                <button class="btn btn-outline btn-sm" onclick="openManagePhotosModal('${p.id}', '${escapedTitle}', '${p.sku}')" style="display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 600;" title="Manage Multiple Photos for this garment">
+                  <span>📷</span> <span>Manage Photos</span>
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="10" style="color: var(--red-text);">${e.message}</td></tr>`;
+      }
     }
 
     let cachedCategories = [];
@@ -3733,24 +3806,86 @@
     }
 
     function openAddProductModal() {
+      document.getElementById('addProductForm').reset();
+      newProductPhotos = [];
+      renderAddProductPhotosPreview();
       document.getElementById('addProductModal').classList.add('open');
     }
+
     function closeAddProductModal() {
       document.getElementById('addProductModal').classList.remove('open');
+      newProductPhotos = [];
+      renderAddProductPhotosPreview();
     }
-    let newProductImageBase64 = null;
 
-    function handleProductPhotoSelect(e) {
-      const file = e.target.files[0];
-      if (file) {
+    let newProductPhotos = [];
+
+    function handleProductPhotosSelect(e) {
+      const files = Array.from(e.target.files || []);
+      if (!files.length) return;
+
+      let loadedCount = 0;
+      files.forEach(file => {
         const reader = new FileReader();
         reader.onload = (evt) => {
-          newProductImageBase64 = evt.target.result;
-          document.getElementById('npPhotoImg').src = evt.target.result;
-          document.getElementById('npPhotoPreview').style.display = 'flex';
+          const isFirst = newProductPhotos.length === 0;
+          newProductPhotos.push({
+            dataUrl: evt.target.result,
+            name: file.name,
+            isPrimary: isFirst
+          });
+          loadedCount++;
+          if (loadedCount === files.length) {
+            renderAddProductPhotosPreview();
+          }
         };
         reader.readAsDataURL(file);
+      });
+      e.target.value = ''; // Reset so the same files can be re-selected if needed
+    }
+
+    function renderAddProductPhotosPreview() {
+      const grid = document.getElementById('npPhotosPreviewGrid');
+      const badge = document.getElementById('npPhotosCountBadge');
+      if (!grid || !badge) return;
+
+      badge.textContent = `${newProductPhotos.length} photo${newProductPhotos.length === 1 ? '' : 's'} selected`;
+
+      if (newProductPhotos.length === 0) {
+        grid.style.display = 'none';
+        grid.innerHTML = '';
+        return;
       }
+
+      grid.style.display = 'grid';
+      grid.innerHTML = newProductPhotos.map((p, idx) => `
+        <div style="position: relative; background: #fff; border: 2px solid ${p.isPrimary ? 'var(--maroon)' : 'var(--gray-200)'}; border-radius: 6px; padding: 3px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.06);">
+          <img src="${p.dataUrl}" style="width: 100%; height: 80px; object-fit: cover; border-radius: 4px; cursor: pointer;" onclick="setAddProductPrimary(${idx})" title="Click to set as cover photo">
+          <div style="margin-top: 4px; width: 100%; display: flex; justify-content: space-between; align-items: center;">
+            ${p.isPrimary
+              ? `<span style="font-size: 0.65rem; font-weight: 700; color: #fff; background: var(--maroon); padding: 1px 5px; border-radius: 3px;">★ Cover</span>`
+              : `<button type="button" onclick="setAddProductPrimary(${idx})" style="background: none; border: none; font-size: 0.65rem; color: var(--maroon); cursor: pointer; text-decoration: underline; font-weight: 600;">Set Cover</button>`
+            }
+            <button type="button" onclick="removeAddProductPhoto(${idx})" style="background: none; border: none; color: var(--red-text); font-size: 0.8rem; cursor: pointer; line-height: 1; padding: 0 2px;" title="Remove this photo">&times;</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function setAddProductPrimary(idx) {
+      newProductPhotos.forEach((p, i) => {
+        p.isPrimary = (i === idx);
+      });
+      renderAddProductPhotosPreview();
+    }
+
+    function removeAddProductPhoto(idx) {
+      const wasPrimary = newProductPhotos[idx]?.isPrimary;
+      newProductPhotos.splice(idx, 1);
+      if (wasPrimary && newProductPhotos.length > 0) {
+        newProductPhotos[0].isPrimary = true;
+      }
+      renderAddProductPhotosPreview();
     }
 
     async function submitNewProduct(e) {
@@ -3773,7 +3908,13 @@
       const stock = parseInt(document.getElementById('npStock').value, 10) || 1;
       const description = document.getElementById('npDesc').value.trim();
 
-      const image = newProductImageBase64 || 'images/pink-leheriya-cotton-suit.jpg';
+      const imagesPayload = newProductPhotos.map(p => ({
+        dataUrl: p.dataUrl,
+        alt: title,
+        is_primary: p.isPrimary ? 1 : 0
+      }));
+
+      const primaryPhoto = newProductPhotos.find(p => p.isPrimary)?.dataUrl || (newProductPhotos[0]?.dataUrl || 'images/pink-leheriya-cotton-suit.jpg');
 
       try {
         await apiRequest('/api/admin/products', {
@@ -3794,18 +3935,19 @@
             inventory_type: inventoryType,
             stock_quantity: stock,
             description,
-            primary_image: image,
-            photo: image
+            primary_image: primaryPhoto,
+            photo: primaryPhoto,
+            images: imagesPayload
           })
         });
 
         closeAddProductModal();
         document.getElementById('addProductForm').reset();
-        newProductImageBase64 = null;
-        document.getElementById('npPhotoPreview').style.display = 'none';
+        newProductPhotos = [];
+        renderAddProductPhotosPreview();
         loadProductsAdmin();
         loadPosItems();
-        alert(`Product "${title}" added successfully! It is now active in your catalog and live on your customer storefront.`);
+        alert(`Product "${title}" added successfully with ${imagesPayload.length || 1} photo(s)!`);
       } catch (err) {
         alert(err.message);
       } finally {
@@ -3813,6 +3955,167 @@
           submitBtn.disabled = false;
           submitBtn.textContent = originalText;
         }
+      }
+    }
+
+    // ==========================================
+    // MANAGE PRODUCT PHOTOS GALLERY MODAL
+    // ==========================================
+    let currentManageProductId = null;
+    let currentManageProductTitle = '';
+    let currentManageProductSku = '';
+    let pendingMorePhotos = [];
+
+    async function openManagePhotosModal(productId, productTitle, productSku) {
+      currentManageProductId = productId;
+      currentManageProductTitle = productTitle;
+      currentManageProductSku = productSku;
+      pendingMorePhotos = [];
+
+      document.getElementById('managePhotosModalTitle').textContent = `Photos: ${productTitle}`;
+      document.getElementById('managePhotosModalSubtitle').textContent = `SKU: ${productSku} • Manage multiple images or upload new angles`;
+      document.getElementById('manageMorePreview').style.display = 'none';
+      document.getElementById('manageMorePreview').innerHTML = '';
+      document.getElementById('btnUploadMorePhotos').style.display = 'none';
+      document.getElementById('manageMorePhotosFile').value = '';
+
+      document.getElementById('managePhotosModal').classList.add('open');
+      await loadManagePhotos(productId);
+    }
+
+    function closeManagePhotosModal() {
+      document.getElementById('managePhotosModal').classList.remove('open');
+      currentManageProductId = null;
+      pendingMorePhotos = [];
+    }
+
+    async function loadManagePhotos(productId) {
+      const grid = document.getElementById('managePhotosGrid');
+      const countText = document.getElementById('managePhotosCountText');
+      grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--gray-500); padding: 1rem;">Loading photos...</div>';
+
+      try {
+        const res = await apiRequest(`/api/admin/products/${productId}/images`);
+        const imgs = res.data?.images || [];
+        countText.textContent = `${imgs.length} photo${imgs.length === 1 ? '' : 's'} in gallery`;
+
+        if (imgs.length === 0) {
+          grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--gray-500); padding: 1rem;">No photos uploaded yet.</div>';
+          return;
+        }
+
+        grid.innerHTML = imgs.map((img, idx) => {
+          const isPrimary = Boolean(img.is_primary);
+          return `
+            <div style="background: #fff; border: 2px solid ${isPrimary ? 'var(--maroon)' : 'var(--gray-300)'}; border-radius: 8px; padding: 6px; display: flex; flex-direction: column; align-items: center; gap: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.06);">
+              <div style="position: relative; width: 100%; height: 120px; border-radius: 4px; overflow: hidden; background: var(--gray-100);">
+                <img src="${img.image_url}" alt="Product Photo" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='images/pink-leheriya-cotton-suit.jpg'">
+                ${isPrimary ? `<span style="position: absolute; top: 4px; left: 4px; background: var(--maroon); color: #fff; font-size: 0.68rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">★ Cover</span>` : ''}
+              </div>
+              <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 4px;">
+                ${!isPrimary
+                  ? `<button type="button" class="btn btn-outline btn-sm" onclick="setPrimaryPhotoFromModal('${productId}', '${img.id}')" style="font-size: 0.7rem; padding: 2px 6px; flex: 1;">Make Cover</button>`
+                  : `<span style="font-size: 0.72rem; color: var(--maroon); font-weight: 700; flex: 1; text-align: center;">Main Image</span>`
+                }
+                <button type="button" class="btn btn-outline btn-sm" onclick="deletePhotoFromModal('${productId}', '${img.id}')" style="color: var(--red-text); border-color: var(--red-text); padding: 2px 6px; font-size: 0.7rem;" title="Delete this photo">🗑️</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        grid.innerHTML = `<div style="grid-column: 1 / -1; color: var(--red-text); padding: 1rem;">${err.message}</div>`;
+      }
+    }
+
+    async function setPrimaryPhotoFromModal(productId, imageId) {
+      try {
+        await apiRequest(`/api/admin/products/${productId}/images/${imageId}/primary`, {
+          method: 'PUT'
+        });
+        await loadManagePhotos(productId);
+        loadProductsAdmin();
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    async function deletePhotoFromModal(productId, imageId) {
+      if (!confirm('Are you sure you want to remove this photo from the product?')) return;
+      try {
+        await apiRequest(`/api/admin/products/${productId}/images/${imageId}`, {
+          method: 'DELETE'
+        });
+        await loadManagePhotos(productId);
+        loadProductsAdmin();
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    function handleManageMorePhotosSelect(e) {
+      const files = Array.from(e.target.files || []);
+      if (!files.length) return;
+
+      pendingMorePhotos = [];
+      const previewContainer = document.getElementById('manageMorePreview');
+      const uploadBtn = document.getElementById('btnUploadMorePhotos');
+      previewContainer.innerHTML = '';
+      previewContainer.style.display = 'flex';
+
+      let loaded = 0;
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+          pendingMorePhotos.push({
+            dataUrl: evt.target.result,
+            alt: file.name
+          });
+          const thumb = document.createElement('img');
+          thumb.src = evt.target.result;
+          thumb.style.width = '45px';
+          thumb.style.height = '55px';
+          thumb.style.objectFit = 'cover';
+          thumb.style.borderRadius = '4px';
+          thumb.style.border = '1px solid var(--gray-300)';
+          previewContainer.appendChild(thumb);
+
+          loaded++;
+          if (loaded === files.length) {
+            uploadBtn.style.display = 'inline-block';
+            uploadBtn.textContent = `Upload ${files.length} Photo${files.length === 1 ? '' : 's'}`;
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function submitUploadMorePhotos() {
+      if (!currentManageProductId || !pendingMorePhotos.length) return;
+      const uploadBtn = document.getElementById('btnUploadMorePhotos');
+      uploadBtn.disabled = true;
+      uploadBtn.textContent = 'Uploading...';
+
+      try {
+        await apiRequest(`/api/admin/products/${currentManageProductId}/images`, {
+          method: 'POST',
+          body: JSON.stringify({
+            images: pendingMorePhotos
+          })
+        });
+
+        pendingMorePhotos = [];
+        document.getElementById('manageMorePreview').style.display = 'none';
+        document.getElementById('manageMorePreview').innerHTML = '';
+        document.getElementById('manageMorePhotosFile').value = '';
+        uploadBtn.style.display = 'none';
+
+        await loadManagePhotos(currentManageProductId);
+        loadProductsAdmin();
+        alert('Photos uploaded successfully to product!');
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        uploadBtn.disabled = false;
       }
     }
 

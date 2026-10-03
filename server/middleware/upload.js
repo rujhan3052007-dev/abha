@@ -54,18 +54,25 @@ const fileFilter = (req, file, cb) => {
 
 const uploadProductImage = multer({
   storage: productStorage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB max for high-res product photos
+  limits: { fileSize: 15 * 1024 * 1024 }, // 15MB max
+  fileFilter
+});
+
+const uploadProductImages = multer({
+  storage: productStorage,
+  limits: { fileSize: 15 * 1024 * 1024 }, // 15MB max per image
   fileFilter
 });
 
 const uploadReferenceImages = multer({
   storage: privateVaultStorage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB per reference image
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB per reference image
   fileFilter
 });
 
 module.exports = {
   uploadProductImage,
+  uploadProductImages,
   uploadReferenceImages,
   publicUploadsDir,
   privateVaultDir

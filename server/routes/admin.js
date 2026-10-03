@@ -6,6 +6,8 @@
 
 const express = require('express');
 const router = express.Router();
+const fs = require('fs');
+const path = require('path');
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const { getDb } = require('../config/database');
@@ -25,7 +27,7 @@ const {
   TRANSACTION_TYPES,
   INTEGRATION_STATUS
 } = require('../config/constants');
-const { uploadProductImage } = require('../middleware/upload');
+const { uploadProductImage, uploadProductImages } = require('../middleware/upload');
 
 // Enforce authenticated staff session
 router.use(verifyToken);
@@ -228,7 +230,94 @@ router.post('/pos/order', requirePermission('pos.bill'), async (req, res, next) 
   }
 });
 
-// 3. Product Management (Add / Update / Toggle Status)
+// Helper: Save Base64 Image to uploads/products directory
+function saveBase64ToProductUpload(base64Str, prefix = 'prod_img_') {
+  if (!base64Str || typeof base64Str !== 'string') return null;
+  if (!base64Str.startsWith('data:image/')) return base64Str;
+  try {
+    const matches = base64Str.match(/^data:image\/([a-zA-Z0-9+.-]+);base64,(.+)$/);
+    if (!matches) return base64Str;
+    let ext = matches[1].toLowerCase();
+    if (ext === 'jpeg') ext = 'jpg';
+    const buffer = Buffer.from(matches[2], 'base64');
+    const filename = `${prefix}${Date.now()}_${crypto.randomBytes(4).toString('hex')}.${ext}`;
+    const targetDir = path.join(__dirname, '../uploads/products');
+    if (!fs.existsSync(targetDir)) {
+      fs.mkdirSync(targetDir, { recursive: true });
+    }
+    const targetPath = path.join(targetDir, filename);
+    fs.writeFileSync(targetPath, buffer);
+    return `/uploads/products/${filename}`;
+  } catch (err) {
+    console.error('Failed to save base64 image:', err);
+    return base64Str;
+  }
+}
+
+// Helper: Extract all images from Multer files and body
+function extractImagesFromRequest(req) {
+  const images = [];
+
+  // 1. Files uploaded via Multer (req.files or req.file)
+  if (req.files) {
+    const fileList = Array.isArray(req.files) ? req.files : Object.values(req.files).flat();
+    fileList.forEach(file => {
+      images.push({
+        url: `/uploads/products/${file.filename}`,
+        alt: file.originalname || 'Product Image',
+        is_primary: 0
+      });
+    });
+  } else if (req.file) {
+    images.push({
+      url: `/uploads/products/${req.file.filename}`,
+      alt: req.file.originalname || 'Product Image',
+      is_primary: 1
+    });
+  }
+
+  // 2. Images sent in body (JSON or Form)
+  let rawBodyImages = req.body.images;
+  if (typeof rawBodyImages === 'string') {
+    try { rawBodyImages = JSON.parse(rawBodyImages); } catch (e) { rawBodyImages = [rawBodyImages]; }
+  }
+
+  if (Array.isArray(rawBodyImages)) {
+    rawBodyImages.forEach(img => {
+      if (!img) return;
+      if (typeof img === 'string') {
+        const savedUrl = saveBase64ToProductUpload(img);
+        images.push({ url: savedUrl, alt: 'Product Image', is_primary: 0 });
+      } else if (typeof img === 'object') {
+        const rawUrl = img.dataUrl || img.image_url || img.url || img.base64;
+        const savedUrl = saveBase64ToProductUpload(rawUrl);
+        images.push({
+          url: savedUrl,
+          alt: img.alt_text || img.alt || 'Product Image',
+          is_primary: img.is_primary ? 1 : 0
+        });
+      }
+    });
+  }
+
+  // 3. Single image fallback
+  const singleFallback = req.body.primary_image || req.body.photo || req.body.image_url;
+  if (singleFallback && typeof singleFallback === 'string') {
+    const savedFallback = saveBase64ToProductUpload(singleFallback);
+    if (!images.some(im => im.url === savedFallback)) {
+      images.unshift({ url: savedFallback, alt: 'Product Image', is_primary: 1 });
+    }
+  }
+
+  // Ensure at least one image is marked primary
+  if (images.length > 0 && !images.some(im => im.is_primary === 1)) {
+    images[0].is_primary = 1;
+  }
+
+  return images;
+}
+
+// 3. Product Management (List with all images)
 router.get('/products', async (req, res, next) => {
   try {
     const db = getDb();
@@ -238,13 +327,35 @@ router.get('/products', async (req, res, next) => {
       LEFT JOIN categories c ON p.category_id = c.id
       ORDER BY p.created_at DESC
     `);
-    res.json({ success: true, data: products });
+
+    // Fetch all product images
+    const allImages = await db.all(`
+      SELECT * FROM product_images ORDER BY is_primary DESC, display_order ASC, created_at ASC
+    `);
+
+    const imageMap = {};
+    allImages.forEach(img => {
+      if (!imageMap[img.product_id]) imageMap[img.product_id] = [];
+      imageMap[img.product_id].push(img);
+    });
+
+    const enrichedProducts = products.map(p => {
+      const pImages = imageMap[p.id] || [];
+      return {
+        ...p,
+        images: pImages.length > 0 ? pImages : (p.primary_image ? [{ id: `def_${p.id}`, product_id: p.id, image_url: p.primary_image, is_primary: 1, alt_text: p.title }] : []),
+        image_count: pImages.length > 0 ? pImages.length : (p.primary_image ? 1 : 0)
+      };
+    });
+
+    res.json({ success: true, data: enrichedProducts });
   } catch (err) {
     next(err);
   }
 });
 
-router.post('/products', requirePermission('products.create'), uploadProductImage.single('photo'), async (req, res, next) => {
+// Create product with support for MULTIPLE images
+router.post('/products', requirePermission('products.create'), uploadProductImages.any(), async (req, res, next) => {
   try {
     const {
       title, sku, category_id, description, fabric,
@@ -265,7 +376,11 @@ router.post('/products', requirePermission('products.create'), uploadProductImag
 
     const id = `prod_${Date.now()}_${crypto.randomBytes(3).toString('hex')}`;
     const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-    const imagePath = req.file ? `/uploads/products/${req.file.filename}` : (req.body.image_url || '/images/cream-lime-cotton-suit.jpg');
+
+    // Extract all images
+    const images = extractImagesFromRequest(req);
+    const primaryImgObj = images.find(im => im.is_primary === 1) || images[0];
+    const primaryImagePath = primaryImgObj ? primaryImgObj.url : '/images/cream-lime-cotton-suit.jpg';
 
     await db.run(`
       INSERT INTO products (
@@ -280,12 +395,149 @@ router.post('/products', requirePermission('products.create'), uploadProductImag
       top_length || '2.50 Meters', bottom_length || '2.50 Meters', dupatta_length || '2.25 Meters',
       work_type || 'Traditional Handcrafted', wash_care || 'Hand Wash in Cold Water',
       Number(base_price), Number(stitching_price), inventory_type, Number(stock_quantity),
-      is_featured ? 1 : 0, imagePath
+      is_featured ? 1 : 0, primaryImagePath
     ]);
 
-    await logAudit(req, { action: 'CREATE_PRODUCT', entityType: 'PRODUCT', entityId: id, newValue: { sku, title } });
+    // Insert all images into product_images table
+    const savedImages = [];
+    if (images.length > 0) {
+      for (let i = 0; i < images.length; i++) {
+        const img = images[i];
+        const imgId = `pimg_${Date.now()}_${i}_${crypto.randomBytes(3).toString('hex')}`;
+        const isPrimary = (img.url === primaryImagePath || img.is_primary === 1) ? 1 : 0;
+        await db.run(`
+          INSERT INTO product_images (id, product_id, image_url, alt_text, is_primary, display_order)
+          VALUES (?, ?, ?, ?, ?, ?)
+        `, [imgId, id, img.url, img.alt || title.trim(), isPrimary, i]);
+        savedImages.push({ id: imgId, product_id: id, image_url: img.url, is_primary: isPrimary, display_order: i });
+      }
+    } else {
+      // Default placeholder record
+      const imgId = `pimg_${Date.now()}_0_${crypto.randomBytes(3).toString('hex')}`;
+      await db.run(`
+        INSERT INTO product_images (id, product_id, image_url, alt_text, is_primary, display_order)
+        VALUES (?, ?, ?, ?, 1, 0)
+      `, [imgId, id, primaryImagePath, title.trim()]);
+      savedImages.push({ id: imgId, product_id: id, image_url: primaryImagePath, is_primary: 1 });
+    }
 
-    res.status(201).json({ success: true, message: 'Product created successfully', data: { id, sku, title } });
+    await logAudit(req, { action: 'CREATE_PRODUCT', entityType: 'PRODUCT', entityId: id, newValue: { sku, title, image_count: savedImages.length } });
+
+    res.status(201).json({
+      success: true,
+      message: `Product created with ${savedImages.length} image(s)`,
+      data: { id, sku, title, primary_image: primaryImagePath, images: savedImages }
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// GET all images for a specific product
+router.get('/products/:id/images', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const db = getDb();
+    const product = await db.get('SELECT id, title, sku, primary_image FROM products WHERE id = ? OR sku = ?', [id, id]);
+    if (!product) return res.status(404).json({ success: false, error: 'Product not found' });
+
+    const images = await db.all('SELECT * FROM product_images WHERE product_id = ? ORDER BY is_primary DESC, display_order ASC, created_at ASC', [product.id]);
+    res.json({
+      success: true,
+      data: {
+        product_id: product.id,
+        product_title: product.title,
+        product_sku: product.sku,
+        primary_image: product.primary_image,
+        images: images.length > 0 ? images : [{ id: `def_${product.id}`, product_id: product.id, image_url: product.primary_image, alt_text: product.title, is_primary: 1 }]
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// POST add more images to an existing product
+router.post('/products/:id/images', requirePermission('products.edit'), uploadProductImages.any(), async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const db = getDb();
+    const product = await db.get('SELECT id, title, primary_image FROM products WHERE id = ? OR sku = ?', [id, id]);
+    if (!product) return res.status(404).json({ success: false, error: 'Product not found' });
+
+    const newImages = extractImagesFromRequest(req);
+    if (newImages.length === 0) {
+      return res.status(400).json({ success: false, error: 'No valid images provided' });
+    }
+
+    const existingImages = await db.all('SELECT * FROM product_images WHERE product_id = ?', [product.id]);
+    let nextOrder = existingImages.length;
+    const inserted = [];
+
+    for (const img of newImages) {
+      const imgId = `pimg_${Date.now()}_${nextOrder}_${crypto.randomBytes(3).toString('hex')}`;
+      const isPrimary = (existingImages.length === 0 && inserted.length === 0) || img.is_primary ? 1 : 0;
+      await db.run(`
+        INSERT INTO product_images (id, product_id, image_url, alt_text, is_primary, display_order)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `, [imgId, product.id, img.url, img.alt || product.title, isPrimary, nextOrder++]);
+
+      if (isPrimary === 1) {
+        await db.run('UPDATE product_images SET is_primary = 0 WHERE product_id = ? AND id != ?', [product.id, imgId]);
+        await db.run('UPDATE products SET primary_image = ? WHERE id = ?', [img.url, product.id]);
+      }
+      inserted.push({ id: imgId, product_id: product.id, image_url: img.url, is_primary: isPrimary });
+    }
+
+    await logAudit(req, { action: 'ADD_PRODUCT_IMAGES', entityType: 'PRODUCT', entityId: product.id, newValue: { added_count: inserted.length } });
+    res.status(201).json({ success: true, message: `${inserted.length} image(s) uploaded successfully`, data: inserted });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// DELETE an image from a product
+router.delete('/products/:productId/images/:imageId', requirePermission('products.edit'), async (req, res, next) => {
+  try {
+    const { productId, imageId } = req.params;
+    const db = getDb();
+    const img = await db.get('SELECT * FROM product_images WHERE id = ? AND product_id = ?', [imageId, productId]);
+    if (!img) return res.status(404).json({ success: false, error: 'Image not found' });
+
+    await db.run('DELETE FROM product_images WHERE id = ?', [imageId]);
+
+    // If deleted image was primary, designate the next available image as primary
+    if (img.is_primary === 1) {
+      const nextImg = await db.get('SELECT * FROM product_images WHERE product_id = ? ORDER BY display_order ASC, created_at ASC LIMIT 1', [productId]);
+      if (nextImg) {
+        await db.run('UPDATE product_images SET is_primary = 1 WHERE id = ?', [nextImg.id]);
+        await db.run('UPDATE products SET primary_image = ? WHERE id = ?', [nextImg.image_url, productId]);
+      } else {
+        await db.run('UPDATE products SET primary_image = NULL WHERE id = ?', [productId]);
+      }
+    }
+
+    await logAudit(req, { action: 'DELETE_PRODUCT_IMAGE', entityType: 'PRODUCT_IMAGE', entityId: imageId, previousValue: img });
+    res.json({ success: true, message: 'Image deleted successfully' });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// PUT set an image as the primary cover photo
+router.put('/products/:productId/images/:imageId/primary', requirePermission('products.edit'), async (req, res, next) => {
+  try {
+    const { productId, imageId } = req.params;
+    const db = getDb();
+    const img = await db.get('SELECT * FROM product_images WHERE id = ? AND product_id = ?', [imageId, productId]);
+    if (!img) return res.status(404).json({ success: false, error: 'Image not found' });
+
+    await db.run('UPDATE product_images SET is_primary = 0 WHERE product_id = ?', [productId]);
+    await db.run('UPDATE product_images SET is_primary = 1 WHERE id = ?', [imageId]);
+    await db.run('UPDATE products SET primary_image = ? WHERE id = ?', [img.image_url, productId]);
+
+    await logAudit(req, { action: 'SET_PRIMARY_PRODUCT_IMAGE', entityType: 'PRODUCT', entityId: productId, newValue: { image_id: imageId, image_url: img.image_url } });
+    res.json({ success: true, message: 'Cover image set successfully', data: { primary_image: img.image_url } });
   } catch (err) {
     next(err);
   }

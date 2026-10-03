@@ -6,5 +6,7 @@ server/node_modules/
 server/data/*.sqlite*
 server/.env
 server/vault/
+server/uploads/products/*
+!.gitkeep
 .DS_Store
 *.log

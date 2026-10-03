@@ -1849,6 +1849,98 @@
         return { success: true, data: res };
       }
 
+      // Products Management (Admin)
+      if (pathname === '/api/admin/products') {
+        if (method === 'GET') {
+          const prods = getTable('products', INITIAL_PRODUCTS);
+          return { success: true, data: prods };
+        }
+        if (method === 'POST') {
+          checkPermission(caller, 'products.create');
+          const prods = getTable('products', INITIAL_PRODUCTS);
+          const newId = `prod_${Date.now()}`;
+          const imgs = (body.images || []).map((im, idx) => ({
+            id: `pimg_${Date.now()}_${idx}`,
+            image_url: typeof im === 'string' ? im : (im.dataUrl || im.image_url),
+            is_primary: idx === 0 ? 1 : 0
+          }));
+          const primary = imgs.find(i => i.is_primary)?.image_url || body.primary_image || body.photo || 'images/pink-leheriya-cotton-suit.jpg';
+          const newProd = {
+            id: newId,
+            title: body.title,
+            name: body.title,
+            sku: body.sku,
+            fabric: body.fabric,
+            base_price: body.base_price || body.price,
+            price: body.base_price || body.price,
+            stitching_price: body.stitching_price || 650,
+            inventory_type: body.inventory_type || 'UNIQUE_1OF1',
+            stock_quantity: body.stock_quantity || 1,
+            is_sold_out: false,
+            primary_image: primary,
+            image: primary,
+            images: imgs.length > 0 ? imgs.map(i => i.image_url) : [primary],
+            image_objects: imgs,
+            category: body.category_name || body.category || 'Pure Cotton Salwar Suits'
+          };
+          prods.unshift(newProd);
+          setTable('products', prods);
+          return { success: true, data: newProd };
+        }
+      }
+      if (pathname.startsWith('/api/admin/products/') && pathname.endsWith('/images') && method === 'GET') {
+        const prodId = pathname.split('/')[4];
+        const prods = getTable('products', INITIAL_PRODUCTS);
+        const prod = prods.find(p => p.id === prodId || p.sku === prodId);
+        const imgs = (prod?.images || [prod?.primary_image || 'images/pink-leheriya-cotton-suit.jpg']).map((url, idx) => ({
+          id: `pimg_${prodId}_${idx}`,
+          image_url: url,
+          is_primary: (url === prod?.primary_image || idx === 0) ? 1 : 0
+        }));
+        return { success: true, data: { product_id: prodId, images: imgs } };
+      }
+      if (pathname.startsWith('/api/admin/products/') && pathname.endsWith('/images') && method === 'POST') {
+        checkPermission(caller, 'products.edit');
+        const prodId = pathname.split('/')[4];
+        const prods = getTable('products', INITIAL_PRODUCTS);
+        const prod = prods.find(p => p.id === prodId || p.sku === prodId);
+        if (!prod) throw new Error('Product not found');
+        const newImgs = (body.images || []).map((im) => (typeof im === 'string' ? im : (im.dataUrl || im.image_url)));
+        prod.images = [...(prod.images || [prod.primary_image]), ...newImgs];
+        setTable('products', prods);
+        return { success: true, message: 'Images added', data: prod.images };
+      }
+      if (pathname.startsWith('/api/admin/products/') && pathname.includes('/images/') && pathname.endsWith('/primary') && method === 'PUT') {
+        checkPermission(caller, 'products.edit');
+        const parts = pathname.split('/');
+        const prodId = parts[4];
+        const prods = getTable('products', INITIAL_PRODUCTS);
+        const prod = prods.find(p => p.id === prodId || p.sku === prodId);
+        if (prod && body.image_url) {
+          prod.primary_image = body.image_url;
+          prod.image = body.image_url;
+          setTable('products', prods);
+        }
+        return { success: true, message: 'Primary image updated' };
+      }
+      if (pathname.startsWith('/api/admin/products/') && pathname.includes('/images/') && method === 'DELETE') {
+        checkPermission(caller, 'products.edit');
+        const parts = pathname.split('/');
+        const prodId = parts[4];
+        const imgId = parts[6];
+        const prods = getTable('products', INITIAL_PRODUCTS);
+        const prod = prods.find(p => p.id === prodId || p.sku === prodId);
+        if (prod && Array.isArray(prod.images)) {
+          prod.images = prod.images.filter((_, idx) => `pimg_${prodId}_${idx}` !== imgId);
+          if (prod.images.length > 0 && !prod.images.includes(prod.primary_image)) {
+            prod.primary_image = prod.images[0];
+            prod.image = prod.images[0];
+          }
+          setTable('products', prods);
+        }
+        return { success: true, message: 'Image deleted' };
+      }
+
       // Managers Management (Owner Only §4)
       if (pathname === '/api/admin/managers') {
         if (method === 'GET') {

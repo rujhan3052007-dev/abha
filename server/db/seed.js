@@ -322,6 +322,15 @@ async function seed() {
         WHERE sku = ?
       `, [p.stock_quantity, p.sku]);
     }
+
+    // Ensure product_images contains initial image
+    const imgExists = await db.get('SELECT id FROM product_images WHERE product_id = ? AND image_url = ?', [p.id, p.primary_image]);
+    if (!imgExists) {
+      await db.run(`
+        INSERT INTO product_images (id, product_id, image_url, alt_text, is_primary, display_order)
+        VALUES (?, ?, ?, ?, 1, 0)
+      `, [`pimg_${p.id}_01`, p.id, p.primary_image, p.title]);
+    }
   }
 
   // Ensure admin_audit_logs has modern columns
