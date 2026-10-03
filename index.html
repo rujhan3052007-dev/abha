@@ -3000,31 +3000,14 @@
               <span class="font-sans text-2xl font-bold text-maroon-900" id="qvPrice">₹1,650</span>
               <span class="text-xs text-slateText-600">Unstitched 3-Piece Material</span>
             </div>
-            <p class="text-[11px] text-slateText-600 mt-0.5">+ ₹<span id="qvStitchFee">650</span> for bespoke tailoring fit</p>
+            <p class="text-[11px] text-slateText-600 mt-0.5">+ ₹<span id="qvStitchFee">650</span> for custom stitching</p>
           </div>
 
-          <!-- Concise 5-Line Product Highlights -->
-          <div class="p-3.5 bg-ivory-100/90 rounded-lg border border-ivory-200 text-xs space-y-2 text-charcoal-900 leading-normal">
-            <div class="flex items-start gap-2">
-              <span class="w-1.5 h-1.5 rounded-full bg-maroon-800 shrink-0 mt-1.5"></span>
-              <p><strong class="font-semibold text-charcoal-950">Fabric:</strong> <span id="qvFabricDetail">100% Fine Combed Cotton</span></p>
-            </div>
-            <div class="flex items-start gap-2">
-              <span class="w-1.5 h-1.5 rounded-full bg-maroon-800 shrink-0 mt-1.5"></span>
-              <p><strong class="font-semibold text-charcoal-950">Set Includes:</strong> Top 2.5m, Bottom 2.5m, Dupatta 2.5m (3-Piece)</p>
-            </div>
-            <div class="flex items-start gap-2">
-              <span class="w-1.5 h-1.5 rounded-full bg-maroon-800 shrink-0 mt-1.5"></span>
-              <p><strong class="font-semibold text-charcoal-950">Craft &amp; Style:</strong> <span id="qvDescription">Artisanal mandala motifs with pearl embroidered neck</span></p>
-            </div>
-            <div class="flex items-start gap-2">
-              <span class="w-1.5 h-1.5 rounded-full bg-maroon-800 shrink-0 mt-1.5"></span>
-              <p><strong class="font-semibold text-charcoal-950">Tailoring:</strong> Buy unstitched or custom-tailored to your measurements</p>
-            </div>
-            <div class="flex items-start gap-2">
-              <span class="w-1.5 h-1.5 rounded-full bg-maroon-800 shrink-0 mt-1.5"></span>
-              <p><strong class="font-semibold text-charcoal-950">Care &amp; Delivery:</strong> Gentle Hand Wash • Free Doorstep Delivery Across India</p>
-            </div>
+          <!-- Concise 3-Line Product Details -->
+          <div class="p-3 bg-ivory-100/75 rounded-lg border border-ivory-200 text-xs space-y-1.5 text-charcoal-800">
+            <p><strong class="font-semibold text-charcoal-950">Fabric:</strong> <span id="qvFabricDetail">100% Pure Breathable Cotton</span></p>
+            <p><strong class="font-semibold text-charcoal-950">Set Includes:</strong> Top 2.5m, Bottom 2.5m, Dupatta 2.5m (3-Piece)</p>
+            <p><strong class="font-semibold text-charcoal-950">Delivery &amp; Care:</strong> Free Doorstep Delivery • Gentle Wash</p>
           </div>
 
           <!-- Quick Actions -->
@@ -3250,7 +3233,7 @@
         category: 'Pure Cotton Salwar Suits',
         suitType: 'cotton',
         price: 1650,
-        fabric: '100% Pure Cotton (Top 2.5m, Bottom 2.5m, Dupatta 2.5m)',
+        fabric: '100% Pure Breathable Cotton',
         color: 'Rani Pink with White Leheriya Stripes',
         image: 'images/pink-leheriya-cotton-suit.jpg',
         stitchingAvailable: true,
@@ -5317,17 +5300,6 @@
       if (qvPrice) qvPrice.textContent = `₹${prod.price.toLocaleString('en-IN')}`;
       const qvStitch = document.getElementById('qvStitchFee');
       if (qvStitch) qvStitch.textContent = prod.stitchingFee;
-      const craftHighlights = {
-        'prod-01': 'Artisanal Rajasthani Leheriya print with delicate gota patti work',
-        'prod-02': 'Handcrafted Chanderi silk with golden zari bootis & tissue dupatta',
-        'prod-03': 'Traditional Bandhani tie-dye with golden zari handwork & border',
-        'prod-04': 'Artisanal mirror-work lace placket with vibrant floral dupatta',
-        'prod-05': 'Artistic mandala block print with pearl embroidered neck placket'
-      };
-      const qvDesc = document.getElementById('qvDescription');
-      if (qvDesc) {
-        qvDesc.textContent = craftHighlights[prod.id] || (prod.description ? prod.description.split('.')[0] : 'Handcrafted authentic Rajasthani weave');
-      }
       const qvFab = document.getElementById('qvFabricDetail');
       if (qvFab) qvFab.textContent = prod.fabric;
 
