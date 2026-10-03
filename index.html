@@ -1923,146 +1923,153 @@
   <!-- MODAL 4: MULTI-STEP CHECKOUT (§23, 24, 25) -->
   <!-- ========================================================================= -->
   <div id="checkoutModal" onclick="if (event.target === this) closeCheckoutModal()" class="fixed inset-0 z-50 bg-charcoal-950/75 backdrop-blur-sm hidden flex items-center justify-center p-2 sm:p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="checkoutModalTitle">
-    <div class="bg-ivory-50 rounded-lg max-w-2xl w-full p-6 sm:p-8 border border-ivory-300 shadow-2xl my-8 relative">
+    <div class="bg-ivory-50 rounded-2xl max-w-2xl w-full p-3.5 sm:p-4 border border-ivory-300 shadow-2xl relative my-auto max-h-[92vh] flex flex-col">
       
-      <!-- Top Navigation Bar: Back & Close Actions -->
-      <div class="flex items-center justify-between pb-2 mb-3 border-b border-ivory-200">
-        <button type="button" onclick="handleCheckoutBack()" class="p-1 -ml-1 text-charcoal-700 hover:text-maroon-900 transition-colors rounded hover:bg-ivory-200/60 inline-flex items-center justify-center focus:outline-none" aria-label="Go back" title="Go back">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-        </button>
-        <button type="button" onclick="closeCheckoutModal()" class="p-1 -mr-1 text-slateText-400 hover:text-charcoal-900 transition-colors rounded hover:bg-ivory-200/60 inline-flex items-center justify-center focus:outline-none" aria-label="Close checkout" title="Close">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-        </button>
-      </div>
-
-      <!-- Checkout Header -->
-      <div class="border-b border-ivory-200 pb-4">
-        <span class="text-[10px] font-bold uppercase tracking-luxury text-maroon-800">Express Online Checkout</span>
-        <h2 id="checkoutModalTitle" class="font-sans text-2xl font-bold text-maroon-950">Complete Your Order</h2>
-        <div class="flex items-center gap-2 mt-2 text-xs font-semibold text-slateText-600">
-          <span id="stepBadge1" class="text-maroon-800">1. Customer Info</span> →
-          <span id="stepBadge2">2. Delivery</span> →
-          <span id="stepBadge3">3. Review & Payment</span>
-        </div>
-      </div>
-
-      <!-- Checkout Form -->
-      <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event)" class="space-y-6 pt-6">
-        
-        <!-- Step 1: Customer Contact (§23 Step 1) -->
-        <div id="checkoutStep1" class="space-y-4">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-charcoal-950">1. Contact Information</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label for="cFullName" class="block text-[11px] font-semibold text-slateText-700 mb-1">Full Name *</label>
-              <input type="text" id="cFullName" required placeholder="Enter your full name" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
-            </div>
-            <div>
-              <label for="cPhone" class="block text-[11px] font-semibold text-slateText-700 mb-1">Mobile Phone (+91) *</label>
-              <input type="tel" id="cPhone" required pattern="[0-9]{10}" placeholder="10-digit mobile number" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
-            </div>
-            <div class="sm:col-span-2">
-              <label for="cEmail" class="block text-[11px] font-semibold text-slateText-700 mb-1">Email Address (for order tracking receipt) *</label>
-              <input type="email" id="cEmail" required placeholder="name@example.com" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
+      <!-- Unified Compact Header: Back, Step Indicators, Amount & Close -->
+      <div class="flex items-center justify-between pb-2 mb-2 border-b border-ivory-200 shrink-0">
+        <div class="flex items-center gap-2 min-w-0">
+          <button type="button" onclick="handleCheckoutBack()" class="p-1 -ml-1 text-charcoal-700 hover:text-maroon-900 transition-colors rounded hover:bg-ivory-200/60 inline-flex items-center justify-center focus:outline-none shrink-0" aria-label="Go back" title="Go back">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          </button>
+          <div class="min-w-0">
+            <h2 id="checkoutModalTitle" class="font-sans text-xs sm:text-sm font-bold text-maroon-950 truncate leading-tight">Express Checkout</h2>
+            <div class="flex items-center gap-1.5 text-[10px] font-semibold text-slateText-600">
+              <span id="stepBadge1" class="text-maroon-800 font-bold">1. Contact</span> •
+              <span id="stepBadge2">2. Delivery</span> •
+              <span id="stepBadge3">3. Payment</span>
             </div>
           </div>
         </div>
 
-        <!-- Step 2: Delivery Address (§23 Step 2) -->
-        <div id="checkoutStep2" class="space-y-4">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-charcoal-950">2. Delivery Address Across India</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div class="sm:col-span-2">
-              <label for="cAddress" class="block text-[11px] font-semibold text-slateText-700 mb-1">Street Address / House No. *</label>
-              <input type="text" id="cAddress" required placeholder="House / building / street name" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
+        <div class="flex items-center gap-2 shrink-0">
+          <div class="text-right">
+            <span class="block text-[9px] uppercase tracking-wider text-slateText-500 font-bold">Total Payable</span>
+            <span class="font-sans text-xs sm:text-sm font-extrabold text-maroon-900" id="checkoutPayableTotal">₹0</span>
+          </div>
+          <button type="button" onclick="closeCheckoutModal()" class="p-1 text-slateText-400 hover:text-charcoal-900 transition-colors rounded hover:bg-ivory-200/60 inline-flex items-center justify-center focus:outline-none" aria-label="Close checkout" title="Close">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Checkout Form (Scrollable body with compact form inputs) -->
+      <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event)" class="overflow-y-auto flex-1 min-h-0 pr-1 space-y-2.5">
+        
+        <!-- Step 1: Customer Contact -->
+        <div id="checkoutStep1" class="space-y-1.5">
+          <h3 class="text-[11px] font-bold uppercase tracking-wider text-charcoal-950 flex items-center gap-1.5">
+            <span class="w-4 h-4 rounded-full bg-maroon-900 text-gold-300 text-[9px] flex items-center justify-center font-bold">1</span>
+            <span>Contact Information</span>
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+            <div>
+              <label for="cFullName" class="block text-[10px] font-semibold text-slateText-700 mb-0.5">Full Name *</label>
+              <input type="text" id="cFullName" required placeholder="Enter your full name" class="w-full px-2.5 py-1.5 bg-ivory-100 border border-ivory-300 rounded-lg text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
             </div>
             <div>
-              <label for="cPincode" class="block text-[11px] font-semibold text-slateText-700 mb-1">Pincode *</label>
-              <input type="text" id="cPincode" required pattern="[0-9]{6}" placeholder="6-digit PIN" oninput="checkLocalDeliveryZone(this.value)" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
-              <div id="localDeliveryNotice" class="hidden mt-1 text-[10px] font-semibold text-green-700 bg-green-50 px-2 py-1 rounded border border-green-200">
-                ✨ ABHA Local Doorstep Delivery from 11, Ganesha Tower, Beawar (Free ₹0)
+              <label for="cPhone" class="block text-[10px] font-semibold text-slateText-700 mb-0.5">Mobile Phone (+91) *</label>
+              <input type="tel" id="cPhone" required pattern="[0-9]{10}" placeholder="10-digit mobile number" class="w-full px-2.5 py-1.5 bg-ivory-100 border border-ivory-300 rounded-lg text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
+            </div>
+            <div class="sm:col-span-2">
+              <label for="cEmail" class="block text-[10px] font-semibold text-slateText-700 mb-0.5">Email Address (for order tracking receipt) *</label>
+              <input type="email" id="cEmail" required placeholder="name@example.com" class="w-full px-2.5 py-1.5 bg-ivory-100 border border-ivory-300 rounded-lg text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Delivery Address -->
+        <div id="checkoutStep2" class="space-y-1.5 pt-1 border-t border-ivory-200/70">
+          <h3 class="text-[11px] font-bold uppercase tracking-wider text-charcoal-950 flex items-center gap-1.5">
+            <span class="w-4 h-4 rounded-full bg-maroon-900 text-gold-300 text-[9px] flex items-center justify-center font-bold">2</span>
+            <span>Delivery Address Across India</span>
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+            <div class="sm:col-span-2">
+              <label for="cAddress" class="block text-[10px] font-semibold text-slateText-700 mb-0.5">Street Address / House No. *</label>
+              <input type="text" id="cAddress" required placeholder="House / building / street name" class="w-full px-2.5 py-1.5 bg-ivory-100 border border-ivory-300 rounded-lg text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
+            </div>
+            <div>
+              <label for="cPincode" class="block text-[10px] font-semibold text-slateText-700 mb-0.5">Pincode *</label>
+              <input type="text" id="cPincode" required pattern="[0-9]{6}" placeholder="6-digit PIN" oninput="checkLocalDeliveryZone(this.value)" class="w-full px-2.5 py-1.5 bg-ivory-100 border border-ivory-300 rounded-lg text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
+              <div id="localDeliveryNotice" class="hidden mt-1 text-[9px] font-semibold text-green-700 bg-green-50 px-1.5 py-0.5 rounded border border-green-200">
+                ✨ Beawar Doorstep Delivery (Free ₹0)
               </div>
             </div>
             <div>
-              <label for="cCity" class="block text-[11px] font-semibold text-slateText-700 mb-1">City / Town *</label>
-              <input type="text" id="cCity" required placeholder="e.g. Beawar, Jaipur, Mumbai" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
+              <label for="cCity" class="block text-[10px] font-semibold text-slateText-700 mb-0.5">City / Town *</label>
+              <input type="text" id="cCity" required placeholder="e.g. Beawar, Jaipur" class="w-full px-2.5 py-1.5 bg-ivory-100 border border-ivory-300 rounded-lg text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
             </div>
             <div>
-              <label for="cState" class="block text-[11px] font-semibold text-slateText-700 mb-1">State *</label>
-              <input type="text" id="cState" required placeholder="e.g. Rajasthan" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
+              <label for="cState" class="block text-[10px] font-semibold text-slateText-700 mb-0.5">State *</label>
+              <input type="text" id="cState" required placeholder="e.g. Rajasthan" class="w-full px-2.5 py-1.5 bg-ivory-100 border border-ivory-300 rounded-lg text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
             </div>
             <div>
-              <label for="cLandmark" class="block text-[11px] font-semibold text-slateText-700 mb-1">Landmark (Optional)</label>
-              <input type="text" id="cLandmark" placeholder="Nearby landmark" class="w-full px-3 py-2 bg-ivory-100 border border-ivory-300 rounded text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
+              <label for="cLandmark" class="block text-[10px] font-semibold text-slateText-700 mb-0.5">Landmark (Optional)</label>
+              <input type="text" id="cLandmark" placeholder="Nearby landmark" class="w-full px-2.5 py-1.5 bg-ivory-100 border border-ivory-300 rounded-lg text-xs text-charcoal-950 focus:outline-none focus:ring-1 focus:ring-maroon-800" />
             </div>
           </div>
         </div>
 
-        <!-- Step 3: Payment Method Selection (§24) -->
-        <div id="checkoutStep3" class="space-y-4">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-charcoal-950">3. Payment Option</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <!-- Step 3: Payment Method Selection -->
+        <div id="checkoutStep3" class="space-y-1.5 pt-1 border-t border-ivory-200/70">
+          <h3 class="text-[11px] font-bold uppercase tracking-wider text-charcoal-950 flex items-center gap-1.5">
+            <span class="w-4 h-4 rounded-full bg-maroon-900 text-gold-300 text-[9px] flex items-center justify-center font-bold">3</span>
+            <span>Payment Method</span>
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
             
-            <label class="p-3.5 bg-ivory-100 rounded-lg border border-ivory-300 cursor-pointer hover:border-maroon-800 flex items-center gap-3 has-[:checked]:border-maroon-800 has-[:checked]:bg-maroon-900/5 transition">
-              <input type="radio" name="paymentMethod" value="UPI" checked class="text-maroon-800 focus:ring-maroon-800" />
+            <label class="p-2.5 bg-ivory-100 rounded-xl border border-ivory-300 cursor-pointer hover:border-maroon-800 flex items-center gap-2 has-[:checked]:border-maroon-800 has-[:checked]:bg-maroon-900/5 transition shadow-2xs">
+              <input type="radio" name="paymentMethod" value="UPI" checked class="text-maroon-800 focus:ring-maroon-800 cursor-pointer" />
               <div>
                 <span class="text-xs font-bold text-charcoal-950 block">UPI (Fastest)</span>
-                <span class="text-[10px] text-slateText-600 block">Google Pay, PhonePe, Paytm, BHIM</span>
+                <span class="text-[9px] text-slateText-600 block">GPay, PhonePe, Paytm, BHIM</span>
               </div>
             </label>
 
-            <label class="p-3.5 bg-ivory-100 rounded-lg border border-ivory-300 cursor-pointer hover:border-maroon-800 flex items-center gap-3 has-[:checked]:border-maroon-800 has-[:checked]:bg-maroon-900/5 transition">
-              <input type="radio" name="paymentMethod" value="COD" class="text-maroon-800 focus:ring-maroon-800" />
+            <label class="p-2.5 bg-ivory-100 rounded-xl border border-ivory-300 cursor-pointer hover:border-maroon-800 flex items-center gap-2 has-[:checked]:border-maroon-800 has-[:checked]:bg-maroon-900/5 transition shadow-2xs">
+              <input type="radio" name="paymentMethod" value="COD" class="text-maroon-800 focus:ring-maroon-800 cursor-pointer" />
               <div>
                 <span class="text-xs font-bold text-charcoal-950 block">Cash on Delivery</span>
-                <span class="text-[10px] text-slateText-600 block">Pay when parcel arrives</span>
+                <span class="text-[9px] text-slateText-600 block">Pay when parcel arrives</span>
               </div>
             </label>
 
-            <label class="p-3.5 bg-ivory-100 rounded-lg border border-ivory-300 cursor-pointer hover:border-maroon-800 flex items-center gap-3 has-[:checked]:border-maroon-800 has-[:checked]:bg-maroon-900/5 transition">
-              <input type="radio" name="paymentMethod" value="StorePay" class="text-maroon-800 focus:ring-maroon-800" />
+            <label class="p-2.5 bg-ivory-100 rounded-xl border border-ivory-300 cursor-pointer hover:border-maroon-800 flex items-center gap-2 has-[:checked]:border-maroon-800 has-[:checked]:bg-maroon-900/5 transition shadow-2xs">
+              <input type="radio" name="paymentMethod" value="StorePay" class="text-maroon-800 focus:ring-maroon-800 cursor-pointer" />
               <div>
                 <span class="text-xs font-bold text-charcoal-950 block">Store Pay</span>
-                <span class="text-[10px] text-slateText-600 block">Pay at Beawar flagship boutique</span>
+                <span class="text-[9px] text-slateText-600 block">Pay at Beawar boutique</span>
               </div>
             </label>
 
           </div>
         </div>
 
-        <!-- Tailor Support Row (Strictly visible ONLY when customer is ordering stitched products) -->
-        <div id="checkoutTailorSupportRow" class="hidden p-3 bg-gradient-to-r from-ivory-100 to-green-50 rounded-lg border border-green-700/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
-          <div class="flex items-center gap-2.5">
-            <span class="text-xl">✂️</span>
-            <div>
-              <p class="font-bold text-charcoal-950">Custom Stitched Salwar Suit Order</p>
-              <p class="text-[11px] text-slateText-600">Have questions about your measurements, ease margins, or fit before payment?</p>
+        <!-- Tailor Support Row -->
+        <div id="checkoutTailorSupportRow" class="hidden p-2.5 bg-gradient-to-r from-ivory-100 to-green-50 rounded-xl border border-green-700/20 flex items-center justify-between gap-2 text-xs">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="text-lg">✂️</span>
+            <div class="min-w-0">
+              <p class="font-bold text-charcoal-950 truncate">Custom Tailoring Consultation Included</p>
+              <p class="text-[10px] text-slateText-600 truncate">Have questions about measurements or fit before payment?</p>
             </div>
           </div>
-          <button type="button" onclick="triggerWhatsAppChat('Checkout - Custom Stitching Assistance')" class="shrink-0 px-3.5 py-1.5 bg-green-700 hover:bg-green-600 text-ivory-50 text-xs font-bold rounded-full transition flex items-center justify-center gap-1.5 shadow-xs">
-            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.106.005.249-.04.39.299.144.347.491 1.2.534 1.288.043.087.072.188.014.303-.058.116-.087.188-.173.289l-.26.303c-.087.087-.178.181-.077.354.101.173.449.741.963 1.2.662.591 1.221.774 1.394.86.173.087.275.072.376-.043.101-.116.433-.506.549-.679.116-.173.231-.144.39-.087s1.011.477 1.184.564c.173.087.289.13.332.202.043.072.043.419-.101.824z"/></svg>
-            <span>Chat with Tailor</span>
+          <button type="button" onclick="triggerWhatsAppChat('Checkout - Custom Stitching Assistance')" class="shrink-0 px-2.5 py-1 bg-green-700 hover:bg-green-600 text-ivory-50 text-[11px] font-bold rounded-full transition flex items-center gap-1 shadow-2xs">
+            <span>Chat Tailor</span>
           </button>
         </div>
 
-        <!-- Order Total Banner -->
-        <div class="p-4 bg-maroon-900/5 rounded-lg border border-maroon-800/20 flex items-center justify-between">
-          <div>
-            <p class="text-xs font-bold text-charcoal-950">Payable Amount:</p>
-            <p class="text-[11px] text-slateText-600" id="checkoutCouponNotice">Includes all taxes & delivery across India</p>
-          </div>
-          <span class="font-sans text-xl font-bold text-maroon-900" id="checkoutPayableTotal">Select a product</span>
-        </div>
+        <p class="text-[10px] text-slateText-500 text-center" id="checkoutCouponNotice">Free Pan-India Delivery • Includes all taxes</p>
 
-        <!-- Actions: Back & Place Order -->
-        <div class="flex items-center gap-3 pt-2">
-          <button type="button" onclick="handleCheckoutBack()" class="w-1/3 py-3.5 bg-ivory-200 hover:bg-ivory-300 text-charcoal-900 text-xs font-bold rounded-lg transition flex items-center justify-center gap-1.5 shadow-2xs">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        <!-- Sticky / Pinned Actions: Back & Place Order (Always visible without scrolling) -->
+        <div class="flex items-center gap-2 pt-2 border-t border-ivory-200 shrink-0">
+          <button type="button" onclick="handleCheckoutBack()" class="w-1/3 py-2.5 bg-ivory-200 hover:bg-ivory-300 text-charcoal-900 text-xs font-bold rounded-xl transition flex items-center justify-center gap-1 shadow-2xs">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
             <span>Back</span>
           </button>
-          <button type="submit" class="w-2/3 py-3.5 bg-maroon-800 hover:bg-maroon-700 text-ivory-50 text-xs font-bold uppercase tracking-wider rounded-lg transition-all shadow flex items-center justify-center gap-2">
+          <button type="submit" class="w-2/3 py-2.5 bg-maroon-800 hover:bg-maroon-700 text-ivory-50 text-xs font-bold uppercase tracking-wider rounded-xl transition shadow flex items-center justify-center gap-1.5">
             <span>Place Order</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
           </button>
         </div>
 
@@ -2075,7 +2082,7 @@
   <!-- MODAL 5: ORDER CONFIRMATION SCREEN (§25) -->
   <!-- ========================================================================= -->
   <div id="confirmationModal" class="fixed inset-0 z-50 bg-charcoal-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
-    <div class="bg-ivory-50 rounded-xl max-w-lg w-full p-8 border border-ivory-300 shadow-2xl text-center space-y-5 my-8">
+    <div class="bg-ivory-50 rounded-2xl max-w-md w-full p-4 sm:p-6 border border-ivory-300 shadow-2xl text-center space-y-3.5 my-auto max-h-[92vh] overflow-y-auto">
       
       <div class="w-16 h-16 rounded-full bg-green-100 text-green-700 flex items-center justify-center mx-auto">
         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
@@ -2133,7 +2140,7 @@
   <!-- MODAL: LIVE ORDER TRACKING (§34, §35) -->
   <!-- ========================================================================= -->
   <div id="trackingModal" class="fixed inset-0 z-50 bg-charcoal-950/75 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="trackOrderTitle">
-    <div class="bg-ivory-50 rounded-lg max-w-lg w-full p-6 sm:p-8 border border-ivory-300 shadow-2xl relative space-y-4">
+    <div class="bg-ivory-50 rounded-2xl max-w-md w-full p-4 sm:p-5 border border-ivory-300 shadow-2xl relative space-y-3 my-auto max-h-[92vh] overflow-y-auto">
       <button type="button" onclick="closeTrackingModal()" class="absolute top-4 right-4 p-2 text-slateText-600 hover:text-charcoal-950" aria-label="Close tracking">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
@@ -2190,7 +2197,7 @@
   <!-- MODAL 7: TAILOR APPOINTMENT & HOTLINE (§18) -->
   <!-- ========================================================================= -->
   <div id="tailorModal" class="fixed inset-0 z-50 bg-charcoal-950/75 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="tailorModalTitle">
-    <div class="bg-ivory-50 rounded-lg max-w-lg w-full p-6 border border-ivory-300 shadow-2xl space-y-4 my-6">
+    <div class="bg-ivory-50 rounded-2xl max-w-lg w-full p-4 sm:p-5 border border-ivory-300 shadow-2xl space-y-3 my-auto max-h-[92vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-ivory-200 pb-3">
         <div>
           <span class="text-[10px] font-bold uppercase tracking-luxury text-maroon-800">Direct Artisan Support</span>
@@ -2265,7 +2272,7 @@
   <!-- MODAL 8: LEGAL POLICIES VIEWER -->
   <!-- ========================================================================= -->
   <div id="policyModal" class="fixed inset-0 z-50 bg-charcoal-950/75 backdrop-blur-sm hidden flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="policyModalTitle">
-    <div class="bg-ivory-50 rounded-lg max-w-xl w-full p-6 border border-ivory-300 shadow-2xl space-y-4">
+    <div class="bg-ivory-50 rounded-2xl max-w-lg w-full p-4 sm:p-5 border border-ivory-300 shadow-2xl space-y-3 my-auto max-h-[92vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-ivory-200 pb-3">
         <h2 id="policyModalTitle" class="font-sans text-lg font-bold text-maroon-950">ABHA Policies</h2>
         <button type="button" onclick="closePolicyModal()" class="p-1 text-slateText-600 hover:text-charcoal-950" aria-label="Close dialog">
@@ -2282,104 +2289,100 @@
   <!-- MODAL 9: QUICK VIEW PRODUCT DETAIL MODAL (§11) -->
   <!-- ========================================================================= -->
   <div id="quickViewModal" onclick="if (event.target === this) closeQuickViewModal()" class="fixed inset-0 z-50 bg-charcoal-950/75 backdrop-blur-sm hidden flex items-center justify-center p-2 sm:p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="qvTitle">
-    <div class="bg-ivory-50 rounded-2xl max-w-3xl w-full p-3.5 sm:p-5 border border-ivory-300 shadow-2xl relative my-auto max-h-[92vh] flex flex-col overflow-y-auto">
+    <div class="bg-ivory-50 rounded-2xl max-w-2xl sm:max-w-3xl w-full p-3 sm:p-4 border border-ivory-300 shadow-2xl relative my-auto max-h-[92vh] flex flex-col">
       
-      <!-- Top Navigation Bar: Small Arrow to Go Back (Not highlighted) & Close -->
-      <div class="flex items-center justify-between pb-2 mb-3 border-b border-ivory-200">
+      <!-- Top Navigation Bar: Small Arrow to Go Back & Close -->
+      <div class="flex items-center justify-between pb-1.5 mb-2 border-b border-ivory-200 shrink-0">
         <button type="button" onclick="closeQuickViewModal()" class="p-1 -ml-1 text-charcoal-700 hover:text-maroon-900 transition-colors rounded hover:bg-ivory-200/60 inline-flex items-center justify-center focus:outline-none" aria-label="Go back" title="Go back">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
         </button>
+        <span class="text-[10px] font-bold uppercase tracking-wider text-maroon-800">Product Details</span>
         <button type="button" onclick="closeQuickViewModal()" class="p-1 -mr-1 text-slateText-400 hover:text-charcoal-900 transition-colors rounded hover:bg-ivory-200/60 inline-flex items-center justify-center focus:outline-none" aria-label="Close product view" title="Close">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-        <!-- Product Image Preview -->
-        <div class="space-y-3">
-          <div class="aspect-[3/4] rounded-lg overflow-hidden border border-ivory-300 bg-ivory-200 shadow-inner relative group">
-            <!-- Small floating back arrow on image preview -->
-            <button type="button" onclick="closeQuickViewModal()" class="absolute top-2.5 left-2.5 w-8 h-8 rounded-full bg-white/85 hover:bg-white text-charcoal-700 hover:text-maroon-900 shadow-xs flex items-center justify-center transition-all z-10 focus:outline-none" aria-label="Go back" title="Go back">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+      <!-- Main Content Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-5 items-center overflow-y-auto flex-1 min-h-0 pr-0.5">
+        <!-- Left: Image Preview (Height-capped to fit screen without scrolling) -->
+        <div class="flex flex-col items-center justify-center">
+          <div class="relative w-full max-w-[240px] sm:max-w-[280px] aspect-[3/4] max-h-[290px] sm:max-h-[330px] rounded-xl overflow-hidden border border-ivory-300 bg-ivory-200 shadow-inner group">
+            <button type="button" onclick="closeQuickViewModal()" class="absolute top-2 left-2 w-7 h-7 rounded-full bg-white/85 hover:bg-white text-charcoal-700 hover:text-maroon-900 shadow-xs flex items-center justify-center transition-all z-10 focus:outline-none" aria-label="Go back" title="Go back">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
             </button>
             <img id="qvImage" src="" alt="Product detail" class="w-full h-full object-cover" />
           </div>
-          <div class="flex items-center justify-between text-[11px] text-slateText-600 px-1">
-            <span class="flex items-center gap-1 text-green-800 font-semibold">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-              100% Authentic Handloom Fabric
-            </span>
-            <span class="font-bold text-maroon-800">ABHA Beawar Atelier</span>
+          <div class="flex items-center justify-between text-[10px] text-slateText-600 px-1 mt-1.5 w-full max-w-[240px] sm:max-w-[280px]">
+            <span class="flex items-center gap-1 text-emerald-800 font-semibold">✓ 100% Handloom</span>
+            <span class="font-bold text-maroon-800">ABHA Beawar</span>
           </div>
         </div>
 
-        <!-- Product Specs & Ordering -->
-        <div class="space-y-4">
+        <!-- Right: Specs & Stitching Options -->
+        <div class="space-y-2">
           <div>
-            <div class="flex items-center gap-2 mb-1">
-              <span id="qvCategory" class="text-[10px] uppercase font-bold tracking-wider text-maroon-800 bg-maroon-900/10 px-2 py-0.5 rounded">Category</span>
-              <span class="text-xs text-emerald-800 font-semibold flex items-center gap-1">
-                ✓ 100% Handcrafted
-              </span>
+            <div class="flex items-center gap-1.5 mb-0.5">
+              <span id="qvCategory" class="text-[9px] uppercase font-bold tracking-wider text-maroon-800 bg-maroon-900/10 px-1.5 py-0.5 rounded">Category</span>
+              <span class="text-[10px] text-emerald-800 font-semibold">✓ Handcrafted</span>
             </div>
-            <h2 id="qvTitle" class="font-sans text-xl sm:text-2xl font-bold text-maroon-950 leading-tight">Product Name</h2>
-            <div class="flex items-baseline gap-3 mt-1.5">
-              <span class="font-sans text-2xl font-extrabold text-maroon-900" id="qvPrice">₹1,650</span>
-              <span class="text-xs text-slateText-600">Pure 3-Piece Material</span>
+            <h2 id="qvTitle" class="font-sans text-sm sm:text-base font-bold text-maroon-950 leading-tight">Product Name</h2>
+            <div class="flex items-baseline gap-2 mt-0.5">
+              <span class="font-sans text-xl sm:text-2xl font-extrabold text-maroon-900" id="qvPrice">₹1,650</span>
+              <span class="text-[10px] text-slateText-600">Pure 3-Piece Material</span>
             </div>
           </div>
 
-          <!-- Concise 3-Line Product Details -->
-          <div class="p-3 bg-ivory-100/75 rounded-lg border border-ivory-200 text-xs space-y-1 text-charcoal-800">
+          <!-- Concise 3-Line Details -->
+          <div class="p-2 bg-ivory-100/80 rounded-lg border border-ivory-200 text-[11px] space-y-0.5 text-charcoal-800">
             <p><strong class="font-semibold text-charcoal-950">Fabric:</strong> <span id="qvFabricDetail">100% Pure Breathable Cotton</span></p>
-            <p><strong class="font-semibold text-charcoal-950">Set Includes:</strong> Top 2.5m, Bottom 2.5m, Dupatta 2.5m (3-Piece)</p>
-            <p><strong class="font-semibold text-charcoal-950">Delivery &amp; Care:</strong> Free Doorstep Delivery Pan-India • Gentle Wash</p>
+            <p><strong class="font-semibold text-charcoal-950">Set Includes:</strong> Top 2.5m, Bottom 2.5m, Dupatta 2.5m</p>
+            <p><strong class="font-semibold text-charcoal-950">Delivery &amp; Care:</strong> Free Pan-India Delivery • Gentle Wash</p>
           </div>
 
-          <!-- Stitching Option Selection (Radio Toggle) -->
-          <div class="space-y-2 pt-1">
-            <label class="block text-xs font-bold uppercase tracking-wider text-charcoal-900">Choose How You Want It:</label>
+          <!-- Stitching Radio Options -->
+          <div class="space-y-1.5 pt-0.5">
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-charcoal-900">Choose How You Want It:</label>
             
-            <div class="space-y-2" id="qvOptionContainer">
+            <div class="space-y-1.5" id="qvOptionContainer">
               <!-- Option 1: Fabric Only (Unstitched) -->
-              <label id="qvOptUnstitchedLabel" class="flex items-center justify-between p-3 rounded-xl border-2 border-maroon-900 bg-maroon-900/5 cursor-pointer transition-all">
-                <div class="flex items-center gap-3">
-                  <input type="radio" id="qvRadioUnstitched" name="qvStitchOption" value="unstitched" checked onchange="updateQvOptionSelection('unstitched')" class="w-4 h-4 text-maroon-900 focus:ring-maroon-800 cursor-pointer" />
+              <label id="qvOptUnstitchedLabel" class="flex items-center justify-between p-2 rounded-xl border-2 border-maroon-900 bg-maroon-900/5 cursor-pointer transition-all">
+                <div class="flex items-center gap-2">
+                  <input type="radio" id="qvRadioUnstitched" name="qvStitchOption" value="unstitched" checked onchange="updateQvOptionSelection('unstitched')" class="w-3.5 h-3.5 text-maroon-900 focus:ring-maroon-800 cursor-pointer" />
                   <div>
-                    <span class="block text-xs sm:text-sm font-bold text-maroon-950">Fabric Only (Unstitched)</span>
-                    <span class="block text-[11px] text-slateText-600">3-Piece Material for your local tailor</span>
+                    <span class="block text-xs font-bold text-maroon-950">Fabric Only (Unstitched)</span>
+                    <span class="block text-[10px] text-slateText-600">3-Piece Material for your local tailor</span>
                   </div>
                 </div>
-                <span class="font-sans text-sm sm:text-base font-extrabold text-maroon-950" id="qvOptUnstitchedPrice">₹1,650</span>
+                <span class="font-sans text-xs sm:text-sm font-extrabold text-maroon-950" id="qvOptUnstitchedPrice">₹1,650</span>
               </label>
 
               <!-- Option 2: Custom Stitched -->
-              <label id="qvOptStitchedLabel" class="flex items-center justify-between p-3 rounded-xl border border-ivory-300 bg-white hover:border-maroon-900/40 cursor-pointer transition-all">
-                <div class="flex items-center gap-3">
-                  <input type="radio" id="qvRadioStitched" name="qvStitchOption" value="stitched" onchange="updateQvOptionSelection('stitched')" class="w-4 h-4 text-maroon-900 focus:ring-maroon-800 cursor-pointer" />
+              <label id="qvOptStitchedLabel" class="flex items-center justify-between p-2 rounded-xl border border-ivory-300 bg-white hover:border-maroon-900/40 cursor-pointer transition-all">
+                <div class="flex items-center gap-2">
+                  <input type="radio" id="qvRadioStitched" name="qvStitchOption" value="stitched" onchange="updateQvOptionSelection('stitched')" class="w-3.5 h-3.5 text-maroon-900 focus:ring-maroon-800 cursor-pointer" />
                   <div>
-                    <div class="flex items-center gap-1.5">
-                      <span class="text-xs sm:text-sm font-bold text-maroon-950">Custom Stitched to Your Size</span>
-                      <span class="text-[9px] font-bold uppercase bg-gold-400 text-maroon-950 px-1.5 py-0.5 rounded">Tailored</span>
+                    <div class="flex items-center gap-1">
+                      <span class="text-xs font-bold text-maroon-950">Custom Stitched to Your Size</span>
+                      <span class="text-[8px] font-bold uppercase bg-gold-400 text-maroon-950 px-1 py-0.2 rounded">Tailored</span>
                     </div>
-                    <span class="block text-[11px] text-slateText-600">Standard S–XXL or your measurements</span>
+                    <span class="block text-[10px] text-slateText-600">Standard S–XXL or your measurements</span>
                   </div>
                 </div>
                 <div class="text-right">
-                  <span class="block font-sans text-sm sm:text-base font-extrabold text-maroon-950" id="qvOptStitchedPrice">₹2,300</span>
-                  <span class="block text-[10px] text-emerald-800 font-semibold" id="qvOptStitchedBreakdown">Includes ₹650 stitching</span>
+                  <span class="block font-sans text-xs sm:text-sm font-extrabold text-maroon-950" id="qvOptStitchedPrice">₹2,300</span>
+                  <span class="block text-[9px] text-emerald-800 font-semibold" id="qvOptStitchedBreakdown">Includes stitching</span>
                 </div>
               </label>
             </div>
           </div>
 
           <!-- Single Clear CTA -->
-          <div class="pt-2">
-            <button type="button" id="qvProceedBtn" onclick="handleQvProceed()" class="w-full py-3.5 px-4 bg-maroon-900 hover:bg-maroon-950 text-gold-300 hover:text-white font-bold rounded-xl text-sm uppercase tracking-wider text-center transition-all shadow-md flex items-center justify-center gap-2 group">
+          <div class="pt-1">
+            <button type="button" id="qvProceedBtn" onclick="handleQvProceed()" class="w-full py-2.5 px-4 bg-maroon-900 hover:bg-maroon-950 text-gold-300 hover:text-white font-bold rounded-xl text-xs sm:text-sm uppercase tracking-wider text-center transition-all shadow flex items-center justify-center gap-2 group">
               <span id="qvProceedBtnText">Proceed to Order →</span>
               <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
             </button>
-            <p class="text-center text-[11px] text-slateText-500 mt-2 flex items-center justify-center gap-2">
+            <p class="text-center text-[10px] text-slateText-500 mt-1 flex items-center justify-center gap-2">
               <span>🚚 Free Delivery Pan-India</span>
               <span>•</span>
               <span>🛡️ 100% Handloom Guarantee</span>
