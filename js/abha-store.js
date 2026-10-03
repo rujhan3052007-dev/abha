@@ -416,8 +416,12 @@
   }
 
   // Local-First Storage Helpers
+  const _memoryDb = {};
+
   function getTable(name, fallback = []) {
-    if (typeof localStorage === 'undefined') return fallback;
+    if (typeof localStorage === 'undefined') {
+      return _memoryDb[name] !== undefined ? _memoryDb[name] : fallback;
+    }
     try {
       const raw = localStorage.getItem(STORAGE_PREFIX + name);
       if (!raw) return fallback;
@@ -429,7 +433,10 @@
   }
 
   function setTable(name, data) {
-    if (typeof localStorage === 'undefined') return;
+    if (typeof localStorage === 'undefined') {
+      _memoryDb[name] = data;
+      return;
+    }
     try {
       localStorage.setItem(STORAGE_PREFIX + name, JSON.stringify(data));
       if (typeof window !== 'undefined' && typeof CustomEvent !== 'undefined') {
@@ -442,10 +449,17 @@
 
   // Initialize store defaults if not present
   function ensureSeeded() {
-    if (typeof localStorage === 'undefined') return;
+    if (typeof localStorage === 'undefined') {
+      if (!_memoryDb['products']) _memoryDb['products'] = JSON.parse(JSON.stringify(INITIAL_PRODUCTS));
+      if (!_memoryDb['categories']) _memoryDb['categories'] = JSON.parse(JSON.stringify(INITIAL_CATEGORIES));
+      if (!_memoryDb['users']) _memoryDb['users'] = JSON.parse(JSON.stringify(INITIAL_USERS));
+      if (!_memoryDb['departments']) _memoryDb['departments'] = JSON.parse(JSON.stringify(INITIAL_DEPARTMENTS));
+      if (!_memoryDb['employees']) _memoryDb['employees'] = JSON.parse(JSON.stringify(INITIAL_EMPLOYEES));
+      return;
+    }
     const existingProds = getTable('products', null);
     if (!existingProds) {
-      setTable('products', INITIAL_PRODUCTS);
+      setTable('products', JSON.parse(JSON.stringify(INITIAL_PRODUCTS)));
     } else {
       let cleaned = false;
       existingProds.forEach(p => {
@@ -1939,6 +1953,89 @@
           setTable('products', prods);
         }
         return { success: true, message: 'Image deleted' };
+      }
+
+      // GET single product with details and images
+      if (pathname.startsWith('/api/admin/products/') && !pathname.includes('/images') && method === 'GET') {
+        const prodId = pathname.split('/')[4];
+        const prods = getTable('products', INITIAL_PRODUCTS);
+        const prod = prods.find(p => p.id === prodId || p.sku === prodId);
+        if (!prod) throw new Error('Product not found');
+        const imgs = (prod.images || [prod.primary_image || 'images/pink-leheriya-cotton-suit.jpg']).map((url, idx) => ({
+          id: `pimg_${prod.id}_${idx}`,
+          image_url: url,
+          is_primary: (url === prod.primary_image || idx === 0) ? 1 : 0
+        }));
+        return {
+          success: true,
+          data: {
+            ...prod,
+            images: imgs
+          }
+        };
+      }
+
+      // PUT update all details of a product
+      if (pathname.startsWith('/api/admin/products/') && !pathname.includes('/images') && method === 'PUT') {
+        checkPermission(caller, 'products.edit');
+        const prodId = pathname.split('/')[4];
+        const prods = getTable('products', INITIAL_PRODUCTS);
+        const prodIndex = prods.findIndex(p => p.id === prodId || p.sku === prodId);
+        if (prodIndex === -1) throw new Error('Product not found');
+
+        const prod = prods[prodIndex];
+        const newSku = (body.sku || prod.sku).trim();
+        if (newSku !== prod.sku && prods.some(p => p.sku === newSku && p.id !== prod.id)) {
+          throw new Error(`SKU '${newSku}' is already in use by another product`);
+        }
+
+        const updated = {
+          ...prod,
+          title: (body.title || prod.title).trim(),
+          name: (body.title || prod.title).trim(),
+          sku: newSku,
+          category: body.category || body.category_name || prod.category,
+          category_id: body.category_id || prod.category_id,
+          fabric: (body.fabric || prod.fabric).trim(),
+          color: body.color !== undefined ? body.color : prod.color,
+          base_price: Number(body.base_price != null ? body.base_price : (body.price != null ? body.price : prod.base_price)),
+          price: Number(body.base_price != null ? body.base_price : (body.price != null ? body.price : prod.price)),
+          stitching_price: Number(body.stitching_price != null ? body.stitching_price : prod.stitching_price),
+          inventory_type: body.inventory_type || prod.inventory_type,
+          stock_quantity: Number(body.stock_quantity != null ? body.stock_quantity : prod.stock_quantity),
+          is_sold_out: body.is_sold_out !== undefined ? Boolean(body.is_sold_out) : prod.is_sold_out,
+          is_featured: body.is_featured !== undefined ? Boolean(body.is_featured) : prod.is_featured,
+          is_active: body.is_active !== undefined ? Boolean(body.is_active) : prod.is_active,
+          description: body.description !== undefined ? body.description : prod.description,
+          top_length: body.top_length !== undefined ? body.top_length : prod.top_length,
+          bottom_length: body.bottom_length !== undefined ? body.bottom_length : prod.bottom_length,
+          dupatta_length: body.dupatta_length !== undefined ? body.dupatta_length : prod.dupatta_length,
+          work_type: body.work_type !== undefined ? body.work_type : prod.work_type,
+          wash_care: body.wash_care !== undefined ? body.wash_care : prod.wash_care
+        };
+        prods[prodIndex] = updated;
+        setTable('products', prods);
+        return {
+          success: true,
+          message: `Product "${updated.title}" updated successfully`,
+          data: updated
+        };
+      }
+
+      // DELETE remove product permanently
+      if (pathname.startsWith('/api/admin/products/') && !pathname.includes('/images') && method === 'DELETE') {
+        checkPermission(caller, 'products.edit', 'products.delete');
+        const prodId = pathname.split('/')[4];
+        let prods = getTable('products', INITIAL_PRODUCTS);
+        const prod = prods.find(p => p.id === prodId || p.sku === prodId);
+        if (!prod) throw new Error('Product not found');
+
+        prods = prods.filter(p => p.id !== prod.id && p.sku !== prod.sku);
+        setTable('products', prods);
+        return {
+          success: true,
+          message: `Product "${prod.title}" (${prod.sku}) was permanently removed.`
+        };
       }
 
       // Managers Management (Owner Only §4)

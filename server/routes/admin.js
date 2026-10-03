@@ -543,6 +543,168 @@ router.put('/products/:productId/images/:imageId/primary', requirePermission('pr
   }
 });
 
+// GET single product with details and images for admin edit modal
+router.get('/products/:id', requirePermission('products.view', 'pos.bill'), async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const db = getDb();
+    const product = await db.get(`
+      SELECT p.*, c.name as category_name
+      FROM products p
+      LEFT JOIN categories c ON p.category_id = c.id
+      WHERE p.id = ? OR p.sku = ?
+    `, [id, id]);
+
+    if (!product) {
+      return res.status(404).json({ success: false, error: 'Product not found' });
+    }
+
+    const images = await db.all(`
+      SELECT * FROM product_images WHERE product_id = ? ORDER BY is_primary DESC, display_order ASC, created_at ASC
+    `, [product.id]);
+
+    res.json({
+      success: true,
+      data: {
+        ...product,
+        images: images.length > 0 ? images : (product.primary_image ? [{ id: `def_${product.id}`, product_id: product.id, image_url: product.primary_image, is_primary: 1 }] : [])
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// PUT update all details of a product
+router.put('/products/:id', requirePermission('products.edit'), async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const db = getDb();
+
+    const existing = await db.get('SELECT * FROM products WHERE id = ? OR sku = ?', [id, id]);
+    if (!existing) {
+      return res.status(404).json({ success: false, error: 'Product not found' });
+    }
+
+    const {
+      title, sku, category_id, fabric, color, description,
+      top_length, bottom_length, dupatta_length, work_type, wash_care,
+      base_price, price, stitching_price, stitchingFee,
+      inventory_type, stock_quantity, is_sold_out, is_featured, is_active
+    } = req.body;
+
+    const newSku = (sku || existing.sku).trim();
+    if (newSku !== existing.sku) {
+      const duplicateSku = await db.get('SELECT id FROM products WHERE sku = ? AND id != ?', [newSku, existing.id]);
+      if (duplicateSku) {
+        return res.status(409).json({ success: false, error: `SKU '${newSku}' is already in use by another product` });
+      }
+    }
+
+    const finalTitle = (title || existing.title).trim();
+    const finalFabric = (fabric || existing.fabric).trim();
+    const finalBasePrice = Number(base_price != null ? base_price : (price != null ? price : existing.base_price));
+    const finalStitchingPrice = Number(stitching_price != null ? stitching_price : (stitchingFee != null ? stitchingFee : existing.stitching_price));
+    const finalStock = Number(stock_quantity != null ? stock_quantity : existing.stock_quantity);
+    const finalInventoryType = inventory_type || existing.inventory_type;
+    const finalSoldOut = is_sold_out != null ? (is_sold_out === 1 || is_sold_out === true ? 1 : 0) : (finalStock <= 0 ? 1 : 0);
+    const finalFeatured = is_featured != null ? (is_featured === 1 || is_featured === true ? 1 : 0) : existing.is_featured;
+    const finalActive = is_active != null ? (is_active === 1 || is_active === true ? 1 : 0) : existing.is_active;
+
+    await db.run(`
+      UPDATE products SET
+        title = ?,
+        sku = ?,
+        category_id = ?,
+        description = ?,
+        fabric = ?,
+        top_length = ?,
+        bottom_length = ?,
+        dupatta_length = ?,
+        work_type = ?,
+        wash_care = ?,
+        base_price = ?,
+        stitching_price = ?,
+        inventory_type = ?,
+        stock_quantity = ?,
+        is_sold_out = ?,
+        is_featured = ?,
+        is_active = ?,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `, [
+      finalTitle,
+      newSku,
+      category_id || existing.category_id,
+      description != null ? description : existing.description,
+      finalFabric,
+      top_length || existing.top_length,
+      bottom_length || existing.bottom_length,
+      dupatta_length || existing.dupatta_length,
+      work_type || existing.work_type,
+      wash_care || existing.wash_care,
+      finalBasePrice,
+      finalStitchingPrice,
+      finalInventoryType,
+      finalStock,
+      finalSoldOut,
+      finalFeatured,
+      finalActive,
+      existing.id
+    ]);
+
+    const updated = await db.get('SELECT * FROM products WHERE id = ?', [existing.id]);
+    await logAudit(req, {
+      action: 'UPDATE_PRODUCT',
+      entityType: 'PRODUCT',
+      entityId: existing.id,
+      previousValue: existing,
+      newValue: updated
+    });
+
+    res.json({
+      success: true,
+      message: `Product "${finalTitle}" updated successfully`,
+      data: updated
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// DELETE remove product permanently
+router.delete('/products/:id', requirePermission('products.delete', 'products.edit'), async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const db = getDb();
+
+    const existing = await db.get('SELECT * FROM products WHERE id = ? OR sku = ?', [id, id]);
+    if (!existing) {
+      return res.status(404).json({ success: false, error: 'Product not found' });
+    }
+
+    // Delete associated images
+    await db.run('DELETE FROM product_images WHERE product_id = ?', [existing.id]);
+
+    // Delete product
+    await db.run('DELETE FROM products WHERE id = ?', [existing.id]);
+
+    await logAudit(req, {
+      action: 'DELETE_PRODUCT',
+      entityType: 'PRODUCT',
+      entityId: existing.id,
+      previousValue: { sku: existing.sku, title: existing.title, base_price: existing.base_price }
+    });
+
+    res.json({
+      success: true,
+      message: `Product "${existing.title}" (${existing.sku}) was permanently removed.`
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // 4. Category Management (Create, Edit, Delete, Toggle Active vs Coming Soon - Section 52)
 router.post('/categories', requirePermission('settings.edit', 'products.edit'), async (req, res, next) => {
   try {

@@ -1570,44 +1570,176 @@
     </div>
   </div>
 
-  <!-- MANAGE PRODUCT PHOTOS MODAL -->
-  <div id="managePhotosModal" class="modal-backdrop">
-    <div class="modal-card" style="max-width: 680px;">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; border-bottom: 1px solid var(--gray-200); padding-bottom: 0.75rem;">
+  <!-- MANAGE PRODUCT MODAL (DETAILS, PHOTOS & DELETION) -->
+  <div id="manageProductModal" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 720px; max-height: 90vh; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.85rem; border-bottom: 1px solid var(--gray-200); padding-bottom: 0.75rem;">
         <div>
-          <h3 class="panel-title" id="managePhotosModalTitle" style="margin-bottom: 0.2rem;">Product Photography Gallery</h3>
-          <p id="managePhotosModalSubtitle" style="font-size: 0.82rem; color: var(--gray-500);">Upload and manage multiple high-resolution photos for this garment</p>
+          <h3 class="panel-title" id="manageProductModalTitle" style="margin-bottom: 0.2rem;">Manage Garment</h3>
+          <p id="manageProductModalSubtitle" style="font-size: 0.82rem; color: var(--gray-500);">Edit specifications, pricing, photo gallery, or remove garment</p>
         </div>
-        <button type="button" class="btn btn-outline btn-sm" onclick="closeManagePhotosModal()">&times;</button>
+        <button type="button" class="btn btn-outline btn-sm" onclick="closeManageProductModal()">&times;</button>
       </div>
 
-      <!-- Current Photos Grid -->
-      <div style="margin-bottom: 1.25rem;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-          <span style="font-size: 0.82rem; font-weight: 700; color: var(--charcoal);">Current Photos:</span>
-          <span id="managePhotosCountText" style="font-size: 0.75rem; color: var(--gray-500);">Loading photos...</span>
+      <!-- Tab Switcher -->
+      <div style="display: flex; gap: 0.5rem; margin-bottom: 1.1rem; border-bottom: 1px solid var(--gray-200); padding-bottom: 0.6rem;">
+        <button type="button" id="mpTabBtnDetails" class="btn btn-primary btn-sm" onclick="switchManageProductTab('details')" style="display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 600;">
+          <span>📝</span> <span>Product Details</span>
+        </button>
+        <button type="button" id="mpTabBtnPhotos" class="btn btn-outline btn-sm" onclick="switchManageProductTab('photos')" style="display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 600;">
+          <span>📷</span> <span>Photo Gallery</span> <span id="mpTabPhotosCountBadge" class="badge" style="background: var(--maroon); color: #fff; font-size: 0.7rem; padding: 1px 6px; border-radius: 10px;">0</span>
+        </button>
+      </div>
+
+      <!-- TAB 1: PRODUCT DETAILS FORM -->
+      <div id="mpTabContentDetails">
+        <form id="editProductForm" onsubmit="submitEditProduct(event)" style="display: flex; flex-direction: column; gap: 0.85rem;">
+          <input type="hidden" id="epId" name="id">
+
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--charcoal);">Product Title *</label>
+            <input type="text" id="epTitle" name="title" class="form-input" required placeholder="e.g. Royal Indigo Handblock Pure Cotton Suit">
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--charcoal);">SKU Code *</label>
+              <input type="text" id="epSku" name="sku" class="form-input" required placeholder="ABHA-SLW-001">
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--charcoal);">Category *</label>
+              <select id="epCategory" name="category" class="form-input">
+                <option value="Pure Cotton Salwar Suits">Pure Cotton Salwar Suits</option>
+                <option value="Chanderi Silk Salwar Suits">Chanderi Silk Salwar Suits</option>
+                <option value="Bandhani & Leheriya Suits">Bandhani & Leheriya Suits</option>
+                <option value="Mirror-Work Cotton Suits">Mirror-Work Cotton Suits</option>
+                <option value="Designer Printed Salwar Suits">Designer Printed Salwar Suits</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--charcoal);">Fabric Composition *</label>
+              <input type="text" id="epFabric" name="fabric" class="form-input" required placeholder="100% Pure Breathable Cotton">
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--charcoal);">Color / Shade</label>
+              <input type="text" id="epColor" name="color" class="form-input" placeholder="e.g. Rani Pink & Gold">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--charcoal);">Base Fabric Price (₹) *</label>
+              <input type="number" id="epPrice" name="base_price" class="form-input" required placeholder="1650" min="0">
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--charcoal);">Master Tailoring Fee (₹) *</label>
+              <input type="number" id="epStitching" name="stitching_price" class="form-input" required value="650" min="0">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--charcoal);">Inventory Model</label>
+              <select id="epInventoryType" name="inventory_type" class="form-input">
+                <option value="UNIQUE_1OF1">Exclusive 1-of-1 Artisan (De-lists when sold)</option>
+                <option value="QUANTITY">Quantity-based Stock</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--charcoal);">Stock Quantity</label>
+              <input type="number" id="epStock" name="stock_quantity" class="form-input" value="1" min="0">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem;">
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--charcoal);">Stock Availability Status</label>
+              <select id="epSoldOut" name="is_sold_out" class="form-input">
+                <option value="0">✅ Active / In Stock</option>
+                <option value="1">🚫 Marked as Sold Out</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600; color: var(--charcoal);">Storefront Visibility</label>
+              <select id="epActive" name="is_active" class="form-input">
+                <option value="1">👁️ Visible on Website</option>
+                <option value="0">🔒 Hidden / Draft Mode</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 600; color: var(--charcoal);">Garment Description</label>
+            <textarea id="epDesc" name="description" class="form-input" rows="2" placeholder="Fabric weave, neckline details, dupatta work, dimensions..."></textarea>
+          </div>
+
+          <!-- Cut & Dimensions (Optional specifications) -->
+          <div style="background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 6px; padding: 0.75rem;">
+            <span style="font-size: 0.75rem; font-weight: 700; color: var(--gray-700); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 0.5rem;">Fabric Cut & Care Details</span>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.5rem;">
+              <div>
+                <label style="font-size: 0.72rem; color: var(--gray-500);">Top Fabric Length</label>
+                <input type="text" id="epTopLength" name="top_length" class="form-input" style="padding: 0.45rem 0.6rem; font-size: 0.82rem;" placeholder="e.g. 2.5 Meters">
+              </div>
+              <div>
+                <label style="font-size: 0.72rem; color: var(--gray-500);">Bottom Fabric Length</label>
+                <input type="text" id="epBottomLength" name="bottom_length" class="form-input" style="padding: 0.45rem 0.6rem; font-size: 0.82rem;" placeholder="e.g. 2.5 Meters">
+              </div>
+              <div>
+                <label style="font-size: 0.72rem; color: var(--gray-500);">Dupatta Length</label>
+                <input type="text" id="epDupattaLength" name="dupatta_length" class="form-input" style="padding: 0.45rem 0.6rem; font-size: 0.82rem;" placeholder="e.g. 2.5 Meters">
+              </div>
+              <div>
+                <label style="font-size: 0.72rem; color: var(--gray-500);">Wash Care Instructions</label>
+                <input type="text" id="epWashCare" name="wash_care" class="form-input" style="padding: 0.45rem 0.6rem; font-size: 0.82rem;" placeholder="e.g. Dry Clean Only">
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- TAB 2: PHOTOS GALLERY & UPLOAD -->
+      <div id="mpTabContentPhotos" style="display: none;">
+        <!-- Current Photos Grid -->
+        <div style="margin-bottom: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span style="font-size: 0.82rem; font-weight: 700; color: var(--charcoal);">Current Garment Photos:</span>
+            <span id="managePhotosCountText" style="font-size: 0.75rem; color: var(--gray-500);">Loading photos...</span>
+          </div>
+          <div id="managePhotosGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.75rem; max-height: 280px; overflow-y: auto; padding: 0.65rem; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px;">
+            <!-- Rendered via JS -->
+          </div>
         </div>
-        <div id="managePhotosGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.75rem; max-height: 280px; overflow-y: auto; padding: 0.65rem; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px;">
-          <!-- Rendered via JS -->
+
+        <!-- Upload Additional Photos Form -->
+        <div style="background: var(--cream); border: 1px dashed var(--gold); border-radius: 8px; padding: 1rem;">
+          <label style="font-size: 0.82rem; font-weight: 700; color: var(--maroon); display: block; margin-bottom: 0.35rem;">
+            + Add More Photos to This Garment
+          </label>
+          <input type="file" id="manageMorePhotosFile" class="form-input" accept="image/*" multiple onchange="handleManageMorePhotosSelect(event)">
+          <div id="manageMorePreview" style="display: none; margin-top: 0.5rem; gap: 0.5rem; flex-wrap: wrap;"></div>
+          <div style="display: flex; justify-content: flex-end; margin-top: 0.75rem;">
+            <button type="button" id="btnUploadMorePhotos" onclick="submitUploadMorePhotos()" class="btn btn-primary btn-sm" style="display: none;">
+              Upload Selected Photos
+            </button>
+          </div>
         </div>
       </div>
 
-      <!-- Upload Additional Photos Form -->
-      <div style="background: var(--cream); border: 1px dashed var(--gold); border-radius: 8px; padding: 1rem;">
-        <label style="font-size: 0.82rem; font-weight: 700; color: var(--maroon); display: block; margin-bottom: 0.35rem;">
-          + Add More Photos to This Product
-        </label>
-        <input type="file" id="manageMorePhotosFile" class="form-input" accept="image/*" multiple onchange="handleManageMorePhotosSelect(event)">
-        <div id="manageMorePreview" style="display: none; margin-top: 0.5rem; gap: 0.5rem; flex-wrap: wrap;"></div>
-        <div style="display: flex; justify-content: flex-end; margin-top: 0.75rem;">
-          <button type="button" id="btnUploadMorePhotos" onclick="submitUploadMorePhotos()" class="btn btn-primary btn-sm" style="display: none;">
-            Upload Selected Photos
+      <!-- Modal Footer -->
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; margin-top: 1.25rem; border-top: 1px solid var(--gray-200); padding-top: 0.75rem; flex-wrap: wrap;">
+        <button type="button" class="btn btn-outline" style="color: var(--red-text); border-color: var(--red-text); background: var(--red-bg); font-weight: 600;" onclick="deleteCurrentProductAdmin()">
+          🗑️ Delete Product
+        </button>
+        <div style="display: flex; gap: 0.75rem; margin-left: auto;">
+          <button type="button" class="btn btn-outline" onclick="closeManageProductModal()">Cancel</button>
+          <button type="submit" form="editProductForm" id="btnSaveProductChanges" class="btn btn-primary" style="font-weight: 600;">
+            💾 Save Changes
           </button>
         </div>
-      </div>
-
-      <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem; border-top: 1px solid var(--gray-200); padding-top: 0.75rem;">
-        <button type="button" class="btn btn-outline" onclick="closeManagePhotosModal()">Close</button>
       </div>
     </div>
   </div>
@@ -3494,8 +3626,8 @@
               </td>
               <td>${p.is_sold_out ? '<span class="tag tag-soldout">Sold Out</span>' : '<span class="tag tag-instock">Active</span>'}</td>
               <td style="white-space: nowrap;">
-                <button class="btn btn-outline btn-sm" onclick="openManagePhotosModal('${p.id}', '${escapedTitle}', '${p.sku}')" style="display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 600;" title="Manage Multiple Photos for this garment">
-                  <span>📷</span> <span>Manage Photos</span>
+                <button class="btn btn-outline btn-sm" onclick="openManageProductModal('${p.id}')" style="display: inline-flex; align-items: center; gap: 0.35rem; font-weight: 600; border-color: var(--maroon); color: var(--maroon);" title="Edit Product Details, Photos & Delete Product">
+                  <span>⚙️</span> <span>Manage Product</span>
                 </button>
               </td>
             </tr>
@@ -3959,71 +4091,283 @@
     }
 
     // ==========================================
-    // MANAGE PRODUCT PHOTOS GALLERY MODAL
+    // MANAGE PRODUCT MODAL (DETAILS, PHOTOS & DELETION)
     // ==========================================
     let currentManageProductId = null;
     let currentManageProductTitle = '';
     let currentManageProductSku = '';
+    let currentManageProductData = null;
     let pendingMorePhotos = [];
 
-    async function openManagePhotosModal(productId, productTitle, productSku) {
+    function switchManageProductTab(tab) {
+      const detailsContent = document.getElementById('mpTabContentDetails');
+      const photosContent = document.getElementById('mpTabContentPhotos');
+      const btnDetails = document.getElementById('mpTabBtnDetails');
+      const btnPhotos = document.getElementById('mpTabBtnPhotos');
+
+      if (tab === 'photos') {
+        if (detailsContent) detailsContent.style.display = 'none';
+        if (photosContent) photosContent.style.display = 'block';
+        if (btnDetails) btnDetails.className = 'btn btn-outline btn-sm';
+        if (btnPhotos) btnPhotos.className = 'btn btn-primary btn-sm';
+      } else {
+        if (detailsContent) detailsContent.style.display = 'block';
+        if (photosContent) photosContent.style.display = 'none';
+        if (btnDetails) btnDetails.className = 'btn btn-primary btn-sm';
+        if (btnPhotos) btnPhotos.className = 'btn btn-outline btn-sm';
+      }
+    }
+
+    async function openManageProductModal(productId) {
       currentManageProductId = productId;
-      currentManageProductTitle = productTitle;
-      currentManageProductSku = productSku;
       pendingMorePhotos = [];
 
-      document.getElementById('managePhotosModalTitle').textContent = `Photos: ${productTitle}`;
-      document.getElementById('managePhotosModalSubtitle').textContent = `SKU: ${productSku} • Manage multiple images or upload new angles`;
-      document.getElementById('manageMorePreview').style.display = 'none';
-      document.getElementById('manageMorePreview').innerHTML = '';
-      document.getElementById('btnUploadMorePhotos').style.display = 'none';
-      document.getElementById('manageMorePhotosFile').value = '';
+      // Reset uploads
+      const preview = document.getElementById('manageMorePreview');
+      if (preview) { preview.style.display = 'none'; preview.innerHTML = ''; }
+      const uploadBtn = document.getElementById('btnUploadMorePhotos');
+      if (uploadBtn) uploadBtn.style.display = 'none';
+      const fileInput = document.getElementById('manageMorePhotosFile');
+      if (fileInput) fileInput.value = '';
 
-      document.getElementById('managePhotosModal').classList.add('open');
-      await loadManagePhotos(productId);
+      // Reset tab
+      switchManageProductTab('details');
+
+      // Populate Category dropdown from cachedCategories
+      const categorySelect = document.getElementById('epCategory');
+      if (categorySelect) {
+        let catOptions = cachedCategories;
+        if (!catOptions || catOptions.length === 0) {
+          try {
+            const catRes = await apiRequest('/api/categories');
+            if (catRes?.data) {
+              cachedCategories = catRes.data;
+              catOptions = catRes.data;
+            }
+          } catch (e) {
+            // fallback
+          }
+        }
+        if (catOptions && catOptions.length > 0) {
+          categorySelect.innerHTML = catOptions.map(c => 
+            `<option value="${c.name}">${c.name}</option>`
+          ).join('');
+        }
+      }
+
+      // Show modal in loading state
+      const modal = document.getElementById('manageProductModal');
+      const titleElem = document.getElementById('manageProductModalTitle');
+      const subtitleElem = document.getElementById('manageProductModalSubtitle');
+      if (titleElem) titleElem.textContent = 'Loading Garment Details...';
+      if (subtitleElem) subtitleElem.textContent = 'Please wait while product data is fetched';
+      modal.classList.add('open');
+
+      try {
+        const res = await apiRequest(`/api/admin/products/${productId}`);
+        const p = res.data;
+        if (!p) throw new Error('Product not found');
+        currentManageProductData = p;
+        currentManageProductTitle = p.title || p.name || '';
+        currentManageProductSku = p.sku || '';
+
+        if (titleElem) titleElem.textContent = `Manage: ${currentManageProductTitle}`;
+        if (subtitleElem) subtitleElem.textContent = `SKU: ${currentManageProductSku} • ID: ${p.id}`;
+
+        // Populate Form Fields
+        document.getElementById('epId').value = p.id;
+        document.getElementById('epTitle').value = p.title || p.name || '';
+        document.getElementById('epSku').value = p.sku || '';
+        if (categorySelect) {
+          const matchCat = p.category || p.category_name;
+          if (matchCat && !Array.from(categorySelect.options).some(o => o.value === matchCat)) {
+            const opt = document.createElement('option');
+            opt.value = matchCat;
+            opt.textContent = matchCat;
+            categorySelect.appendChild(opt);
+          }
+          if (matchCat) categorySelect.value = matchCat;
+        }
+        document.getElementById('epFabric').value = p.fabric || '';
+        document.getElementById('epColor').value = p.color || '';
+        document.getElementById('epPrice').value = p.base_price != null ? p.base_price : (p.price != null ? p.price : '');
+        document.getElementById('epStitching').value = p.stitching_price != null ? p.stitching_price : 650;
+        document.getElementById('epInventoryType').value = p.inventory_type || 'UNIQUE_1OF1';
+        document.getElementById('epStock').value = p.stock_quantity != null ? p.stock_quantity : 1;
+        document.getElementById('epSoldOut').value = p.is_sold_out ? '1' : '0';
+        document.getElementById('epActive').value = (p.is_active === 0 || p.is_active === false) ? '0' : '1';
+        document.getElementById('epDesc').value = p.description || '';
+        document.getElementById('epTopLength').value = p.top_length || '';
+        document.getElementById('epBottomLength').value = p.bottom_length || '';
+        document.getElementById('epDupattaLength').value = p.dupatta_length || '';
+        document.getElementById('epWashCare').value = p.wash_care || '';
+
+        // Load Photos
+        await loadManagePhotos(productId);
+      } catch (err) {
+        alert('Failed to load product: ' + err.message);
+        closeManageProductModal();
+      }
+    }
+
+    function closeManageProductModal() {
+      const modal = document.getElementById('manageProductModal');
+      if (modal) modal.classList.remove('open');
+      currentManageProductId = null;
+      currentManageProductData = null;
+      pendingMorePhotos = [];
+    }
+
+    // Backward-compatible alias
+    async function openManagePhotosModal(productId, productTitle, productSku) {
+      await openManageProductModal(productId);
+      switchManageProductTab('photos');
     }
 
     function closeManagePhotosModal() {
-      document.getElementById('managePhotosModal').classList.remove('open');
-      currentManageProductId = null;
-      pendingMorePhotos = [];
+      closeManageProductModal();
+    }
+
+    async function submitEditProduct(e) {
+      e.preventDefault();
+      if (!currentManageProductId) return;
+
+      const submitBtn = document.getElementById('btnSaveProductChanges');
+      const originalText = submitBtn ? submitBtn.textContent : 'Save Changes';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Saving Changes...';
+      }
+
+      const title = document.getElementById('epTitle').value.trim();
+      const sku = document.getElementById('epSku').value.trim();
+      const category = document.getElementById('epCategory').value;
+      const fabric = document.getElementById('epFabric').value.trim();
+      const color = document.getElementById('epColor').value.trim();
+      const price = parseFloat(document.getElementById('epPrice').value);
+      const stitchingFee = parseFloat(document.getElementById('epStitching').value) || 650;
+      const inventoryType = document.getElementById('epInventoryType').value;
+      const stock = parseInt(document.getElementById('epStock').value, 10) || 0;
+      const isSoldOut = document.getElementById('epSoldOut').value === '1' ? 1 : 0;
+      const isActive = document.getElementById('epActive').value === '1' ? 1 : 0;
+      const description = document.getElementById('epDesc').value.trim();
+      const topLength = document.getElementById('epTopLength').value.trim();
+      const bottomLength = document.getElementById('epBottomLength').value.trim();
+      const dupattaLength = document.getElementById('epDupattaLength').value.trim();
+      const washCare = document.getElementById('epWashCare').value.trim();
+
+      try {
+        await apiRequest(`/api/admin/products/${currentManageProductId}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            title,
+            name: title,
+            sku,
+            category,
+            category_name: category,
+            fabric,
+            color,
+            base_price: price,
+            price,
+            stitching_price: stitchingFee,
+            stitchingFee,
+            inventory_type: inventoryType,
+            stock_quantity: stock,
+            is_sold_out: isSoldOut,
+            is_active: isActive,
+            description,
+            top_length: topLength,
+            bottom_length: bottomLength,
+            dupatta_length: dupattaLength,
+            wash_care: washCare
+          })
+        });
+
+        currentManageProductTitle = title;
+        currentManageProductSku = sku;
+        closeManageProductModal();
+        loadProductsAdmin();
+        if (typeof loadPosItems === 'function') loadPosItems();
+        alert(`Product "${title}" updated successfully!`);
+      } catch (err) {
+        alert('Failed to update product: ' + err.message);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+        }
+      }
+    }
+
+    async function deleteCurrentProductAdmin() {
+      if (!currentManageProductId) return;
+
+      const title = currentManageProductTitle || 'this garment';
+      const sku = currentManageProductSku ? ` (SKU: ${currentManageProductSku})` : '';
+
+      const confirmed = confirm(
+        `Are you sure you want to permanently delete "${title}"${sku}?\n\n` +
+        `⚠️ WARNING:\n` +
+        `• This garment will be completely removed from your active catalog.\n` +
+        `• All associated gallery photos will be removed.\n` +
+        `• This action is permanent and cannot be undone.`
+      );
+
+      if (!confirmed) return;
+
+      try {
+        const res = await apiRequest(`/api/admin/products/${currentManageProductId}`, {
+          method: 'DELETE'
+        });
+
+        closeManageProductModal();
+        loadProductsAdmin();
+        if (typeof loadPosItems === 'function') loadPosItems();
+        alert(res.message || `Product "${title}" was permanently removed.`);
+      } catch (err) {
+        alert('Failed to delete product: ' + err.message);
+      }
     }
 
     async function loadManagePhotos(productId) {
       const grid = document.getElementById('managePhotosGrid');
       const countText = document.getElementById('managePhotosCountText');
-      grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--gray-500); padding: 1rem;">Loading photos...</div>';
+      const badgeTab = document.getElementById('mpTabPhotosCountBadge');
+      if (grid) grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--gray-500); padding: 1rem;">Loading photos...</div>';
 
       try {
         const res = await apiRequest(`/api/admin/products/${productId}/images`);
         const imgs = res.data?.images || [];
-        countText.textContent = `${imgs.length} photo${imgs.length === 1 ? '' : 's'} in gallery`;
+        if (countText) countText.textContent = `${imgs.length} photo${imgs.length === 1 ? '' : 's'} in gallery`;
+        if (badgeTab) badgeTab.textContent = imgs.length;
 
         if (imgs.length === 0) {
-          grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--gray-500); padding: 1rem;">No photos uploaded yet.</div>';
+          if (grid) grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: var(--gray-500); padding: 1rem;">No photos uploaded yet.</div>';
           return;
         }
 
-        grid.innerHTML = imgs.map((img, idx) => {
-          const isPrimary = Boolean(img.is_primary);
-          return `
-            <div style="background: #fff; border: 2px solid ${isPrimary ? 'var(--maroon)' : 'var(--gray-300)'}; border-radius: 8px; padding: 6px; display: flex; flex-direction: column; align-items: center; gap: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.06);">
-              <div style="position: relative; width: 100%; height: 120px; border-radius: 4px; overflow: hidden; background: var(--gray-100);">
-                <img src="${img.image_url}" alt="Product Photo" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='images/pink-leheriya-cotton-suit.jpg'">
-                ${isPrimary ? `<span style="position: absolute; top: 4px; left: 4px; background: var(--maroon); color: #fff; font-size: 0.68rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">★ Cover</span>` : ''}
+        if (grid) {
+          grid.innerHTML = imgs.map((img, idx) => {
+            const isPrimary = Boolean(img.is_primary);
+            return `
+              <div style="background: #fff; border: 2px solid ${isPrimary ? 'var(--maroon)' : 'var(--gray-300)'}; border-radius: 8px; padding: 6px; display: flex; flex-direction: column; align-items: center; gap: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.06);">
+                <div style="position: relative; width: 100%; height: 120px; border-radius: 4px; overflow: hidden; background: var(--gray-100);">
+                  <img src="${img.image_url}" alt="Product Photo" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='images/pink-leheriya-cotton-suit.jpg'">
+                  ${isPrimary ? `<span style="position: absolute; top: 4px; left: 4px; background: var(--maroon); color: #fff; font-size: 0.68rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">★ Cover</span>` : ''}
+                </div>
+                <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 4px;">
+                  ${!isPrimary
+                    ? `<button type="button" class="btn btn-outline btn-sm" onclick="setPrimaryPhotoFromModal('${productId}', '${img.id}')" style="font-size: 0.7rem; padding: 2px 6px; flex: 1;">Make Cover</button>`
+                    : `<span style="font-size: 0.72rem; color: var(--maroon); font-weight: 700; flex: 1; text-align: center;">Main Image</span>`
+                  }
+                  <button type="button" class="btn btn-outline btn-sm" onclick="deletePhotoFromModal('${productId}', '${img.id}')" style="color: var(--red-text); border-color: var(--red-text); padding: 2px 6px; font-size: 0.7rem;" title="Delete this photo">🗑️</button>
+                </div>
               </div>
-              <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 4px;">
-                ${!isPrimary
-                  ? `<button type="button" class="btn btn-outline btn-sm" onclick="setPrimaryPhotoFromModal('${productId}', '${img.id}')" style="font-size: 0.7rem; padding: 2px 6px; flex: 1;">Make Cover</button>`
-                  : `<span style="font-size: 0.72rem; color: var(--maroon); font-weight: 700; flex: 1; text-align: center;">Main Image</span>`
-                }
-                <button type="button" class="btn btn-outline btn-sm" onclick="deletePhotoFromModal('${productId}', '${img.id}')" style="color: var(--red-text); border-color: var(--red-text); padding: 2px 6px; font-size: 0.7rem;" title="Delete this photo">🗑️</button>
-              </div>
-            </div>
-          `;
-        }).join('');
+            `;
+          }).join('');
+        }
       } catch (err) {
-        grid.innerHTML = `<div style="grid-column: 1 / -1; color: var(--red-text); padding: 1rem;">${err.message}</div>`;
+        if (grid) grid.innerHTML = `<div style="grid-column: 1 / -1; color: var(--red-text); padding: 1rem;">${err.message}</div>`;
       }
     }
 
