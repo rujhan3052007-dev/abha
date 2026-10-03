@@ -170,7 +170,8 @@ async function runTests() {
 
     // 10. Store POS Offline Billing Terminal
     const prod3 = products.body.data.find(p => p.sku === 'ABHA-SS-003');
-    const initialQty = prod3.stock_quantity;
+    const prod3Before = await request('GET', `/api/products/${prod3.id}`);
+    const initialQty = prod3Before.body.data.stock_quantity;
 
     const posRes = await request('POST', '/api/admin/pos/order', {
       sku_or_id: 'ABHA-SS-003',
