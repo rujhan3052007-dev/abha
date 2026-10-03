@@ -92,6 +92,37 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Public Storefront Hero Advertisement Endpoint
+app.get('/api/advertisement', async (req, res, next) => {
+  try {
+    const db = getDb();
+    let ad = null;
+    try {
+      ad = await db.get('SELECT * FROM hero_advertisements WHERE id = ?', ['hero-ad-default']);
+    } catch {
+      // Table might not be queried yet
+    }
+    res.json({
+      success: true,
+      data: ad || {
+        id: 'hero-ad-default',
+        media_type: 'DEFAULT',
+        media_url: 'images/pink-leheriya-cotton-suit.jpg',
+        title: 'Bespoke Fitting Studio',
+        subtitle: 'Pure Cotton Leheriya Salwar Suit',
+        badge_text: 'Stitching Available',
+        description: '✓ 100% Pure Cotton (Top 2.5m, Bottom 2.5m, Dupatta 2.5m)\n✓ Custom-tailored to measurements in 7 days',
+        cta_text: 'Stitching Available',
+        cta_url: '#newArrivals',
+        show_badge: 1,
+        is_active: 1
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // Fallback to Storefront for client navigation
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, '../admin.html'));

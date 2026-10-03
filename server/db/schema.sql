@@ -374,3 +374,22 @@ CREATE INDEX IF NOT EXISTS idx_employees_department ON employees(department_code
 CREATE INDEX IF NOT EXISTS idx_employees_status ON employees(status);
 CREATE INDEX IF NOT EXISTS idx_audit_actor ON admin_audit_logs(user_id);
 CREATE INDEX IF NOT EXISTS idx_audit_entity ON admin_audit_logs(entity_type, entity_id);
+
+-- 23. HERO ADVERTISEMENTS (Storefront promotional photo or video banner)
+CREATE TABLE IF NOT EXISTS hero_advertisements (
+    id TEXT PRIMARY KEY,
+    media_type TEXT NOT NULL DEFAULT 'DEFAULT', -- 'DEFAULT', 'IMAGE', 'VIDEO'
+    media_url TEXT NOT NULL,
+    title TEXT,
+    subtitle TEXT,
+    badge_text TEXT,
+    description TEXT,
+    cta_text TEXT,
+    cta_url TEXT,
+    show_badge INTEGER NOT NULL DEFAULT 1,
+    is_active INTEGER NOT NULL DEFAULT 1,
+    updated_by TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+

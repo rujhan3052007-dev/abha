@@ -1079,6 +1079,9 @@
       <button class="nav-item" id="navItemReviews" onclick="switchTab('reviews')" data-perm="reviews.view">
         <span>⭐</span> Customer Reviews
       </button>
+      <button class="nav-item" id="navItemAdvertisement" onclick="switchTab('advertisement')" data-perm="advertisement.edit">
+        <span>📢</span> Advertisement
+      </button>
 
       <div class="nav-header" id="navHeaderSystem">System</div>
       <button class="nav-item" id="navItemIntegrations" onclick="switchTab('integrations')" data-perm="settings.view" data-owner="true">
@@ -1482,6 +1485,161 @@
                 <!-- Rendered via JS -->
               </tbody>
             </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- 10. HERO ADVERTISEMENT (Photo or Video Banner) -->
+      <section id="section-advertisement" class="page-section">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">Storefront Hero Advertisement</h1>
+            <p class="section-desc">Manage the primary featured promotional photo or video displayed in the storefront hero section.</p>
+          </div>
+          <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+            <button type="button" class="btn btn-outline btn-sm" onclick="resetAdvertisementAdmin()" style="border-color: var(--gold); color: var(--maroon); font-weight: 600;" title="Revert to original Rani Pink Leheriya authentic cotton suit photo">
+              ↺ Reset to Default Photo
+            </button>
+            <a href="index.html" target="_blank" class="btn btn-outline btn-sm" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+              <span>🌐</span> View Live Website
+            </a>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.5rem; align-items: start;">
+          <!-- Left Column: Advertisement Configurator -->
+          <div class="panel-card" style="margin-bottom: 0;">
+            <h3 class="panel-title" style="margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between;">
+              <span>Banner Configuration</span>
+              <span id="adStatusBadge" class="tag tag-instock">Active on Storefront</span>
+            </h3>
+
+            <form id="heroAdForm" onsubmit="saveAdvertisementAdmin(event)" style="display: flex; flex-direction: column; gap: 1.1rem;">
+              
+              <!-- Media Format Selector -->
+              <div>
+                <label style="font-size: 0.82rem; font-weight: 700; color: var(--charcoal); display: block; margin-bottom: 0.45rem;">
+                  Media Format *
+                </label>
+                <div style="display: flex; gap: 0.6rem;">
+                  <button type="button" id="btnAdFormatPhoto" class="btn btn-primary btn-sm" onclick="switchAdMediaType('IMAGE')" style="flex: 1; display: inline-flex; justify-content: center; align-items: center; gap: 0.35rem; padding: 0.55rem;">
+                    <span>📷</span> <span>Photo / Image</span>
+                  </button>
+                  <button type="button" id="btnAdFormatVideo" class="btn btn-outline btn-sm" onclick="switchAdMediaType('VIDEO')" style="flex: 1; display: inline-flex; justify-content: center; align-items: center; gap: 0.35rem; padding: 0.55rem;">
+                    <span>🎬</span> <span>Video (MP4 / WebM)</span>
+                  </button>
+                </div>
+                <input type="hidden" id="adMediaType" value="IMAGE">
+              </div>
+
+              <!-- Media Upload / URL Tabs -->
+              <div style="background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px; padding: 1rem;">
+                <label style="font-size: 0.8rem; font-weight: 700; color: var(--maroon); display: block; margin-bottom: 0.5rem;" id="adMediaInputLabel">
+                  Upload Media File or Enter URL *
+                </label>
+
+                <!-- File Picker -->
+                <div style="margin-bottom: 0.75rem;">
+                  <input type="file" id="adFileInput" class="form-input" accept="image/*,video/mp4,video/webm" onchange="handleAdFileUpload(event)" style="background: #fff;">
+                  <p id="adFileHelp" style="font-size: 0.72rem; color: var(--gray-500); margin-top: 0.25rem;">
+                    ✨ Select any high-resolution photo (JPG, PNG, WebP) or video (MP4, WebM up to 50MB).
+                  </p>
+                </div>
+
+                <!-- Or Direct URL -->
+                <div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                    <label style="font-size: 0.75rem; color: var(--gray-600); font-weight: 600;">Or Direct Media Link / CDN URL:</label>
+                    <span id="adMediaCurrentTag" style="font-size: 0.72rem; color: var(--gold); font-weight: 700;"></span>
+                  </div>
+                  <input type="text" id="adMediaUrl" class="form-input" placeholder="e.g. images/pink-leheriya-cotton-suit.jpg or https://.../video.mp4" oninput="handleAdUrlChange(this.value)">
+                </div>
+              </div>
+
+              <!-- Overlay Customization Section -->
+              <div style="border-top: 1px solid var(--gray-200); padding-top: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                  <label style="font-size: 0.82rem; font-weight: 700; color: var(--charcoal); cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
+                    <input type="checkbox" id="adShowBadge" checked onchange="updateAdPreview()">
+                    <span>Display Overlay Information Card on Banner</span>
+                  </label>
+                </div>
+
+                <div id="adBadgeFields" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                    <div>
+                      <label style="font-size: 0.75rem; font-weight: 600;">Studio / Top Tag</label>
+                      <input type="text" id="adBadgeTag" class="form-input" placeholder="Bespoke Fitting Studio" oninput="updateAdPreview()">
+                    </div>
+                    <div>
+                      <label style="font-size: 0.75rem; font-weight: 600;">Status Pill Text</label>
+                      <input type="text" id="adBadgeStatus" class="form-input" placeholder="Stitching Available" oninput="updateAdPreview()">
+                    </div>
+                  </div>
+
+                  <div>
+                    <label style="font-size: 0.75rem; font-weight: 600;">Title / Garment Name</label>
+                    <input type="text" id="adTitle" class="form-input" placeholder="Pure Cotton Leheriya Salwar Suit" oninput="updateAdPreview()">
+                  </div>
+
+                  <div>
+                    <label style="font-size: 0.75rem; font-weight: 600;">Bullet Points (Separate lines with Enter)</label>
+                    <textarea id="adBullets" class="form-input" rows="2" placeholder="✓ 100% Pure Cotton (Top 2.5m, Bottom 2.5m, Dupatta 2.5m)&#10;✓ Custom-tailored to measurements in 7 days" oninput="updateAdPreview()"></textarea>
+                  </div>
+
+                  <div>
+                    <label style="font-size: 0.75rem; font-weight: 600;">Action Link / Button URL</label>
+                    <input type="text" id="adCtaUrl" class="form-input" placeholder="#newArrivals or WhatsApp URL" oninput="updateAdPreview()">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Submit button -->
+              <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem; border-top: 1px solid var(--gray-200); padding-top: 1rem;">
+                <button type="submit" id="btnSaveHeroAd" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.65rem 1.4rem; font-weight: 700;">
+                  <span>💾</span> <span>Publish Changes to Storefront</span>
+                </button>
+              </div>
+
+            </form>
+          </div>
+
+          <!-- Right Column: Live Storefront Mockup Preview -->
+          <div class="panel-card" style="margin-bottom: 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+              <h3 class="panel-title" style="margin-bottom: 0;">Live Storefront Preview</h3>
+              <span style="font-size: 0.75rem; color: var(--gray-500); font-weight: 600;">Exact Hero Mockup</span>
+            </div>
+
+            <div style="background: #faf7f2; border: 1px solid var(--gray-200); border-radius: 12px; padding: 1.25rem;">
+              <p style="font-size: 0.75rem; color: var(--gray-500); margin-bottom: 0.75rem; text-align: center;">
+                ✨ How this advertisement appears on the homepage to customers:
+              </p>
+
+              <!-- Hero Mockup Frame -->
+              <div style="position: relative; max-width: 440px; margin: 0 auto; border-radius: 10px; overflow: hidden; border: 1px solid #dfb35e40; box-shadow: 0 4px 16px rgba(0,0,0,0.08); background: #fdfbf7;">
+                <!-- Image Preview -->
+                <img id="prevHeroImg" src="images/pink-leheriya-cotton-suit.jpg" alt="Preview" style="width: 100%; height: 420px; object-fit: cover; display: block;" onerror="this.src='images/pink-leheriya-cotton-suit.jpg'">
+
+                <!-- Video Preview -->
+                <video id="prevHeroVid" style="width: 100%; height: 420px; object-fit: cover; display: none;" autoplay muted loop playsinline controls></video>
+
+                <!-- Floating Overlay Badge Card Mockup -->
+                <div id="prevHeroBadgeCard" style="position: absolute; bottom: 12px; left: 12px; right: 12px; background: rgba(253, 251, 247, 0.95); backdrop-filter: blur(4px); padding: 12px 14px; border-radius: 8px; border: 1px solid #e5e0d8; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                  <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                    <div>
+                      <span id="prevBadgeTag" style="font-size: 9px; text-transform: uppercase; font-weight: 800; letter-spacing: 0.05em; color: var(--maroon); display: block;">Bespoke Fitting Studio</span>
+                      <strong id="prevTitle" style="font-size: 13px; color: #232323; line-height: 1.25; display: block; margin-top: 2px;">Pure Cotton Leheriya Salwar Suit</strong>
+                    </div>
+                    <span id="prevBadgeStatus" class="tag tag-instock" style="font-size: 10px; padding: 2px 6px; white-space: nowrap; background: #fef3c7; color: #b45309; border: 1px solid rgba(198,146,52,0.3);">Stitching Available</span>
+                  </div>
+                  <div id="prevBullets" style="margin-top: 6px; font-size: 10px; color: #555; line-height: 1.35;">
+                    <div>✓ 100% Pure Cotton (Top 2.5m, Bottom 2.5m, Dupatta 2.5m)</div>
+                    <div>✓ Custom-tailored to measurements in 7 days</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -2634,7 +2792,7 @@
       const overviewVisible = isNavVisible('navItemDashboard');
       const govVisible = isNavVisible('navItemManagers') || isNavVisible('navItemEmployees');
       const opsVisible = isNavVisible('navItemPos') || isNavVisible('navItemTailor') || isNavVisible('navItemDeliveries');
-      const catalogVisible = isNavVisible('navItemProducts') || isNavVisible('navItemCategories') || isNavVisible('navItemReviews');
+      const catalogVisible = isNavVisible('navItemProducts') || isNavVisible('navItemCategories') || isNavVisible('navItemReviews') || isNavVisible('navItemAdvertisement');
       const systemVisible = isNavVisible('navItemIntegrations') || isNavVisible('navItemAudit');
 
       toggleElemDisplay('navHeaderOverview', overviewVisible);
@@ -2750,6 +2908,7 @@
       if (tabId === 'reviews') loadReviewsModeration();
       if (tabId === 'integrations') loadIntegrationsStatus();
       if (tabId === 'audit') loadAuditLogs();
+      if (tabId === 'advertisement') loadAdvertisementAdmin();
     }
 
     async function loadDashboard() {
@@ -2922,6 +3081,7 @@
           staff: '👥',
           pos: '🏷️',
           finance: '💰',
+          marketing: '📢',
           system: '⚙️'
         };
 
@@ -4460,6 +4620,228 @@
         alert(err.message);
       } finally {
         uploadBtn.disabled = false;
+      }
+    }
+
+    // ==========================================
+    // STOREFRONT HERO ADVERTISEMENT (BANNER)
+    // ==========================================
+    let currentHeroAdData = null;
+
+    async function loadAdvertisementAdmin() {
+      try {
+        const res = await apiRequest('/api/admin/advertisement');
+        const ad = res.data || {};
+        currentHeroAdData = ad;
+
+        const mediaType = (ad.media_type || 'IMAGE').toUpperCase();
+        const mediaUrl = ad.media_url || 'images/pink-leheriya-cotton-suit.jpg';
+        document.getElementById('adMediaType').value = mediaType === 'DEFAULT' ? 'IMAGE' : mediaType;
+        document.getElementById('adMediaUrl').value = mediaUrl;
+        document.getElementById('adShowBadge').checked = ad.show_badge !== 0;
+        document.getElementById('adBadgeTag').value = ad.badge_text || ad.tag || 'Bespoke Fitting Studio';
+        document.getElementById('adBadgeStatus').value = ad.cta_text || 'Stitching Available';
+        document.getElementById('adTitle').value = ad.subtitle || ad.title || 'Pure Cotton Leheriya Salwar Suit';
+        document.getElementById('adBullets').value = ad.description || '✓ 100% Pure Cotton (Top 2.5m, Bottom 2.5m, Dupatta 2.5m)\n✓ Custom-tailored to measurements in 7 days';
+        document.getElementById('adCtaUrl').value = ad.cta_url || '#newArrivals';
+
+        // Tag label
+        const statusBadge = document.getElementById('adStatusBadge');
+        if (statusBadge) {
+          if (mediaType === 'DEFAULT') {
+            statusBadge.className = 'tag tag-quantity';
+            statusBadge.textContent = 'Default Photo Active';
+          } else {
+            statusBadge.className = 'tag tag-instock';
+            statusBadge.textContent = `Custom ${mediaType === 'VIDEO' ? 'Video' : 'Photo'} Active`;
+          }
+        }
+
+        switchAdMediaType(mediaType === 'VIDEO' ? 'VIDEO' : 'IMAGE');
+        updateAdPreview();
+      } catch (err) {
+        alert('Failed to load hero advertisement: ' + err.message);
+      }
+    }
+
+    function switchAdMediaType(type) {
+      const isVideo = type === 'VIDEO';
+      document.getElementById('adMediaType').value = isVideo ? 'VIDEO' : 'IMAGE';
+
+      const btnPhoto = document.getElementById('btnAdFormatPhoto');
+      const btnVideo = document.getElementById('btnAdFormatVideo');
+      if (btnPhoto) btnPhoto.className = isVideo ? 'btn btn-outline btn-sm' : 'btn btn-primary btn-sm';
+      if (btnVideo) btnVideo.className = isVideo ? 'btn btn-primary btn-sm' : 'btn btn-outline btn-sm';
+
+      const fileInput = document.getElementById('adFileInput');
+      const help = document.getElementById('adFileHelp');
+      if (fileInput) {
+        fileInput.accept = isVideo ? 'video/mp4,video/webm,video/ogg' : 'image/*';
+      }
+      if (help) {
+        help.textContent = isVideo
+          ? '🎬 Select an MP4 or WebM video file (recommended: high quality portrait or 4:5 ratio video).'
+          : '📷 Select any high-resolution photo (JPG, PNG, WebP) to display as hero banner.';
+      }
+
+      updateAdPreview();
+    }
+
+    function handleAdFileUpload(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      const isVideo = file.type.startsWith('video/');
+      const isImage = file.type.startsWith('image/');
+
+      if (!isVideo && !isImage) {
+        alert('Please select an image or video file.');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const dataUrl = evt.target.result;
+        document.getElementById('adMediaUrl').value = dataUrl;
+        const currentTag = document.getElementById('adMediaCurrentTag');
+        if (currentTag) currentTag.textContent = `Local File: ${file.name}`;
+
+        if (isVideo) {
+          switchAdMediaType('VIDEO');
+        } else {
+          switchAdMediaType('IMAGE');
+        }
+        updateAdPreview();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function handleAdUrlChange(val) {
+      const currentTag = document.getElementById('adMediaCurrentTag');
+      if (currentTag) currentTag.textContent = '';
+      const cleanVal = (val || '').trim().toLowerCase();
+      if (cleanVal.endsWith('.mp4') || cleanVal.endsWith('.webm') || cleanVal.includes('video')) {
+        switchAdMediaType('VIDEO');
+      }
+      updateAdPreview();
+    }
+
+    function updateAdPreview() {
+      const mediaType = document.getElementById('adMediaType').value;
+      const mediaUrl = document.getElementById('adMediaUrl').value.trim() || 'images/pink-leheriya-cotton-suit.jpg';
+      const showBadge = document.getElementById('adShowBadge').checked;
+      const badgeTag = document.getElementById('adBadgeTag').value.trim() || 'Bespoke Fitting Studio';
+      const badgeStatus = document.getElementById('adBadgeStatus').value.trim() || 'Stitching Available';
+      const title = document.getElementById('adTitle').value.trim() || 'Pure Cotton Leheriya Salwar Suit';
+      const bulletsText = document.getElementById('adBullets').value.trim();
+
+      const img = document.getElementById('prevHeroImg');
+      const vid = document.getElementById('prevHeroVid');
+      const badgeCard = document.getElementById('prevHeroBadgeCard');
+      const prevTag = document.getElementById('prevBadgeTag');
+      const prevTitle = document.getElementById('prevTitle');
+      const prevStatus = document.getElementById('prevBadgeStatus');
+      const prevBullets = document.getElementById('prevBullets');
+
+      if (mediaType === 'VIDEO') {
+        if (img) img.style.display = 'none';
+        if (vid) {
+          vid.style.display = 'block';
+          if (vid.src !== mediaUrl) vid.src = mediaUrl;
+        }
+      } else {
+        if (vid) {
+          vid.style.display = 'none';
+          vid.pause();
+        }
+        if (img) {
+          img.style.display = 'block';
+          img.src = mediaUrl;
+        }
+      }
+
+      if (badgeCard) {
+        badgeCard.style.display = showBadge ? 'block' : 'none';
+      }
+      if (prevTag) prevTag.textContent = badgeTag;
+      if (prevTitle) prevTitle.textContent = title;
+      if (prevStatus) prevStatus.textContent = badgeStatus;
+      if (prevBullets) {
+        if (bulletsText) {
+          const lines = bulletsText.split('\n').filter(l => l.trim().length > 0);
+          prevBullets.innerHTML = lines.map(l => `<div>${l}</div>`).join('');
+        } else {
+          prevBullets.innerHTML = '';
+        }
+      }
+    }
+
+    async function saveAdvertisementAdmin(e) {
+      e.preventDefault();
+      const mediaType = document.getElementById('adMediaType').value;
+      const mediaUrl = document.getElementById('adMediaUrl').value.trim();
+
+      if (!mediaUrl) {
+        alert('Please choose a photo/video file or enter a valid URL.');
+        return;
+      }
+
+      const showBadge = document.getElementById('adShowBadge').checked;
+      const badgeTag = document.getElementById('adBadgeTag').value.trim();
+      const badgeStatus = document.getElementById('adBadgeStatus').value.trim();
+      const title = document.getElementById('adTitle').value.trim();
+      const bullets = document.getElementById('adBullets').value.trim();
+      const ctaUrl = document.getElementById('adCtaUrl').value.trim();
+
+      const submitBtn = document.getElementById('btnSaveHeroAd');
+      const originalText = submitBtn ? submitBtn.innerHTML : 'Publish';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>⏳</span> <span>Publishing to Storefront...</span>';
+      }
+
+      try {
+        await apiRequest('/api/admin/advertisement', {
+          method: 'PUT',
+          body: JSON.stringify({
+            media_type: mediaType,
+            media_url: mediaUrl,
+            show_badge: showBadge ? 1 : 0,
+            badge_text: badgeTag,
+            cta_text: badgeStatus,
+            title: title,
+            subtitle: title,
+            description: bullets,
+            cta_url: ctaUrl,
+            is_active: 1
+          })
+        });
+
+        alert('✨ Hero advertisement published successfully to the storefront!');
+        loadAdvertisementAdmin();
+      } catch (err) {
+        alert('Failed to publish advertisement: ' + err.message);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        }
+      }
+    }
+
+    async function resetAdvertisementAdmin() {
+      const confirmed = confirm(
+        'Are you sure you want to reset the hero banner to the authentic default photo?\n\n' +
+        '• This will restore the original Rani Pink Leheriya Pure Cotton Suit photo and Bespoke Fitting Studio badge.'
+      );
+      if (!confirmed) return;
+
+      try {
+        await apiRequest('/api/admin/advertisement/reset', { method: 'POST' });
+        alert('↺ Storefront hero banner reset to authentic default photo!');
+        loadAdvertisementAdmin();
+      } catch (err) {
+        alert('Failed to reset: ' + err.message);
       }
     }
 

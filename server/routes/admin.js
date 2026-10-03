@@ -1554,4 +1554,172 @@ router.put('/users/password', requireRole(ROLES.OWNER), async (req, res, next) =
   }
 });
 
+// ============================================================================
+// STOREFRONT HERO ADVERTISEMENT MANAGEMENT (PHOTO / VIDEO BANNER)
+// ============================================================================
+
+async function ensureHeroAdTable(db) {
+  await db.run(`
+    CREATE TABLE IF NOT EXISTS hero_advertisements (
+      id TEXT PRIMARY KEY,
+      media_type TEXT NOT NULL DEFAULT 'DEFAULT',
+      media_url TEXT NOT NULL,
+      title TEXT,
+      subtitle TEXT,
+      badge_text TEXT,
+      description TEXT,
+      cta_text TEXT,
+      cta_url TEXT,
+      show_badge INTEGER NOT NULL DEFAULT 1,
+      is_active INTEGER NOT NULL DEFAULT 1,
+      updated_by TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  const existing = await db.get('SELECT * FROM hero_advertisements WHERE id = ?', ['hero-ad-default']);
+  if (!existing) {
+    await db.run(`
+      INSERT INTO hero_advertisements (
+        id, media_type, media_url, title, subtitle, badge_text, description, cta_text, cta_url, show_badge, is_active
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [
+      'hero-ad-default',
+      'DEFAULT',
+      'images/pink-leheriya-cotton-suit.jpg',
+      'Bespoke Fitting Studio',
+      'Pure Cotton Leheriya Salwar Suit',
+      'Stitching Available',
+      '✓ 100% Pure Cotton (Top 2.5m, Bottom 2.5m, Dupatta 2.5m)\n✓ Custom-tailored to measurements in 7 days',
+      'Stitching Available',
+      '#newArrivals',
+      1,
+      1
+    ]);
+  }
+}
+
+// GET active hero advertisement for admin view
+router.get('/advertisement', requirePermission('advertisement.view', 'advertisement.edit'), async (req, res, next) => {
+  try {
+    const db = getDb();
+    await ensureHeroAdTable(db);
+    const ad = await db.get('SELECT * FROM hero_advertisements WHERE id = ?', ['hero-ad-default']);
+    res.json({ success: true, data: ad });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// PUT update hero advertisement (Photo or Video banner)
+router.put('/advertisement', requirePermission('advertisement.edit'), async (req, res, next) => {
+  try {
+    const db = getDb();
+    await ensureHeroAdTable(db);
+    const current = await db.get('SELECT * FROM hero_advertisements WHERE id = ?', ['hero-ad-default']);
+
+    const {
+      media_type, media_url, title, subtitle, badge_text, description,
+      cta_text, cta_url, show_badge, is_active
+    } = req.body;
+
+    if (!media_url || !media_url.trim()) {
+      return res.status(400).json({ success: false, error: 'Media URL or file is required' });
+    }
+
+    const finalMediaType = (media_type || current.media_type || 'IMAGE').trim().toUpperCase();
+    const finalMediaUrl = media_url.trim();
+    const finalTitle = title !== undefined ? title : current.title;
+    const finalSubtitle = subtitle !== undefined ? subtitle : current.subtitle;
+    const finalBadgeText = badge_text !== undefined ? badge_text : current.badge_text;
+    const finalDescription = description !== undefined ? description : current.description;
+    const finalCtaText = cta_text !== undefined ? cta_text : current.cta_text;
+    const finalCtaUrl = cta_url !== undefined ? cta_url : current.cta_url;
+    const finalShowBadge = show_badge !== undefined ? (show_badge ? 1 : 0) : current.show_badge;
+    const finalIsActive = is_active !== undefined ? (is_active ? 1 : 0) : current.is_active;
+
+    await db.run(`
+      UPDATE hero_advertisements SET
+        media_type = ?,
+        media_url = ?,
+        title = ?,
+        subtitle = ?,
+        badge_text = ?,
+        description = ?,
+        cta_text = ?,
+        cta_url = ?,
+        show_badge = ?,
+        is_active = ?,
+        updated_by = ?,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `, [
+      finalMediaType, finalMediaUrl, finalTitle, finalSubtitle,
+      finalBadgeText, finalDescription, finalCtaText, finalCtaUrl,
+      finalShowBadge, finalIsActive, req.user?.name || 'Owner', 'hero-ad-default'
+    ]);
+
+    const updated = await db.get('SELECT * FROM hero_advertisements WHERE id = ?', ['hero-ad-default']);
+    await logAudit(req, {
+      action: 'UPDATE_HERO_ADVERTISEMENT',
+      entityType: 'ADVERTISEMENT',
+      entityId: 'hero-ad-default',
+      previousValue: current,
+      newValue: updated
+    });
+
+    res.json({
+      success: true,
+      message: 'Storefront hero advertisement updated successfully',
+      data: updated
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// POST reset hero advertisement to default authentic photo
+router.post('/advertisement/reset', requirePermission('advertisement.edit'), async (req, res, next) => {
+  try {
+    const db = getDb();
+    await ensureHeroAdTable(db);
+    const current = await db.get('SELECT * FROM hero_advertisements WHERE id = ?', ['hero-ad-default']);
+
+    await db.run(`
+      UPDATE hero_advertisements SET
+        media_type = 'DEFAULT',
+        media_url = 'images/pink-leheriya-cotton-suit.jpg',
+        title = 'Bespoke Fitting Studio',
+        subtitle = 'Pure Cotton Leheriya Salwar Suit',
+        badge_text = 'Stitching Available',
+        description = '✓ 100% Pure Cotton (Top 2.5m, Bottom 2.5m, Dupatta 2.5m)\n✓ Custom-tailored to measurements in 7 days',
+        cta_text = 'Stitching Available',
+        cta_url = '#newArrivals',
+        show_badge = 1,
+        is_active = 1,
+        updated_by = ?,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `, [req.user?.name || 'Owner', 'hero-ad-default']);
+
+    const resetAd = await db.get('SELECT * FROM hero_advertisements WHERE id = ?', ['hero-ad-default']);
+    await logAudit(req, {
+      action: 'RESET_HERO_ADVERTISEMENT',
+      entityType: 'ADVERTISEMENT',
+      entityId: 'hero-ad-default',
+      previousValue: current,
+      newValue: resetAd
+    });
+
+    res.json({
+      success: true,
+      message: 'Storefront hero advertisement reset to authentic default photo',
+      data: resetAd
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;

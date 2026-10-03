@@ -629,24 +629,29 @@
         <div class="lg:col-span-5 relative">
           <div class="relative mx-auto max-w-md lg:max-w-none">
             <!-- Frame Container -->
-            <div class="relative rounded-lg overflow-hidden border border-ivory-300 shadow-sm bg-ivory-100">
-              <img src="images/pink-leheriya-cotton-suit.jpg" 
+            <div id="heroAdContainer" class="relative rounded-lg overflow-hidden border border-ivory-300 shadow-sm bg-ivory-100">
+              <img id="heroAdImage" 
+                   src="images/pink-leheriya-cotton-suit.jpg" 
                    alt="ABHA Rani Pink Leheriya Pure Cotton Salwar Suit Dress Material" 
                    class="w-full h-[460px] sm:h-[520px] object-cover object-center" 
                    loading="eager" />
+
+              <video id="heroAdVideo" 
+                     class="w-full h-[460px] sm:h-[520px] object-cover object-center hidden" 
+                     autoplay muted loop playsinline controls preload="metadata"></video>
               
               <!-- Floating Custom Fitting Badge -->
-              <div class="absolute bottom-4 left-4 right-4 bg-ivory-50/95 backdrop-blur-sm p-4 rounded border border-ivory-200 text-charcoal-900 shadow-sm">
+              <div id="heroAdBadgeCard" class="absolute bottom-4 left-4 right-4 bg-ivory-50/95 backdrop-blur-sm p-4 rounded border border-ivory-200 text-charcoal-900 shadow-sm transition-opacity duration-300">
                 <div class="flex items-center justify-between">
                   <div>
-                    <span class="text-[10px] uppercase font-bold tracking-wider text-maroon-800">Bespoke Fitting Studio</span>
-                    <p class="text-xs font-semibold text-charcoal-950">Pure Cotton Leheriya Salwar Suit</p>
+                    <span id="heroAdBadgeTag" class="text-[10px] uppercase font-bold tracking-wider text-maroon-800">Bespoke Fitting Studio</span>
+                    <p id="heroAdTitle" class="text-xs font-semibold text-charcoal-950">Pure Cotton Leheriya Salwar Suit</p>
                   </div>
-                  <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-gold-100 text-gold-600 border border-gold-500/20">
+                  <span id="heroAdBadgeStatus" class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-gold-100 text-gold-600 border border-gold-500/20">
                     Stitching Available
                   </span>
                 </div>
-                <div class="mt-2 text-[11px] text-slateText-600 flex items-center gap-3">
+                <div id="heroAdBullets" class="mt-2 text-[11px] text-slateText-600 flex items-center gap-3">
                   <span>✓ 100% Pure Cotton (Top 2.5m, Bottom 2.5m, Dupatta 2.5m)</span>
                   <span>✓ Custom-tailored to measurements in 7 days</span>
                 </div>
@@ -2731,6 +2736,7 @@
       }
 
       syncLiveProducts();
+      loadHeroAdvertisement();
     });
 
     async function syncLiveProducts() {
@@ -2782,10 +2788,100 @@
       }
     }
 
+    // Dynamic Hero Editorial Advertisement Loader (§Hero Ad)
+    async function loadHeroAdvertisement() {
+      try {
+        let ad = null;
+        if (window.AbhaStore && typeof AbhaStore.apiCall === 'function') {
+          try {
+            const storeRes = await AbhaStore.apiCall('/api/advertisement');
+            if (storeRes && storeRes.data) ad = storeRes.data;
+          } catch (e) {}
+        }
+        if (!ad) {
+          try {
+            const res = await fetch('/api/advertisement', { cache: 'no-store' });
+            if (res.ok) {
+              const json = await res.json();
+              ad = json.data || json;
+            }
+          } catch (e) {}
+        }
+
+        if (!ad) return;
+
+        const imgEl = document.getElementById('heroAdImage');
+        const vidEl = document.getElementById('heroAdVideo');
+        const badgeEl = document.getElementById('heroAdBadgeCard');
+        const tagEl = document.getElementById('heroAdBadgeTag');
+        const titleEl = document.getElementById('heroAdTitle');
+        const statusEl = document.getElementById('heroAdBadgeStatus');
+        const bulletsEl = document.getElementById('heroAdBullets');
+
+        if (!imgEl || !vidEl) return;
+
+        const mediaType = (ad.media_type || 'DEFAULT').toUpperCase();
+        const mediaUrl = ad.media_url || 'images/pink-leheriya-cotton-suit.jpg';
+
+        if (mediaType === 'VIDEO' && mediaUrl) {
+          imgEl.classList.add('hidden');
+          vidEl.classList.remove('hidden');
+          if (vidEl.src !== mediaUrl && !vidEl.src.endsWith(mediaUrl)) {
+            vidEl.src = mediaUrl;
+            vidEl.load();
+            vidEl.play().catch(() => {});
+          }
+        } else if (mediaType === 'IMAGE' && mediaUrl) {
+          vidEl.classList.add('hidden');
+          vidEl.pause();
+          imgEl.classList.remove('hidden');
+          imgEl.src = mediaUrl;
+          imgEl.alt = ad.title || ad.alt_text || 'ABHA Rani Pink Leheriya Pure Cotton Salwar Suit Dress Material';
+        } else {
+          // DEFAULT: Original Rani Pink Leheriya Pure Cotton Suit
+          vidEl.classList.add('hidden');
+          vidEl.pause();
+          imgEl.classList.remove('hidden');
+          imgEl.src = 'images/pink-leheriya-cotton-suit.jpg';
+          imgEl.alt = 'ABHA Rani Pink Leheriya Pure Cotton Salwar Suit Dress Material';
+        }
+
+        // Badge styling & visibility
+        if (badgeEl) {
+          if (ad.show_badge === 0 || ad.show_badge === false || ad.show_badge === '0') {
+            badgeEl.classList.add('hidden');
+          } else {
+            badgeEl.classList.remove('hidden');
+            if (tagEl) tagEl.textContent = ad.badge_text || 'Bespoke Fitting Studio';
+            if (titleEl) titleEl.textContent = ad.title || ad.subtitle || 'Pure Cotton Leheriya Salwar Suit';
+            if (statusEl) statusEl.textContent = ad.cta_text || 'Stitching Available';
+            if (bulletsEl && ad.description) {
+              const lines = String(ad.description).split('\n').map(l => l.trim()).filter(Boolean);
+              if (lines.length > 0) {
+                bulletsEl.innerHTML = lines.map(line => {
+                  const clean = line.replace(/^[✓•\-\*]\s*/, '');
+                  return `<span>✓ ${clean}</span>`;
+                }).join('');
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Hero ad sync notice:', err);
+      }
+    }
+
     // Reactive store update listener for instant 1-of-1 delisting & category changes (§11, §32)
     window.addEventListener('abha-store-update', () => {
       renderDynamicCategoryNavigation();
       syncLiveProducts();
+      loadHeroAdvertisement();
+    });
+
+    window.addEventListener('storage', (e) => {
+      if (e.key && (e.key.includes('ad') || e.key.includes('hero'))) {
+        loadHeroAdvertisement();
+      }
     });
 
     // -------------------------------------------------------------

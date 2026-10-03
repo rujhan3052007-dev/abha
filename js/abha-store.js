@@ -33,6 +33,21 @@
     is_active: true
   };
 
+  // Authentic Hero Advertisement Configuration (§8) - Default is authentic Leheriya cotton suit
+  const INITIAL_HERO_ADVERTISEMENT = {
+    id: 'hero-ad-default',
+    media_type: 'DEFAULT',
+    media_url: 'images/pink-leheriya-cotton-suit.jpg',
+    title: 'Bespoke Fitting Studio',
+    subtitle: 'Pure Cotton Leheriya Salwar Suit',
+    badge_text: 'Stitching Available',
+    description: '✓ 100% Pure Cotton (Top 2.5m, Bottom 2.5m, Dupatta 2.5m)\n✓ Custom-tailored to measurements in 7 days',
+    cta_text: 'Stitching Available',
+    cta_url: '#newArrivals',
+    show_badge: 1,
+    is_active: 1
+  };
+
   // Authentic 5 Salwar Suit dress materials currently in stock (Hard rule: Zero fake products, unaltered colors)
   const INITIAL_PRODUCTS = [
     {
@@ -334,10 +349,13 @@
     { code: 'reviews.moderate', module: 'reviews', action: 'moderate', name: 'Moderate Reviews', description: 'Approve or reject customer reviews' },
     { code: 'settings.view', module: 'settings', action: 'view', name: 'View Settings', description: 'View system configuration' },
     { code: 'settings.edit', module: 'settings', action: 'edit', name: 'Edit Settings', description: 'Modify store settings' },
+    { code: 'advertisement.view', module: 'marketing', action: 'view', name: 'View Advertisement', description: 'View storefront hero advertisement' },
+    { code: 'advertisement.edit', module: 'marketing', action: 'edit', name: 'Manage Hero Advertisement', description: 'Update storefront hero photo or video banner' },
     { code: 'audit.view', module: 'audit', action: 'view', name: 'View Audit Logs', description: 'View security & operational audit trails' }
   ];
 
   function getCallerFromToken(options = {}) {
+    if (options.caller) return options.caller;
     const authHeader = options.headers?.Authorization || options.headers?.authorization;
     if (!authHeader) return null;
     const tokenStr = authHeader.replace(/^Bearer\s+/, '').trim();
@@ -455,6 +473,7 @@
       if (!_memoryDb['users']) _memoryDb['users'] = JSON.parse(JSON.stringify(INITIAL_USERS));
       if (!_memoryDb['departments']) _memoryDb['departments'] = JSON.parse(JSON.stringify(INITIAL_DEPARTMENTS));
       if (!_memoryDb['employees']) _memoryDb['employees'] = JSON.parse(JSON.stringify(INITIAL_EMPLOYEES));
+      if (!_memoryDb['hero_advertisement']) _memoryDb['hero_advertisement'] = JSON.parse(JSON.stringify(INITIAL_HERO_ADVERTISEMENT));
       return;
     }
     const existingProds = getTable('products', null);
@@ -587,6 +606,9 @@
     }
     if (!localStorage.getItem(STORAGE_PREFIX + 'integrations')) {
       setTable('integrations', INITIAL_INTEGRATIONS);
+    }
+    if (!localStorage.getItem(STORAGE_PREFIX + 'hero_advertisement')) {
+      setTable('hero_advertisement', JSON.parse(JSON.stringify(INITIAL_HERO_ADVERTISEMENT)));
     }
   }
 
@@ -2220,6 +2242,47 @@
       if (pathname === '/api/admin/audit-logs') {
         checkPermission(caller, 'audit.view');
         return { success: true, data: getTable('audit_logs', []) };
+      }
+
+      // Storefront Hero Advertisement
+      if (pathname === '/api/advertisement' && method === 'GET') {
+        const ad = getTable('hero_advertisement', INITIAL_HERO_ADVERTISEMENT);
+        return { success: true, data: ad };
+      }
+      if (pathname === '/api/admin/advertisement' && method === 'GET') {
+        checkPermission(caller, 'advertisement.view', 'advertisement.edit');
+        const ad = getTable('hero_advertisement', INITIAL_HERO_ADVERTISEMENT);
+        return { success: true, data: ad };
+      }
+      if (pathname === '/api/admin/advertisement' && method === 'PUT') {
+        checkPermission(caller, 'advertisement.edit');
+        const current = getTable('hero_advertisement', INITIAL_HERO_ADVERTISEMENT);
+        const updated = {
+          ...current,
+          media_type: body.media_type || current.media_type || 'IMAGE',
+          media_url: body.media_url || current.media_url,
+          title: body.title !== undefined ? body.title : current.title,
+          subtitle: body.subtitle !== undefined ? body.subtitle : current.subtitle,
+          badge_text: body.badge_text !== undefined ? body.badge_text : current.badge_text,
+          description: body.description !== undefined ? body.description : current.description,
+          cta_text: body.cta_text !== undefined ? body.cta_text : current.cta_text,
+          cta_url: body.cta_url !== undefined ? body.cta_url : current.cta_url,
+          show_badge: body.show_badge !== undefined ? (body.show_badge ? 1 : 0) : 1,
+          is_active: body.is_active !== undefined ? (body.is_active ? 1 : 0) : 1,
+          updated_by: caller?.name || 'Owner',
+          updated_at: new Date().toISOString()
+        };
+        setTable('hero_advertisement', updated);
+        recordAuditLog(caller?.name || 'Owner', caller?.role || 'OWNER', 'UPDATE_HERO_ADVERTISEMENT', 'ADVERTISEMENT', 'hero-ad-default', current, updated, `Updated hero advertisement (${updated.media_type})`);
+        return { success: true, message: 'Hero advertisement updated successfully', data: updated };
+      }
+      if (pathname === '/api/admin/advertisement/reset' && method === 'POST') {
+        checkPermission(caller, 'advertisement.edit');
+        const current = getTable('hero_advertisement', INITIAL_HERO_ADVERTISEMENT);
+        const resetAd = { ...INITIAL_HERO_ADVERTISEMENT, updated_at: new Date().toISOString() };
+        setTable('hero_advertisement', resetAd);
+        recordAuditLog(caller?.name || 'Owner', caller?.role || 'OWNER', 'RESET_HERO_ADVERTISEMENT', 'ADVERTISEMENT', 'hero-ad-default', current, resetAd, 'Reverted hero advertisement to authentic default photo');
+        return { success: true, message: 'Hero advertisement reset to authentic default photo', data: resetAd };
       }
 
       throw new Error(`Endpoint ${pathname} not mapped in local engine.`);

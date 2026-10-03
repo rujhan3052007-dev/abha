@@ -98,7 +98,9 @@ module.exports = {
     REVIEWS_MODERATE: 'reviews.moderate',
     SETTINGS_VIEW: 'settings.view',
     SETTINGS_EDIT: 'settings.edit',
-    AUDIT_VIEW: 'audit.view'
+    AUDIT_VIEW: 'audit.view',
+    ADVERTISEMENT_VIEW: 'advertisement.view',
+    ADVERTISEMENT_EDIT: 'advertisement.edit'
   },
 
   INVENTORY_TYPES: {

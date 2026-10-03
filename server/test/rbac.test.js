@@ -290,6 +290,40 @@ async function runRbacTests() {
     assert(changePassRes.statusCode === 200, 'Owner can change password of any role or staff member');
     assert(changePassRes.data.success === true, 'Password update returned success confirmation');
 
+    // 17. Hero Advertisement Management & Owner/Manager RBAC:
+    // A. Public can retrieve hero ad without authentication
+    const publicAdRes = await makeRequest('GET', '/api/advertisement');
+    assert(publicAdRes.statusCode === 200, 'Public can view storefront hero advertisement');
+    assert(publicAdRes.data.data.media_url.includes('pink-leheriya-cotton-suit.jpg'), 'Default ad features authentic Leheriya cotton suit');
+
+    // B. Manager without advertisement.edit is strictly blocked (403 Forbidden)
+    const unauthAdPut = await makeRequest('PUT', '/api/admin/advertisement', {
+      media_type: 'VIDEO',
+      media_url: 'videos/promo.mp4'
+    }, mgrHeaders);
+    assert(unauthAdPut.statusCode === 403, 'Manager without advertisement.edit is blocked from editing hero ad');
+
+    // C. Owner can manage and update hero advertisement
+    const ownerAdPut = await makeRequest('PUT', '/api/admin/advertisement', {
+      media_type: 'VIDEO',
+      media_url: 'videos/leheriya-showcase.mp4',
+      title: 'Heritage Leheriya Showcase',
+      badge_text: 'Live Runway',
+      cta_text: 'Watch Video'
+    }, ownerHeaders);
+    assert(ownerAdPut.statusCode === 200, 'Owner can update storefront hero advertisement');
+    assert(ownerAdPut.data.data.media_type === 'VIDEO', 'Advertisement updated to video successfully');
+
+    // D. Public sees updated advertisement
+    const updatedAdRes = await makeRequest('GET', '/api/advertisement');
+    assert(updatedAdRes.data.data.media_type === 'VIDEO', 'Storefront reflects updated video advertisement');
+
+    // E. Owner can reset advertisement back to authentic default
+    const resetAdRes = await makeRequest('POST', '/api/admin/advertisement/reset', {}, ownerHeaders);
+    assert(resetAdRes.statusCode === 200, 'Owner can reset hero advertisement to authentic default');
+    assert(resetAdRes.data.data.media_type === 'DEFAULT', 'Hero advertisement restored to authentic DEFAULT');
+
+
   } catch (err) {
     console.error('Test execution error:', err);
     failed++;
