@@ -332,6 +332,24 @@
     "areaServed": "IN"
   }
   </script>
+
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '2108179083162053');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=2108179083162053&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
 </head>
 
 <body class="min-h-screen flex flex-col antialiased selection:bg-maroon-800 selection:text-ivory-50 pb-20 lg:pb-0">
@@ -3872,6 +3890,21 @@
         quantity: 1
       });
       saveCart();
+
+      // Meta Pixel: AddToCart
+      if (typeof fbq === 'function' && cartItem.product) {
+        try {
+          const itemVal = (cartItem.product.price || 0) + (cartItem.isStitched ? (cartItem.stitchingFee || 0) : 0);
+          fbq('track', 'AddToCart', {
+            content_name: cartItem.product.name,
+            content_category: cartItem.product.category,
+            content_ids: [cartItem.product.id || cartItem.product.sku],
+            content_type: 'product',
+            value: itemVal,
+            currency: 'INR'
+          });
+        } catch (e) {}
+      }
     }
 
     function removeFromCart(cartItemId) {
@@ -4061,6 +4094,22 @@
     // -------------------------------------------------------------
     function openCheckoutModal() {
       closeCartDrawer();
+
+      // Meta Pixel: InitiateCheckout
+      if (typeof fbq === 'function' && state.cart.length > 0) {
+        try {
+          const item = state.cart[0];
+          const val = (item.product?.price || 0) + (item.isStitched ? (item.stitchingFee || 0) : 0);
+          fbq('track', 'InitiateCheckout', {
+            content_name: item.product?.name,
+            content_category: item.product?.category,
+            content_ids: [item.product?.id || item.product?.sku],
+            content_type: 'product',
+            value: val,
+            currency: 'INR'
+          });
+        } catch (e) {}
+      }
 
       // Ensure payable total is populated dynamically so it NEVER shows "Select a product" or ₹0
       let payable = 0;
@@ -4257,6 +4306,20 @@
             created_at: new Date().toISOString()
           });
           localStorage.setItem('abha_orders', JSON.stringify(existingOrders));
+
+          // Meta Pixel: Purchase
+          if (typeof fbq === 'function') {
+            try {
+              fbq('track', 'Purchase', {
+                value: totalVal,
+                currency: 'INR',
+                content_name: cartItem.product.name,
+                content_type: 'product',
+                content_ids: [cartItem.product.id || cartItem.product.sku],
+                num_items: cartItem.quantity || 1
+              });
+            } catch (e) {}
+          }
         } catch (e) {}
 
         // Save profile address & contact
@@ -4795,6 +4858,20 @@
       const prod = PRODUCTS.find(p => p.id === productId);
       if (!prod) return;
       state.activeProduct = prod;
+
+      // Meta Pixel: ViewContent
+      if (typeof fbq === 'function') {
+        try {
+          fbq('track', 'ViewContent', {
+            content_name: prod.name,
+            content_category: prod.category,
+            content_ids: [prod.id || prod.sku],
+            content_type: 'product',
+            value: prod.price,
+            currency: 'INR'
+          });
+        } catch (e) {}
+      }
 
       // Extract multiple images array if present
       currentQvImages = Array.isArray(prod.images) && prod.images.length > 0 
