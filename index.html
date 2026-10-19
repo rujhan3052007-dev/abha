@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-W8LRJSBK');</script>
+  <!-- End Google Tag Manager -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <title>ABHA — Premium Salwar Suit Dress Materials & Custom Tailoring Across India</title>
@@ -355,6 +362,10 @@
 </head>
 
 <body class="min-h-screen flex flex-col antialiased selection:bg-maroon-800 selection:text-ivory-50 pb-20 lg:pb-0">
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W8LRJSBK"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
 
   <!-- ========================================================================= -->
   <!-- 0. ROYAL INTRODUCTION SCREEN (RESPONSIVE FLAT-LAY + ADAPTIVE DRAG & GLIDE) -->
@@ -5667,6 +5678,19 @@
         const chk = document.getElementById('checkoutModal');
         if (chk && !chk.classList.contains('hidden')) { closeCheckoutModal(); return; }
       });
+
+      // Google Tag Manager - Dynamic Route Tracking for Single-Page Navigation
+      window.dataLayer = window.dataLayer || [];
+      const trackDynamicRoute = () => {
+        const routePath = window.location.pathname + (window.location.hash || '');
+        window.dataLayer.push({
+          event: 'virtual_pageview',
+          page_path: routePath,
+          page_title: document.title,
+          page_location: window.location.href
+        });
+      };
+      window.addEventListener('hashchange', trackDynamicRoute);
 
       // Double-click brand logo opens protected passcode prompt
       const logoBox = document.getElementById('siteHeaderBrandLogo');
