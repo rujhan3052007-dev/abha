@@ -2699,6 +2699,22 @@
         isNewArrival: true,
         isBestSeller: false,
         description: 'Designer peacock teal unstitched salwar suit dress material featuring artistic circular mandala motifs, pearl embroidered neck placket, solid teal bottom, and coordinated soft cotton dupatta with tassel trim.'
+      },
+      {
+        id: 'prod-06',
+        sku: 'Abha sku 006',
+        name: 'Burgandy Pure Breathable Cotton Salwar Suit',
+        category: 'Pure Cotton Salwar Suits',
+        suitType: 'cotton',
+        price: 1200,
+        fabric: '100% Pure Breathable Cotton (Top 2.5m, Bottom 2.5m, Dupatta 2.5m)',
+        color: 'Burgandy Artisanal Weave',
+        image: 'images/burgandy-salwar-suit.jpg',
+        stitchingAvailable: true,
+        stitchingFee: 650,
+        isNewArrival: true,
+        isBestSeller: false,
+        description: '100% pure breathable cotton 3-piece salwar suit dress material in rich burgandy wine. Unstitched 2.5m cuts ready for bespoke custom tailoring.'
       }
     ];
 
@@ -2726,7 +2742,7 @@
       uploadedReference: null,
       uploadedReferences: [],
       pendingCustomization: null,
-      selectedCategorySlug: 'salwar-suit-dress-materials',
+      selectedCategorySlug: 'all',
       activeFilter: 'all',
       activeSort: 'featured',
       appliedCoupon: null,
@@ -2770,45 +2786,73 @@
       loadHeroAdvertisement();
     });
 
+    function deriveSuitType(p) {
+      if (p.suitType === 'silk' || p.suitType === 'prints' || p.suitType === 'cotton') return p.suitType;
+      const parts = [
+        p.category_name,
+        p.category,
+        p.subcategory,
+        p.fabric,
+        p.pattern,
+        p.title,
+        p.name
+      ].filter(Boolean).join(' ').toLowerCase();
+
+      if (parts.includes('silk') || parts.includes('chanderi')) return 'silk';
+      if (parts.includes('bandhani') || parts.includes('bandhej') || parts.includes('print') || parts.includes('leheriya') || parts.includes('tie-dye') || parts.includes('mandala')) return 'prints';
+      return 'cotton';
+    }
+
     async function syncLiveProducts() {
       try {
         let apiData = null;
         if (window.AbhaStore) {
           apiData = await window.AbhaStore.apiCall('/api/products?includeSold=true');
         } else {
-          const res = await fetch('/api/products');
+          const res = await fetch('/api/products?includeSold=true');
           if (res.ok) apiData = await res.json();
         }
 
         if (apiData && apiData.data && apiData.data.length > 0) {
-          apiData.data.forEach(dbProd => {
-            const local = PRODUCTS.find(p => p.id === dbProd.id || p.sku === dbProd.sku || p.image === dbProd.primary_image);
-            if (local) {
-              local.id = dbProd.id;
-              local.sku = dbProd.sku;
-              local.isSoldOut = Boolean(dbProd.is_sold_out === 1 || dbProd.is_sold_out === true || dbProd.stock_quantity <= 0);
-              local.stockQuantity = dbProd.stock_quantity;
-              local.price = dbProd.base_price || dbProd.price || local.price;
-              local.stitchingFee = dbProd.stitching_price || dbProd.stitchingPrice || local.stitchingFee;
-            } else {
-              PRODUCTS.unshift({
-                id: dbProd.id,
-                sku: dbProd.sku,
-                name: dbProd.title || dbProd.name,
-                category: dbProd.category_name || dbProd.category || 'Pure Cotton Salwar Suits',
-                suitType: (dbProd.category_name || dbProd.category || '').toLowerCase().includes('silk') ? 'silk' : 'cotton',
-                price: dbProd.base_price || dbProd.price || 1850,
-                fabric: dbProd.fabric || '100% Pure Handloom Cotton',
-                color: dbProd.color || 'Artisanal Weave',
-                image: dbProd.primary_image || dbProd.photo || 'images/pink-leheriya-cotton-suit.jpg',
-                stitchingAvailable: true,
-                stitchingFee: dbProd.stitching_price || dbProd.stitchingPrice || dbProd.stitchingFee || 650,
-                isNewArrival: true,
-                isBestSeller: false,
-                description: dbProd.description || 'Authentic unstitched salwar suit dress material from ABHA atelier.'
-              });
+          PRODUCTS = apiData.data.map(dbProd => {
+            const primaryImg = dbProd.primary_image || dbProd.photo || dbProd.image || 'images/pink-leheriya-cotton-suit.jpg';
+            const catStr = dbProd.category_name || dbProd.category || 'Pure Cotton Salwar Suits';
+            const fabricStr = dbProd.fabric || '100% Pure Handloom Cotton';
+            const priceVal = Number(dbProd.base_price != null ? dbProd.base_price : (dbProd.price != null ? dbProd.price : 1850));
+            const stitchVal = Number(dbProd.stitching_price != null ? dbProd.stitching_price : (dbProd.stitchingFee != null ? dbProd.stitchingFee : 650));
+            const stockVal = Number(dbProd.stock_quantity != null ? dbProd.stock_quantity : 1);
+            const soldVal = Boolean(dbProd.is_sold_out === 1 || dbProd.is_sold_out === true || stockVal <= 0);
+
+            let imagesArr = [primaryImg];
+            if (Array.isArray(dbProd.images) && dbProd.images.length > 0) {
+              imagesArr = dbProd.images.map(img => (typeof img === 'string' ? img : (img.dataUrl || img.image_url || img.url || primaryImg)));
             }
+
+            return {
+              id: dbProd.id,
+              sku: dbProd.sku || ('ABHA-SLW-' + dbProd.id),
+              name: dbProd.title || dbProd.name || 'ABHA Handcrafted Salwar Suit',
+              title: dbProd.title || dbProd.name || 'ABHA Handcrafted Salwar Suit',
+              category: catStr,
+              category_id: dbProd.category_id || '',
+              suitType: deriveSuitType(dbProd),
+              price: priceVal,
+              fabric: fabricStr,
+              color: dbProd.color || 'Artisanal Weave',
+              image: primaryImg,
+              primary_image: primaryImg,
+              images: imagesArr,
+              stitchingAvailable: true,
+              stitchingFee: stitchVal,
+              inventory_type: dbProd.inventory_type || 'UNIQUE_1OF1',
+              stockQuantity: stockVal,
+              isSoldOut: soldVal,
+              isNewArrival: dbProd.is_new_arrival !== undefined ? Boolean(dbProd.is_new_arrival) : true,
+              isBestSeller: Boolean(dbProd.is_featured || dbProd.isBestSeller),
+              description: dbProd.description || 'Authentic unstitched salwar suit dress material from ABHA atelier.'
+            };
           });
+
           renderDynamicCategoryNavigation();
           renderNewArrivals();
           renderBestSellers();
@@ -2902,28 +2946,49 @@
       }
     }
 
-    // Reactive store update listener for instant 1-of-1 delisting & category changes (§11, §32)
+    // Reactive store update listener for instant 1-of-1 delisting & new product publish
     window.addEventListener('abha-store-update', () => {
-      renderDynamicCategoryNavigation();
       syncLiveProducts();
       loadHeroAdvertisement();
     });
 
+    // Cross-tab synchronization when changes occur in admin panel in another tab
     window.addEventListener('storage', (e) => {
-      if (e.key && (e.key.includes('ad') || e.key.includes('hero'))) {
+      if (!e.key || e.key.includes('product') || e.key.includes('abha_db')) {
+        syncLiveProducts();
+      }
+      if (!e.key || e.key.includes('ad') || e.key.includes('hero')) {
         loadHeroAdvertisement();
       }
+    });
+
+    // Re-sync whenever the user switches back to this tab
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        syncLiveProducts();
+        loadHeroAdvertisement();
+      }
+    });
+
+    window.addEventListener('focus', () => {
+      syncLiveProducts();
     });
 
     // -------------------------------------------------------------
     // Category Architecture & Storefront Navigation
     // -------------------------------------------------------------
     function getStoreCategories() {
+      const activeProducts = PRODUCTS.filter(p => !p.isSoldOut && p.stockQuantity > 0);
+      const totalCount = activeProducts.length;
+      const cottonCount = activeProducts.filter(p => p.suitType === 'cotton').length;
+      const silkCount = activeProducts.filter(p => p.suitType === 'silk').length;
+      const printsCount = activeProducts.filter(p => p.suitType === 'prints').length;
+
       return [
-        { id: 'cat-all', name: 'All Salwar Suits', slug: 'all', gender: 'Women', is_active: 1, status: 'ACTIVE', badge_text: '5 In Stock', description: 'Complete curation of authentic 3-piece unstitched salwar suit dress materials. Order fabric-only or custom stitched.', product_count: 5, image: 'images/pink-leheriya-cotton-suit.jpg' },
-        { id: 'cat-cotton', name: 'Pure Cotton Suits', slug: 'cotton', gender: 'Women', is_active: 1, status: 'ACTIVE', badge_text: '3 In Stock', description: '100% pure breathable handloom and combed cotton dress materials for daily elegance and summer comfort.', product_count: 3, image: 'images/teal-geometric-cotton-suit.jpg' },
-        { id: 'cat-silk', name: 'Chanderi Silk Suits', slug: 'silk', gender: 'Women', is_active: 1, status: 'ACTIVE', badge_text: '1 In Stock', description: 'Royal Chanderi silk suits with rich zari borders, sequin embroidery, and celebration finishes.', product_count: 1, image: 'images/magenta-chanderi-silk-suit.jpg' },
-        { id: 'cat-prints', name: 'Bandhani & Prints', slug: 'prints', gender: 'Women', is_active: 1, status: 'ACTIVE', badge_text: '1 In Stock', description: 'Traditional Rajasthani tie-dye Bandhani and artistic block prints crafted by heritage artisans.', product_count: 1, image: 'images/mustard-bandhani-chanderi-suit.jpg' }
+        { id: 'cat-all', name: 'All Salwar Suits', slug: 'all', gender: 'Women', is_active: 1, status: 'ACTIVE', badge_text: `${totalCount} In Stock`, description: 'Complete curation of authentic 3-piece unstitched salwar suit dress materials. Order fabric-only or custom stitched.', product_count: totalCount, image: 'images/pink-leheriya-cotton-suit.jpg' },
+        { id: 'cat-cotton', name: 'Pure Cotton Suits', slug: 'cotton', gender: 'Women', is_active: 1, status: 'ACTIVE', badge_text: `${cottonCount} In Stock`, description: '100% pure breathable handloom and combed cotton dress materials for daily elegance and summer comfort.', product_count: cottonCount, image: 'images/teal-geometric-cotton-suit.jpg' },
+        { id: 'cat-silk', name: 'Chanderi Silk Suits', slug: 'silk', gender: 'Women', is_active: 1, status: 'ACTIVE', badge_text: `${silkCount} In Stock`, description: 'Royal Chanderi silk suits with rich zari borders, sequin embroidery, and celebration finishes.', product_count: silkCount, image: 'images/magenta-chanderi-silk-suit.jpg' },
+        { id: 'cat-prints', name: 'Bandhani & Prints', slug: 'prints', gender: 'Women', is_active: 1, status: 'ACTIVE', badge_text: `${printsCount} In Stock`, description: 'Traditional Rajasthani tie-dye Bandhani and artistic block prints crafted by heritage artisans.', product_count: printsCount, image: 'images/mustard-bandhani-chanderi-suit.jpg' }
       ];
     }
 

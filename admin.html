@@ -4250,7 +4250,10 @@
         renderAddProductPhotosPreview();
         loadProductsAdmin();
         loadPosItems();
-        alert(`Product "${title}" added successfully with ${imagesPayload.length || 1} photo(s)!`);
+        if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
+          window.dispatchEvent(new CustomEvent('abha-store-update', { detail: { table: 'products' } }));
+        }
+        alert(`✨ Garment "${title}" published live to storefront!\n\nIt is now immediately available in the "All Salwar Suits" collection.`);
       } catch (err) {
         alert(err.message);
       } finally {

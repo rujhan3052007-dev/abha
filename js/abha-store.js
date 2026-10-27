@@ -204,6 +204,37 @@
       isBestSeller: false,
       description: 'Contemporary deep teal cotton suit piece featuring intricate mandala yoke detailing, coordinating printed bottom fabric, and lightweight printed cotton dupatta. Ideal for daily elegance.',
       wash_care: 'Gentle Machine Wash or Hand Wash'
+    },
+    {
+      id: 'prod-06',
+      title: 'Burgandy Pure Breathable Cotton Salwar Suit',
+      name: 'Burgandy Pure Breathable Cotton Salwar Suit',
+      sku: 'Abha sku 006',
+      barcode: '890123400006',
+      category: 'Salwar Suit Dress Materials',
+      subcategory: 'Pure Cotton Salwar Suits',
+      gender: 'Women',
+      suitType: 'cotton',
+      price: 1200,
+      base_price: 1200,
+      salePrice: null,
+      stitchingPrice: 650,
+      stitching_price: 650,
+      stitchingAvailable: true,
+      fabric: '100% Pure Breathable Cotton (Top 2.5m, Bottom 2.5m, Dupatta 2.5m)',
+      color: 'Burgandy Artisanal Weave',
+      pattern: 'Traditional Fine Weave',
+      primary_image: 'images/burgandy-salwar-suit.jpg',
+      images: ['images/burgandy-salwar-suit.jpg'],
+      is_unique_item: true,
+      inventory_type: 'UNIQUE_1OF1',
+      stock_quantity: 1,
+      is_sold_out: false,
+      is_new_arrival: true,
+      is_featured: true,
+      isBestSeller: false,
+      description: '100% pure breathable cotton 3-piece salwar suit dress material in rich burgandy wine. Unstitched 2.5m cuts ready for bespoke custom tailoring.',
+      wash_care: 'Gentle Hand Wash in Cold Water / Dry in Shade'
     }
   ];
 
@@ -477,18 +508,25 @@
       return;
     }
     const existingProds = getTable('products', null);
-    if (!existingProds) {
+    if (!existingProds || !Array.isArray(existingProds) || existingProds.length === 0) {
       setTable('products', JSON.parse(JSON.stringify(INITIAL_PRODUCTS)));
     } else {
-      let cleaned = false;
+      let prodsUpdated = false;
+      INITIAL_PRODUCTS.forEach(initP => {
+        const found = existingProds.find(p => p.id === initP.id || p.sku === initP.sku);
+        if (!found) {
+          existingProds.push({ ...initP });
+          prodsUpdated = true;
+        }
+      });
       existingProds.forEach(p => {
         if ('rating' in p || 'reviewsCount' in p) {
           delete p.rating;
           delete p.reviewsCount;
-          cleaned = true;
+          prodsUpdated = true;
         }
       });
-      if (cleaned) setTable('products', existingProds);
+      if (prodsUpdated) setTable('products', existingProds);
     }
     let existingCats = getTable('categories', null);
     if (!existingCats || !Array.isArray(existingCats) || existingCats.length === 0) {
@@ -1691,6 +1729,12 @@
       const newSku = data.sku || ('ABHA-SLW-' + Math.floor(100 + Math.random() * 900));
       const basePrice = parseFloat(data.base_price || data.price || 1850);
       const stitchingFee = parseFloat(data.stitching_price || data.stitchingFee || 650);
+      const primaryPhoto = data.primary_image || data.photo || (Array.isArray(data.images) && data.images[0] ? (data.images[0].dataUrl || data.images[0].url || data.images[0]) : 'images/pink-leheriya-cotton-suit.jpg');
+
+      const descText = `${data.category_name || ''} ${data.category || ''} ${data.fabric || ''} ${data.title || ''} ${data.name || ''}`.toLowerCase();
+      let suitType = 'cotton';
+      if (descText.includes('silk') || descText.includes('chanderi')) suitType = 'silk';
+      else if (descText.includes('bandhani') || descText.includes('print') || descText.includes('leheriya') || descText.includes('tie-dye') || descText.includes('mandala')) suitType = 'prints';
 
       const newProd = {
         id: newId,
@@ -1700,8 +1744,9 @@
         category_id: data.category_id || 'cat-cotton',
         category_name: data.category_name || data.category || 'Pure Cotton Salwar Suits',
         category: data.category_name || data.category || 'Pure Cotton Salwar Suits',
-        suitType: (data.category_name || data.category || '').toLowerCase().includes('silk') ? 'silk' : 'cotton',
-        fabric: data.fabric || '100% Pure Cotton (Top 2.5m, Bottom 2.5m, Dupatta 2.5m)',
+        subcategory: data.subcategory || data.category_name || data.category || 'Pure Cotton Salwar Suits',
+        suitType: suitType,
+        fabric: data.fabric || '100% Pure Breathable Cotton (Top 2.5m, Bottom 2.5m, Dupatta 2.5m)',
         color: data.color || 'Artisanal Weave',
         base_price: basePrice,
         price: basePrice,
@@ -1713,8 +1758,11 @@
         is_unique_item: data.inventory_type !== 'QUANTITY',
         stock_quantity: parseInt(data.stock_quantity || 1, 10),
         is_sold_out: false,
-        primary_image: data.primary_image || data.photo || 'images/pink-leheriya-cotton-suit.jpg',
-        image: data.primary_image || data.photo || 'images/pink-leheriya-cotton-suit.jpg',
+        is_active: 1,
+        is_new_arrival: true,
+        primary_image: primaryPhoto,
+        image: primaryPhoto,
+        images: Array.isArray(data.images) && data.images.length > 0 ? data.images : [primaryPhoto],
         description: data.description || 'Authentic handcrafted unstitched salwar suit material ready for bespoke tailoring.',
         rating: 5.0,
         reviewsCount: 0,
@@ -1758,7 +1806,10 @@
 
       // Catalog & Categories
       if (pathname === '/api/products') {
-        return { success: true, data: this.getProducts(options.includeSold) };
+        const includeSold = options.includeSold !== undefined 
+          ? Boolean(options.includeSold) 
+          : (url.searchParams.get('includeSold') === 'true' || url.searchParams.get('includeSold') === '1');
+        return { success: true, data: this.getProducts(includeSold) };
       }
       if (pathname === '/api/admin/products') {
         if (method === 'POST') {
