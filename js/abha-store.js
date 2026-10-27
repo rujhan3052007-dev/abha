@@ -57,7 +57,7 @@
       sku: 'ABHA-SS-001',
       barcode: '890123400001',
       category: 'Salwar Suit Dress Materials',
-      subcategory: 'Pure Cotton Salwar Suits',
+      subcategory: 'Cotton Suits',
       gender: 'Women',
       suitType: 'cotton',
       price: 1650,
@@ -88,9 +88,9 @@
       sku: 'ABHA-SS-002',
       barcode: '890123400002',
       category: 'Salwar Suit Dress Materials',
-      subcategory: 'Bandhani & Leheriya Suits',
+      subcategory: 'Cotton Suits',
       gender: 'Women',
-      suitType: 'prints',
+      suitType: 'cotton',
       price: 2450,
       base_price: 2450,
       salePrice: null,
@@ -119,9 +119,9 @@
       sku: 'ABHA-SS-003',
       barcode: '890123400003',
       category: 'Salwar Suit Dress Materials',
-      subcategory: 'Chanderi Silk Salwar Suits',
+      subcategory: 'Cotton Suits',
       gender: 'Women',
-      suitType: 'silk',
+      suitType: 'cotton',
       price: 2850,
       base_price: 2850,
       salePrice: null,
@@ -150,7 +150,7 @@
       sku: 'ABHA-SS-004',
       barcode: '890123400004',
       category: 'Salwar Suit Dress Materials',
-      subcategory: 'Mirror-Work Cotton Suits',
+      subcategory: 'Cotton Suits',
       gender: 'Women',
       suitType: 'cotton',
       price: 1950,
@@ -181,7 +181,7 @@
       sku: 'ABHA-SS-005',
       barcode: '890123400005',
       category: 'Salwar Suit Dress Materials',
-      subcategory: 'Designer Printed Salwar Suits',
+      subcategory: 'Cotton Suits',
       gender: 'Women',
       suitType: 'cotton',
       price: 1850,
@@ -212,7 +212,7 @@
       sku: 'Abha sku 006',
       barcode: '890123400006',
       category: 'Salwar Suit Dress Materials',
-      subcategory: 'Pure Cotton Salwar Suits',
+      subcategory: 'Cotton Suits',
       gender: 'Women',
       suitType: 'cotton',
       price: 1200,
@@ -238,13 +238,11 @@
     }
   ];
 
-  // Categories architecture: Active vs Coming Soon (§2, §51)
+  // Categories architecture: Salwar Suits with Cotton & Woollen subcategories
   const INITIAL_CATEGORIES = [
-    { id: 'cat-salwar', name: 'Salwar Suit Dress Materials', slug: 'salwar-suit-dress-materials', gender: 'Women', product_count: 5, status: 'ACTIVE', is_active: 1, badge_text: 'Active', image: 'images/categories/cat-salwar.jpg', description: 'Authentic 3-piece unstitched salwar suit dress materials (Top, Bottom & Dupatta). Buy as pure fabric or custom-tailored to your measurements.' },
-    { id: 'cat-sarees', name: 'Sarees', slug: 'sarees', gender: 'Women', product_count: 0, status: 'COMING_SOON', is_active: 0, badge_text: 'Coming Soon', image: 'images/categories/cat-sarees.jpg', description: 'Handcrafted Kota Doria, Bandhani, and Chanderi sarees from Rajasthan heritage looms.' },
-    { id: 'cat-poshak', name: 'Rajputi Poshak', slug: 'rajputi-poshak', gender: 'Women', product_count: 0, status: 'COMING_SOON', is_active: 0, badge_text: 'Coming Soon', image: 'images/categories/cat-poshak.jpg', description: 'Traditional Royal Rajputana bridal and festive poshaks with authentic gota patti work.' },
-    { id: 'cat-chaniya', name: 'Chaniya Choli', slug: 'chaniya-choli', gender: 'Women', product_count: 0, status: 'COMING_SOON', is_active: 0, badge_text: 'Coming Soon', image: 'images/categories/cat-chaniya.jpg', description: 'Artisan flared lehengas and chaniya cholis for Navratri, sangeet, and festive celebrations.' },
-    { id: 'cat-mens', name: "Men's Collection", slug: 'mens-collection', gender: 'Men', product_count: 0, status: 'COMING_SOON', is_active: 0, badge_text: 'Coming Soon', image: 'images/categories/cat-mens.jpg', description: 'Bespoke Royal Kurta Pajama, Jodhpuris, and Nehru jackets tailored with artisanal fabrics.' }
+    { id: 'cat-salwar', name: 'Salwar Suit Dress Materials', slug: 'salwar-suit-dress-materials', gender: 'Women', product_count: 6, status: 'ACTIVE', is_active: 1, badge_text: 'Active', image: 'images/pink-leheriya-cotton-suit.jpg', description: 'Authentic 3-piece unstitched salwar suit dress materials (Top, Bottom & Dupatta).' },
+    { id: 'cat-cotton', name: 'Cotton Suits', slug: 'cotton', gender: 'Women', product_count: 6, status: 'ACTIVE', is_active: 1, badge_text: 'In Stock', image: 'images/teal-geometric-cotton-suit.jpg', description: '100% pure breathable handloom and combed cotton dress materials for daily elegance and summer comfort.' },
+    { id: 'cat-woollen', name: 'Woollen Suits', slug: 'woollen', gender: 'Women', product_count: 0, status: 'ACTIVE', is_active: 1, badge_text: 'Winter Edit', image: 'images/magenta-chanderi-silk-suit.jpg', description: 'Luxurious warm woollen & Pashmina blend unstitched salwar suit dress materials crafted for winter comfort.' }
   ];
 
   // Operational staff accounts (§48)
@@ -525,32 +523,19 @@
           delete p.reviewsCount;
           prodsUpdated = true;
         }
+        if (p.suitType === 'silk' || p.suitType === 'prints' || !p.suitType) {
+          const desc = `${p.category || ''} ${p.subcategory || ''} ${p.fabric || ''} ${p.title || ''}`.toLowerCase();
+          const isWoollen = desc.includes('wool') || desc.includes('woollen') || desc.includes('pashmina') || desc.includes('cashmere') || desc.includes('winter') || desc.includes('warm');
+          p.suitType = isWoollen ? 'woollen' : 'cotton';
+          p.subcategory = isWoollen ? 'Woollen Suits' : 'Cotton Suits';
+          p.category = 'Salwar Suit Dress Materials';
+          prodsUpdated = true;
+        }
       });
       if (prodsUpdated) setTable('products', existingProds);
     }
-    let existingCats = getTable('categories', null);
-    if (!existingCats || !Array.isArray(existingCats) || existingCats.length === 0) {
-      setTable('categories', INITIAL_CATEGORIES);
-    } else {
-      let catUpdated = false;
-      INITIAL_CATEGORIES.forEach(initCat => {
-        const found = existingCats.find(c => c.slug === initCat.slug || c.id === initCat.id);
-        if (!found) {
-          existingCats.push({ ...initCat });
-          catUpdated = true;
-        } else {
-          if (!found.image || found.image.includes('pink-leheriya') || found.image.includes('chanderi-suit') || found.image.includes('bandhani-chanderi') || found.image.includes('cream-lime') || found.image.includes('teal-geometric')) {
-            found.image = initCat.image;
-            catUpdated = true;
-          }
-          if (initCat.description && (!found.description || found.description.length < 10)) {
-            found.description = initCat.description;
-            catUpdated = true;
-          }
-        }
-      });
-      if (catUpdated) setTable('categories', existingCats);
-    }
+    // Category seeding strictly aligned to Salwar Suits (Cotton & Woollen)
+    setTable('categories', INITIAL_CATEGORIES);
     if (!localStorage.getItem(STORAGE_PREFIX + 'stores')) {
       setTable('stores', [INITIAL_STORE]);
     }
@@ -1731,22 +1716,22 @@
       const stitchingFee = parseFloat(data.stitching_price || data.stitchingFee || 650);
       const primaryPhoto = data.primary_image || data.photo || (Array.isArray(data.images) && data.images[0] ? (data.images[0].dataUrl || data.images[0].url || data.images[0]) : 'images/pink-leheriya-cotton-suit.jpg');
 
-      const descText = `${data.category_name || ''} ${data.category || ''} ${data.fabric || ''} ${data.title || ''} ${data.name || ''}`.toLowerCase();
-      let suitType = 'cotton';
-      if (descText.includes('silk') || descText.includes('chanderi')) suitType = 'silk';
-      else if (descText.includes('bandhani') || descText.includes('print') || descText.includes('leheriya') || descText.includes('tie-dye') || descText.includes('mandala')) suitType = 'prints';
+      const descText = `${data.category_name || ''} ${data.category || ''} ${data.subcategory || ''} ${data.fabric || ''} ${data.title || ''} ${data.name || ''}`.toLowerCase();
+      const isWoollen = descText.includes('wool') || descText.includes('woollen') || descText.includes('pashmina') || descText.includes('cashmere') || descText.includes('winter') || descText.includes('warm');
+      const suitType = isWoollen ? 'woollen' : 'cotton';
+      const subcategoryName = isWoollen ? 'Woollen Suits' : 'Cotton Suits';
 
       const newProd = {
         id: newId,
         sku: newSku,
         title: data.title || data.name,
         name: data.title || data.name,
-        category_id: data.category_id || 'cat-cotton',
-        category_name: data.category_name || data.category || 'Pure Cotton Salwar Suits',
-        category: data.category_name || data.category || 'Pure Cotton Salwar Suits',
-        subcategory: data.subcategory || data.category_name || data.category || 'Pure Cotton Salwar Suits',
+        category_id: isWoollen ? 'cat-woollen' : 'cat-cotton',
+        category_name: 'Salwar Suit Dress Materials',
+        category: 'Salwar Suit Dress Materials',
+        subcategory: subcategoryName,
         suitType: suitType,
-        fabric: data.fabric || '100% Pure Breathable Cotton (Top 2.5m, Bottom 2.5m, Dupatta 2.5m)',
+        fabric: data.fabric || (isWoollen ? 'Warm Premium Woollen / Pashmina Blend' : '100% Pure Breathable Cotton (Top 2.5m, Bottom 2.5m, Dupatta 2.5m)'),
         color: data.color || 'Artisanal Weave',
         base_price: basePrice,
         price: basePrice,
@@ -2062,12 +2047,21 @@
           throw new Error(`SKU '${newSku}' is already in use by another product`);
         }
 
+        const catStr = body.category || body.category_name || prod.category || '';
+        const descText = `${catStr} ${body.subcategory || prod.subcategory || ''} ${body.fabric || prod.fabric || ''} ${body.title || prod.title || ''}`.toLowerCase();
+        const isWoollen = descText.includes('wool') || descText.includes('woollen') || descText.includes('pashmina') || descText.includes('cashmere') || descText.includes('winter') || descText.includes('warm');
+        const suitType = isWoollen ? 'woollen' : 'cotton';
+        const subcategoryName = isWoollen ? 'Woollen Suits' : 'Cotton Suits';
+
         const updated = {
           ...prod,
           title: (body.title || prod.title).trim(),
           name: (body.title || prod.title).trim(),
           sku: newSku,
-          category: body.category || body.category_name || prod.category,
+          category: 'Salwar Suit Dress Materials',
+          category_name: 'Salwar Suit Dress Materials',
+          subcategory: subcategoryName,
+          suitType: suitType,
           category_id: body.category_id || prod.category_id,
           fabric: (body.fabric || prod.fabric).trim(),
           color: body.color !== undefined ? body.color : prod.color,
@@ -2088,6 +2082,10 @@
         };
         prods[prodIndex] = updated;
         setTable('products', prods);
+        recordAuditLog(caller?.name || 'Admin', caller?.role || 'OWNER', 'PRODUCT_UPDATED', 'PRODUCT', updated.id, `Updated product "${updated.title}" (${updated.sku})`);
+        if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
+          window.dispatchEvent(new CustomEvent('abha-store-update', { detail: { table: 'products' } }));
+        }
         return {
           success: true,
           message: `Product "${updated.title}" updated successfully`,
@@ -2105,6 +2103,10 @@
 
         prods = prods.filter(p => p.id !== prod.id && p.sku !== prod.sku);
         setTable('products', prods);
+        recordAuditLog(caller?.name || 'Admin', caller?.role || 'OWNER', 'PRODUCT_DELETED', 'PRODUCT', prod.id, `Removed product "${prod.title}" (${prod.sku})`);
+        if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
+          window.dispatchEvent(new CustomEvent('abha-store-update', { detail: { table: 'products' } }));
+        }
         return {
           success: true,
           message: `Product "${prod.title}" (${prod.sku}) was permanently removed.`

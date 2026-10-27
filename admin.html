@@ -1675,11 +1675,8 @@
           <div>
             <label style="font-size: 0.8rem; font-weight: 600;">Category *</label>
             <select id="npCategory" name="category" class="form-input">
-              <option value="Pure Cotton Salwar Suits">Pure Cotton Salwar Suits</option>
-              <option value="Chanderi Silk Salwar Suits">Chanderi Silk Salwar Suits</option>
-              <option value="Bandhani & Leheriya Suits">Bandhani & Leheriya Suits</option>
-              <option value="Mirror-Work Cotton Suits">Mirror-Work Cotton Suits</option>
-              <option value="Designer Printed Salwar Suits">Designer Printed Salwar Suits</option>
+              <option value="Cotton Suits">Cotton Suits</option>
+              <option value="Woollen Suits">Woollen Suits</option>
             </select>
           </div>
         </div>
@@ -1778,11 +1775,8 @@
             <div>
               <label style="font-size: 0.8rem; font-weight: 600; color: var(--charcoal);">Category *</label>
               <select id="epCategory" name="category" class="form-input">
-                <option value="Pure Cotton Salwar Suits">Pure Cotton Salwar Suits</option>
-                <option value="Chanderi Silk Salwar Suits">Chanderi Silk Salwar Suits</option>
-                <option value="Bandhani & Leheriya Suits">Bandhani & Leheriya Suits</option>
-                <option value="Mirror-Work Cotton Suits">Mirror-Work Cotton Suits</option>
-                <option value="Designer Printed Salwar Suits">Designer Printed Salwar Suits</option>
+                <option value="Cotton Suits">Cotton Suits</option>
+                <option value="Woollen Suits">Woollen Suits</option>
               </select>
             </div>
           </div>
@@ -3818,11 +3812,9 @@
         cachedCategories = res.data || [];
         tbody.innerHTML = cachedCategories.map(c => {
           const imgUrl = c.image || (
-            (c.slug || '').includes('saree') ? 'images/categories/cat-sarees.jpg' :
-            (c.slug || '').includes('poshak') || (c.slug || '').includes('rajputi') ? 'images/categories/cat-poshak.jpg' :
-            (c.slug || '').includes('chaniya') || (c.slug || '').includes('lehenga') ? 'images/categories/cat-chaniya.jpg' :
-            (c.slug || '').includes('men') || (c.slug || '').includes('kurta') ? 'images/categories/cat-mens.jpg' :
-            'images/categories/cat-salwar.jpg'
+            (c.slug || '').includes('woollen') || (c.name || '').toLowerCase().includes('wool') ? 'images/magenta-chanderi-silk-suit.jpg' :
+            (c.slug || '').includes('cotton') || (c.name || '').toLowerCase().includes('cotton') ? 'images/teal-geometric-cotton-suit.jpg' :
+            'images/pink-leheriya-cotton-suit.jpg'
           );
           return `
           <tr>
@@ -4112,6 +4104,13 @@
       document.getElementById('addProductForm').reset();
       newProductPhotos = [];
       renderAddProductPhotosPreview();
+      const npCat = document.getElementById('npCategory');
+      if (npCat && cachedCategories && cachedCategories.length > 0) {
+        const subCats = cachedCategories.filter(c => c.slug === 'cotton' || c.slug === 'woollen' || c.name.toLowerCase().includes('cotton') || c.name.toLowerCase().includes('wool'));
+        if (subCats.length > 0) {
+          npCat.innerHTML = subCats.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+        }
+      }
       document.getElementById('addProductModal').classList.add('open');
     }
 
@@ -4323,7 +4322,9 @@
           }
         }
         if (catOptions && catOptions.length > 0) {
-          categorySelect.innerHTML = catOptions.map(c => 
+          const subCats = catOptions.filter(c => c.slug === 'cotton' || c.slug === 'woollen' || c.name.toLowerCase().includes('cotton') || c.name.toLowerCase().includes('wool'));
+          const list = subCats.length > 0 ? subCats : catOptions;
+          categorySelect.innerHTML = list.map(c => 
             `<option value="${c.name}">${c.name}</option>`
           ).join('');
         }

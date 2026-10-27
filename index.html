@@ -706,7 +706,7 @@
         <div>
           <span class="text-xs font-bold uppercase tracking-luxury text-maroon-800">Unstitched Collections</span>
           <h2 class="font-sans text-2xl sm:text-3xl font-bold text-maroon-950 mt-1">Salwar Suit Dress Materials</h2>
-          <p class="text-sm text-slateText-600 mt-1">Authentic 3-piece unstitched salwar suit dress materials (Top, Bottom & Dupatta). Buy as pure woven fabric or get custom-tailored to your measurements.</p>
+          <p class="text-sm text-slateText-600 mt-1">Authentic 3-piece unstitched salwar suit dress materials (Top, Bottom &amp; Dupatta) available in breathable pure Cotton and warm Woollen weaves.</p>
         </div>
 
         <!-- Boutique Category Tabs (Desktop) -->
@@ -715,8 +715,8 @@
         </div>
       </div>
 
-      <!-- Categories Grid -->
-      <div id="categoryGrid" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+      <!-- Categories Grid (Centered 3-Card Architecture) -->
+      <div id="categoryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto gap-4 sm:gap-6">
         <!-- Populated via JavaScript dynamically from Category Architecture -->
       </div>
 
@@ -1166,13 +1166,11 @@
         <div class="space-y-3">
           <p class="font-bold uppercase tracking-wider text-ivory-50 text-xs">Dress Materials</p>
           <ul class="space-y-2 text-slate-400">
-            <li><a href="#newArrivals" class="hover:text-ivory-50 transition-colors">All Dress Materials</a></li>
+            <li><a href="#newArrivals" onclick="selectBoutiqueCategory('all')" class="hover:text-ivory-50 transition-colors">All Salwar Suits</a></li>
+            <li><a href="#newArrivals" onclick="selectBoutiqueCategory('cotton')" class="hover:text-ivory-50 transition-colors">Cotton Suits</a></li>
+            <li><a href="#newArrivals" onclick="selectBoutiqueCategory('woollen')" class="hover:text-ivory-50 transition-colors">Woollen Suits</a></li>
             <li><a href="#newArrivals" class="hover:text-ivory-50 transition-colors">New Fabric Arrivals</a></li>
             <li><a href="#bestSellers" class="hover:text-ivory-50 transition-colors">Best Sellers</a></li>
-            <li><a href="#featured" class="hover:text-ivory-50 transition-colors">Chanderi Silk Edit</a></li>
-            <li><a href="#categories" class="hover:text-ivory-50 transition-colors">Pure Cotton Suits</a></li>
-            <li><a href="#categories" class="hover:text-ivory-50 transition-colors">Festive Salwar Suits</a></li>
-            <li><a href="#categories" class="hover:text-ivory-50 transition-colors">Bandhani & Leheriya Suits</a></li>
           </ul>
         </div>
 
@@ -2640,10 +2638,11 @@
         id: 'prod-02',
         sku: 'ABHA-SLW-002',
         name: 'Mustard Heritage Bandhani Salwar Suit Material',
-        category: 'Bandhani & Leheriya Suits',
-        suitType: 'prints',
+        category: 'Salwar Suit Dress Materials',
+        subcategory: 'Cotton Suits',
+        suitType: 'cotton',
         price: 2450,
-        fabric: 'Premium Handloom Cotton-Silk with Bandhej Dupatta',
+        fabric: 'Premium Handloom Cotton with Traditional Bandhej Dupatta',
         color: 'Haldi Mustard & Rani Pink Accents',
         image: 'images/mustard-bandhani-chanderi-suit.jpg',
         stitchingAvailable: true,
@@ -2655,24 +2654,26 @@
       {
         id: 'prod-03',
         sku: 'ABHA-SLW-003',
-        name: 'Magenta Festive Chanderi Silk Salwar Suit Material',
-        category: 'Chanderi Silk Salwar Suits',
-        suitType: 'silk',
+        name: 'Magenta Festive Fine Cotton Salwar Suit Material',
+        category: 'Salwar Suit Dress Materials',
+        subcategory: 'Cotton Suits',
+        suitType: 'cotton',
         price: 2850,
-        fabric: 'Pure Chanderi Silk with Sequin Embroidery',
+        fabric: 'Fine Cotton Loom with Sequin Embroidery & Tree-of-Life Motif',
         color: 'Deep Magenta Wine & Silver Accents',
         image: 'images/magenta-chanderi-silk-suit.jpg',
         stitchingAvailable: true,
         stitchingFee: 800,
         isNewArrival: true,
         isBestSeller: true,
-        description: 'Festive Chanderi silk unstitched salwar suit material with rich tree-of-life neckline thread embroidery, subtle diagonal woven texture, matching patterned bottom, and coordinates for celebration occasions.'
+        description: 'Festive unstitched salwar suit material with rich tree-of-life neckline thread embroidery, subtle diagonal woven texture, matching patterned bottom, and coordinates for celebration occasions.'
       },
       {
         id: 'prod-04',
         sku: 'ABHA-SLW-004',
         name: 'Cream Handloom Cotton Mirror-Work Salwar Suit',
-        category: 'Mirror-Work Cotton Suits',
+        category: 'Salwar Suit Dress Materials',
+        subcategory: 'Cotton Suits',
         suitType: 'cotton',
         price: 1950,
         fabric: 'Pure Slub Cotton with Mirror Work & Lime Dupatta',
@@ -2688,7 +2689,8 @@
         id: 'prod-05',
         sku: 'ABHA-SLW-005',
         name: 'Teal Mandala Motif Pure Cotton Salwar Suit',
-        category: 'Designer Printed Salwar Suits',
+        category: 'Salwar Suit Dress Materials',
+        subcategory: 'Cotton Suits',
         suitType: 'cotton',
         price: 1850,
         fabric: '100% Fine Combed Cotton with Block Print',
@@ -2704,7 +2706,8 @@
         id: 'prod-06',
         sku: 'Abha sku 006',
         name: 'Burgandy Pure Breathable Cotton Salwar Suit',
-        category: 'Pure Cotton Salwar Suits',
+        category: 'Salwar Suit Dress Materials',
+        subcategory: 'Cotton Suits',
         suitType: 'cotton',
         price: 1200,
         fabric: '100% Pure Breathable Cotton (Top 2.5m, Bottom 2.5m, Dupatta 2.5m)',
@@ -2720,12 +2723,9 @@
 
 
     const CATEGORIES = [
-      { name: 'Pure Cotton Salwar Suits', count: '100% Pure Cotton (2.5m)', type: 'cotton', img: 'images/pink-leheriya-cotton-suit.jpg' },
-      { name: 'Chanderi Silk Salwar Suits', count: 'Festive Zari Weaves', type: 'silk', img: 'images/magenta-chanderi-silk-suit.jpg' },
-      { name: 'Bandhani & Leheriya Suits', count: 'Heritage Tie-Dye', type: 'prints', img: 'images/mustard-bandhani-chanderi-suit.jpg' },
-      { name: 'Mirror-Work Cotton Suits', count: 'Handloom Artisanal', type: 'cotton', img: 'images/cream-lime-cotton-suit.jpg' },
-      { name: 'Designer Printed Salwar Suits', count: 'Mandala & Block Prints', type: 'prints', img: 'images/teal-geometric-cotton-suit.jpg' },
-      { name: 'Festive Occasion Salwar Suits', count: 'Zari & Sequin Ensembles', type: 'silk', img: 'images/mustard-bandhani-chanderi-suit.jpg' }
+      { name: 'All Salwar Suits', count: 'Complete Collection', type: 'all', img: 'images/pink-leheriya-cotton-suit.jpg' },
+      { name: 'Cotton Suits', count: '100% Pure Cotton', type: 'cotton', img: 'images/teal-geometric-cotton-suit.jpg' },
+      { name: 'Woollen Suits', count: 'Winter Warmth', type: 'woollen', img: 'images/magenta-chanderi-silk-suit.jpg' }
     ];
 
     const specialFeaturedProduct = PRODUCTS[0];
@@ -2787,7 +2787,8 @@
     });
 
     function deriveSuitType(p) {
-      if (p.suitType === 'silk' || p.suitType === 'prints' || p.suitType === 'cotton') return p.suitType;
+      if (p.suitType === 'woollen' || p.suitType === 'wool') return 'woollen';
+      if (p.suitType === 'cotton') return 'cotton';
       const parts = [
         p.category_name,
         p.category,
@@ -2798,8 +2799,7 @@
         p.name
       ].filter(Boolean).join(' ').toLowerCase();
 
-      if (parts.includes('silk') || parts.includes('chanderi')) return 'silk';
-      if (parts.includes('bandhani') || parts.includes('bandhej') || parts.includes('print') || parts.includes('leheriya') || parts.includes('tie-dye') || parts.includes('mandala')) return 'prints';
+      if (parts.includes('wool') || parts.includes('woollen') || parts.includes('pashmina') || parts.includes('cashmere') || parts.includes('winter') || parts.includes('warm')) return 'woollen';
       return 'cotton';
     }
 
@@ -2981,23 +2981,20 @@
       const activeProducts = PRODUCTS.filter(p => !p.isSoldOut && p.stockQuantity > 0);
       const totalCount = activeProducts.length;
       const cottonCount = activeProducts.filter(p => p.suitType === 'cotton').length;
-      const silkCount = activeProducts.filter(p => p.suitType === 'silk').length;
-      const printsCount = activeProducts.filter(p => p.suitType === 'prints').length;
+      const woollenCount = activeProducts.filter(p => p.suitType === 'woollen').length;
 
       return [
         { id: 'cat-all', name: 'All Salwar Suits', slug: 'all', gender: 'Women', is_active: 1, status: 'ACTIVE', badge_text: `${totalCount} In Stock`, description: 'Complete curation of authentic 3-piece unstitched salwar suit dress materials. Order fabric-only or custom stitched.', product_count: totalCount, image: 'images/pink-leheriya-cotton-suit.jpg' },
-        { id: 'cat-cotton', name: 'Pure Cotton Suits', slug: 'cotton', gender: 'Women', is_active: 1, status: 'ACTIVE', badge_text: `${cottonCount} In Stock`, description: '100% pure breathable handloom and combed cotton dress materials for daily elegance and summer comfort.', product_count: cottonCount, image: 'images/teal-geometric-cotton-suit.jpg' },
-        { id: 'cat-silk', name: 'Chanderi Silk Suits', slug: 'silk', gender: 'Women', is_active: 1, status: 'ACTIVE', badge_text: `${silkCount} In Stock`, description: 'Royal Chanderi silk suits with rich zari borders, sequin embroidery, and celebration finishes.', product_count: silkCount, image: 'images/magenta-chanderi-silk-suit.jpg' },
-        { id: 'cat-prints', name: 'Bandhani & Prints', slug: 'prints', gender: 'Women', is_active: 1, status: 'ACTIVE', badge_text: `${printsCount} In Stock`, description: 'Traditional Rajasthani tie-dye Bandhani and artistic block prints crafted by heritage artisans.', product_count: printsCount, image: 'images/mustard-bandhani-chanderi-suit.jpg' }
+        { id: 'cat-cotton', name: 'Cotton Suits', slug: 'cotton', gender: 'Women', is_active: 1, status: 'ACTIVE', badge_text: `${cottonCount} In Stock`, description: '100% pure breathable handloom and combed cotton dress materials for daily elegance and summer comfort.', product_count: cottonCount, image: 'images/teal-geometric-cotton-suit.jpg' },
+        { id: 'cat-woollen', name: 'Woollen Suits', slug: 'woollen', gender: 'Women', is_active: 1, status: 'ACTIVE', badge_text: `${woollenCount} In Stock`, description: 'Luxurious warm woollen & Pashmina blend unstitched salwar suit dress materials crafted for winter comfort.', product_count: woollenCount, image: 'images/magenta-chanderi-silk-suit.jpg' }
       ];
     }
 
     function getCategoryThumbnail(cat) {
       const s = (cat.slug || '').toLowerCase();
       const n = (cat.name || '').toLowerCase();
+      if (s === 'woollen' || n.includes('wool')) return 'images/magenta-chanderi-silk-suit.jpg';
       if (s === 'cotton' || n.includes('cotton')) return 'images/teal-geometric-cotton-suit.jpg';
-      if (s === 'silk' || n.includes('silk') || n.includes('chanderi')) return 'images/magenta-chanderi-silk-suit.jpg';
-      if (s === 'prints' || n.includes('bandhani') || n.includes('print')) return 'images/mustard-bandhani-chanderi-suit.jpg';
       return 'images/pink-leheriya-cotton-suit.jpg';
     }
 
@@ -3089,7 +3086,7 @@
     // Product Card Template (One Clear CTA: Select Stitching & Buy)
     function createProductCard(prod) {
       const isWishlisted = state.wishlist.includes(prod.id);
-      const categoryBadge = prod.suitType === 'cotton' ? 'Pure Cotton' : (prod.suitType === 'silk' ? 'Chanderi' : (prod.suitType === 'prints' ? 'Bandhani' : (prod.category ? prod.category.split(' ')[0] : 'Pure Loom')));
+      const categoryBadge = prod.suitType === 'woollen' ? 'Woollen Suit' : 'Pure Cotton';
       const isSoldOut = Boolean(prod.isSoldOut || prod.stockQuantity <= 0);
 
       return `
@@ -3188,10 +3185,8 @@
       // Filter by category slug
       if (currentCat.slug === 'cotton') {
         items = items.filter(p => p.suitType === 'cotton');
-      } else if (currentCat.slug === 'silk') {
-        items = items.filter(p => p.suitType === 'silk');
-      } else if (currentCat.slug === 'prints') {
-        items = items.filter(p => p.suitType === 'prints');
+      } else if (currentCat.slug === 'woollen') {
+        items = items.filter(p => p.suitType === 'woollen');
       }
 
       // Apply price filter if activeFilter specifies price
