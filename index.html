@@ -495,7 +495,7 @@
 
         <!-- Official ABHA Logo: Corner Crest + Theme Maroon Text -->
         <div id="siteHeaderBrandLogo" class="flex-shrink-0 flex items-center lg:-ml-3 relative z-30">
-          <a href="#" class="group flex items-center gap-2 sm:gap-2.5 lg:gap-3 focus:outline-none cursor-pointer" aria-label="ABHA — Premium Dress Materials & Custom Stitching" title="ABHA Homepage">
+          <a href="index.html" class="group flex items-center gap-2 sm:gap-2.5 lg:gap-3 focus:outline-none cursor-pointer" aria-label="ABHA — Premium Dress Materials & Custom Stitching" title="ABHA Homepage">
             <!-- Authentic Crest -->
             <img id="headerTargetCrest" src="images/logo/abha-crest-simplified.png?v=20260913_4" alt="ABHA Crest" class="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 object-contain filter drop-shadow-sm transition-transform duration-300 group-hover:scale-105" />
             
@@ -507,12 +507,11 @@
 
         <!-- Desktop Navigation Links -->
         <nav class="hidden lg:flex items-center space-x-8 text-sm font-medium text-charcoal-900" aria-label="Primary Navigation">
-          <a href="#" class="text-maroon-800 border-b border-maroon-800 pb-0.5" data-i18n="nav_home">Home</a>
-          <a href="#newArrivals" class="hover:text-maroon-800 transition-colors">Shop Suits</a>
-          <a href="#howItWorks" class="hover:text-maroon-800 transition-colors">How Tailoring Works</a>
-          <a href="#reviews" class="hover:text-maroon-800 transition-colors">Reviews</a>
-          <a href="#store" class="hover:text-maroon-800 transition-colors" data-i18n="nav_store">Beawar Store</a>
-          <a href="#faq" class="hover:text-maroon-800 transition-colors" data-i18n="nav_faq">FAQ</a>
+          <a href="index.html" class="text-maroon-800 border-b-2 border-maroon-800 pb-0.5 font-bold" data-i18n="nav_home">Home</a>
+          <a href="shop.html" class="hover:text-maroon-800 transition-colors font-medium" data-i18n="nav_shop">Shop</a>
+          <a href="categories.html" class="hover:text-maroon-800 transition-colors font-medium" data-i18n="nav_categories">Categories</a>
+          <a href="collections.html" class="hover:text-maroon-800 transition-colors font-medium" data-i18n="nav_collections">Collections</a>
+          <a href="about.html" class="hover:text-maroon-800 transition-colors font-medium" data-i18n="nav_about">About</a>
         </nav>
 
         <!-- Utility Actions (§9) -->
@@ -541,14 +540,16 @@
 
     <!-- Mobile Drawer Menu -->
     <div id="mobileMenu" class="hidden lg:hidden border-t border-ivory-200 bg-ivory-50 px-4 pt-4 pb-6 space-y-3">
-      <a href="#" onclick="toggleMobileMenu()" class="block text-base font-medium text-maroon-900 py-1" data-i18n="nav_home">Home</a>
-      <a href="#newArrivals" onclick="toggleMobileMenu()" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1">Shop Salwar Suits</a>
-      <a href="#howItWorks" onclick="toggleMobileMenu()" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1">How Tailoring Works</a>
+      <a href="index.html" onclick="toggleMobileMenu()" class="block text-base font-bold text-maroon-900 py-1" data-i18n="nav_home">Home</a>
+      <a href="shop.html" onclick="toggleMobileMenu()" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1" data-i18n="nav_shop">Shop</a>
+      <a href="categories.html" onclick="toggleMobileMenu()" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1" data-i18n="nav_categories">Categories</a>
+      <a href="collections.html" onclick="toggleMobileMenu()" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1" data-i18n="nav_collections">Collections</a>
+      <a href="about.html" onclick="toggleMobileMenu()" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1" data-i18n="nav_about">About</a>
       <a href="javascript:void(0)" onclick="toggleMobileMenu(); openWishlistDrawer();" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1">Saved Wishlist (<span id="mobileWishlistCount">0</span>)</a>
       <a href="javascript:void(0)" onclick="toggleMobileMenu(); openAccountDrawer();" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1">My Account &amp; Saved Measurements</a>
-      <a href="#reviews" onclick="toggleMobileMenu()" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1">Customer Reviews</a>
-      <a href="#store" onclick="toggleMobileMenu()" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1" data-i18n="nav_store">Visit Beawar Store</a>
-      <a href="#faq" onclick="toggleMobileMenu()" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1" data-i18n="nav_faq">Frequently Asked Questions</a>
+      <a href="index.html#reviews" onclick="toggleMobileMenu()" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1">Customer Reviews</a>
+      <a href="about.html#store" onclick="toggleMobileMenu()" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1" data-i18n="nav_store">Visit Beawar Store</a>
+      <a href="index.html#faq" onclick="toggleMobileMenu()" class="block text-base font-medium text-charcoal-900 hover:text-maroon-800 py-1" data-i18n="nav_faq">Frequently Asked Questions</a>
       <div class="pt-4 border-t border-ivory-200 space-y-2 text-xs text-slateText-600">
         <div class="flex items-center justify-between">
           <span>Need Tailoring Help?</span>
@@ -1141,7 +1142,7 @@
         
         <!-- Col 1: Brand -->
         <div class="lg:col-span-2 space-y-4">
-          <a href="#" class="flex items-center gap-3 mb-2 cursor-pointer group" title="ABHA Homepage">
+          <a href="index.html" class="flex items-center gap-3 mb-2 cursor-pointer group" title="ABHA Homepage">
             <img src="images/logo/abha-crest-simplified.png?v=20260913_4" alt="ABHA Crest" class="h-11 w-11 object-contain filter drop-shadow-sm group-hover:scale-105 transition-transform" />
             <div class="flex flex-col justify-center text-left">
               <span class="font-sans text-[24px] font-bold tracking-[0.18em] text-[#FAF7F2] uppercase leading-none">ABHA</span>
@@ -1166,10 +1167,10 @@
         <div class="space-y-3">
           <p class="font-bold uppercase tracking-wider text-ivory-50 text-xs">Dress Materials</p>
           <ul class="space-y-2 text-slate-400">
-            <li><a href="#newArrivals" onclick="selectBoutiqueCategory('all')" class="hover:text-ivory-50 transition-colors">All Salwar Suits</a></li>
-            <li><a href="#newArrivals" onclick="selectBoutiqueCategory('cotton')" class="hover:text-ivory-50 transition-colors">Cotton Suits</a></li>
-            <li><a href="#newArrivals" onclick="selectBoutiqueCategory('woollen')" class="hover:text-ivory-50 transition-colors">Woollen Suits</a></li>
-            <li><a href="#newArrivals" class="hover:text-ivory-50 transition-colors">New Fabric Arrivals</a></li>
+            <li><a href="shop.html" onclick="selectBoutiqueCategory('all')" class="hover:text-ivory-50 transition-colors">All Salwar Suits</a></li>
+            <li><a href="shop.html?category=cotton" onclick="selectBoutiqueCategory('cotton')" class="hover:text-ivory-50 transition-colors">Cotton Suits</a></li>
+            <li><a href="shop.html?category=woollen" onclick="selectBoutiqueCategory('woollen')" class="hover:text-ivory-50 transition-colors">Woollen Suits</a></li>
+            <li><a href="shop.html" class="hover:text-ivory-50 transition-colors">New Fabric Arrivals</a></li>
             <li><a href="#bestSellers" class="hover:text-ivory-50 transition-colors">Best Sellers</a></li>
           </ul>
         </div>
@@ -1185,7 +1186,7 @@
             <li><a href="https://www.instagram.com/abha_tailor_and_creation/" target="_blank" rel="noopener noreferrer" class="hover:text-gold-400 text-gold-400 font-semibold transition-colors flex items-center gap-1.5"><span>📸 Instagram: @abha_tailor_and_creation</span></a></li>
             <li><button onclick="openPolicyModal('shipping')" class="hover:text-ivory-50 transition-colors text-left">Shipping Across India</button></li>
             <li><button onclick="openPolicyModal('returns')" class="hover:text-ivory-50 transition-colors text-left">Returns & Alterations</button></li>
-            <li><a href="#store" class="hover:text-ivory-50 transition-colors">Visit Physical Store</a></li>
+            <li><a href="about.html" class="hover:text-ivory-50 transition-colors">Visit Physical Store</a></li>
           </ul>
         </div>
 
@@ -5781,13 +5782,13 @@
   <nav id="mobileBottomNav" class="mobile-bottom-nav fixed bottom-0 inset-x-0 z-50 bg-[#FAF8F5]/98 backdrop-blur-md border-t border-[#EBE3D7] shadow-lg hidden items-center justify-around py-1.5 px-4 text-charcoal-900" aria-label="Mobile Navigation">
     
     <!-- Home -->
-    <a href="#" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;" class="flex flex-col items-center text-maroon-950 font-bold text-[10px] focus:outline-none" aria-label="Home">
+    <a href="index.html" class="flex flex-col items-center text-maroon-950 font-bold text-[10px] focus:outline-none" aria-label="Home">
       <svg class="w-5 h-5 text-maroon-900" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
       <span class="mt-0.5" data-i18n="nav_home">Home</span>
     </a>
 
     <!-- Loom / Catalog -->
-    <a href="#newArrivals" onclick="setCatalogFilter('all')" class="flex flex-col items-center text-gray-500 hover:text-maroon-900 text-[10px] focus:outline-none" aria-label="Loom Catalog">
+    <a href="shop.html" class="flex flex-col items-center text-gray-500 hover:text-maroon-900 text-[10px] focus:outline-none" aria-label="Loom Catalog">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
       <span class="mt-0.5">Loom</span>
     </a>
